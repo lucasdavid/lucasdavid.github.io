@@ -73,8 +73,7 @@ print('predictions:', p[:3])
 ```
 
 A função sigmoid não é linear. Logo, uma função de erro `E`, definida sobre
-um modelo `a(w*x + b)`, não é quadrática, o que implica que múltiplos
-pontos de mínimo podem existir:
+um modelo `a(w*x + b)`, não é quadrática e múltiplos pontos de mínimo podems existir:
 
 <center>
   <figure class="equation">
@@ -99,14 +98,14 @@ direção de maior decremento **local** da função de erro.
 
 Como o espaço de otimização possui vários pontos de mínimo, a solução não é
 mais garantidamente ótima. Entretanto, a sensação que temos ao observar os
-experimentos impíricos conduzidos até hoje é que as soluções encontradas são
+experimentos empíricos conduzidos até hoje é que as soluções encontradas são
 suficientemente boas, próximas à ótima. É claro que vários melhoramentos ainda
 podem ser feitos:
 
 - **random restart**: o treinamento é feito múltiplas vezes, considerando-se múltiplos pontos
   de início. Os melhores pesos são mantidos.
 - **simulated annealing**: os passos feitos na modificação dos parâmetros do modelo
-  são bruscos e vão graduamente diminuindo. Isso pode ajudar o modelo à superar vales e atindir
+  são bruscos e vão graduamente diminuindo. Isso pode ajudar o modelo à superar vales e atingir
   melhores pontos de mínimo. Este nome remete à ideia de metal sendo modelado nas fornaças,
   onde ele começa "quente e maleável" e termina "frio e rígido".
 
@@ -120,38 +119,10 @@ tecido de mama através de 30 características, como raio, textura, perímetro e
 As amostras foram então classificadas em `0: malignas` e `1: benignas`.
 
 ```python
-from sacred import Experiment
-from sklearn.datasets import load_breast_cancer
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
-from sklearn.model_selection import train_test_split
-
-ex = Experiment('training-a-logistic-regression-model')
-
-@ex.config
-def my_config():
-  workers = 1
-  test_size = 1 / 3
-  split_random_state = 42
-
-@ex.automain
-def main(test_size, workers, split_random_state):
-  dataset = load_breast_cancer()
-  x_train, x_test, y_train, y_test = train_test_split(
-    dataset.data, dataset.target,
-    test_size=test_size,
-    random_state=split_random_state)
-
-  model = LogisticRegression(n_jobs=workers)
-  model.fit(x_train, y_train)
-
-  print('train accuracy:', accuracy_score(y_train, model.predict(x_train)))
-  print('test accuracy:', accuracy_score(y_test, model.predict(x_test)))
-
-  print('y:', y_test)
-  print('p:', model.predict(x_test))
+{% include code/training_logistic_regressor.py %}
 ```
 ```shell
+python training_logistic_regressor with seed=42
 train accuracy: 0.955145118734
 test accuracy: 0.957894736842
 y: [1 0 0 1 1 0 0 0 1 1 1 0 1 0 1 0 1 1 1 0 ...]
@@ -165,7 +136,7 @@ Nem sempre a resposta é 0 ou 1. Muitas vezes, as amostras no problema em mãos
 se distribuem por multiplas classes. O conjunto de dados [ImageNet](http://image-net.org),
 por exemplo, contém imagens de 1000 classes diferentes.
 
-Ainda sim, estes são facilmente traduzidos para o que já sabemos: cada classe pode
+Ainda assim, estes são facilmente traduzidos para o que já sabemos: cada classe pode
 ser codificada em um número:
 
 ```python
@@ -230,13 +201,13 @@ não-lineares.
 ## Redes Artificiais
 
 As redes artificiais são modelos de aprendizado de máquina que generalizam regressores lineares,
-logísticos e SVMs. Na verdade, redes neurais são genéricas o suficiente para aproximar todo
+logísticos e SVMs. Na verdade, redes são genéricas o suficiente para aproximar todo
 e qualquer função (e portanto todo e qualquer modelo).
 
-Muitos autores abordam redes neurais fazendo um paralelo à redes neurais
+Muitos autores abordam redes artificiais fazendo um paralelo à redes neurais
 cerebrais nos seres-humanos, já que a inspiração original era essa. Eu,
 particularmente, não sou o maior fã dessa visão, pois (a) o conceito de redes
-neurais são ajuda em nada no entendimento da composição formal (o porquê elas
+neurais não ajuda muito no entendimento da composição formal (o porquê elas
 funcionam) das redes artificiais e (b) as redes artificias não chegam nem perto
 de descrever a complexidade do cérebro humano, sendo simplesmente uma
 aproximação muito distante do modelo teórico que temos atualmente.
@@ -260,9 +231,22 @@ usar uma função de ativação radial (sim, ela existe). Com essa função,
 o modelo classificaria todas as amostras que estão dentro de um raio `r`,
 transladados por um ponto `p` (o epicentro do radial), em um grupo e os demais
 em outro. Isso funciona pra esse caso, mas e se o conjunto fosse um 1-torus
-(uma rosquinha), 2-torus?  
+(uma rosquinha), 2-torus?
+
+<center>
+<figure class="equation">
+  <img src="/assets/ml/nonlinear/orientable_surfaces.png"
+       alt="A esfera, o 1-torus e o 2-torus."
+       style="width:100%; max-width:500px" />
+  <figcaption>
+    A esfera, o 1-torus e o 2-torus.
+    Disponível em: <a href="http://laerne.github.io/">laerne.github.io</a>
+  </figcaption>
+</figure>
+</center>
+
 Existem infinitos casos onde a radial não funcionaria, exatamente como existem
-infintos casos para a linear.
+infintos casos para a linear ou qualquer outra função.
 
 Seria bem da hora se:
 
@@ -329,30 +313,48 @@ O que aconteceu acima:
 
 ### Treinando redes de múltiplas camadas
 
-Já sabemos calcular o treinamento dos pesos da camada `predictions`, usando
-o método  `Mini-batch Stochastic Gradient Descent`. Falta treinar os pesos
-das camadas internas. O algoritmo que faz isso é chamado de
-**backward error propagation** ou backprop. O nome é grande e intimiador,
-mas na verdade é só a regra da cadeia, aplicada na prática.
+Considere a rede de múltiplas camadas abaixo.
 
 <center>
   <figure class="equation">
-    <img src="/assets/ml/backprop-diagram.png" alt="Diagrama do backward error propagation."
-         style="width:100%; max-width:500px" />
-  </figure>
-</center>
-<center>
-  <figure class="equation">
-    <img src="/assets/ml/backprop-equations.png" alt="Equações do backward error propagation."
-         style="width:100%; max-width:500px" />
+    <img src="/assets/ml/nonlinear/network.png" alt="Uma rede de 2 camadas" />
   </figure>
 </center>
 
-É bem possível que a camada interna `fc1` aprenda a simular a função
-radial, já que ela é uma resposta válida para o problema. Se isso te faz
-questionar "por que não usar a radial logo de cara?", a diferença é que nós
-aprendemos a função que separa os dados. Se os dados fossem outros, com outra
-função separadora, teríamos aprendido outra ela sem problemas! :-)
+Toda rede pode ser expressa como uma função de uma entrada e de todos os
+seus parâmetros. A rede acima não é exceção:
+
+<center>
+  <figure class="equation">
+    <img src="/assets/ml/nonlinear/network_equation.png"
+         alt="Equação da rede acima: y(x, \theta) = \sigma(w_{2\_} \cdot \sigma(w_{1\_} \cdot x + b_1) + b_2)"
+         style="width:100%; max-width:600px" />
+  </figure>
+</center>
+
+Já sabemos calcular o treinamento dos pesos da camada `y` (`w^2` e `b^2`),
+usando o método  `Mini-batch Stochastic Gradient Descent`. Falta treinar os
+pesos das camadas internas. O algoritmo que faz isso é chamado de
+**backward error propagation** ou backprop.
+
+A ideia aqui geral do backprop é iterativamente propagar o erro para as
+camadas anteriores (neste caso, `a`) e utilizar o SGD para reduzir os
+parâmetros daquela camada em específico; repetindo o processo até que todas as
+camadas tenham sido atualizadas.
+
+<center>
+  <figure class="equation">
+    <img src="/assets/ml/backprop-equations.png" alt="Equações do backward error propagation." />
+  </figure>
+</center>
+
+Aplicada ao problema do conjunto não linearmente separável, é bem possível que
+a camada interna aprenda a simular a função radial, já que ela é uma resposta
+válida para o problema.
+Se isso te faz questionar "por que não usar a radial logo de cara?", a
+diferença é que nós aprendemos a função que separa os dados. Se os dados
+fossem outros, com outra função separadora, teríamos a aprendido
+sem problemas! :-)
 
 > Uma rede com duas camadas é comumente denominada **aproximador universal**,
 > devido a sua teorica capacidade de aproximar toda e qualquer função. Embora
@@ -360,7 +362,7 @@ função separadora, teríamos aprendido outra ela sem problemas! :-)
 > à complexidade necessária para treiná-la.
 
 
-### Softmax e cross-entropy loss
+### Últimas dicas (softmax e cross-entropy)
 
 Se o sinal de saída `y` é *one-hot encoded* e as amostras se distribuem
 mutualmente disjuntas umas das outras (uma amostra pertence à uma única
@@ -416,70 +418,10 @@ Várias amostras de dígitos escritos a mão. O objetivo aqui é classificar uma
 amostra entre os 10 diferentes dígitos.
 
 ```python
-import keras
-from keras import callbacks
-from keras.datasets import mnist
-from keras.models import Sequential
-from keras.layers import Dense
-from sklearn.model_selection import train_test_split
-
-from sacred import Experiment
-
-ex = Experiment('training-a-dense-network-model')
-
-
-@ex.config
-def my_config():
-    batch_size = 128
-    num_classes = 10
-    epochs = 20
-    valid_size = .25
-
-    early_stopping_patience = 5
-    ckpt = './optimal_weights.hdf5'
-
-
-@ex.automain
-def main(batch_size, num_classes, epochs, valid_size,
-         early_stopping_patience, ckpt):
-    (x_train, y_train), (x_test, y_test) = mnist.load_data()
-
-    x_train = x_train.reshape(60000, 784).astype('float32') / 255
-    x_test = x_test.reshape(10000, 784).astype('float32') / 255
-
-    x_train, x_valid, y_train, y_valid = train_test_split(
-        x_train, y_train, test_size=valid_size)
-
-    # one-hot encode train and test
-    y_train = keras.utils.to_categorical(y_train, num_classes)
-    y_valid = keras.utils.to_categorical(y_valid, num_classes)
-    y_test = keras.utils.to_categorical(y_test, num_classes)
-
-    model = Sequential([
-      Dense(1024, activation='relu', name='fc1', input_dim=784),
-      Dense(1024, activation='relu', name='fc3'),
-      Dense(num_classes, activation='softmax', name='predictions')
-    ])
-    model.compile(optimizer='SGD',
-                  loss='categorical_crossentropy',
-                  metrics=['accuracy'])
-
-    history = model.fit(x_train, y_train,
-                        batch_size=batch_size,
-                        epochs=epochs,
-                        verbose=1,
-                        validation_data=(x_valid, y_valid),
-                        callbacks=[
-                            callbacks.EarlyStopping(patience=early_stopping_patience),
-                            callbacks.ModelCheckpoint(ckpt, save_best_only=True, verbose=True)
-                        ])
-    score = model.evaluate(x_test, y_test, verbose=0)
-    print('test loss:', score[0])
-    print('test accuracy:', score[1])
+{% include code/training_dense_network.py %}
 ```
 ```shell
-INFO - training-a-keras-model - Running command 'main'
-INFO - training-a-keras-model - Started
+python training_dense_network.py with seed=42
 Train on 45000 samples, validate on 15000 samples
 Epoch 1/20
 44928/45000 [==>.] - ETA: 0s - loss: 1.2394 - acc: 0.7426Epoch 00000: val_loss improved from inf to 0.63017, saving model to ./optimal_weights.hdf5
@@ -497,8 +439,7 @@ Dica I: tente mudar o otimizador de `SGD` para `adam` e veja o grande aumento
 em performance:
 
 ```shell
-INFO - training-a-keras-model - Running command 'main'
-INFO - training-a-keras-model - Started
+python training_dense_network.py with optimizer="adam" seed=42
 Train on 45000 samples, validate on 15000 samples
 Epoch 1/20
 44800/45000 [==>.] - ETA: 0s - loss: 0.2195 - acc: 0.9344Epoch 00000: val_loss improved from inf to 0.10569, saving model to ./optimal_weights.hdf5

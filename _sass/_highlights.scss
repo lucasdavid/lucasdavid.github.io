@@ -1,12 +1,20 @@
+.highlighter-rouge {
+  margin-bottom: .5em;
+}
 
-.highlight {
+pre {
   padding: 1em 1em;
-  font-size: .8em;
-  overflow: auto;
+  font-size: 1em;
 }
 
 code {
   font-family:'Bitstream Vera Sans Mono','Courier', monospace;
+  overflow-x:scroll;
+  overflow-y: none;
+}
+
+pre code {
+  white-space: pre;
 }
 
 .highlight .c { color: #586E75 } /* Comment */
