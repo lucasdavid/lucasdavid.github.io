@@ -1,15 +1,17 @@
 ---
 layout: post
 title: Introdução ao aprendizado de máquina, pt. 3
-excerpt: Modelos não-lineares, redes artificias.
+excerpt: "Modelos não-lineares e redes artificias."
 date: 2017-10-26 21:43:00
 images:
   - url: /assets/ml/nonlinear/nonlinear-iterative-loss-improvement.png
+    alt: "A error function of one variable and an optimization point iteratively reducing the error."
+    title: "A error function of one variable and an optimization point iteratively reducing the error."
 ---
 
-# Modelos não-lineares, Redes Artificiais
+# Modelos não-lineares e Redes Artificiais
 
-Um guia compreensível, em Português e Python.
+Um guia introdutório em Português e Python.
 
 Infelizmente, as coisas nem sempre serão resolvidas com retas e linearidade.
 Para resolver esses problemas, vamos falar um pouco sobre não linearidade.
@@ -282,8 +284,9 @@ dimensionalidade que separe corretamente os dados:
 ```python
 from sklearn import datasets
 
-def layer(x, w, b, a, name):
-  return a(np.dot(x, w.T) + b)
+def dense(x, w, b, name):
+  # Apply a 'Dense' layer.
+  return np.dot(x, w.T) + b
 
 r = np.random.randn
 cancer = datasets.load_breast_cancer()
@@ -297,8 +300,10 @@ weights = [
 ]
 
 p = cancer.data
-p = layer(p, weights[0][0], weights[0][1], sigma, 'fc1')
-p = layer(p, weights[1][0], weights[1][1], sigma, 'predictions')
+p = dense(p, weights[0][0], weights[0][1], 'fc1')
+p = sigma(p)
+p = dense(p, weights[1][0], weights[1][1], 'predictions')
+p = sigma(p)
 ```
 
 O que aconteceu acima:
@@ -535,5 +540,7 @@ tivemos um bom resultado sobre **digits**. A verdade é que esse conjunto
 é um brinquedo. Ele foi pre-processado ao ponto de remover quase todos
 os problemas comumente encontrados em problemas reais, o que o simplificou
 à um ponto extremo.
-No próximo post, nós vamos ver alguns problemas mais complicados e como
-redes neurais (profundas) podem ser utilizadas para resolvê-los.
+
+No próximo [post](/ml-convolution/), nós vamos ver alguns problemas mais
+complicados e como redes neurais (profundas) podem ser utilizadas
+para resolvê-los.

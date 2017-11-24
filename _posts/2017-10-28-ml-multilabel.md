@@ -12,17 +12,15 @@ the position `i` of the vector.
 
 ```python
 import numpy as np
-from keras import Model, Input
-from keras.layers import Dense
-from keras.utils importo onehotencode
+from keras.utils import to_categorical
 
 samples = 8096
 features = 128
-classes = 1001
+classes = 1000
 
 data, target = (np.random.rand(samples, features),
-                np.random.randint(classes, shape=(samples, 1)))
-target_c = onehotencode(target)
+                np.random.randint(classes, size=(samples, 1)))
+target_c = to_categorical(target)
 ```
 
 We also define the networks to end with a `softmax` layer with the same number
@@ -36,6 +34,9 @@ of units as classes, where the activations are translated intro probabilities:
 </center>
 
 ```python
+from keras import Model, Input
+from keras.layers import Dense
+
 x = Input(shape=[299, 299, 3])
 y = Dense(1024, activation='relu')(x)
 y = Dense(1024, activation='relu')(y)
