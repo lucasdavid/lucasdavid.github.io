@@ -38,7 +38,7 @@ def main(batch_size, num_classes, optimizer, epochs, valid_size, ckpt,
     y_test = keras.utils.to_categorical(y_test, num_classes)
 
     model = Sequential([
-      InputLayer(shape=[768])
+      InputLayer(shape=[768]),
       Dense(1024, activation='relu', name='fc1'),
       Dense(1024, activation='relu', name='fc2'),
       Dense(num_classes, activation='softmax', name='predictions')
@@ -47,15 +47,24 @@ def main(batch_size, num_classes, optimizer, epochs, valid_size, ckpt,
                   loss='categorical_crossentropy',
                   metrics=['accuracy'])
 
-    history = model.fit(x_train, y_train,
-                        batch_size=batch_size,
-                        epochs=epochs,
-                        verbose=1,
-                        validation_data=(x_valid, y_valid),
-                        callbacks=[
-                            callbacks.EarlyStopping(patience=early_stopping_patience),
-                            callbacks.ModelCheckpoint(ckpt, save_best_only=True, verbose=True)
-                        ])
+    try:
+        model.fit(x_train, y_train,
+                  batch_size=batch_size,
+                  epochs=epochs,
+                  verbose=1,
+                  validation_data=(x_valid, y_valid),
+                  callbacks=[
+                      callbacks.EarlyStopping(patience=early_stopping_patience),
+                      callbacks.ModelCheckpoint(ckpt, save_best_only=True, verbose=True)
+                  ])
+    except KeyboardInterrupt:
+        print('interrupted')
+    else:
+        print('done')
+
+    print('reloading optimal weights...')
+    model.load_weights(ckpt)
+
     score = model.evaluate(x_test, y_test, verbose=0)
     print('test loss:', score[0])
     print('test accuracy:', score[1])

@@ -165,7 +165,7 @@ print(y)
 [[1, 0, 0, 0, 0],
  [1, 0, 0, 0, 0],
  [0, 0, 0, 0, 1],
-  ...]
+ ...]
 ```
 
 Treinamos agora `len(classes)` regressores logísticos (faça `w` ser uma matriz,
@@ -380,7 +380,7 @@ classe), podemos substituir a função `sigma` por uma melhor, o `softmax`.
 extritamente positivos sem desordená-los (pela propriedade da exponencial,
 "estritamente crescente", `x > y => e^x > e^y`). Isso é importante pois mantém
 unidades com alto nível de ativação como "importantes", enquanto unidades
-de baixo nível de ativação se mantém como "não importantes".  
+de baixo nível de ativação se mantém como "não importantes".
 Finalmente, ela normaliza cada saída pelo valor total, o que resulta em uma
 distribuição probabilistica. Isto é, uma imagem de um cachorro entra numa rede
 que separa entre cachorros, gatos e cavalos. Com sorte, um vetor próximo à
@@ -424,16 +424,79 @@ amostra entre os 10 diferentes dígitos.
 python training_dense_network.py with seed=42
 Train on 45000 samples, validate on 15000 samples
 Epoch 1/20
-44928/45000 [==>.] - ETA: 0s - loss: 1.2394 - acc: 0.7426Epoch 00000: val_loss improved from inf to 0.63017, saving model to ./optimal_weights.hdf5
-45000/45000 [====] - 12s - loss: 1.2386 - acc: 0.7427 - val_loss: 0.6302 - val_acc: 0.8639
+44928/45000 [==>.] - ETA: 0s - loss: 1.2223 - acc: 0.7549Epoch 00001: val_loss improved from inf to 0.62518, saving model to ./optimal_weights.hdf5
+45000/45000 [====] - 13s 288us/step - loss: 1.2214 - acc: 0.7551 - val_loss: 0.6252 - val_acc: 0.8597
 ...
 Epoch 20/20
-44800/45000 [==>.] - ETA: 0s - loss: 0.1653 - acc: 0.9535Epoch 00019: val_loss improved from 0.17629 to 0.17221, saving model to ./optimal_weights.hdf5
-45000/45000 [====] - 13s - loss: 0.1652 - acc: 0.9536 - val_loss: 0.1722 - val_acc: 0.9515
-test loss: 0.167305353248
-test accuracy: 0.9526
+44928/45000 [==>.] - ETA: 0s - loss: 0.1678 - acc: 0.9533Epoch 00020: val_loss improved from 0.19170 to 0.18757, saving model to ./optimal_weights.hdf5
+45000/45000 [====] - 13s 284us/step - loss: 0.1680 - acc: 0.9532 - val_loss: 0.1876 - val_acc: 0.9470
+reloading optimal weights...
+test loss: 0.171604911404
+test accuracy: 0.9512
 INFO - training-a-keras-model - Completed after 0:04:27
 ```
+
+Pra ilustrar, podemos exibir alguns dígitos e pedir para o modelo predizer quais são estes.
+Também pode ser útil visualizar as amostras que estamos errando.
+
+```python
+import matplotlib.pyplot as plt
+
+def plot_digits_and_predictions(x, y, p, name):
+    plt.figure(figsize=(8, 24))
+
+    for i, (_x, _y, _p) in enumerate(zip(x, y, p)):
+        plt.subplot(len(x), 2, 2 * i + 1)
+        plt.imshow(_x.reshape(28, 28))
+        plt.axis('off')
+        plt.title('Digit %i' % int(_y))
+        plt.subplot(len(x), 2, 2 * i + 2)
+        plt.bar(range(10), _p, color='crimson')
+        plt.xticks(range(10), map(str, range(10)))
+        plt.yticks([i / 100 for i in range(0, 101, 25)],
+                   ['%i%%' % i for i in range(0, 101, 25)])
+        plt.title('Label Probability')
+    plt.tight_layout()
+    plt.savefig(name)
+
+p_test = model.predict(x_test)
+
+plot_digits_and_predictions(x_test[:10],
+                            y_test[:10],
+                            p_test[:10],
+                            'digit-predictions.png')
+
+misses = np.argmax(p_test, axis=1) != y_test
+# retain only the first 10 incorrect predictions
+plot_digits_and_predictions(x_test[misses][:10],
+                            y_test[misses][:10],
+                            p_test[misses][:10],
+                            'digit-wrong-predictions.png')
+```
+
+Pelas imagens na coluna à esquerda abaixo, o modelo parece classificar com
+bastante certeza as primeiras 10 amostras do conjunto de teste.
+Quanto à amostras classificadas incorretamente (coluna à direita),
+observamos que **algumas** amostras apresentam forte variação no estilo de
+escrita (o primeiro dígito, por exemplo, não se parece um perfeitamente claro 5).
+
+<center>
+<div class="row">
+    <div class="col-md-6">
+       <figure class="equation">
+        <img src="/assets/ml/nonlinear/digit-predictions.png" alt="Alguns dígitos e as predições da rede referentes à eles."
+             style="width:100%" />
+      </figure>
+    </div>
+    <div class="col-md-6">
+       <figure class="equation">
+        <img src="/assets/ml/nonlinear/digit-wrong-predictions.png" alt="Alguns dígitos preditos como incorreto pela rede."
+             style="width:100%" />
+      </figure>
+    </div>
+</div>
+</center>
+
 
 Dica I: tente mudar o otimizador de `SGD` para `adam` e veja o grande aumento
 em performance:
@@ -455,15 +518,22 @@ Epoch 6/20
 Epoch 11/20
 44800/45000 [==>.] - ETA: 0s - loss: 0.0138 - acc: 0.9956Epoch 00010: val_loss did not improve
 45000/45000 [====] - 16s - loss: 0.0137 - acc: 0.9956 - val_loss: 0.1139 - val_acc: 0.9745
+reloading optimal weights...
 test loss: 0.107181316118
 test accuracy: 0.9765
 INFO - training-a-keras-model - Completed after 0:03:12
 ```
 
-Acurácia em teste aumentou em metade do número de épocas. Se você está começando
+> Acurácia em teste aumentou em metade do número de épocas. Se você está começando
 e não tem nenhuma informação sobre o problema, vá com `adam`.
 Se as coisas não funcionarem como deveriam, tente reduzir o `lr` ou usar
 métodos mais simples como o `SGD` ou `Momentum`.
 
-Dica II: veja mais exemplos aqui:
-[fchollet/keras/.../examples](https://github.com/fchollet/keras/blob/master/examples).
+Uma rede densa sofre de vários problemas que a torna pouco indicada para
+para processamento de *raw data* (imagens, vídeos, audio). Ainda sim,
+tivemos um bom resultado sobre **digits**. A verdade é que esse conjunto
+é um brinquedo. Ele foi pre-processado ao ponto de remover quase todos
+os problemas comumente encontrados em problemas reais, o que o simplificou
+à um ponto extremo.
+No próximo post, nós vamos ver alguns problemas mais complicados e como
+redes neurais (profundas) podem ser utilizadas para resolvê-los.
