@@ -1,21 +1,13 @@
-#
-# This file contains configuration flags to customize your site
-#
-
-# Name of your site (displayed in the header)
-name: Lucas David
-
-# Short bio or description (displayed in the header)
-description: Some Tutorials & Thoughts
-
-# URL of your avatar or profile pic (you could use your GitHub profile pic)
+name: ldavid
+description:
 avatar: /assets/profile-s.jpg
 
 #
 # Flags below are optional
 #
 
-# Includes an icon in the footer for each username you enter
+paginate_path: "/page/:num/"
+
 footer-links:
   dribbble:
   email: lucasolivdavid@gmail.com
@@ -73,6 +65,7 @@ sass:
 
 plugins:
   - jekyll-sitemap
+  - jekyll-paginate
   - jekyll-feed
 
 # Exclude these files from your production _site
@@ -82,3 +75,4 @@ exclude:
   - LICENSE
   - README.md
   - CNAME
+  - vendor/

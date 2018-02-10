@@ -2,19 +2,42 @@
 layout: default
 ---
 
-<div class="posts">
-  {% for post in site.posts %}
-    <article class="post">
+<div class="small-empty-v-space"></div>
 
-      <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
-
-      <div class="entry">
-        {{ post.excerpt }}<br>
-        {% assign image = post.images[0] %}
-        {% include image.html image=image %}
+<div class="container">
+  {% assign categories = site.categories | sort %}
+  {% for c in categories %}
+    <div class="category">
+      <h4 class="title">{{c[0] | replace: '-',' '}}</h4>
+      <div class="grid-wrapper">
+        <div class="grid-{{c[0]}}">
+          <div class="grid-sizer"></div>
+          <div class="gutter-sizer"></div>
+          {% assign posts = c[1] | sort %}
+          {% for post in posts %}
+            <div class="grid-item">
+              {% include post-preview.html post=post %}
+            </div>
+          {% endfor %}
+        </div>
       </div>
-
-      <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
-    </article>
+    </div>
   {% endfor %}
 </div>
+
+<script type="text/javascript" src="{{site.basedir}}/assets/js/masonry.min.js"></script>
+<script type="text/javascript" src="{{site.basedir}}/assets/js/imagesloaded.min.js"></script>
+
+<script type="text/javascript">
+  {% for c in site.categories %}
+    imagesLoaded('.grid-{{c[0]}}', function () {
+      var msnry = new Masonry('.grid-{{c[0]}}', {
+        itemSelector: '.grid-item',
+        columnWidth: '.grid-sizer',
+        gutter: '.gutter-sizer',
+        horizontalOrder: true,
+        percentPosition: true
+      });
+    });
+  {% endfor %}
+</script>
