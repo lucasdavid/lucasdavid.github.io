@@ -5,7 +5,6 @@
 // IMPORTS
 //
 
-@import 'materialize/materialize';
 @import '_variables';
 @import '_masonry';
 
@@ -36,6 +35,12 @@
     clear: both;
 }
 
+body {
+  background: white; // #f8f9fa;
+}
+
+
+
 //
 // Headers
 //
@@ -61,31 +66,18 @@ h1, h2, h3, h4 {
 }
 
 //
-// Recodists page
-//
-.recodist-wrapper {
-  margin-bottom: 2em;
-  height:400px;
-  overflow-y: hidden;
-
-  .name {
-    margin-top:0;
-    margin-bottom: 0;
-  }
-
-  .institute {
-
-  }
-
-  .interests {
-
-  }
-}
-
-//
 // Posts
 //
-.post {
+.article-content {
+  color: #444;
+  font-family: 'SwiftNeueLTW01', Georgia, serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1.25em;
+  line-height: 1.5;
+  margin: 0 0 1em;
+  letter-spacing: .01em;
+  
   .title {
   }
 
@@ -160,10 +152,6 @@ hr {
   margin-top:.25em;
 }
 
-.post > p {
-  text-align: justify;
-}
-
 .category {
   .title {
     margin-top: 2rem;
@@ -174,5 +162,20 @@ hr {
   border-bottom: 1px solid #eee;
 }
 
+.bg-purple {
+  background-color: $purple;
+}
+
 @import "highlights";
 @import "svg-icons";
+
+
+//
+// Figures
+//
+
+figure > figcaption {
+  font-size: .8em;
+  color: $gray;
+  text-align: center;
+}

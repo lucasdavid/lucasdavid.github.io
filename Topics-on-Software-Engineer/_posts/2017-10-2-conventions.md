@@ -2,16 +2,23 @@
 layout: post
 title: Code Conventions and Personal Hints
 excerpt: My Perspective on Multiple Examples of Coding
+first_p: |-
+    Conventions are created by people. They encapsulate, inherently, these same people's preconceptions and opinions. Bottom line is: they are not necessary logical (although, in many cases, much study is done before adopting a convention). Therefore, it is okay to disagree with conventions and what they state.
 date: 2017-10-2 00:05:00
-color: indigo darken-1
+lead_image: /assets/images/posts/pep8.webp
 ---
 
-## Introduction
-No, this isn't a post saying that you shouldn't create variables called `aux1`, `aux2` and `aux3` (you shouldn't, though).
+<span class="display-6">No</span>, this isn't a post saying that you shouldn't create variables called `aux1`, `aux2` and `aux3` (you shouldn't, though).
 
 [Conventions](https://en.wikipedia.org/wiki/Coding_conventions) are created by people. They encapsulate, inherently, these same people's preconceptions and opinions. Bottom line is: they are not necessary logical (although, in many cases, much study is done before adopting a convention). Therefore, it is okay to disagree with conventions and what they state.
 
 That doesn't mean they were created to be broken. They represent an important feature that allows people that don't even speak the same language to create, understand, modified and improved by each other's code.
+
+<figure>
+  <img src="/assets/images/posts/pep8.webp" alt="A fun drawing of PEP8 compliant code." class="figure-img img-fluid rounded" />
+    <figcaption>A fun drawing of PEP8 complaint code. Available at:
+      <a href="https://realpython.com/python-pep8/">realpython/python-pep8</a></figcaption>
+</figure>
 
 So what do we do? I've come to the conclusion that it's very important to follow SOME convention. Ideally, the conventions that most people follow in your current programming language. However, you should never stop looking up for new styles that might interest you and why not.
 

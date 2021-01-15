@@ -4,17 +4,25 @@ layout: default
 
 <div class="small-empty-v-space"></div>
 
-<div class="container">
-  <article class="post post-extended">
-    <h1 class="header grey-text text-darken-3">{{ page.title }}</h1>
-    <div class="right-align">
-      <p class="grey-text darken-1">— {{ page.date | date: "%B %e, %Y" }}</p>
+<article class="container">
+  <div class="row">
+    <div class="col-12 col-lg-3"></div>
+    <div class="col-12 col-lg-7">
+      <article class="post">
+        <h1 class="display-4">{{ page.title }}</h1>
+        <div class="right-align">
+          <p class="small text-muted">{{ page.excerpt }} <em>— {{ page.date | date: "%B %e, %Y" }}</em></p>
+        </div>
+
+        <div class="article-content">
+          {{ content }}
+        </div>
+
+        <div class="empty-v-space"></div>
+
+        {% include disqus.html %}
+      </article>
     </div>
-
-    {{ content }}
-
-    <div class="empty-v-space"></div>
-
-    {% include disqus.html %}
-  </article>
-</div>
+    <div class="col-12 col-lg-2"></div>
+  </div>
+</article>

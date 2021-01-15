@@ -2,8 +2,16 @@
 layout: post
 title: Multilabel Learning Problems
 excerpt: Dealing with ML classification problems that deal where samples aren't mutually disjointed.
+first_p: |-
+  In classic classification with networks, samples belong to a single class.
+  We usually code this relationship using one-hot encoding: a label <code>i</code> is
+  transformed into a vector <code>[0, 0, ... 1.0, ..., 0, 0]</code>, where the <code>1</code> is at
+  the position <code>i</code> of the vector.
 date: 2017-10-26 21:43:00
-color: pink darken-2
+lead_image: /assets/ml/deep/dog-cat.jpeg
+tags:
+  - ML
+  - classification
 ---
 
 In classic classification with networks, samples belong to a single class.
@@ -84,6 +92,35 @@ Because `sigmoid`'s shape, probabilities are no longer normalized between
 the different activation units. This means that `model` might output an
 entire vector of ones `(1., 1., ..., 1.)` or zeros `(0., 0., ..., 0.)` -- even
 though such situations are unlikely to happen.
+
+Finally, we must replace our `categorical_crossentropy` loss function by the
+`binary_crossentropy`. To ensure we are up with the base concepts, this is the
+categorical cross-entropy function definition once again:
+
+<center>
+{% include figure.html
+   src="/assets/ml/eq-crossentropy.png"
+   alt="A definição da equação 'categorical cross-entropy loss': 'E(y, p) = -(y log(p))/N'"
+   figcaption="A definição da equação 'categorical cross-entropy loss': 'E(y, p) = -(y log(p))/N'" %}
+</center>
+
+So let *x* be any given sample from the dataset, associated with the class of index *k*.
+From the equation above, we know all *yi* are 0, with exception of *yk*. Hence all terms *i != k*
+of the sum will be equal to *0* and will not directly affect the value of the loss function
+(the adjacent activation units *yi* s.t. *y != k* are still indirectly related through the softmax function).
+
+We use here a new loss function, that accounts for the independency of each activation unit
+of the networks's last layer:
+<center>
+{% include figure.html
+   src="/assets/ml/eq-binary-crossentropy.png"
+   alt="A definição da equação 'binary cross-entropy loss': 'E(y, p) = -[y log(p) + (1-y) log(1 - p)]/N'"
+   figcaption="A equação da 'binary cross-entropy loss': 'E(y, p) = -[y log(p) + (1-y) log(1 - p)]/N'" %}
+</center>
+
+From the figure above, we can see this *loss function* contains two terms.
+Differently from the categorical cross-entropy, all units directly contribute to the summation through
+one of the terms.
 
 ## A Practical Example
 

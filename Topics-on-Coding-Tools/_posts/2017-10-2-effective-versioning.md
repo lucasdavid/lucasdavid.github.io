@@ -2,24 +2,23 @@
 layout: post
 title: Effective Code Versioning
 excerpt: Digging Deep in Code Versioning with GIT
+first_p: |-
+  Some weeks ago, I've started this blog with this very subject. Today, as requested by a reader, I'll go back and try to talk a little bit more about versioning focusing on GIT, it's problems and how to avoid/fix them.
 date: 2017-10-2 00:08:00
-color: blue darken-2
+lead_image: /assets/images/posts/git-advanced.svg
+tags:
+  - devops
 ---
 
-## Introduction
+<span class="display-6">Some</span>
+weeks ago, I've started this blog with this [very subject](https://ycoding.wordpress.com/2015/05/03/14/). Today, as requested by a reader, I'll go back and try to talk a little bit more about versioning (focusing on [GIT](http://git-scm.com/)), it's problems and how to avoid/fix them.
 
-<div class="row">
-  <div class="col-md-7">
-    Some weeks ago, I've started this blog with this [very subject](https://ycoding.wordpress.com/2015/05/03/14/). Today, as requested by a reader, I'll go back and try to talk a little bit more about versioning (focusing on [GIT](http://git-scm.com/)), it's problems and how to avoid/fix them.
+Versioning is great. If you're coding alone, it provides you cool features, like saving, branching, rolling back, reverting, peeking previous states etc. In the other hand, if you're working with a team, it becomes even more important:, as it's a way to automate what can be automated, stop wasting so much time on team management and focus on your domain problem.
 
-    Versioning is great. If you're coding alone, it provides you cool features, like saving, branching, rolling back, reverting, peeking previous states etc. In the other hand, if you're working with a team, it becomes even more important:, as it's a way to automate what can be automated, stop wasting so much time on team management and focus on your domain problem.
-  </div>
-  <div class="col-md-5">
-    <figure>
-      <img src="/assets/git-advanced.svg" alt="Git's advanced flow">
-    </figure>
-  </div>
-</div>
+<figure>
+  <img src="/assets/images/posts/git-advanced.svg" alt="An advanced flow using Git" class="figure-img img-fluid rounded" />
+    <figcaption>An advanced flow using Git. Available at: <a href="https://www.benmarshall.me/git-rebase/">benmarshall.me</a></figcaption>
+</figure>
 
 ## First, some important GIT concepts
 

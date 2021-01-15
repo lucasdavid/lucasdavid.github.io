@@ -2,22 +2,20 @@
 layout: post
 title: Code Versioning
 excerpt: The basics on GIT and code storage
+first_p: |-
+    Versioning is one of the most basic ideas in software development, but is treated with such contempt that lots of people only start to actually use it after too much manual effort. Someone somewhere at some point said: "the idea of a human doing a task that could be automated by a machine just makes me sad". I think this sentence sums up pretty much everything about versioning: you can develop without it, sure, but it would be just painful and, considering the formality of computers, it would just result in a shittier job, most likely.
 date: 2017-10-2 00:01:00
-color: blue lighten-1
+lead_image: /assets/images/posts/git.svg
+tags:
+  - devops
 ---
 
-## Introduction
+<span class="display-6">Versioning</span> is one of the most basic ideas in software development, but is treated with such contempt that lots of people only start to actually use it after too much manual effort. Someone somewhere at some point said: "the idea of a human doing a task that could be automated by a machine just makes me sad". I think this sentence sums up pretty much everything about versioning: you can develop without it, sure, but it would be just painful and, considering the formality of computers, it would just result in a shittier job, most likely.
 
-<div class="row">
-  <div class="col-md-7">
-    Versioning is one of the most basic ideas in software development, but is treated with such contempt that lots of people only start to actually use it after too much manual effort. Someone somewhere at some point said: "the idea of a human doing a task that could be automated by a machine just makes me sad". I think this sentence sums up pretty much everything about versioning: you can develop without it, sure, but it would be just painful and, considering the formality of computers, it would just result in a shittier job, most likely.
-  </div>
-  <div class="col-md-5">
-    <figure>
-      <img src="/assets/git.svg" alt="Git's basic flow">
-    </figure>
-  </div>
-</div>
+<figure>
+  <img src="/assets/images/posts/git.svg" alt="A simple flow using Git" class="figure-img img-fluid rounded" />
+    <figcaption>A simple flow using Git. Available at: <a href="https://www.benmarshall.me/git-rebase/">benmarshall.me</a></figcaption>
+</figure>
 
 ## What are versioning control softwares
 

@@ -2,13 +2,23 @@
 layout: post
 title: Introdução ao aprendizado de máquina, pt. 3
 excerpt: "Modelos não-lineares e redes artificias."
+first_p: |-
+  Apesar do nome "regressão logíca", este método remete à uma atividade de
+  classificação. Diferente da regressão, a nossa preocupação do agente inteligente
+  aqui não é estimar um valor, mas sim dar uma resposta: sim ou não.
+
+  Como fazer isso sem perdermos o que nós aprendemos acima? Podemos
+  utilizar uma função de ativação. Uma função aplicada sobre a saída
+  de um modelo linear que restringe a resposta à um certo intervalo.  
 date: 2017-10-26 21:43:00
-color: purple darken-2
+lead_image: /assets/ml/nonlinear/nonlinear-iterative-loss-improvement.png
+tags:
+  - ML
 ---
 
-Felizmente, as coisas nem sempre serão resolvidas com retas e linearidade.
+<span class="display-6">Felizmente,</span>
+as coisas nem sempre podem ser resolvidas com retas e linearidade.
 Para resolver esses problemas, vamos falar um pouco sobre não linearidade.
-
 
 ## Classificação por regressão logística
 
@@ -480,17 +490,16 @@ escrita (o primeiro dígito, por exemplo, não se parece um perfeitamente claro 
 
 <center>
 <div class="row">
-  <div class="col m5">
+  <div class="col-6 m0">
      <figure class="equation">
       <img src="/assets/ml/nonlinear/digit-predictions.png" alt="Alguns dígitos e as predições da rede referentes à eles."
-           class="responsive-img" />
+           class="img-fluid" />
     </figure>
   </div>
-  <div class="col m1"></div>
-  <div class="col m5">
+  <div class="col-6 m0">
      <figure class="equation">
       <img src="/assets/ml/nonlinear/digit-wrong-predictions.png" alt="Alguns dígitos preditos como incorreto pela rede."
-           class="responsive-img" />
+           class="img-fluid" />
     </figure>
   </div>
 </div>

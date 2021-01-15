@@ -1,4 +1,4 @@
-$(document).ready(function(){
-  $('#nav-mobile').sidenav();
-  $('.materialboxed').materialbox();
-});
+// $(document).ready(function(){
+//   $('#nav-mobile').sidenav();
+//   $('.materialboxed').materialbox();
+// });

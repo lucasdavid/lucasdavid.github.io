@@ -1,12 +1,27 @@
 ---
 layout: post
 title: Introdução ao aprendizado de máquina, pt. 4
-excerpt: Convoluções, o início de deep-learning.
+excerpt: Convoluções, o início de deep-learning
+first_p: |-
+  Na parte 3, eu mostrei alguns modelos não lineares
+  e como eles lidam com a tarefa de classificação. No geral, redes densas
+  possuem duas ou três camadas.
+  Isso acontece pois observa-se empiricamente que o ganho em <i>validation loss</i>
+  não segue linearmente com a adição de mais camadas. Além disso, este pequeno
+  ganho também pode ser alcançado ao simplesmente aumentar o número de unidades
+  nas camadas já presentes na rede densa.
+
+  Por quê precisamos da ideia de deep-learning e deep-models, então?
 date: 2017-12-24 21:17:00
 color: purple darken-3
+lead_image: /assets/ml/deep/conv_outputs.jpg
+tags:
+  - ML
+  - classification
 ---
 
-Na [parte 3](/ml-nonlinear), eu mostrei alguns modelos não lineares
+<span class="display-6">Na</span>
+[parte 3](/ml-nonlinear), eu mostrei alguns modelos não lineares
 e como eles lidam com a tarefa de classificação. No geral, redes densas
 possuem duas ou três camadas.
 Isso acontece pois observa-se empiricamente que o ganho em *validation loss*
@@ -17,14 +32,10 @@ nas camadas já presentes na rede densa.
 Por quê precisamos da ideia de *deep-learning* e *deep-models*, então?
 Vamos voltar à imagem da introdução:
 
-<center>
-  <figure>
-    <img src="/assets/ml/intro/ml-computing.png"
-         alt="Aprendizado de máquina clássico"
-         class="responsive-img" />
-    <figcaption>Aprendizado de máquina clássico</figcaption>
-  </figure>
-</center>
+{% include figure.html
+   src="/assets/ml/intro/ml-computing.png"
+   alt="Aprendizado de máquina"
+   figcaption="Aprendizado de máquina clássico." %}
 
 O aprendizado de máquina clássico se focou em preencher a lacuna do centro
 do fluxo. O "como" resolver um problema. Os modelos clássicos, portanto,
@@ -55,28 +66,20 @@ semânticas de dados não estruturados.
 Eles são integrados ao início do *pipeline* de processamento e podem, portanto,
 ser vistos como uma extensão do aprendizado de máquina 'clássico':
 
-<center>
-  <figure>
-    <img src="/assets/ml/deep/dml-computing.png"
-         alt="Aprendizado de máquina 'profundo'"
-         class="responsive-img" />
-    <figcaption>Aprendizado de máquina 'profundo'</figcaption>
-  </figure>
-</center>
-
+{% include figure.html
+   src="/assets/ml/deep/dml-computing.png"
+   alt="Aprendizado de máquina 'profundo'"
+   figcaption="Aprendizado de máquina profundo." %}
 
 ## Descrição das camadas convolucionais
 
 Vamos entender como as redes convolucionais funcionam na prática.
 Considere a imagem do urso koala abaixo:
 
-<center>
-  <figure>
-    <img src="/assets/ml/deep/koala.jpg"
-         alt="A imagem de um urso Koala."
-         class="responsive-img" />
-  </figure>
-</center>
+{% include figure.html
+   src="/assets/ml/deep/koala.jpg"
+   alt="A imagem de um koala sobre uma árvore."
+   figcaption="A fotografia de um koala sobre uma árvore." %}
 
 Primeiramente, confirme que você tem a biblioteca keras instalada com
 `pip install --upgrade keras`. Com o código abaixo, podemos carregar o koala
@@ -117,16 +120,15 @@ mas apenas à uma pequena porção local do seu campo de recepção visual.
 Os parâmetros da unidade promovem uma ativação de alta intensidade na detecção
 de um determinado padrão:
 
-
 <center>
   <figure>
     <img src="/assets/ml/deep/conv.jpg"
          alt="Exemplo de Hadamard entre uma região local de um sinal de entrada e um kernel, seguido de uma soma redutiva."
-         class="responsive-img" />
+         class="img-fluid" />
+    
      <figcaption>
-       Exemplo de Hadamard entre uma região local de um sinal de entrada e um kernel, seguido de uma soma redutiva.<br />
-       Disponível em:
-       <a href="https://stats.stackexchange.com/questions/114385/what-is-the-difference-between-convolutional-neural-networks-restricted-boltzma">stackexchange.com</a>
+        Exemplo de Hadamard entre uma região local de um sinal de entrada e um kernel, seguido de uma soma redutiva.
+        Disponível em: <a href="https://stats.stackexchange.com/questions/114385/what-is-the-difference-between-convolutional-neural-networks-restricted-boltzma">stackexchange.com</a>
      </figcaption>
   </figure>
 </center>
@@ -290,7 +292,7 @@ saída desta rede convolucional, criando assim um *pipeline* completo -- porém 
 <center>
 <figure>
   <img src="/assets/ml/deep/convnet.png"
-       class="responsive-img" >
+       class="figure-img img-fluid rounded" >
   <figcaption>
     Exemplo de rede convolucional aplicada ao processamento de imagens.
     Disponível em: <a href="https://adeshpande3.github.io/A-Beginner%27s-Guide-To-Understanding-Convolutional-Neural-Networks/">adeshpande3.github.io</a>
@@ -326,10 +328,10 @@ automóvel, pássaro etc).
 <center>
 <figure>
   <img src="/assets/ml/deep/cifar10.png" width="400"
-       class="responsive-img">
+       class="figure-img img-fluid rounded">
   <figcaption>
-  Exemplo de amostras em cifar10.
-  Disponível em: <a href="https://www.cs.toronto.edu/~kriz/cifar.html">cs.toronto.edu/~kriz/cifar.html</a>
+    Exemplo de amostras em cifar10.
+    Disponível em: <a href="https://www.cs.toronto.edu/~kriz/cifar.html">cs.toronto.edu/~kriz/cifar.html</a>
   </figcaption>
 </figure>
 </center>
@@ -529,7 +531,7 @@ plt.clf()
 <center>
 <figure>
 <img src="/assets/ml/deep/conv_outputs.jpg"
-     class="responsive-img" >
+     class="figure-img img-fluid rounded" >
   <figcaption>
   Visualização das saídas produzidas pelas camadas observadas, quando a rede é alimentada com o koala.
   </figcaption>

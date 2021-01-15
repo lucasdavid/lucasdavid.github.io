@@ -3,23 +3,33 @@ layout: post
 title: Repository Pattern
 excerpt: Understanding A Data Abstraction Pattern
 date: 2017-10-2 00:07:00
-color: indigo darken-4
+first_p: |-
+  Real life applications might have to communicate with more than one data source. Data might be coming from/going to different places and it's hard to keep it simple, as you have to implement the interaction with all of these places individually. The repository pattern abstracts the data layer (how you store and retrieve your resources), making it transparent to the business layer.
+tags:
+  - engineering
 ---
 
-## Introduction
-Real life applications might have to communicate with more than one data source. Data might be coming from/going to different places and it's hard to keep it simple, as you have to implement the interaction with all of these places individually. The [repository pattern](http://docs.spring.io/spring-data/data-commons/docs/1.6.1.RELEASE/reference/html/repositories.html) abstracts the data layer (how you store and retrieve your resources), making it transparent to the business layer. It's important to keep in mind that it does not replace an [ORM](https://ycoding.wordpress.com/2015/05/03/object-relational-mapping/), which is specifically defined to map model classes to database entities.
+<span class="display-6">Real</span> life applications might have to communicate with more than one data source. Data might be coming from/going to different places and it's hard to keep it simple, as you have to implement the interaction with all of these places individually. The [repository pattern](http://docs.spring.io/spring-data/data-commons/docs/1.6.1.RELEASE/reference/html/repositories.html) abstracts the data layer (how you store and retrieve your resources), making it transparent to the business layer. It's important to keep in mind that it does not replace an [ORM](https://ycoding.wordpress.com/2015/05/03/object-relational-mapping/), which is specifically defined to map model classes to database entities.
 
 ## Example #1: invisible database
 [Spring](https://spring.io/) has one of the greatest Repository Pattern implementations, although these are specifically designed to abstract databases. Here, the repositories are interfaces and the queries are built based on the methods signatures.
 ```java
-public interface ProductRepository extends CrudRepository<Product, Long>, QueryDslPredicateExecutor<Product> {
-    // Returns a {@link Page} of {@link Product}s having a description which contains the given snippet.
-    Page<Product> findByDescriptionContaining(String description, Pageable pageable);
+public interface ProductRepository
+       extends CrudRepository<Product, Long>,
+               QueryDslPredicateExecutor<Product>
+{
+    // Returns a {@link Page} of {@link Product}s having a
+    // description which contains the given snippet.
+    Page<Product> findByDescriptionContaining(
+        String description,
+        Pageable pageable);
 
 
     // Returns all {@link Product}s having the given attribute.
     @Query("{ ?0 : ?1 }")
-    List<Product> findByAttributes(String key, String value);
+    List<Product> findByAttributes(
+        String key,
+        String value);
 }
 ```
 *Example taken from [spring-data-book](https://github.com/spring-projects/spring-data-book/blob/master/mongodb/src/main/java/com/oreilly/springdata/mongodb/core/ProductRepository.java).*

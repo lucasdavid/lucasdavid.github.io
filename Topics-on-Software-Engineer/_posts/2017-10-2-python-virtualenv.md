@@ -2,13 +2,14 @@
 layout: post
 title: Python virtualenv and Dependency Management
 excerpt: The basics project's dependency management using virtualenv
+first_p: |-
+    If you like Java or C#, you most likely have had contact with Maven or NuGet. These are both amazing utilities that can help you managing your projects and their dependencies. These tools will basically retrieve packages from a repository and install them somewhere, making them easily <code>[imported|used|updated|removed]</code> (read this as a regular expression). They can also modify or create structures or files inside your project, providing you a starting point for doing something. There is much stuff here, check out their web-pages to see what I'm talking about.
 date: 2017-10-2 00:02:00
-color: indigo lighten-1
+tags:
+  - devops
 ---
 
-## Introduction
-
-If you like Java or C#, you most likely have had contact with [Maven](https://maven.apache.org/) or [NuGet](https://www.nuget.org/). These are both amazing utilities that can help you managing your projects and their dependencies. These tools will basically retrieve packages from a repository and install them somewhere, making them easily `[imported|used|updated|removed]` (read this as a [regular expression](http://en.wikipedia.org/wiki/Regular_expression)). They can also modify or create structures or files inside your project, providing you a starting point for doing something. There is much stuff here, check out their web-pages to see what I'm talking about.
+<span class="display-6">If</span> you like Java or C#, you most likely have had contact with [Maven](https://maven.apache.org/) or [NuGet](https://www.nuget.org/). These are both amazing utilities that can help you managing your projects and their dependencies. These tools will basically retrieve packages from a repository and install them somewhere, making them easily `[imported|used|updated|removed]` (read this as a [regular expression](http://en.wikipedia.org/wiki/Regular_expression)). They can also modify or create structures or files inside your project, providing you a starting point for doing something. There is much stuff here, check out their web-pages to see what I'm talking about.
 
 Let's focus this discussion on Python. Python, of course, has a similarly cool feature. It's called [pip](https://pypi.python.org/pypi/pip).
 
