@@ -261,6 +261,7 @@ PLATFORMS
 DEPENDENCIES
   github-pages
   jekyll-feed
+  jekyll-github-metadata
   jekyll-paginate
   jekyll-sitemap
 

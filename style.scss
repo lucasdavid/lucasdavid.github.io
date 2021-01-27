@@ -6,7 +6,6 @@
 //
 
 @import '_variables';
-@import '_masonry';
 
 // Fixes images in popup boxes from Google Translate
 .gmnoprint img {
@@ -39,6 +38,13 @@ body {
   background: white; // #f8f9fa;
 }
 
+a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
 
 
 //

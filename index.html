@@ -4,22 +4,20 @@ layout: default
 
 <div class="container-fluid">
   <div class="row">
-    <div class="col-12 col-lg-3 bg-white pt-4">
-      <div class="mb-2">
-      </div>
-      <div class="profile-container">
-        {% include profile.html %}
+    <div class="col-12 col-md-3 col-xl-2 pt-4 border-end">
+      <div class="profile-container mt-2">
+        {% include index/profile.html %}
       </div>
     </div>
-    <div class="col-12 col-lg-7 col-xl-5 pt-4">
+    <div class="col-12 col-md-7 col-xl-6 col-xxl-5 offset-xl-1 pt-4">
       <div class="list-group list-group-flush">
-        {% for post in site.posts %}
+        {% for post in site.posts limit:16 %}
           {% include post-preview.html post=post %}
         {% endfor %}
       </div>
     </div>
-    <div class="col-12 col-lg-2 offset-xl-2 pt-4">
-      <!-- <h3>GitHub Projects</h3> -->
-      </div>
+    <div class="col-12 col-md-2 col-xl-2 offset-xl-1 offset-xxl-2 pt-4">
+      {% include index/projects.html %}
+    </div>
   </div>
 </div>
