@@ -6,6 +6,9 @@ first_p: |-
     Conventions are created by people. They encapsulate, inherently, these same people's preconceptions and opinions. Bottom line is: they are not necessary logical (although, in many cases, much study is done before adopting a convention). Therefore, it is okay to disagree with conventions and what they state.
 date: 2017-10-2 00:05:00
 lead_image: /assets/images/posts/pep8.webp
+tags:
+  - engineering
+  - patterns
 ---
 
 <span class="display-6">No</span>, this isn't a post saying that you shouldn't create variables called `aux1`, `aux2` and `aux3` (you shouldn't, though).

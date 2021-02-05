@@ -130,7 +130,14 @@ h1, h2, h3, h4 {
 hr {
   margin: 2em 0 3em 0;
   border: 3px solid #efefef;
+
+  &.thin {
+    border:none;
+    height: 1px;
+    color: #aaa;
+  }
 }
+
 
 //
 // Mixins

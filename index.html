@@ -4,20 +4,28 @@ layout: default
 
 <div class="container-fluid">
   <div class="row">
-    <div class="col-12 col-md-3 col-xl-2 pt-4 border-end">
-      <div class="profile-container mt-2">
-        {% include index/profile.html %}
+    <div class="col-12 col-md-3 col-xl-2 border-end profile-container">
+      <div class="pt-4 sticky-top">
+        <div>{% include index/profile.html %}</div>
+        <div class="mt-4">{% include index/interests.html %}</div>
+        <div class="mt-4">{% include posts/summary.html %}</div>
       </div>
     </div>
     <div class="col-12 col-md-7 col-xl-6 col-xxl-5 offset-xl-1 pt-4">
       <div class="list-group list-group-flush">
         {% for post in site.posts limit:16 %}
-          {% include post-preview.html post=post %}
+        <div>
+          {% include posts/preview.html post=post %}
+        </div>
+        
+        <hr class="mt-4 mb-4 mb-0 thin">
         {% endfor %}
       </div>
     </div>
-    <div class="col-12 col-md-2 col-xl-2 offset-xl-1 offset-xxl-2 pt-4">
-      {% include index/projects.html %}
+    <div class="col-12 col-md-2 col-xl-2 offset-xl-1 offset-xxl-2">
+      <div class="pt-4">
+        {% include index/projects.html %}
+      </div>
     </div>
   </div>
 </div>

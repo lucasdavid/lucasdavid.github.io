@@ -18,6 +18,8 @@ lead_image: /assets/ml/deep/conv_outputs.jpg
 tags:
   - ML
   - classification
+  - computer vision
+  - convolutional networks
 ---
 
 <span class="display-6">Na</span>

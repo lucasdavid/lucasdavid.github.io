@@ -1,0 +1,19 @@
+<span class="text-muted" style="font-size:.8em">
+  {{ post.date | date: "%b %e, %Y" }}
+</span>
+
+<h2 style="font-weight:900;">
+  <a href="{{ site.baseurl }}{{ post.url }}" class="text-dark" style="text-decoration: none;">{{ post.title }}</a>
+  <br>
+  <small class="lead text-muted" style="font-size: .5em;">{{ post.excerpt }}</small>
+</h2>
+
+{% if post.lead_image %}
+<div style="max-height: 300px; overflow-y: hidden" class="mb-2">
+  <img src="{{ site.baseurl }}{{ post.lead_image }}" class="figure-img img-fluid rounded" />
+</div>
+{% endif %}
+<p class="" style="color: #444; font-size: 1.2em;">
+  {{ post.first_p }}
+</p>
+{% include posts/badges.html tags=post.tags %}

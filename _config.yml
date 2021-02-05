@@ -12,7 +12,7 @@ paginate_path: "/page/:num/"
 footer-links:
   dribbble:
   email: lucasolivdavid@gmail.com
-  facebook: ldvid
+  facebook: ldaviddd7
   flickr:
   github: lucasdavid
   instagram: ldaviddd
@@ -21,8 +21,8 @@ footer-links:
   rss:
   twitter:
   stackoverflow: "users/2429640/lucasdavid"
-  youtube: # channel/<your_long_string> or user/<user-name>
-  googleplus: # anything in your profile username that comes after plus.google.com/
+  youtube: channel/UC7IWeKUy4OSlC5ripcQGD6Q
+  googleplus:
 
 
 # Enter your Disqus shortname (not your username) to enable commenting on posts

@@ -7,7 +7,9 @@ first_p: |-
 date: 2017-10-2 00:08:00
 lead_image: /assets/images/posts/git-advanced.svg
 tags:
-  - devops
+  - DevOps
+  - Git
+  - code versioning
 ---
 
 <span class="display-6">Some</span>

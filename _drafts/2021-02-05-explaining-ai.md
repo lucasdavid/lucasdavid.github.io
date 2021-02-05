@@ -1,18 +1,15 @@
 ---
 layout: post
-title: Multilabel Learning Problems
-excerpt: Dealing with ML classification problems that deal where samples aren't mutually disjointed.
-first_p: |-
-  In classic classification with networks, samples belong to a single class.
-  We usually code this relationship using one-hot encoding: a label <code>i</code> is
-  transformed into a vector <code>[0, 0, ... 1.0, ..., 0, 0]</code>, where the <code>1</code> is at
-  the position <code>i</code> of the vector.
-date: 2017-10-26 21:43:00
-lead_image: /assets/ml/deep/dog-cat.jpeg
+title: Explaining Machine Learning Models Using Gradients
+excerpt: Presentation of the gradient-based and SmoothGrad methods.
+first_p:
+date: 2021-02-05 16:12:00
+lead_image: 
 tags:
   - ML
   - neural networks
-  - multi-label classification
+  - Explaining
+  - SmoothGrad
 ---
 
 <span class="display-6">In</span>
