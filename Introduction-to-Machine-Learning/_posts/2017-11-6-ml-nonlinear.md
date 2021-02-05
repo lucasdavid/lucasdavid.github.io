@@ -1,7 +1,8 @@
 ---
 layout: post
 title: Introdução ao aprendizado de máquina, pt. 3
-excerpt: "Modelos não-lineares e redes artificias."
+short_title: Parte 3
+excerpt: "Regressão logística, modelos não-lineares e redes artificias."
 first_p: |-
   Apesar do nome "regressão logíca", este método remete à uma atividade de
   classificação. Diferente da regressão, a nossa preocupação do agente inteligente
@@ -14,6 +15,10 @@ date: 2017-10-26 21:43:00
 lead_image: /assets/ml/nonlinear/nonlinear-iterative-loss-improvement.png
 tags:
   - ML
+  - logistic regression
+  - classification
+  - networks
+  - Portuguese language
 ---
 
 <span class="display-6">Felizmente,</span>
@@ -32,28 +37,25 @@ de um modelo linear que restringe a resposta à um certo intervalo.
 
 Abaixo estão alguns exemplos de funções de ativação.
 
-- **sigmoid** (sig), restringindo a saída ao intervalo `[0, 1]`:
-    <figure class="equation">
-      <img src="/assets/ml/nonlinear/sigmoid.png" alt="A função sigmoid '1 / (1 + e^{-x})'."
-           style="width:100%; max-width:200px" />
-    </figure>
-- **tangente hiperbólica** (tanh), restringindo a saída ao intervalo `[-1, 1]`:
-    <figure class="equation">
-      <img src="/assets/ml/nonlinear/tanh.png" alt="A função tanh '(e**x - e**-x) / (e**x + e**-x)'."
-           style="width:100%; max-width:200px" />
-    </figure>
-- **rectifier linear unit** (relu), restringindo a saída ao intervalo `[0, inf)`:
-    <figure class="equation">
-      <img src="/assets/ml/nonlinear/relu.png" alt="A função relu 'max(x, 0)'."
-           style="width:100%; max-width:200px" />
-    </figure>
+- **sigmoid** (sig), restringindo a saída ao intervalo $[0, 1]$:
+
+    $$\sigma(x) = \frac{1}{1 + e^{-x}} $$
+
+- **tangente hiperbólica** (tanh), restringindo a saída ao intervalo $[-1, 1]$:
+
+    $$\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}} $$
+
+- **rectifier linear unit** (relu), restringindo a saída ao intervalo $[0, \inf)$:
+
+    $$\text{relu}(x) = \max(x, 0) $$
+
 
 Veja mais exemplos na página de [funções de ativação](https://en.wikipedia.org/wiki/Activation_function)
 no Wikipedia.
 
-Usando **sig** (ou função logística), por exemplo, podemos restringir
+Usando $\sigma$ (ou função logística), por exemplo, podemos restringir
 a saída de um modelo de regressão linear à um número entre 0.0 e 1.0, que pode
-ser interpretado como uma medida de proximidade entre as respostas não e sim:
+ser interpretado como uma medida de proximidade entre as respostas `não` e `sim`:
 
 ```python
 import numpy as np
@@ -67,9 +69,8 @@ def sigma(x):
 def model(x, w, b, a):
   return a(np.dot(x, w.T) + b)
 
-r = np.random.randn
-samples, features = cancer.data.shape
-w0, b0 = r(1, features), r(1,)
+s, f = cancer.data.shape
+w0, b0 = np.random.randn(1, f), np.random.randn(1,)
 
 p = model(cancer.data, w0, b0, sigma)
 
@@ -77,8 +78,45 @@ print('true labels:', cancer.target[:3])
 print('predictions:', p[:3])
 ```
 
-A função sigmoid não é linear. Logo, uma função de erro `E`, definida sobre
-um modelo `a(w*x + b)`, não é quadrática e múltiplos pontos de mínimo podems existir:
+A função $\sigma$ não é linear. Porém, essa só é aplicada ao sinal
+após este ser dilatado e deslocado pela operação $x\cdot w + b$.
+As variáveis de peso $w$ e $b$ se relacionam linearmente com o sinal
+de entrada $x$. O processo de otimização do sistema é portanto linear
+com respeito as variáveis treináveis.
+
+
+### Um exemplo prático: Breast Cancer Wisconsin (Diagnostic) Database
+
+> Features are computed from a digitized image of a fine needle aspirate (FNA) of a breast mass.
+
+Este conjunto de dados possui 569 amostras descrevendo áreas extraída de
+tecido de mama através de 30 características, como raio, textura, perímetro e área.
+As amostras foram então classificadas em `0: malignas` e `1: benignas`.
+
+```python
+{% include code/training_logistic_regressor.py %}
+```
+```shell
+python training_logistic_regressor with seed=42
+train accuracy: 0.955145118734
+test accuracy: 0.957894736842
+y: [1 0 0 1 1 0 0 0 1 1 1 0 1 0 1 0 1 1 1 0 ...]
+p: [1 0 0 1 1 0 0 0 1 1 1 0 1 0 1 0 1 1 1 0 ...]
+```
+
+### Considerações finais em regressão logística
+
+Mesmo com a não-linearidade aplicada sobre o sinal na regressão logística,
+ela (assim como a regressão linear) ainda é extremamente limitada. Ambas só
+admitem uma liberdade linear, sempre aproximando uma reposta por uma reta.
+Para alguns problemas, como **Boston** ou **Breast Cancer**, tal liberdade
+já é suficiente para uma resposta satisfatória. Entretanto, problemas reais
+muitas vezes são mais difíceis e não-lineares.
+
+## Sistemas não-lineares
+
+Uma função de erro $E$, definida sobre
+um modelo $\sigma(w\cdot x + b)$, não é quadrática e múltiplos pontos de mínimo podems existir:
 
 <center>
   <figure class="equation">
@@ -113,26 +151,6 @@ podem ser feitos:
   são bruscos e vão graduamente diminuindo. Isso pode ajudar o modelo à superar vales e atingir
   melhores pontos de mínimo. Este nome remete à ideia de metal sendo modelado nas fornaças,
   onde ele começa "quente e maleável" e termina "frio e rígido".
-
-
-### Um exemplo prático: Breast Cancer Wisconsin (Diagnostic) Database
-
-> Features are computed from a digitized image of a fine needle aspirate (FNA) of a breast mass.
-
-Este conjunto de dados possui 569 amostras descrevendo áreas extraída de
-tecido de mama através de 30 características, como raio, textura, perímetro e área.
-As amostras foram então classificadas em `0: malignas` e `1: benignas`.
-
-```python
-{% include code/training_logistic_regressor.py %}
-```
-```shell
-python training_logistic_regressor with seed=42
-train accuracy: 0.955145118734
-test accuracy: 0.957894736842
-y: [1 0 0 1 1 0 0 0 1 1 1 0 1 0 1 0 1 1 1 0 ...]
-p: [1 0 0 1 1 0 0 0 1 1 1 0 1 0 1 0 1 1 1 0 ...]
-```
 
 
 ### Problemas multi-classes
@@ -189,19 +207,6 @@ print('decoded predictions:', classes[decoded_p][:3])
 ```shell
 decoded predictions: ['car', 'boat', 'spaceshuttle']
 ```
-
-### Considerações finais em regressão logística
-
-Mesmo com a não-linearidade aplicada sobre o sinal na regressão logística,
-ela (assim como a regressão linear) ainda é extremamente limitada. Ambas só
-admitem uma liberdade linear, sempre aproximando uma reposta por uma reta.
-Para alguns problemas, como **Boston** ou **Breast Cancer**, tal liberdade
-já é suficiente para uma resposta satisfatória. Entretanto, pelo menos pela
-minha pouca experiência, problemas reais são usualmente difíceis e
-não-lineares.
-
-
----
 
 ## Redes Artificiais
 

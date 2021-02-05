@@ -13,13 +13,16 @@ layout: default
     </div>
     <div class="col-12 col-md-7 col-xl-6 col-xxl-5 offset-xl-1 pt-4">
       <div class="list-group list-group-flush">
-        {% for post in site.posts limit:16 %}
+        {% for post in paginator.posts %}
         <div>
           {% include posts/preview.html post=post %}
         </div>
-        
         <hr class="mt-4 mb-4 mb-0 thin">
         {% endfor %}
+      </div>
+      <div class="mt-3 mb-4">
+        {% include index/pagination.html %}
+        <div class="empty-v-space"></div>
       </div>
     </div>
     <div class="col-12 col-md-2 col-xl-2 offset-xl-1 offset-xxl-2">

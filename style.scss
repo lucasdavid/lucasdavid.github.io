@@ -68,14 +68,19 @@ a {
 }
 
 h1, h2, h3, h4 {
+  // margin-top: 1em;
   font-weight: 300;
+}
+
+.text-gray {
+  color: $darkGray;
 }
 
 //
 // Posts
 //
 .article-content {
-  color: #444;
+  color: $darkGray;
   font-family: 'SwiftNeueLTW01', Georgia, serif;
   font-weight: normal;
   font-style: normal;
@@ -84,7 +89,9 @@ h1, h2, h3, h4 {
   margin: 0 0 1em;
   letter-spacing: .01em;
   
-  .title {
+  h2, h3, h4 {
+    margin-top: 2em;
+    margin-bottom: 1em;
   }
 
   blockquote {
@@ -189,6 +196,5 @@ hr {
 
 figure > figcaption {
   font-size: .8em;
-  color: $gray;
-  text-align: center;
+  color: #888;
 }

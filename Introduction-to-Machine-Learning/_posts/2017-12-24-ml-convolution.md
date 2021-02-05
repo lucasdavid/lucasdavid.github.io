@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Introdução ao aprendizado de máquina, pt. 4
+short_title: Parte 4
 excerpt: Convoluções, o início de deep-learning
 first_p: |-
   Na parte 3, eu mostrei alguns modelos não lineares
@@ -20,6 +21,7 @@ tags:
   - classification
   - computer vision
   - convolutional networks
+  - Portuguese language
 ---
 
 <span class="display-6">Na</span>

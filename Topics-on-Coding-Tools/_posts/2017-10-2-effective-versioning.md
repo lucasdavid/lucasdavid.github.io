@@ -18,7 +18,7 @@ weeks ago, I've started this blog with this [very subject](https://ycoding.wordp
 Versioning is great. If you're coding alone, it provides you cool features, like saving, branching, rolling back, reverting, peeking previous states etc. In the other hand, if you're working with a team, it becomes even more important:, as it's a way to automate what can be automated, stop wasting so much time on team management and focus on your domain problem.
 
 <figure>
-  <img src="/assets/images/posts/git-advanced.svg" alt="An advanced flow using Git" class="figure-img img-fluid rounded" />
+  <img src="{{site.baseurl}}/assets/images/posts/git-advanced.svg" alt="An advanced flow using Git" class="figure-img img-fluid rounded" />
     <figcaption>An advanced flow using Git. Available at: <a href="https://www.benmarshall.me/git-rebase/">benmarshall.me</a></figcaption>
 </figure>
 

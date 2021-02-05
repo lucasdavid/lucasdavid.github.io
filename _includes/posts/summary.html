@@ -15,9 +15,16 @@
     <div id="flush-collapse{{ category | first }}" class="accordion-collapse collapse"
       aria-labelledby="flush-heading{{ category | first }}" data-bs-parent="#categoriesAccordion">
       <div class="accordion-body">
-        <ul class="list-unstyled fw-normal pb-1 small">
+        <ul class="list-unstyled fw-normal pb-1 small post-summary">
           {% for post in category.last %}
-          <li><a href="{{ post.url }}" class="d-inline-flex text-start text-dark">{{ post.title }}</a></li>
+          <li class="pt-1 pb-1">
+            <a href="{{ post.url }}" class="d-inline-flex text-start post-summary-item text-gray">
+            {% if post.short_title == nil %}
+            {{ post.title }}
+            {% else %}
+            {{ post.short_title }}
+            {% endif %}
+            </a></li>
           {% endfor %}
         </ul>
       </div>
