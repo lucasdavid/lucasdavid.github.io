@@ -22,6 +22,10 @@
   background: $lightGray;
 }
 
+.accordion-button:not(.collapsed) {
+  background-color:transparent;
+}
+
 // Nicolas Gallagher's micro clearfix hack
 // http://nicolasgallagher.com/micro-clearfix-hack/
 .clearfix:before,

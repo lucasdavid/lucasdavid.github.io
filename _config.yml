@@ -11,7 +11,7 @@ paginate_path: "/page/:num/"
 
 footer-links:
   dribbble:
-  email: lucasolivdavid@gmail.com
+  email: lucas.david@ic.unicamp.br
   facebook: ldaviddd7
   flickr:
   github: lucasdavid
