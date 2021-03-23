@@ -15,7 +15,7 @@ first_p: |-
   Por quê precisamos da ideia de deep-learning e deep-models, então?
 date: 2017-12-24 21:17:00
 color: purple darken-3
-lead_image: /assets/ml/deep/conv_outputs.jpg
+lead_image: /assets/images/posts/ml/deep/conv_outputs.jpg
 tags:
   - ML
   - classification
@@ -37,7 +37,7 @@ Por quê precisamos da ideia de *deep-learning* e *deep-models*, então?
 Vamos voltar à imagem da introdução:
 
 {% include figure.html
-   src="/assets/ml/intro/ml-computing.png"
+   src="/assets/images/posts/ml/intro/ml-computing.png"
    alt="Aprendizado de máquina"
    figcaption="Aprendizado de máquina clássico." %}
 
@@ -71,7 +71,7 @@ Eles são integrados ao início do *pipeline* de processamento e podem, portanto
 ser vistos como uma extensão do aprendizado de máquina 'clássico':
 
 {% include figure.html
-   src="/assets/ml/deep/dml-computing.png"
+   src="/assets/images/posts/ml/deep/dml-computing.png"
    alt="Aprendizado de máquina 'profundo'"
    figcaption="Aprendizado de máquina profundo." %}
 
@@ -81,7 +81,7 @@ Vamos entender como as redes convolucionais funcionam na prática.
 Considere a imagem do urso koala abaixo:
 
 {% include figure.html
-   src="/assets/ml/deep/koala.jpg"
+   src="/assets/images/posts/ml/deep/koala.jpg"
    alt="A imagem de um koala sobre uma árvore."
    figcaption="A fotografia de um koala sobre uma árvore." %}
 
@@ -126,7 +126,7 @@ de um determinado padrão:
 
 <center>
   <figure>
-    <img src="/assets/ml/deep/conv.jpg"
+    <img src="/assets/images/posts/ml/deep/conv.jpg"
          alt="Exemplo de Hadamard entre uma região local de um sinal de entrada e um kernel, seguido de uma soma redutiva."
          class="img-fluid" />
     
@@ -295,7 +295,7 @@ saída desta rede convolucional, criando assim um *pipeline* completo -- porém 
 
 <center>
 <figure>
-  <img src="/assets/ml/deep/convnet.png"
+  <img src="/assets/images/posts/ml/deep/convnet.png"
        class="figure-img img-fluid rounded" >
   <figcaption>
     Exemplo de rede convolucional aplicada ao processamento de imagens.
@@ -331,7 +331,7 @@ automóvel, pássaro etc).
 
 <center>
 <figure>
-  <img src="/assets/ml/deep/cifar10.png" width="400"
+  <img src="/assets/images/posts/ml/deep/cifar10.png" width="400"
        class="figure-img img-fluid rounded">
   <figcaption>
     Exemplo de amostras em cifar10.
@@ -534,7 +534,7 @@ plt.clf()
 
 <center>
 <figure>
-<img src="/assets/ml/deep/conv_outputs.jpg"
+<img src="/assets/images/posts/ml/deep/conv_outputs.jpg"
      class="figure-img img-fluid rounded" >
   <figcaption>
   Visualização das saídas produzidas pelas camadas observadas, quando a rede é alimentada com o koala.

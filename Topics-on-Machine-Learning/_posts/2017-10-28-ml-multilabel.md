@@ -8,7 +8,7 @@ first_p: |-
   transformed into a vector $[0, 0, ... 1.0, ..., 0, 0]$, where the $1$ is at
   the position $i$ of the vector.
 date: 2017-10-26 21:43:00
-lead_image: /assets/ml/multilabel/dataset.png
+lead_image: /assets/images/posts/ml/multilabel/dataset.png
 tags:
   - ML
   - neural networks
@@ -58,7 +58,7 @@ $1.0$. That's ideal when dealing with mutually disjointed classes, but what
 about when that's not the case?
 
 {% include figure.html
-   src="/assets/ml/multilabel/dataset.png"
+   src="/assets/images/posts/ml/multilabel/dataset.png"
    alt="Samples from the multi-label dataset 'Image Data for Multi-Instance Multi-Label Learning'."
    figcaption="Samples from the multi-label dataset 'Image Data for Multi-Instance Multi-Label Learning'. Note that some instances are associated with more than one label (mountains and sea or sea and sunset). Available at: <a href=\"https://www.lamda.nju.edu.cn/data_MIMLimage.ashx\">lamda.nju.edu.cn</a>" %}
 
@@ -248,7 +248,7 @@ def plot_predictions(model, ds, take=1):
 plot_predictions(disc, test_ds)
 ```
 {% include figure.html
-   src="/assets/ml/multilabel/preds.png"
+   src="/assets/images/posts/ml/multilabel/preds.png"
    alt="Samples from the dataset's test split and its predictions."
    figcaption="Samples from the dataset's test split and its predictions." %}
 

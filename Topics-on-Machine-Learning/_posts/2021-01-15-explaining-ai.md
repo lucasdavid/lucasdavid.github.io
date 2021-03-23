@@ -4,7 +4,12 @@ title: Explaining Machine Learning Models Using Gradients
 excerpt: Saliency analysis using <i>SmoothGrad</i>.
 first_p:
 date: 2021-01-15 16:12:00
-lead_image: /assets/ml/explaining/vanilla-grads-aug.png
+lead_image: /assets/images/posts/ml/explaining/vanilla-grads-aug.png
+first_p: |-
+  Estimators that are hard to explain are also hard to trust, jeopardizing
+  the adoption of these models by a broader audience.
+  Research on explaining CNNs has gained traction in the past years.
+  I'll show two related methods this post.
 tags:
   - ML
   - neural networks
@@ -77,7 +82,7 @@ to artificial intelligence --- the idea that intelligence can be achieved by con
 Differently from search algorithms, connectionist models are complicated in nature, which poses higher difficulties in understanding them. Suppose you have a conventional image classification network:
 
 {% include figure.html
-   src="/assets/ml/deep/inception.png"
+   src="/assets/images/posts/ml/deep/inception.png"
    alt="Inception Architecture. A well-established network architecture for convolutional models."
    figcaption="Inception Architecture. A well-established network architecture for convolutional models."
    classed="rounded mx-auto d-block" %}
@@ -88,7 +93,7 @@ Given an input image and the feed-forward signal of that image through the netwo
 Many solutions were studied over the last years. Some of them involved patching-out parts of the image and observing how it affected the answer (see this [article](https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf)). If a given region was occluded and the answer changed drastically, then that would mean that the region in question was *important* for the model's decision process. One could then reapply this procedure over and over, across the entire input sample, and finally draw a heatmap of importance:
 
 {% include figure.html
-   src="/assets/ml/explaining/zeilerECCV2014-fig6.png"
+   src="/assets/images/posts/ml/explaining/zeilerECCV2014-fig6.png"
    alt="Effect of image occlusion in the classifier's answer (columns (a) and (d))."
    figcaption="Effect of image occlusion in the classifier's answer (columns <i>a</i> and <i>d</i>). Available at: <a href=\"https://arxiv.org/pdf/1908.04351.pdf\">arxiv.org/1908.04351</a>."
    classed="rounded mx-auto d-block" %}
@@ -141,7 +146,7 @@ images, labels = next(iter(images_set.take(1)))
 ```
 
 {% include figure.html
-   src="/assets/ml/explaining/inputs.png"
+   src="/assets/images/posts/ml/explaining/inputs.png"
    alt="Input images for our model. Common instances of classes present in the imagenet dataset (dogs, bears, airplanes)."
    figcaption="Input images for our model. Common instances of classes present in the imagenet dataset (dogs, bears, airplanes)."
    classed="rounded mx-auto d-block" %}
@@ -230,7 +235,7 @@ def index_from(label):
 
 And finally define our "vanilla" optimization process, using tensorflow's `GradientTape` class:
 ```py
-def activation_loss(x, unit):
+def activation_gain(x, unit):
     y = model(x)
     return tf.reduce_mean(y[:, unit])
 
@@ -238,14 +243,15 @@ def l2_regularization(x):
     return tf.reduce_sum(tf.square(x), axis=(1, 2, 3), keepdims=True)
 
 def total_var_regularization(x):
-    return tf.reduce_sum(tf.image.total_variation(x) / tf.cast(tf.reduce_prod(x.shape[1:-1]), tf.float32))
+    return (tf.reduce_sum(tf.image.total_variation(x)
+            / tf.cast(tf.reduce_prod(x.shape[1:-1]), tf.float32)))
 
 @tf.function
 def gradient_ascent_step(inputs, unit):
     with tf.GradientTape() as tape:
         tape.watch(inputs)
 
-        loss = (activation_loss(inputs, unit)
+        loss = (activation_gain(inputs, unit)
                 - L2 * l2_regularization(inputs)
                 - TV * total_var_regularization(inputs))
     
@@ -315,7 +321,7 @@ plt.tight_layout();
 ```
 
 {% include figure.html
-   src="/assets/ml/explaining/vanilla-grads.png"
+   src="/assets/images/posts/ml/explaining/vanilla-grads.png"
    alt="Input images optimized to maximize each unit described in UNIT_NAMES."
    figcaption="Input images optimized to maximize each unit described in <code>UNIT_NAMES</code>."  %}
 
@@ -346,7 +352,7 @@ def visualize(unit):
     return loss, i
 ```
 {% include figure.html
-   src="/assets/ml/explaining/vanilla-grads-aug.png"
+   src="/assets/images/posts/ml/explaining/vanilla-grads-aug.png"
    alt="Input images optimized to maximize each unit described in UNIT_NAMES using augmentation."
    figcaption="Input images optimized to maximize each unit described in <code>UNIT_NAMES</code> using augmentation (rotation and translation)."  %}
 
@@ -376,9 +382,9 @@ input image $I$ contributes to the output of the model. Three possibilities here
 2. If the number is strongly positive, then high values for that pixel contribute to its correct classification.
 3. If the number is strongly negative, then low values for that pixel contribute to its correct classification.
 
-So we first must find $\frac{\partial S_c(I)}{\partial I}$. That's pretty simple. I just copied the important part from what we did above (and changed the `activation_loss` function a bit so it could process multiple samples at the same time):
+So we first must find $\frac{\partial S_c(I)}{\partial I}$. That's pretty simple. I just copied the important part from what we did above (and changed the `activation_gain` function a bit so it could process multiple samples at the same time):
 ```py
-def activation_loss(inputs, units):
+def activation_gain(inputs, units):
     y = model(inputs)
     return tf.gather(y, units, axis=1, batch_dims=1)
 
@@ -386,7 +392,7 @@ def activation_loss(inputs, units):
 def gradients(inputs, units):
     with tf.GradientTape() as tape:
         tape.watch(inputs)
-        loss = activation_loss(inputs, units)
+        loss = activation_gain(inputs, units)
     
     grads = tape.gradient(loss, inputs)
 
@@ -404,7 +410,7 @@ s /= tf.reduce_max(s, axis=(1, 2), keepdims=True)
 plot_images_and_salency_maps(as_image_vector(images), s.numpy(), y.numpy())
 ```
 {% include figure.html
-   src="/assets/ml/explaining/vanilla-saliency.png"
+   src="/assets/images/posts/ml/explaining/vanilla-saliency.png"
    alt="Input images and saliency activation maps, considering their most activating units."
    figcaption="Input images and saliency activation maps, considering their most activating units." %}
 
@@ -441,7 +447,7 @@ s /= tf.reduce_max(s, axis=(1, 2), keepdims=True)
 plot_images_and_salency_maps(as_image_vector(images), s.numpy(), y.numpy())
 ```
 {% include figure.html
-   src="/assets/ml/explaining/smoothgrad-saliency.png"
+   src="/assets/images/posts/ml/explaining/smoothgrad-saliency.png"
    alt="Input images and saliency activation maps, considering their most activating units."
    figcaption="Input images and saliency activation maps, considering their most activating units. Obtained using the SmoothGrad method."  %}
 

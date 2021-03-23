@@ -12,7 +12,7 @@ first_p: |-
   utilizar uma função de ativação. Uma função aplicada sobre a saída
   de um modelo linear que restringe a resposta à um certo intervalo.  
 date: 2017-10-26 21:43:00
-lead_image: /assets/ml/nonlinear/nonlinear-iterative-loss-improvement.png
+lead_image: /assets/images/posts/ml/nonlinear/nonlinear-iterative-loss-improvement.png
 tags:
   - ML
   - logistic regression
@@ -120,7 +120,7 @@ um modelo $\sigma(w\cdot x + b)$, não é quadrática e múltiplos pontos de mí
 
 <center>
   <figure class="equation">
-    <img src="/assets/ml/nonlinear/nonlinear-f.png" alt="Gráfico de uma função não linear, de ordem superior à quadrática."
+    <img src="/assets/images/posts/ml/nonlinear/nonlinear-f.png" alt="Gráfico de uma função não linear, de ordem superior à quadrática."
          style="width:100%; max-width:500px" />
   </figure>
 </center>
@@ -133,7 +133,7 @@ direção de maior decremento **local** da função de erro.
 
 <center>
   <figure class="equation">
-    <img src="/assets/ml/nonlinear/nonlinear-iterative-loss-improvement.png"
+    <img src="/assets/images/posts/ml/nonlinear/nonlinear-iterative-loss-improvement.png"
     alt="Melhoramento iterativo de erro pelo método 'Gradient Descent'."
          style="width:100%; max-width:500px" />
   </figure>
@@ -226,7 +226,7 @@ Considere o conjunto de dados exemplo abaixo:
 
 <center>
 <figure class="equation">
-  <img src="/assets/ml/nonlinear/nonlinear-dataset-a.png"
+  <img src="/assets/images/posts/ml/nonlinear/nonlinear-dataset-a.png"
        alt="Um conjunto de dados não linearmente separável em duas dimensões."
        style="width:100%; max-width:500px" />
 </figure>
@@ -245,7 +245,7 @@ em outro. Isso funciona pra esse caso, mas e se o conjunto fosse um 1-torus
 
 <center>
 <figure class="equation">
-  <img src="/assets/ml/nonlinear/orientable_surfaces.png"
+  <img src="/assets/images/posts/ml/nonlinear/orientable_surfaces.png"
        alt="A esfera, o 1-torus e o 2-torus."
        style="width:100%; max-width:500px" />
   <figcaption>
@@ -275,7 +275,7 @@ facilmente com três dimensões:
 
 <center>
 <figure class="equation">
-  <img src="/assets/ml/nonlinear/nonlinear-dataset-b.png"
+  <img src="/assets/images/posts/ml/nonlinear/nonlinear-dataset-b.png"
        alt="Um conjunto de dados linearmente separável em três dimensões."
        style="width:100%; max-width:500px" />
 </figure>
@@ -330,7 +330,7 @@ Considere a rede de múltiplas camadas abaixo.
 
 <center>
   <figure class="equation">
-    <img src="/assets/ml/nonlinear/network.png" alt="Uma rede de 2 camadas" />
+    <img src="/assets/images/posts/ml/nonlinear/network.png" alt="Uma rede de 2 camadas" />
   </figure>
 </center>
 
@@ -339,7 +339,7 @@ seus parâmetros. A rede acima não é exceção:
 
 <center>
   <figure class="equation">
-    <img src="/assets/ml/nonlinear/network_equation.png"
+    <img src="/assets/images/posts/ml/nonlinear/network_equation.png"
          alt="Equação da rede acima: y(x, \theta) = \sigma(w_{2\_} \cdot \sigma(w_{1\_} \cdot x + b_1) + b_2)"
          style="width:100%; max-width:600px" />
   </figure>
@@ -357,7 +357,7 @@ camadas tenham sido atualizadas.
 
 <center>
   <figure class="equation">
-    <img src="/assets/ml/backprop-equations.png" alt="Equações do backward error propagation." />
+    <img src="/assets/images/posts/ml/backprop-equations.png" alt="Equações do backward error propagation." />
   </figure>
 </center>
 
@@ -383,7 +383,7 @@ classe), podemos substituir a função `sigma` por uma melhor, o `softmax`.
 
 <center>
   <figure class="equation">
-    <img src="/assets/ml/eq-softmax.png"
+    <img src="/assets/images/posts/ml/eq-softmax.png"
          alt="A equação softmax: 's(x) = e^x/sum(e^x)'"
          style="width:100%; max-width:250px" />
   </figure>
@@ -405,7 +405,7 @@ Além disso, usualmente empregamos a (*binary* ou *categorical*)
 
 <center>
   <figure class="equation">
-    <img src="/assets/ml/eq-crossentropy.png"
+    <img src="/assets/images/posts/ml/eq-crossentropy.png"
          alt="A equação da 'binary cross-entropy loss': 'E(y, p) = - \sum_i y_i \log p_i'"
          style="width:100%; max-width:500px" />
   </figure>
@@ -497,13 +497,13 @@ escrita (o primeiro dígito, por exemplo, não se parece um perfeitamente claro 
 <div class="row">
   <div class="col-6 m0">
      <figure class="equation">
-      <img src="/assets/ml/nonlinear/digit-predictions.png" alt="Alguns dígitos e as predições da rede referentes à eles."
+      <img src="/assets/images/posts/ml/nonlinear/digit-predictions.png" alt="Alguns dígitos e as predições da rede referentes à eles."
            class="img-fluid" />
     </figure>
   </div>
   <div class="col-6 m0">
      <figure class="equation">
-      <img src="/assets/ml/nonlinear/digit-wrong-predictions.png" alt="Alguns dígitos preditos como incorreto pela rede."
+      <img src="/assets/images/posts/ml/nonlinear/digit-wrong-predictions.png" alt="Alguns dígitos preditos como incorreto pela rede."
            class="img-fluid" />
     </figure>
   </div>

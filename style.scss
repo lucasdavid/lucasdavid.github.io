@@ -190,6 +190,14 @@ hr {
   background-color: $purple;
 }
 
+.bg-darker {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.text-gray {
+  color: #ccc;
+}
+
 @import "highlights";
 @import "svg-icons";
 
@@ -201,4 +209,10 @@ hr {
 figure > figcaption {
   font-size: .8em;
   color: #888;
+}
+
+
+.carousel-control-prev, .carousel-control-next {
+  background: none;
+  border: none;
 }
