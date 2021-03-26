@@ -463,6 +463,11 @@ in order to only capture what positively affects the output (Guided backpropagat
 Others will focus on general localization instead of fine-details (CAM).
 I'll try and bring more examples of those in the future. :-)
 
+## References
+
+- Simonyan, Karen, Andrea Vedaldi, and Andrew Zisserman. "Deep inside convolutional networks: Visualising image classification models and saliency maps." arXiv preprint arXiv:1312.6034 (2013). [1312.6034](https://arxiv.org/abs/1312.6034)
+- Smilkov, Daniel, Nikhil Thorat, Been Kim, Fernanda Viégas, and Martin Wattenberg. "Smoothgrad: removing noise by adding noise." arXiv preprint arXiv:1706.03825 (2017). [1706.03825](https://arxiv.org/abs/1706.03825)
+
 ## Appendix
 Some of the util functions that I have used during the post are listed below.
 You can use them to download, preprocess or visualize images.
