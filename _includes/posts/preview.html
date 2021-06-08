@@ -10,7 +10,9 @@
 
 {% if post.lead_image %}
 <div style="max-height: 200px; overflow-y: hidden" class="mb-2">
-  <img src="{{ site.baseurl }}{{ post.lead_image }}" class="figure-img img-fluid rounded" />
+  <a href="{{ site.baseurl }}{{ post.url }}">
+    <img src="{{ site.baseurl }}{{ post.lead_image }}" class="figure-img img-fluid rounded" />
+  </a>
 </div>
 {% endif %}
 <p class="" style="color: #444; font-size: 1.2em;">

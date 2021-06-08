@@ -76,6 +76,10 @@ h1, h2, h3, h4 {
   font-weight: 300;
 }
 
+h4, h5, h6 {
+  margin-top: 1em;
+}
+
 .text-gray {
   color: $darkGray;
 }
@@ -215,4 +219,16 @@ figure > figcaption {
 .carousel-control-prev, .carousel-control-next {
   background: none;
   border: none;
+}
+
+
+.w-lg-130 {
+  @media (min-width: 1200px) { 
+    width: 130%;
+    margin-left: -15%;
+
+    img {
+      width: 100%;
+    }
+  }
 }

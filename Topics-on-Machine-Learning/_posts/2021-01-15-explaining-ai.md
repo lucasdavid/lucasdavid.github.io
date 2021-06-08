@@ -4,7 +4,7 @@ title: Explaining Machine Learning Models Using Gradients
 excerpt: Saliency analysis using <i>SmoothGrad</i>.
 first_p:
 date: 2021-01-15 16:12:00
-lead_image: /assets/images/posts/ml/explaining/vanilla-grads-aug.png
+lead_image: /assets/images/posts/ml/explaining/cam/grad/1.png
 first_p: |-
   Estimators that are hard to explain are also hard to trust, jeopardizing
   the adoption of these models by a broader audience.
