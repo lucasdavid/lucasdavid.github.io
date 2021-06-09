@@ -12,7 +12,7 @@ first_p: |-
   utilizar uma função de ativação. Uma função aplicada sobre a saída
   de um modelo linear que restringe a resposta à um certo intervalo.  
 date: 2017-10-26 21:43:00
-lead_image: /assets/images/posts/ml/nonlinear/nonlinear-iterative-loss-improvement.png
+lead_image: /assets/images/posts/ml/nonlinear/cover.png
 tags:
   - ML
   - logistic regression

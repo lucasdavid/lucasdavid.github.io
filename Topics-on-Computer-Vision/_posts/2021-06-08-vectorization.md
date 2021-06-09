@@ -6,6 +6,9 @@ first_p: |-
   In this post, I thought I shared an assignment I have recently done on a Computer Vision class.
   Although results in Computer Vision are easily represented and interpreted, the implementation
   of even the most basic operations can be quite challenging.
+  Even when the idea behind some code is trivial, implementations on GitHub and other websites can
+  be quite difficult to understand. A few reasons come to mind, but I believe one to be of paramount
+  importance: vectorization.
   
 date: 2021-06-08 12:22:00
 lead_image: /assets/images/posts/cv/vectorization/cover.png
@@ -16,14 +19,13 @@ tags:
   - Python
 ---
 
-In this post, I thought I shared an assignment I have recently done on a Computer Vision class.
+In this post, I thought I shared an assignment I have recently done for a Computer Vision class.
+
 Although results in Computer Vision are easily represented and interpreted, the implementation
 of even the most basic operations can be quite challenging.
-
 Even when the idea behind some code is trivial, implementations on GitHub and other websites can
-be quite difficult to understand. A few reasons come to mind: author coding style,
-writing care and time available.
-In spite of all these, I believe vectorization ends up play a major role in this problem.
+be quite difficult to understand. A few reasons come to mind, but I believe one to be of paramount
+importance: vectorization.
 
 ## What's Vectorization
 The idea behind [vectorization](https://en.wikipedia.org/wiki/Array_programming) is to leverage
@@ -76,76 +78,45 @@ c = a * b  # pair-wise mul                   == (0, 4, 6, 6)
 c = a / b  # pair-wise div                   == (0, 1/4, 2/3, 3/2)
 c = a % b  # pair-wise mod                   == (0, 1, 2, 1)
 c = a @ b  # matrix mul (inner product here) == 16
+c = 2 * a  # scalar mul                      == (0, 2, 4, 6)
+c = a**2   # element-wise power              == (0, 1, 4, 9)
 ```
 
+Other interesting examples:
+```py
+c = a.reshape((2, 2))  # reshaping vector into matrix == ((0, 1)
+                       #                                  (2, 3))
+d = c.T                # transposing                  == ((0, 2),
+                       #                                  (1, 3))
+e = c @ d              # matrix mul                   == ((1, 3),
+                       #                                  (3, 13))
+e = e.ravel()          # re-linearizing matrix        == (1, 3, 3, 13)
 
-## Setup
-
-Nothing to see here. Just a few useful functions declarations.
-
-```python
-from math import ceil
-
-import numpy as np
-import tensorflow as tf
-
-import matplotlib.pyplot as plt
-
-
-class Config:
-    image_sizes = (300, 300)
-    images_used = 10
-    
-    buffer_size = 8 * images_used
-    seed = 6714
-
-
-def preprocessing_fn(image, label):
-  # Adjust the image to be at least of size `Config.image_sizes`, which
-  # garantees the random_crop operation below will work.
-  current = tf.cast(tf.shape(image)[:2], tf.float32)
-  target = tf.convert_to_tensor(Config.image_sizes, tf.float32)
-  ratio = tf.reduce_max(tf.math.ceil(target / current))
-  new_sizes = tf.cast(current*ratio, tf.int32)
-
-  image = tf.image.resize(image, new_sizes, preserve_aspect_ratio=True)
-
-  # Crop randomly.
-  image = tf.image.resize_with_crop_or_pad(image, *Config.image_sizes)
-
-  return image, label
+f = np.random.randn(3, 2, 2)  # random normal numbers  == (((n0, n1), (n2, n3)),
+                              #                            ((n4, n5), (n6, n7))
+                              #                            ((n8, n9), (n10, n11)))
+g = f + c                     # broad-cast sum         == (((n0+0, n1+1), (n2+2, n3+3)),
+                              #                            ((n4+0, n5+1), (n6+2, n7+3))
+                              #                            ((n8+0, n9+1), (n10+2, n11+3)))
 ```
 
+As Machine Learning is full of linear algebra, we can efficiently represent pretty much
+any operation with vectorization:
+```py
+x = np.random.randn(32, 64)
+w = np.random.randn(64, 10)
+b = np.zeros(10)
 
-```python
-def visualize(
-    image,
-    title=None,
-    rows=2,
-    cols=None,
-    cmap=None,
-    figsize=(14, 6)
-):
-  if image is not None:
-    if isinstance(image, list) or len(image.shape) > 3:  # many images
-      plt.figure(figsize=figsize)
-      cols = cols or ceil(len(image) / rows)
-      for ix in range(len(image)):
-        plt.subplot(rows, cols, ix+1)
-        visualize(image[ix],
-                 cmap=cmap,
-                 title=title[ix] if title is not None and len(title) > ix else None)
-      plt.tight_layout()
-      return
+x @ w + b         # dense layer of a NN, followed by ReLU activation
+np.maximum(, 0)   # ReLU activation function
+e**x / (1-e**-x)  # Sigmoid activation function
 
-    if isinstance(image, tf.Tensor): image = image.numpy()
-    if image.shape[-1] == 1: image = image[..., 0]
-    plt.imshow(image, cmap=cmap)
-  
-  if title is not None: plt.title(title)
-  plt.axis('off')
+x -= x.mean(axis=1)  # Data standardization
+x /= x.std(axis=1)   #
+
+x -= x.min(axis=1)   # Data normalization
+x /= x.max(axis=1)   #
 ```
-
 
 ## TF-Flowers (Image Dataset)
 
@@ -171,7 +142,34 @@ $I$ is resized so it's smallest component (width or height) would match the smal
 
 
 ```python
+from math import ceil
+
+import numpy as np
+import tensorflow as tf
 import tensorflow_datasets as tfds
+
+
+class Config:
+    image_sizes = (300, 300)
+    images_used = 10
+
+    buffer_size = 8 * images_used
+    seed = 6714
+
+def preprocessing_fn(image, label):
+  # Adjust the image to be at least of size `Config.image_sizes`, which
+  # garantees the random_crop operation below will work.
+  current = tf.cast(tf.shape(image)[:2], tf.float32)
+  target = tf.convert_to_tensor(Config.image_sizes, tf.float32)
+  ratio = tf.reduce_max(tf.math.ceil(target / current))
+  new_sizes = tf.cast(current*ratio, tf.int32)
+
+  image = tf.image.resize(image, new_sizes, preserve_aspect_ratio=True)
+
+  # Crop randomly.
+  image = tf.image.resize_with_crop_or_pad(image, *Config.image_sizes)
+
+  return image, label
 
 (train_ds,), info = tfds.load(
   'tf_flowers',
@@ -385,7 +383,7 @@ $$
 $$
 
 We observe from the equation above that one of the signals is reflected. This is essential so both functions are evaluated over the same time interval, resulting in the effect of "zipping" the two functions together.
-This effect is illustrated in the first column of Fig. 4.
+This effect is illustrated in the first column of the figure below.
 
 On the other hand, *Cross-correlation* is a similar operation in which $g$ slides over $f$ without the aforementioned reflection:
 
@@ -393,13 +391,13 @@ $$
 (f*g)(t) = \int f(\tau)g(t + \tau) d\tau
 $$
 
-The signals are associated in an inverted fashion, which is illustrated in the second column of Fig. 4.
+The signals are associated in an inverted fashion, which is illustrated in the second column of the figure below.
 
 Finally, we can imagine that a 2-D signal (such as images) is reflected when both $(x, y)$ axes are reflected. This is equivalent of rotating the image in $180^\circ$.
 
 {% include figure.html
    src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Comparison_convolution_correlation.svg/1280px-Comparison_convolution_correlation.svg.png"
-   classed="w-50"
+   classed="w-lg-50"
    alt="Comparison between convolution, cross-correlation and autocorrelation. From Wikipedia."
    figcaption="Comparison between convolution, cross-correlation and autocorrelation. From <a href=\"https://en.wikipedia.org/wiki/Cross-correlation\" target=\"_blank\">Wikipedia</a>." %}
 
@@ -484,7 +482,7 @@ I decided to start by considering a simple use case.
 For analytical convenience, I imagined this case to have the following characteristics:
 
 * Only one image and one kernel is involved in this operation.
-* No padding is performed in the input signal (i.e. \textit{padding valid}).
+* No padding is performed in the input signal (i.e. `padding valid`).
 * $I$ and $k$ have different height and width values --- namely, $(H_I, W_I)$ and $(H_k, W_k)$ ---, and they are prime numbers. This is interesting when flattening a matrix into a vector, as prime numbers have distinct products and will result in dimensions that are easier to understand.
 * The kernel is not symmetric. Hence the convolution and cross-correlation functions will result in different signals.
 
@@ -739,7 +737,7 @@ visualize(
    src="/assets/images/posts/cv/vectorization/results.png"
    alt="Convolution between the samples in TF-Flowers and hand-craft kernels."
    figcaption="Convolution between the samples in TF-Flowers and hand-craft kernels."
-   classed="w-lg-130"
+   classed="w-xl-130"
     %}
 
 #### Results and Discussions
