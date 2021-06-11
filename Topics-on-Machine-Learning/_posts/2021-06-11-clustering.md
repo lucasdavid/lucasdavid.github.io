@@ -1,7 +1,7 @@
 ---
 layout: post
 title: K-Means and Hierarchical Clustering
-excerpt: "Efficient clustering algorithms implementations in Tensorflow and NumPy."
+excerpt: "Efficient clustering algorithms implementations in TensorFlow and NumPy."
 first_p: |-
   Here, our goal is to apply unsupervised learning methods to solve clustering and
   dimensionality reduction in two distinct task.
@@ -32,14 +32,14 @@ datasets, including a bonus color quantization example.
 
 ```python
 import numpy as np
-import tensorflow as tf
+import TensorFlow as tf
 import seaborn as sns
 import logging
 from math import ceil
 from typing import Dict, List, Set, Any, Union, Callable
 
 import pandas as pd
-import tensorflow_datasets as tfds
+import TensorFlow_datasets as tfds
 import matplotlib.pyplot as plt
 from sklearn.model_selection import ParameterGrid
 from sklearn.decomposition import PCA
@@ -279,7 +279,7 @@ plt.tight_layout();
 
 ### TF-Flowers
 
-We utilize [TF-Flowers](https://www.tensorflow.org/datasets/catalog/tf_flowers) dataset to illustrate the application of K-Means in Color Quantization.
+We utilize [TF-Flowers](https://www.TensorFlow.org/datasets/catalog/tf_flowers) dataset to illustrate the application of K-Means in Color Quantization.
 
 This dataset represents a multi-class (mono-label) image classification problem, and comprises 3,670 photographs of flowers associated with one of the following labels: *dandelion*, *daisy*, *tulips*, *sunflowers* or *roses*.
 
@@ -721,7 +721,7 @@ def kpp_clusters(x, k, device='CPU:0'):
   Draw clusters using the k-means++ procedure.
   
   Note: this section relies heavely on numpy, as we were unable to implement the
-  function `np.random.choice(..., p=[0.1, 0.2, ...])` in tensorflow. We therefore
+  function `np.random.choice(..., p=[0.1, 0.2, ...])` in TensorFlow. We therefore
   force the code execution of this section in the CPU.
   You can override this behavior by passing `device='GPU:0'` as a function argument.
 
@@ -842,13 +842,19 @@ del ctr, cte, c0, c1, p0_train, p0_test, p1_train, p1_test
     
 Without standardization, samples are not correctly aggregated because of the different proportions of each axis.
 
-In the example above, unstandardized feature $y$ ranged within the interval $[0, 30]$, and affected the $l^2$ distance much strongly than feature $x\in [250, 3750]$.
+In the example above, the unstandardized feature $y$ ranged within the interval $[0, 30]$, which profoundly affected the $l^2$ distance.
+Conversely, variations in feature $x\in [250, 3750]$ caused a smaller impact on clustering configuration.
 In the second scatterplot, we notice all features belonging to the same interval, and contributing similarly to the distance function $l^2$.
 
 #### Application over The Cluster.dat Dataset
 
-##### Searching K
+An interesting application of clustering is image compression through *color quantization*.
+In this procedure, the RGB pixels in an image are clustered into $k$ groups, comprising the color book.
+The image can then be "compressed" by replacing each pixel by its cluster's centroid's identifier,
+which effectively reduces three floating point numbers to a single unsigned integer
+(plus the memory necessary to store the color book).
 
+##### Searching K
 
 ```python
 %%time
