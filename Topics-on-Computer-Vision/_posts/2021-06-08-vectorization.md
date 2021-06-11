@@ -274,9 +274,7 @@ def sepia(x):
   return tf.clip_by_value(y, 0, 255)
 
 
-transformed = sepia(images)
-
-visualize(tf.cast(transformed, tf.uint8), labels)
+sepia(images)
 ```
 
 {% include figure.html
@@ -307,9 +305,7 @@ def grayscale(x):
   y = tf.expand_dims(y, -1)             # restore 3rd rank (H, W, 1)
   return tf.clip_by_value(y, 0, 255)
 
-images_g = grayscale(images)
-
-visualize(tf.cast(images_g, tf.uint8), labels, cmap='gray')
+grayscale(images)
 ```
 {% include figure.html
    src="/assets/images/posts/cv/vectorization/tfflowers-gray.png"
@@ -679,8 +675,32 @@ print('All tests passed (no exceptions raised).')
     All tests passed (no exceptions raised).
 
 
-#### Application over the Image Samples
+#### Application over TF-Flowers Image Samples
 
+The figure below illustrates the result of the convolution of multiple input
+images with each kernel. A brief description of each result is provided below.
+
+* **H1** highlights regions containing vertical lines, in which the left side
+  represents areas with higher activation intensity, while the ones in the right
+  are dark regions.
+* **H2** is similar to `H1`, but activates strongly over horizontal lines in
+  which the top is brighter than the bottom.
+* **H3** responds strongly to bright regions that are surrounded by dark regions
+  in the input. It seems to extract fine edges regardless of their orientation.
+* **H4** is the uniform blur filter. It runs across the image macro-averaging the
+  pixel activation intensities, reducing their differences.
+* **H5** detects diagonal (bottom-left to top-right) lines --- this kernel is
+  symmetric, hence the convolution results in the same signal as the correlation.
+* **H6** similar to H5, but detects diagonal (top-left to bottom-right) lines.
+* **H7** responds to regions with bright top-right corners and dark bottom-right
+  corners, without taking into consideration the information in the in-between
+  section (most of which is multiplied by 0).
+* **H8** is an edge-detector like H3, but seemly results in more detailed edges
+  for these highly-detailed input images.
+* **H9** is the Gaussian blur filter. It weight-averages the differences between
+  the intensities of the pixels giving the central region more importance.
+* **H10** combines `H1` and `H2` into one signal that seems to respond to both
+  vertical and horizontal lines in the same intensity.
 
 ```python
 y = np.concatenate(
@@ -696,69 +716,9 @@ yr1c1 = np.sqrt(
 
 y = np.concatenate((y, yr1c2), axis=-1)
 ```
-
-
-```python
-visualizing = tf.cast(
-  tf.clip_by_value(
-    tf.reshape(
-      tf.transpose(tf.concat((images_g, y), axis=-1), (0, 3, 1, 2)),
-      (-1, *images_g.shape[1:])
-    ),
-    0,
-    255
-  ),
-  tf.uint8
-).numpy()
-
-visualizing = [
-  None,  # empty cell (original images column)
-  *tf.transpose(h17, (2, 0, 1)).numpy(),  # kernels 1 through 7
-  *tf.transpose(h89, (2, 0, 1)).numpy(),  # kernels 8 and 9
-  None,  # empty cell (sqrt(s*h1^2+s^h2^2) column)
-  *visualizing # images and convolution results
-]
-
-titles = [
-  'original',
-  *(f'$s*h_{i+1}$' for i in range(9)),
-  '$\sqrt\{\{s*h_1}^2 + {s*h_2}^2}$',
-]
-
-visualize(
-  visualizing,
-  titles,
-  rows=images_g.shape[0] + 1,
-  cols=y.shape[-1] + 1,
-  figsize=(24, 25),
-)
-```
 {% include figure.html
    src="/assets/images/posts/cv/vectorization/results.png"
    alt="Convolution between the samples in TF-Flowers and hand-craft kernels."
    figcaption="Convolution between the samples in TF-Flowers and hand-craft kernels."
    classed="w-xl-130"
     %}
-
-#### Results and Discussions
-The figure above illustrates the result of the convolution of multiple input images with each kernel. A brief description of each result is provided below.
-
-* **H1** highlights regions containing vertical lines, in which the left side represents areas with higher activation intensity, while the ones in the right are dark regions.
-
-* **H2** is similar to `H1`, but activates strongly over horizontal lines in which the top is brighter than the bottom.
-
-* **H3** responds strongly to bright regions that are surrounded by dark regions in the input. It seems to extract fine edges regardless of their orientation.
-    
-* **H4** is the uniform blur filter. It runs across the image macro-averaging the pixel activation intensities, reducing their differences.
-    
-* **H5** detects diagonal (bottom-left to top-right) lines --- this kernel is symmetric, hence the convolution results in the same signal as the correlation.
-    
-* **H6** similar to H5, but detects diagonal (top-left to bottom-right) lines.
-    
-* **H7** responds to regions with bright top-right corners and dark bottom-right corners, without taking into consideration the information in the in-between section (most of which is multiplied by 0).
-    
-* **H8** is an edge-detector like H3, but seemly results in more detailed edges for these highly-detailed input images.
-    
-* **H9** is the Gaussian blur filter. It weight-averages the differences between the intensities of the pixels giving the central region more importance.
-    
-* **H10** combines `H1` and `H2` into one signal that seems to respond to both vertical and horizontal lines in the same intensity.
