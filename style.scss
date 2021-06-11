@@ -237,3 +237,28 @@ figure > figcaption {
     width: 50%;
   }
 }
+
+
+// Posts
+//
+
+.dataframe {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 0.6em;
+
+  td {
+    text-align: right;
+  }
+}
+
+.dataframe tbody tr th:only-of-type {
+  vertical-align: middle;
+}
+
+.dataframe tbody tr th {
+  vertical-align: top;
+}
+
+.dataframe thead th {
+  text-align: right;
+}
