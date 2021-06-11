@@ -19,4 +19,10 @@
 <ul class="list-group list-group-flush mb-4">
     <a href="/" class="list-group-item list-group-item-action">Posts</a>
     <a href="/projects" class="list-group-item list-group-item-action">Projects</a>
+    {% if site.footer-links.github %}
+    <a href="https://github.com/{{ site.footer-links.github }}"
+       class="list-group-item list-group-item-action">Github</a>{% endif %}
+    {% if site.footer-links.linkedin %}
+    <a href="https://www.linkedin.com/in/{{ site.footer-links.linkedin }}"
+       class="list-group-item list-group-item-action">LinkedIn</a>{% endif %}
 </ul>
