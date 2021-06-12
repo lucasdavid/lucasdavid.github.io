@@ -1,0 +1,6 @@
+<button data-bs-target="#{{ include.id }}"
+        aria-controls="{{ include.id }}"
+        class="btn btn-light btn-sm"
+        type="button"
+        data-bs-toggle="collapse"
+        aria-expanded="false">{{ include.text | default: "show code" }}</button>

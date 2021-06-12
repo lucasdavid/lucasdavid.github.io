@@ -28,8 +28,7 @@ We implemented the K-Means and Hierarchical Clustering algorithms (and their
 evaluation metrics) from the ground up. Results are presented over three distinct
 datasets, including a bonus color quantization example.
 
-<button data-bs-target="#collapseSetup" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show setup code</button>
-
+{% include posts/collapse-btn.html id="collapseSetup" text="show setup code" %}
 ```python
 import numpy as np
 import TensorFlow as tf
@@ -186,7 +185,7 @@ They were selected considering their diverse nature, in order to visualize the b
 
 This dataset was provided during class. It comprises 573 samples and 2 numeric features.
 
-
+{% include posts/collapse-btn.html id="cv1" %}
 ```python
 cluster_train = tf.constant(np.genfromtxt(Config.cluster_dat.source), tf.float32)
 
@@ -197,10 +196,7 @@ cluster_train, cluster_test = split_dataset(
 
 cluster_s_train, (c_u, c_s) = standardize(cluster_train, return_stats=True)
 cluster_s_test = standardize(cluster_test)
-```
 
-<button data-bs-target="#collapseVisualize1" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
-```python
 plt.figure(figsize=(12, 4))
 plt.subplot(121)
 plt.title('Original Cluster.dat Dataset')
@@ -214,7 +210,7 @@ sns.scatterplot(x=cluster_s_test[:, 0], y=cluster_s_test[:, 1], label='test', co
 
 plt.tight_layout();
 ```
-{: class="collapse" id="collapseVisualize1"}
+{: class="collapse" id="cv1"}
 
 {% include figure.html
    src="/assets/images/posts/ml/clustering/14_0.png"
@@ -227,11 +223,11 @@ This dataset represents the association between physical and social attributes o
 In here, we use the Boston dataset to illustrate an structured ML problem.
 
 It comprises 506 samples and 13 features.
-For the purposes of our analysis, we opted to remove the column `B`, described as [3]:
+For the purposes of this work, we opted to exclude column `B` from our analysis.
+The information contained in this column is originally described as
+*"1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town"* [3].
 
-    - B 1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town
-
-
+{% include posts/collapse-btn.html id="cv2" %}
 ```python
 from sklearn.datasets import load_boston
 
@@ -249,10 +245,7 @@ boston_y_train = boston.target.astype(np.float32)
 
 boston_s_train, (b_u, b_s) = standardize(boston_x_train, return_stats=True)
 boston_s_test = standardize(boston_x_test)
-```
 
-<button data-bs-target="#collapseVisualize2" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
-```python
 plt.figure(figsize=(12, 4))
 plt.subplot(121)
 plt.title('Original Boston Dataset')
@@ -269,7 +262,7 @@ plt.xlabel(boston_feature_names[2])
 plt.ylabel(boston_feature_names[5])
 plt.tight_layout();
 ```
-{: class="collapse" id="collapseVisualize2"}
+{: class="collapse" id="cv2"}
 
     
 {% include figure.html
@@ -280,10 +273,9 @@ plt.tight_layout();
 ### TF-Flowers
 
 We utilize [TF-Flowers](https://www.TensorFlow.org/datasets/catalog/tf_flowers) dataset to illustrate the application of K-Means in Color Quantization.
-
 This dataset represents a multi-class (mono-label) image classification problem, and comprises 3,670 photographs of flowers associated with one of the following labels: *dandelion*, *daisy*, *tulips*, *sunflowers* or *roses*.
 
-
+{% include posts/collapse-btn.html id="cv3" %}
 ```python
 def preprocessing_fn(image, label):
   current = tf.cast(tf.shape(image)[:2], tf.float32)
@@ -319,9 +311,7 @@ def load_tf_flowers():
   train_ds.int2str = info.features['label'].int2str
 
   return train_ds, test_ds
-```
-<button data-bs-target="#collapseVisualize3" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
-```python
+
 flowers_train_set, flowers_test_set = load_tf_flowers()
 
 images, target = next(iter(flowers_train_set))
@@ -333,7 +323,7 @@ visualize_images(
   figsize=(9, 5)
 )
 ```
-{: class="collapse" id="collapseVisualize3"}
+{: class="collapse" id="cv3"}
 
 {% include figure.html
    src="/assets/images/posts/ml/clustering/23_0.png"
@@ -749,7 +739,7 @@ def get_k_init_fn_by_name(name):
   return globals()[f'{name}_clusters']
 ```
 
-<button data-bs-target="#collapseVisualize4" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
+{% include posts/collapse-btn.html id="cv4" %}
 ```python
 initializations = (normal_clusters,
                    uniform_clusters,
@@ -775,13 +765,12 @@ for ix, ini in enumerate(initializations):
 
 plt.tight_layout();
 ```
-{: class="collapse" id="collapseVisualize4"}
+{: class="collapse" id="cv4"}
     
 {% include figure.html
    src="/assets/images/posts/ml/clustering/35_0.png"
    alt="Effect of each initialization procedure over the initial state of the model."
    figcaption="Fig. 4: Effect of each initialization procedure over the initial state of the model." %}
-
 
 The `normal_clusters` initialization procedure considers the mean and standard deviation of the training set's distribution, which means points drawn from this procedure will belong to the set's distribution and assume reasonable values in each feature.
 For datasets with complex shapes (with holes close to its features' average values), this method might create unreasonable clusters, which lie on empty sections of the dimensional space. In the example above, we see clusters lying in between the data masses.
@@ -807,7 +796,7 @@ p1_train = kmeans_predict(cluster_train, c1)
 p1_test = kmeans_predict(cluster_test, c1)
 ```
 
-<button data-bs-target="#collapseVisualize5" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
+{% include posts/collapse-btn.html id="cv5" %}
 ```py
 plt.figure(figsize=(12, 4))
 plt.subplot(121)
@@ -833,7 +822,7 @@ plt.tight_layout();
 
 del ctr, cte, c0, c1, p0_train, p0_test, p1_train, p1_test
 ```
-{: class="collapse" id="collapseVisualize5"}
+{: class="collapse" id="cv5"}
 
 {% include figure.html
    src="/assets/images/posts/ml/clustering/37_0.png"
@@ -988,7 +977,7 @@ report.groupby('k').mean().round(2).T
 </div>
 </div>
 
-<button data-bs-target="#collapseVisualize6" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
+{% include posts/collapse-btn.html id="cv6" %}
 ```python
 plt.figure(figsize=(16, 3))
 plt.subplot(141).set_title('Within-Cluster Avg Squared Error'); sns.lineplot(data=report, x='k', y='WCSS')
@@ -997,7 +986,7 @@ plt.subplot(143).set_title('Avg Silhouette'); sns.lineplot(data=report, x='k', y
 plt.subplot(144).set_title('Within-Cluster Avg Silhouette'); sns.lineplot(data=report, x='k', y='WC Silhouette')
 plt.tight_layout();
 ```
-{: class="collapse" id="collapseVisualize6"}
+{: class="collapse" id="cv6"}
 
 {% include figure.html
    src="/assets/images/posts/ml/clustering/43_0.png"
@@ -1086,7 +1075,7 @@ Test
   Samples       =   [22 18 17]
 ```
 
-<button data-bs-target="#collapseVisualize7" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
+{% include posts/collapse-btn.html id="cv7" %}
 ```python
 visualize_clusters(
   (cluster_train, p_train, 'train', '.'),
@@ -1094,7 +1083,7 @@ visualize_clusters(
   (clusters, p_clusters, 'clusters', 's')
 )
 ```
-{: class="collapse" id="collapseVisualize7"}
+{: class="collapse" id="cv7"}
 
 {% include figure.html
    src="/assets/images/posts/ml/clustering/49_0.png"
@@ -1251,7 +1240,7 @@ report.groupby('k').mean().round(2).T
 </div>
 </div>
 
-<button data-bs-target="#collapseVisualize8" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
+{% include posts/collapse-btn.html id="cv8" %}
 ```python
 plt.figure(figsize=(16, 3))
 plt.subplot(141).set_title('Within-Cluster Avg Squared Error'); sns.lineplot(data=report, x='k', y='WCSS')
@@ -1260,7 +1249,7 @@ plt.subplot(143).set_title('Avg Silhouette'); sns.lineplot(data=report, x='k', y
 plt.subplot(144).set_title('Within-Cluster Avg Silhouette'); sns.lineplot(data=report, x='k', y='WC Silhouette')
 plt.tight_layout();
 ```
-{: class="collapse" id="collapseVisualize8"}
+{: class="collapse" id="cv8"}
 
 {% include figure.html
    src="/assets/images/posts/ml/clustering/55_0.png"
@@ -1362,7 +1351,7 @@ Test
   Samples       = [15  4 17 14]
 ```
 
-<button data-bs-target="#collapseVisualize9" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
+{% include posts/collapse-btn.html id="cv9" %}
 ```python
 e = PCA(n_components=2)
 
@@ -1372,7 +1361,7 @@ visualize_clusters(
   (e.transform(clusters), p_clusters, 'clusters', 's')
 )
 ```
-{: class="collapse" id="collapseVisualize9"}
+{: class="collapse" id="cv9"}
     
 {% include figure.html
    src="/assets/images/posts/ml/clustering/61_0.png"
@@ -1436,14 +1425,14 @@ clusters = tf.Variable(uniform_clusters(
 ```
 
 
-<button data-bs-target="#collapseVisualize10" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
+{% include posts/collapse-btn.html id="cv10" %}
 ```python
 visualize_images(
   tf.reshape(tf.cast(127.5*(clusters + 1), tf.int32), (1, 4, -1, 3)),
   figsize=(6, 2),
   rows=1)
 ```
-{: class="collapse" id="collapseVisualize10"}
+{: class="collapse" id="cv10"}
 
 {% include figure.html
    src="/assets/images/posts/ml/clustering/69_0.png"
@@ -1564,14 +1553,14 @@ CPU times: user 2min 58s, sys: 4.13 s, total: 3min 3s
 Wall time: 1min 35s
 ```
 
-<button data-bs-target="#collapseVisualize11" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
+{% include posts/collapse-btn.html id="cv11" %}
 ```python
 visualize_images(
   tf.reshape(tf.cast(127.5*(clusters + 1), tf.int32), (1, 4, -1, 3)),
   figsize=(6, 2),
   rows=1)
 ```
-{: class="collapse" id="collapseVisualize11"}
+{: class="collapse" id="cv11"}
 
 {% include figure.html
    src="/assets/images/posts/ml/clustering/71_0.png"
@@ -1579,7 +1568,7 @@ visualize_images(
    figcaption="Fig. 11: Optimized color book." %}
 
 ##### Transforming Images
-<button data-bs-target="#collapseVisualize12" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
+{% include posts/collapse-btn.html id="cv12" %}
 ```python
 for x, _ in flowers_test_set.take(3):
   # Encoding:
@@ -1595,7 +1584,7 @@ for x, _ in flowers_test_set.take(3):
 
   visualize_images([*tf.cast(x, tf.uint32), *tf.cast(z, tf.uint32)], figsize=(16, 4))
 ```
-{: class="collapse" id="collapseVisualize12"}
+{: class="collapse" id="cv12"}
 
 ```bash
 Encoding 8 images:
@@ -2168,14 +2157,14 @@ p_test = hc_predict(cluster_test.numpy(), cluster_train.numpy(), clusters,
                     params['metric'], params['linkage'])
 ```
 
-<button data-bs-target="#collapseVisualize13" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
+{% include posts/collapse-btn.html id="cv13" %}
 ```python
 visualize_clusters(
   (cluster_train, p_train, 'train', '.'),
   (cluster_test, p_test, 'test', 'o'),
 )
 ```
-{: class="collapse" id="collapseVisualize13"}
+{: class="collapse" id="cv13"}
 
     
 {% include figure.html
@@ -2374,7 +2363,7 @@ p_train = hc_predict(boston_x_train.numpy(), boston_x_train.numpy(), clusters,
 p_test = hc_predict(boston_x_test.numpy(), boston_x_train.numpy(), clusters,
                     params['metric'], params['linkage'])
 ```
-<button data-bs-target="#collapseVisualize14" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
+{% include posts/collapse-btn.html id="cv14" %}
 ```py
 e = PCA(n_components=2)
 
@@ -2383,7 +2372,7 @@ visualize_clusters(
   (e.transform(boston_x_test), p_test, 'test', 'o'),
 )
 ```
-{: class="collapse" id="collapseVisualize14"}
+{: class="collapse" id="cv14"}
 
     
 {% include figure.html
@@ -2400,7 +2389,7 @@ We selected $e=5.0$, as this configuration resulted in 5 clusters more evenly ba
 The neighboring clusters found by K-Means have disapeared here. Furthermore, sparsely outlying samples have been clustered into small subsets (comprising of few samples).
 This confirms the search results found when applying the K-Means algorithm, which described this set as being dominated by two large clusters ($k=2$).
 
-<button data-bs-target="#collapseVisualize15" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
+{% include posts/collapse-btn.html id="cv15" %}
 ```python
 e = PCA(n_components=2)
 
@@ -2450,7 +2439,7 @@ for ix, (linkage, (p_train, p_test)) in enumerate(zip(linkages, results)):
   
 plt.tight_layout()
 ```
-{: class="collapse" id="collapseVisualize15"}
+{: class="collapse" id="cv15"}
 
 {% include figure.html
    src="/assets/images/posts/ml/clustering/103_0.png"
@@ -2493,7 +2482,7 @@ b_cor_train = e.fit_transform(boston_x_train)
 b_cor_test = e.transform(boston_x_test)
 ```
 
-<button data-bs-target="#collapseVisualize16" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
+{% include posts/collapse-btn.html id="cv16" %}
 ```python
 plt.figure(figsize=(12, 4))
 plt.subplot(121)
@@ -2509,7 +2498,7 @@ sns.scatterplot(x=b_cor_test[:, 0], y=b_cor_test[:, 1], hue=boston_y_test, label
 
 del e, b_cov_train, b_cov_test, b_cor_train, b_cor_test
 ```
-{: class="collapse" id="collapseVisualize16"}
+{: class="collapse" id="cv16"}
 
 {% include figure.html
    src="/assets/images/posts/ml/clustering/107_0.png"
@@ -2764,7 +2753,7 @@ report.groupby('k').mean().round(2).T
 </div>
 </div>
 
-<button data-bs-target="#collapseVisualize17" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
+{% include posts/collapse-btn.html id="cv17" %}
 ```python
 plt.figure(figsize=(16, 3))
 plt.subplot(141).set_title('Within-Cluster Avg Squared Error'); sns.lineplot(data=report, x='k', y='WCSS')
@@ -2773,7 +2762,7 @@ plt.subplot(143).set_title('Avg Silhouette'); sns.lineplot(data=report, x='k', y
 plt.subplot(144).set_title('Within-Cluster Avg Silhouette'); sns.lineplot(data=report, x='k', y='WC Silhouette')
 plt.tight_layout();
 ```
-{: class="collapse" id="collapseVisualize17"}
+{: class="collapse" id="cv17"}
     
 {% include figure.html
    src="/assets/images/posts/ml/clustering/116_0.png"
@@ -2870,7 +2859,7 @@ kmeans_report_evaluation('Test', boston_z_test, clusters)
       WC Silhouette =       0.1154
       Samples       = [20  6  9 15]
 
-<button data-bs-target="#collapseVisualize18" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
+{% include posts/collapse-btn.html id="cv18" %}
 ```python
 visualize_clusters(
   (boston_z_train, p_train, 'train', '.'),
@@ -2878,7 +2867,7 @@ visualize_clusters(
   (clusters, p_clusters, 'clusters', 's')
 )
 ```
-{: class="collapse" id="collapseVisualize18"}
+{: class="collapse" id="cv18"}
 
 {% include figure.html
    src="/assets/images/posts/ml/clustering/122_0.png"
@@ -3064,14 +3053,14 @@ p_test = hc_predict(
   boston_z_train.numpy(), clusters)
 ```
 
-<button data-bs-target="#collapseVisualize19" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
+{% include posts/collapse-btn.html id="cv19" %}
 ```python
 visualize_clusters(
   (boston_z_train, p_train, 'train', '.'),
   (boston_z_test, p_test, 'test', 'o'),
 )
 ```
-{: class="collapse" id="collapseVisualize19"}
+{: class="collapse" id="cv19"}
 
 {% include figure.html
    src="/assets/images/posts/ml/clustering/133_0.png"

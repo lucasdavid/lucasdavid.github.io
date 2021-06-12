@@ -52,7 +52,6 @@ plugins:
   - jekyll-paginate
   - jekyll-feed
   - jekyll-github-metadata
-  - jekyll-compress-images
 
 exclude:
   - Gemfile

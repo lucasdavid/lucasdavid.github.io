@@ -9,14 +9,15 @@ layout: default
   <div class="right-align mb-4">
     <p class="small text-muted">{{ page.excerpt }} <em>— {{ page.date | date: "%B %e, %Y" }}</em></p>
   </div>
+
+  <div class="mt-4 mb-4">
+    <small>
+      {% include posts/badges.html tags=page.tags %}
+    </small>
+  </div>
   <div class="article-content">
     {{ content }}
   </div>
 </article>
-<div class="mt-4 mb-4">
-  <small>
-    {% include posts/badges.html tags=page.tags %}
-  </small>
-</div>
 
 {% include disqus.html %}

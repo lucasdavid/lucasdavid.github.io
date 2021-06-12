@@ -4,8 +4,7 @@
     ],
     "spellright.documentTypes": [
         "latex",
-        "plaintext",
-        "markdown"
+        "plaintext"
     ],
     "cSpell.enabled": true
 }
