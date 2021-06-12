@@ -7,14 +7,14 @@ title: Projects
 
 ## GitHub Repositories
 
-<div class="mt-4 mb-4">
+<div class="row mt-4 mb-4">
   {% assign repos = site.github.public_repositories | where:'fork', false | sort: 'stargazers_count' | reverse %}
   {% for r in repos limit: 12 %}
+  <div class="col-12 col-md-4 col-xl-3">
   <div class="card border-0 mb-1">
     <div class="card-body p-0 pt-2 pb-2">
       <p class="card-title small mb-1">
         <strong>
-          <i data-feather="book" width="12" height="12"></i>
           <a href="{{ r.html_url }}" target="_blank">{{r.name}}</a>
         </strong>
       </p>
@@ -22,9 +22,10 @@ title: Projects
         {{r.description}}
       </p>
       <p class="text-muted small mb-0" style="font-size: .7em;">
-        <i data-feather="star" width="12" style="margin-top:-2px;"></i> {{r.stargazers_count}}
+        {{r.stargazers_count}} stars •
         Last pushed at {{r.pushed_at | date: "%b %e, %Y" }}
       </p>
+    </div>
     </div>
   </div>
   {% endfor %}
@@ -37,7 +38,6 @@ title: Projects
     <div class="card-body p-0 pt-2 pb-2">
       <p class="card-title small mb-1">
         <strong>
-          <i data-feather="book" width="12" height="12"></i>
           <a href="https://github.com/Comp-UFSCar">Comp-UFSCar</a>
         </strong>
         

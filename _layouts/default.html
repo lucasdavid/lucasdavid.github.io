@@ -11,13 +11,15 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
-  <script src="https://unpkg.com/feather-icons"></script>
-
   <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css" />
   <link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}"
     href="{{ site.baseurl }}/feed.xml" />
+
+  {% if jekyll.environment == 'production' %}
   {% include analytics.html %}
+  {% endif %}
 </head>
+
 <body>
   <div class="container-fluid">
     <div class="row">
@@ -36,11 +38,12 @@
   </div>
 
   {% include footer.html %}
-  {% include analytics.html %}
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
     crossorigin="anonymous"></script>
-  <script type="text/x-mathjax-config">
+
+    <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       tex2jax: {
         inlineMath: [['$','$'], ['\\(','\\)']],
@@ -50,6 +53,5 @@
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
     type="text/javascript"></script>
-  <script type="text/javascript" src="{{site.baseurl}}/assets/js/start.js"></script>
 </body>
 </html>

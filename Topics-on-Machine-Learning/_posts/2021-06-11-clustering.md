@@ -895,7 +895,7 @@ report.groupby('k').mean().round(2).T
 ```
 
 <div>
-  <table class="dataframe table table-hover">
+  <div class="table-responsive"><table class="dataframe table table-hover">
     <thead>
       <tr style="text-align: right;">
         <th>k</th>
@@ -985,6 +985,7 @@ report.groupby('k').mean().round(2).T
       </tr>
     </tbody>
   </table>
+</div>
 </div>
 
 <button data-bs-target="#collapseVisualize6" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
@@ -1157,7 +1158,7 @@ report.groupby('k').mean().round(2).T
 ```
 
 <div>
-<table class="dataframe table table-hover">
+<div class="table-responsive"><table class="dataframe table table-hover">
   <thead>
     <tr style="text-align: right;">
       <th>k</th>
@@ -1247,6 +1248,7 @@ report.groupby('k').mean().round(2).T
     </tr>
   </tbody>
 </table>
+</div>
 </div>
 
 <button data-bs-target="#collapseVisualize8" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
@@ -2003,7 +2005,7 @@ Wall time: 39 s
 report
 ```
 <div>
-<table class="dataframe table table-hover">
+<div class="table-responsive"><table class="dataframe table table-hover">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -2105,6 +2107,7 @@ report
     </tr>
   </tbody>
 </table>
+</div>
 </div>
 
 ##### Training
@@ -2228,7 +2231,7 @@ report
 ```
 
 <div>
-<table class="dataframe table table-hover">
+<div class="table-responsive"><table class="dataframe table table-hover">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -2294,6 +2297,7 @@ report
     </tr>
   </tbody>
 </table>
+</div>
 </div>
 
 
@@ -2569,7 +2573,7 @@ report.groupby('energy').mean().round(2).T
 ```
 
 <div>
-<table class="dataframe table table-hover">
+<div class="table-responsive"><table class="dataframe table table-hover">
   <thead>
     <tr style="text-align: right;">
       <th>energy</th>
@@ -2648,13 +2652,14 @@ report.groupby('energy').mean().round(2).T
   </tbody>
 </table>
 </div>
+</div>
 
 
 ```python
 report.groupby('k').mean().round(2).T
 ```
 <div>
-<table class="dataframe table table-hover">
+<div class="table-responsive"><table class="dataframe table table-hover">
   <thead>
     <tr style="text-align: right;">
       <th>k</th>
@@ -2756,6 +2761,7 @@ report.groupby('k').mean().round(2).T
     </tr>
   </tbody>
 </table>
+</div>
 </div>
 
 <button data-bs-target="#collapseVisualize17" class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseSetup">show code</button>
@@ -2919,7 +2925,7 @@ Wall time: 18.9 s
 report
 ```
 <div>
-<table class="dataframe table table-hover">
+<div class="table-responsive"><table class="dataframe table table-hover">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -2985,6 +2991,7 @@ report
     </tr>
   </tbody>
 </table>
+</div>
 </div>
 
 ##### Training
