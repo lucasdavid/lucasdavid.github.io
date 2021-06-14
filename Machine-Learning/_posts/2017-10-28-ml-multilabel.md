@@ -7,6 +7,7 @@ first_p: |-
   We usually code this relationship using one-hot encoding: a label $i$ is
   transformed into a vector $[0, 0, ... 1.0, ..., 0, 0]$, where the $1$ is at
   the position $i$ of the vector.
+toc: true
 date: 2017-10-26 21:43:00
 lead_image: /assets/images/posts/ml/multilabel/dataset.png
 tags:

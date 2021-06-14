@@ -3,6 +3,7 @@ layout: post
 title: Explaining Machine Learning Models Using Gradients
 excerpt: Saliency analysis using <i>SmoothGrad</i>.
 first_p:
+toc: true
 date: 2021-01-15 16:12:00
 lead_image: /assets/images/posts/ml/explaining/cam/grad/1.png
 first_p: |-

@@ -3,7 +3,8 @@ layout: post
 title: Code Versioning
 excerpt: The basics on GIT and code storage
 first_p: |-
-    Versioning is one of the most basic ideas in software development, but is treated with such contempt that lots of people only start to actually use it after too much manual effort. Someone somewhere at some point said: "the idea of a human doing a task that could be automated by a machine just makes me sad". I think this sentence sums up pretty much everything about versioning: you can develop without it, sure, but it would be just painful and, considering the formality of computers, it would just result in a shittier job, most likely.
+    Versioning is one of the most basic ideas in software development, but is treated with such contempt that lots of people only start to actually use it after too much manual effort. Someone somewhere at some point said: "the idea of a human doing a task that could be automated by a machine just makes me sad". I think this sentence sums up pretty much everything about versioning: you can develop without it, sure, but it would be just painful and, considering the formality of computers, it would just result in a worst job, most likely.
+toc: true
 date: 2017-10-2 00:01:00
 lead_image: /assets/images/posts/git.svg
 tags:
@@ -12,7 +13,7 @@ tags:
   - code versioning
 ---
 
-<span class="display-6">Versioning</span> is one of the most basic ideas in software development, but is treated with such contempt that lots of people only start to actually use it after too much manual effort. Someone somewhere at some point said: "the idea of a human doing a task that could be automated by a machine just makes me sad". I think this sentence sums up pretty much everything about versioning: you can develop without it, sure, but it would be just painful and, considering the formality of computers, it would just result in a shittier job, most likely.
+<span class="display-6">Versioning</span> is one of the most basic ideas in software development, but is treated with such contempt that lots of people only start to actually use it after too much manual effort. Someone somewhere at some point said: "the idea of a human doing a task that could be automated by a machine just makes me sad". I think this sentence sums up pretty much everything about versioning: you can develop without it, sure, but it would be just painful and, considering the formality of computers, it would just result in a worst job, most likely.
 
 <figure>
   <img src="{{site.baseurl}}/assets/images/posts/git.svg" alt="A simple flow using Git" class="figure-img img-fluid rounded" />

@@ -9,7 +9,7 @@ first_p: |-
   Even when the idea behind some code is trivial, implementations on GitHub and other websites can
   be quite difficult to understand. A few reasons come to mind, but I believe one to be of paramount
   importance: vectorization.
-  
+toc: true
 date: 2021-06-08 12:22:00
 lead_image: /assets/images/posts/cv/vectorization/cover.png
 tags:
@@ -140,7 +140,7 @@ $I$ is resized so it's smallest component (width or height) would match the smal
 
 2. The largest component in the shape of $I'$ is now greater or equal to $300$. We extract the central crop of size $(300, 300)$ from $I'$, resulting inadvertly in an image of shape $(300, 300, 3)$.
 
-
+{% include posts/collapse-btn.html id="csetup" text="show setup code" %}
 ```python
 from math import ceil
 
@@ -191,6 +191,7 @@ labels = [int2str(l) for l in target]
 
 visualize(tf.cast(images, tf.uint8), labels)
 ```
+{: class="collapse" id="csetup"}
 
 {% include figure.html
    src="/assets/images/posts/cv/vectorization/tfflowers.png"
@@ -274,8 +275,16 @@ def sepia(x):
   return tf.clip_by_value(y, 0, 255)
 
 
-sepia(images)
+images_s = sepia(images)
 ```
+{% include posts/collapse-btn.html id="cv3" %}
+```py
+visualize(
+  tf.cast(transformed, tf.uint8),
+  labels
+)
+```
+{: class="collapse" id="cv3"}
 
 {% include figure.html
    src="/assets/images/posts/cv/vectorization/tfflowers-sepia.png"
@@ -305,8 +314,19 @@ def grayscale(x):
   y = tf.expand_dims(y, -1)             # restore 3rd rank (H, W, 1)
   return tf.clip_by_value(y, 0, 255)
 
-grayscale(images)
+images_g = grayscale(images)
 ```
+
+{% include posts/collapse-btn.html id="cv2" %}
+```py
+visualize(
+  tf.cast(images_g, tf.uint8),
+  labels,
+  cmap='gray'
+)
+```
+{: class="collapse" id="cv2"}
+
 {% include figure.html
    src="/assets/images/posts/cv/vectorization/tfflowers-gray.png"
    alt="Samples in the TF-Flowers dataset converted to gray-scale."
@@ -315,6 +335,7 @@ grayscale(images)
 
 ### *Challenge:* Apply the following filters to the monochromatic images.
 
+{% include posts/collapse-btn.html id="ckernels" text="show kernels" %}
 ```python
 h17 = tf.constant(
   [
@@ -369,6 +390,7 @@ h89 = tf.stack((h8, h9), axis=0)
 h17 = tf.transpose(h17, (1, 2, 0))
 h89 = tf.transpose(h89, (1, 2, 0))
 ```
+{: class="collapse" id="ckernels"}
 
 #### Convolution Basics
 
@@ -425,18 +447,18 @@ print('signal:', s.numpy(), sep='\n')
 print('kernel:', k.numpy(), sep='\n')
 print('s*k:', tf.reshape(c, (2, 2)).numpy(), sep='\n')
 ```
-
-    signal:
-    [[1. 2. 3.]
-     [4. 5. 6.]
-     [7. 8. 9.]]
-    kernel:
-    [[1. 1.]
-     [0. 0.]]
-    s*k:
-    [[ 3.  5.]
-     [ 9. 11.]]
-
+```py
+signal:
+[[1. 2. 3.]
+  [4. 5. 6.]
+  [7. 8. 9.]]
+kernel:
+[[1. 1.]
+  [0. 0.]]
+s*k:
+[[ 3.  5.]
+  [ 9. 11.]]
+```
 
 This is a design decision which takes performance into account, as the rotation operations can be omitted during the feed-forward process. During training, kernels are correctly learnt through back-propagation by minimizing a given loss function (e.g. cross-entropy, N-pairs, focal loss).
 Interestingly enough, the differential of the **real-valued** cross-correlation with respect to its kernel (which is used to update the kernels) is the cross-correlation itself, rotated $180^\circ$ (e.g. convolution).
@@ -471,22 +493,22 @@ y = tf.clip_by_value(y, 0, 255)
 #### Vectorized Cross-correlation Implementation
 
 In this subsection, I present my implementation (and derivation thereof) of the 2-dimensional convolution function.
-For simplicity, it is implemented as the correlation between an input signal $I$ and the reflection of an input kernel $k$.
+For simplicity, it is implemented as the correlation between an input signal $s$ and the reflection of an input kernel $k$.
 
 ##### Study of a Use Case
 I decided to start by considering a simple use case.
 For analytical convenience, I imagined this case to have the following characteristics:
 
-* Only one image and one kernel is involved in this operation.
+* Only one image $s$ and one kernel $k$ are involved in this operation.
 * No padding is performed in the input signal (i.e. `padding valid`).
-* $I$ and $k$ have different height and width values --- namely, $(H_I, W_I)$ and $(H_k, W_k)$ ---, and they are prime numbers. This is interesting when flattening a matrix into a vector, as prime numbers have distinct products and will result in dimensions that are easier to understand.
+* $s$ and $k$ have different height and width values --- namely, $(H_s, W_s)$ and $(H_k, W_k)$ ---, and they are prime numbers. This is interesting when flattening a matrix into a vector, as prime numbers have distinct products and will result in dimensions that are easier to understand.
 * The kernel is not symmetric. Hence the convolution and cross-correlation functions will result in different signals.
 
 I considered the following signals in my use-case:
 
 $$\begin{align}
   \label{eq:use_case}
-  I &= \begin{bmatrix}
+  s &= \begin{bmatrix}
      1 & 2 & 3 & 4 & 5 \\
      6 & 7 & 8 & 9 & 10 \\
      11 & 12 & 13 & 14 & 15 \\
@@ -501,21 +523,29 @@ $$\begin{align}
   \end{bmatrix}
 \end{align}$$
 
-I simulated the effect of a 2-D kernel $k$ sliding across the spatial dimensions of $I$ by "extracting" multiple non-mutually disjointed subsections of the image into a sequence of flattened patches, which could then be broadcast-multiplied by the flattened kernel and reduced with the sum operation.
-To make this "extraction" more efficient, an index-based mask was built and applied over the image. This approach requires the construction of two integer matrices $R$ and $C$ --- each of shape $((H_I-H_k+1)(W_I-W_k+1), H_k W_I)$ ---, but does not replicate the values contained within the input signal $I$. Rather, index-based masks create merely `views` of the n-dimensional arrays over which they are applied.
+{% include posts/collapse-btn.html id="ck2" %}
+```py
+s = np.arange(35).reshape((7, 5))
+k = np.asarray([[0, 2, 1],
+                [0, 1, 0]])
+```
+{: class="collapse" id="ck2"}
+
+I simulated the effect of a 2-D kernel $k$ sliding across the spatial dimensions of $s$ by "extracting" multiple non-mutually disjointed subsections of the image into a sequence of flattened patches, which could then be broadcast-multiplied by the flattened kernel and reduced with the sum operation.
+To make this "extraction" more efficient, an index-based mask was built and applied over the image. This approach requires the construction of two integer matrices $R$ and $C$ --- each of shape $((H_s-H_k+1)(W_s-W_k+1), H_k W_s)$ ---, but does not replicate the values contained within the input signal $s$. Rather, index-based masks create merely `views` of the n-dimensional arrays over which they are applied.
 
 The indexing procedure can be described by the following steps.
 
-* The window starts at the first valid position in matrix $I$, and references the sub-matrix $I[0:2,0:2]$ with the flatten index vector $[(0,0), (0,1), (0,2), (1,0), (1,1),(1,2)]$ or, for briefness, $\begin{bmatrix}00 & 01 & 02 & 10 & 11 & 12\end{bmatrix}$.
-* $k$ slides horizontally until the last valid index of $I$, yielding $W_I-W_k+1$ index vectors in total.
-* The window resets at the column of $I$, but positioned at the next following row.
-* The three steps above are repeated for each valid vertical index ($H_I-H_k+1$ times), effectively covering all sections of the matrix $I$.
+* The window starts at the first valid position in matrix $s$, and references the sub-matrix $s[0:2,0:2]$ with the flatten index vector $[(0,0), (0,1), (0,2), (1,0), (1,1),(1,2)]$ or, for briefness, $\begin{bmatrix}00 & 01 & 02 & 10 & 11 & 12\end{bmatrix}$.
+* $k$ slides horizontally until the last valid index of $s$, yielding $W_s-W_k+1$ index vectors in total.
+* The window resets at the column of $s$, but positioned at the next following row.
+* The three steps above are repeated for each valid vertical index ($H_s-H_k+1$ times), effectively covering all sections of the matrix $s$.
 
 The use-case represented above can therefore be indexed as:
 
 $$\begin{align}
   \label{eq:use_case_index_matrix}
-  M_I = \begin{bmatrix}
+  M_s = \begin{bmatrix}
     00 & 01 & 02 & 10 & 11 & 12 \\
     01 & 02 & 03 & 11 & 12 & 13 \\
     02 & 03 & 04 & 12 & 13 & 14 \\
@@ -532,7 +562,7 @@ $$\begin{align}
 
 We can identify multiple patterns in the matrix above.
 
-Firstly, onto the vertical indexing (i.e., the index $r$ in the index pair $rc$, for $M_I = [rc]_{R\times C})$. In the first column, $r$ is arranged from $0$ to $H_I-H_k+1$, and each number repeats $W_I-W_k+1$ times. This can be expressed in numpy notation as:
+Firstly, onto the vertical indexing (i.e., the index $r$ in the index pair $rc$, for $M_s = [rc]_{R\times C})$. In the first column, $r$ is arranged from $0$ to $H_s-H_k+1$, and each number repeats $W_s-W_k+1$ times. This can be expressed in numpy notation as:
 ```py
 B, H, W = s.shape
 KH, KW, KC = k.shape
@@ -549,7 +579,7 @@ r1 = np.arange(KH).reshape(1, KH)
 r = np.repeat(r0 + r1, KW, axis=1)
 ```
 
-Notice that the addition between a column vector $r_0$ and a row vector $r_1$ will construct a matrix through broadcasting. The matrix $R$ now contains the first index in $M_I$.
+Notice that the addition between a column vector $r_0$ and a row vector $r_1$ will construct a matrix through broadcasting. The matrix $R$ now contains the first index in $M_s$.
 
 As for the horizontal indexing $c$, we observe the numbers are sequentially arranged in the first row from 0 to $W_k$, and that this sequence repeats $H_k$ times:
 ````py
@@ -557,30 +587,30 @@ c0 = np.arange(KW)
 c0 = np.tile(c0, KH).reshape(1, -1)
 ```
 
-Furthermore, $c$ increases by 1 each row (as our convolution slides by exactly 1 step), going up to the number of horizontal slide steps of $k$ onto $I$ ($W_I-W_k+1$).
-Adding this row vector to $c_0$ (a column vector) produces the index matrix for all horizontal slides of the kernel. Finally, we vertically tile (outer repeat) this matrix by the number of valid horizontal slide steps ($H_I-H_k + 1$):
+Furthermore, $c$ increases by 1 each row (as our convolution slides by exactly 1 step), going up to the number of horizontal slide steps of $k$ onto $s$ ($W_s-W_k+1$).
+Adding this row vector to $c_0$ (a column vector) produces the index matrix for all horizontal slides of the kernel. Finally, we vertically tile (outer repeat) this matrix by the number of valid horizontal slide steps ($H_s-H_k + 1$):
 ```py
 c1 = np.arange(W-KW+1).reshape(-1, 1)
 c = np.tile(c0 + c1, [H-KH+1, 1])
 ```
 
-Hence, $M_I = [R, C]$.
+Hence, $M_s = [R, C]$.
 
 ##### Additional Considerations
 ###### Batching
-As $M_I$ was constructed taking the width and height of the signals into consideration, it does not depend on the number of images, nor the number of kernels.
-Let $I$ be redefined as a signal of shape $(B_1, B_2, \ldots, B_n, H_I, W_I)$ (a batch of batches of \ldots batches of images), and $k$ a signal of shape $(H_k, W_k, C)$ This solution can be easily extended to a multi-image, multi-kernel scenario by broadcasting the index-mask selection of $I$ to all batch-like dimensions and dotting it with the flatten kernels:
+As $M_s$ was constructed taking the width and height of the signals into consideration, it does not depend on the number of images, nor the number of kernels.
+Let $s$ be redefined as a signal of shape $(B_1, B_2, \ldots, B_n, H_s, W_s)$ (a batch of batches of \ldots batches of images), and $k$ a signal of shape $(H_k, W_k, C)$ This solution can be easily extended to a multi-image, multi-kernel scenario by broadcasting the index-mask selection of $s$ to all batch-like dimensions and dotting it with the flatten kernels:
 
 ```py
 y = s[..., r, c] @ k.reshape(-1, C)
 ```
 
 ###### Padding
-As kernels of sizes greater than 0 slide across the spatial dimensions of an input signal $I$, they will occupy at most $(H_I-H_k+1)\times (W_I-W_k+1) < H_I W_I$ positions, resulting in an output signal smaller than the input signal. More specifically, of shape $(B_1, B_2, \ldots, B_n, H_I-H_k+1, W_I-W_k+1, C)$.
+As kernels of sizes greater than 0 slide across the spatial dimensions of an input signal $s$, they will occupy at most $(H_s-H_k+1)\times (W_s-W_k+1) < H_s W_s$ positions, resulting in an output signal smaller than the input signal. More specifically, of shape $(B_1, B_2, \ldots, B_n, H_s-H_k+1, W_s-W_k+1, C)$.
 One can imagine many cases in which the maintenance of the signal size is desirable, such as maintaining locality between multiple applications of the convolution; or maintaining visualization consistency.
 
 In order to maintain a consistent signal shape, I implemented the flag `padding='SAME'`, what is sometimes referred to as `zero-padding`. I employed here a strategy similar to what is done in the NumPy and TensorFlow libraries: $(H_k-1, W_k-1)$ zeros are added to the input signal's height and width respectively.
-During the convolution, the spatial dimensions of the input signal become $((H_I+H_k-1)-H_k+1, (W_I+W_k-1)-W_k+1) = (H_I, W_I)$.
+During the convolution, the spatial dimensions of the input signal become $((H_s+H_k-1)-H_k+1, (W_s+W_k-1)-W_k+1) = (H_s, W_s)$.
 
 For kernels with an odd numbered width and height, this operation becomes trivial: we add $\lfloor H_k/2 \rfloor$ rows to both top and bottom extremities of the signal, and $\lfloor W_k/2 \rfloor$ columns to its left and right extremities.
 
@@ -588,7 +618,8 @@ A particular case must be handled when one of the sizes of the kernel is even: a
 
 
 ##### Complete Implementation, Usage Conditions and Limitations
-```python
+
+```py
 from math import ceil, floor
 
 _PADDINGS = ('VALID', 'SAME')
@@ -644,12 +675,18 @@ def convolve2d(s, k, padding='VALID'):
   return correlate2d(s, k, padding)
 ```
 
-The input signal (images) must be in the shape of $(B_1, B_2, \ldots, B_n, H_I, W_I)$ and kernels must be in the shape of $(H_k, W_k, C)$. I also remark the following important limitations of this implementation:
+The input signal (images) must be in the shape of $(B_1, B_2, \ldots, B_n, H_s, W_s)$ and kernels must be in the shape of $(H_k, W_k, C)$. I also remark the following important limitations of this implementation:
 
 * This function is limited to the two dimensional spatial case, and will not work correctly for 3-D, 4-D and, more generally, n-D spatial signals, where $n > 3$.
 * Stride is always 1, making this function unsuitable for Atrous Convolution.
 
 #### Testing My Implementation Against Scipy's
+
+One way of testing this code is to compare the results with scipy's implementation.
+We can use the `np.testing.assert_almost_equal` function to compare arrays (up to the 6th decimal),
+which will either pass without errors or print how similar the two arrays are.
+
+However, scipy's implementation 
 
 ```python
 import scipy.signal
@@ -671,13 +708,71 @@ for padding in ('valid', 'same'):
 
 print('All tests passed (no exceptions raised).')
 ```
-
-    All tests passed (no exceptions raised).
-
+```
+All tests passed (no exceptions raised).
+```
 
 #### Application over TF-Flowers Image Samples
 
-The figure below illustrates the result of the convolution of multiple input
+{% include posts/collapse-btn.html id="cv1" text="show code" %}
+```python
+y = np.concatenate(
+  (convolve2d(images_g[..., 0].numpy(), h17, padding='SAME'),
+   convolve2d(images_g[..., 0].numpy(), h89, padding='SAME')),
+  axis=-1
+)
+
+yr1c1 = np.sqrt(
+  convolve2d(images_g[..., 0].numpy(), h17[..., 0:1], padding='SAME')**2
+  + convolve2d(images_g[..., 0].numpy(), h17[..., 1:2], padding='SAME')**2
+)
+
+y = np.concatenate((y, yr1c2), axis=-1)
+
+visualizing = tf.cast(
+  tf.clip_by_value(
+    tf.reshape(
+      tf.transpose(tf.concat((images_g, y), axis=-1), (0, 3, 1, 2)),
+      (-1, *images_g.shape[1:])
+    ),
+    0,
+    255
+  ),
+  tf.uint8
+).numpy()
+
+visualizing = [
+  None,  # empty cell (original images column)
+  *tf.transpose(h17, (2, 0, 1)).numpy(),  # kernels 1 through 7
+  *tf.transpose(h89, (2, 0, 1)).numpy(),  # kernels 8 and 9
+  None,  # empty cell (sqrt(s*h1^2+s^h2^2) column)
+  *visualizing # images and convolution results
+]
+
+titles = [
+  'original',
+  *(f'$s*h_{i+1}$' for i in range(9)),
+  '$\sqrt{ {s*h_1}^2 + {s*h_2}^2}$',
+]
+
+visualize(
+  visualizing,
+  titles,
+  rows=images_g.shape[0] + 1,
+  cols=y.shape[-1] + 1,
+  figsize=(24, 25),
+)
+```
+{: class="collapse" id="cv1"}
+
+{% include figure.html
+   src="/assets/images/posts/cv/vectorization/results.png"
+   alt="Convolution between the samples in TF-Flowers and hand-craft kernels."
+   figcaption="Convolution between the samples in TF-Flowers and hand-craft kernels."
+   classed="w-xl-130"
+    %}
+
+The figure above illustrates the result of the convolution of multiple input
 images with each kernel. A brief description of each result is provided below.
 
 * **H1** highlights regions containing vertical lines, in which the left side
@@ -701,24 +796,3 @@ images with each kernel. A brief description of each result is provided below.
   the intensities of the pixels giving the central region more importance.
 * **H10** combines `H1` and `H2` into one signal that seems to respond to both
   vertical and horizontal lines in the same intensity.
-
-```python
-y = np.concatenate(
-  (convolve2d(images_g[..., 0].numpy(), h17, padding='SAME'),
-   convolve2d(images_g[..., 0].numpy(), h89, padding='SAME')),
-  axis=-1
-)
-
-yr1c1 = np.sqrt(
-  convolve2d(images_g[..., 0].numpy(), h17[..., 0:1], padding='SAME')**2
-  + convolve2d(images_g[..., 0].numpy(), h17[..., 1:2], padding='SAME')**2
-)
-
-y = np.concatenate((y, yr1c2), axis=-1)
-```
-{% include figure.html
-   src="/assets/images/posts/cv/vectorization/results.png"
-   alt="Convolution between the samples in TF-Flowers and hand-craft kernels."
-   figcaption="Convolution between the samples in TF-Flowers and hand-craft kernels."
-   classed="w-xl-130"
-    %}

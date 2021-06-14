@@ -2,6 +2,7 @@
 layout: post
 title: Repository Pattern
 excerpt: Understanding A Data Abstraction Pattern
+toc: true
 date: 2017-10-2 00:07:00
 first_p: |-
   Real life applications might have to communicate with more than one data source. Data might be coming from/going to different places and it's hard to keep it simple, as you have to implement the interaction with all of these places individually. The repository pattern abstracts the data layer (how you store and retrieve your resources), making it transparent to the business layer.

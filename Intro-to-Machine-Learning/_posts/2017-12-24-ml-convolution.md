@@ -13,6 +13,7 @@ first_p: |-
   nas camadas já presentes na rede densa.
 
   Por quê precisamos da ideia de deep-learning e deep-models, então?
+toc: true
 date: 2017-12-24 21:17:00
 color: purple darken-3
 lead_image: /assets/images/posts/ml/deep/conv_outputs.jpg

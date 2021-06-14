@@ -11,6 +11,7 @@ first_p: |-
   Como fazer isso sem perdermos o que nós aprendemos acima? Podemos
   utilizar uma função de ativação. Uma função aplicada sobre a saída
   de um modelo linear que restringe a resposta à um certo intervalo.  
+toc: true
 date: 2017-10-26 21:43:00
 lead_image: /assets/images/posts/ml/nonlinear/cover.png
 tags:

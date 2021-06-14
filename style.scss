@@ -211,6 +211,10 @@ hr {
   color: #ccc;
 }
 
+.bg-white {
+  background-color: white;
+}
+
 @import "highlights";
 @import "svg-icons";
 
@@ -218,7 +222,6 @@ hr {
 //
 // Figures
 //
-
 figure > figcaption {
   font-size: .8em;
   color: #888;
@@ -269,4 +272,16 @@ figure > figcaption {
 
 .dataframe thead th {
   text-align: right;
+}
+
+.on-this-page {
+  z-index: 2;
+}
+.section-nav {
+  padding: 0;
+  list-style: none;
+
+  a {
+    color: $gray2;
+  }
 }

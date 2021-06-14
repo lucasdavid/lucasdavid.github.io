@@ -4,6 +4,7 @@ title: Effective Code Versioning
 excerpt: Digging Deep in Code Versioning with GIT
 first_p: |-
   Some weeks ago, I've started this blog with this very subject. Today, as requested by a reader, I'll go back and try to talk a little bit more about versioning focusing on GIT, it's problems and how to avoid/fix them.
+toc: true
 date: 2017-10-2 00:08:00
 lead_image: /assets/images/posts/git-advanced.svg
 tags:

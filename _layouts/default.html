@@ -34,6 +34,19 @@
 
         <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
       </div>
+      {% if page.layout == "post" %}
+        <div class="col-12 col-xl-2 d-none d-xl-block on-this-page">
+          <nav class="sticky-top">
+            <div class="small text-secondary bg-white p-2">
+              <div class="border-bottom pt-4 mb-2 pl-2 pr-2">
+                On this page
+              </div>
+              {% toc %}
+            </div>
+            
+          </nav>
+        </div>
+      {% endif %}
     </div>
   </div>
 

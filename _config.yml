@@ -33,9 +33,6 @@ baseurl: ""
 paginate: 12
 paginate_path: "/page:num/"
 
-#
-# !! You don't need to change any of the configuration flags below !!
-#
 permalink: /blog/:categories/:title/
 version: v3.8
 kramdown:
@@ -52,6 +49,7 @@ plugins:
   - jekyll-paginate
   - jekyll-feed
   - jekyll-github-metadata
+  - jekyll-toc
 
 exclude:
   - Gemfile
@@ -63,3 +61,7 @@ exclude:
 
 compress_images:
   images_path: "assets/images/**/*.{gif,png,jpg,jpeg,svg}"
+
+toc:
+  min_level: 1 # default: 1
+  max_level: 4 # default: 6

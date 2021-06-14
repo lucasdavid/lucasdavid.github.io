@@ -8,7 +8,7 @@ first_p: |-
   We implemented the K-Means and Hierarchical Clustering algorithms (and their
   evaluation metrics) from the ground up. Results are presented over three distinct
   datasets, including a bonus color quantization example.
-
+toc: true
 date: 2021-06-11 15:58:00
 lead_image: /assets/images/posts/ml/clustering/103_0.png
 tags:
@@ -990,8 +990,8 @@ plt.tight_layout();
 
 {% include figure.html
    src="/assets/images/posts/ml/clustering/43_0.png"
-   alt="Metrics over time."
-   figcaption="Fig. 6: Metrics over time." %}
+   alt="Metrics over number of clusters k."
+   figcaption="Fig. 6: Metrics over number of clusters k." %}
 
 
 ##### Training
@@ -1253,8 +1253,8 @@ plt.tight_layout();
 
 {% include figure.html
    src="/assets/images/posts/ml/clustering/55_0.png"
-   alt="Metrics over time."
-   figcaption="Fig. 8: Metrics over time." %}
+   alt="Metrics over number of clusters k."
+   figcaption="Fig. 8: Metrics over number of clusters k." %}
 
 
 ##### Training
