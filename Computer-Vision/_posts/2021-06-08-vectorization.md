@@ -280,7 +280,7 @@ images_s = sepia(images)
 {% include posts/collapse-btn.html id="cv3" %}
 ```py
 visualize(
-  tf.cast(transformed, tf.uint8),
+  tf.cast(images_s, tf.uint8),
   labels
 )
 ```
