@@ -49,7 +49,7 @@ plugins:
   - jekyll-paginate
   - jekyll-feed
   - jekyll-github-metadata
-  - jekyll-toc
+  # - jekyll-toc
 
 exclude:
   - Gemfile
