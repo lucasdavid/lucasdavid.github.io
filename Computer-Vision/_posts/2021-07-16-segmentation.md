@@ -284,7 +284,7 @@ props[0].head().round(2)
 ```
 
 <div class="table-responsive"><table class="dataframe table table-hover">
-  <thead>
+  <thead class="table-dark">
     <tr style="text-align: right;">
       <th></th>
       <th>label</th>

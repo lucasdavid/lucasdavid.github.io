@@ -10,7 +10,7 @@ first_p: |-
   datasets, including a bonus color quantization example.
 toc: true
 date: 2021-06-11 15:58:00
-lead_image: /assets/images/posts/ml/clustering/103_0.png
+lead_image: /assets/images/posts/ml/clustering/103_0.jpg
 tags:
   - TensorFlow
   - Clustering
@@ -213,7 +213,7 @@ plt.tight_layout();
 {: class="collapse" id="cv1"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/14_0.png"
+   src="/assets/images/posts/ml/clustering/14_0.jpg"
    alt="The Cluster.dat Dataset: (a) the features in their original value range, and (b) features were scaled in order to have 0 mean and standard deviation 1."
    figcaption="Fig. 1: The Cluster.dat Dataset: (a) the features in their original value range, and (b) features were scaled in order to have mean 0 and standard deviation 1." %}
 
@@ -266,7 +266,7 @@ plt.tight_layout();
 
     
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/18_0.png"
+   src="/assets/images/posts/ml/clustering/18_0.jpg"
    alt="The Boston Dataset: (a) the features in their original value range, and (b) features were scaled in order to have mean 0 and standard deviation 1."
    figcaption="Fig. 2: The Boston Dataset: (a) the features in their original value range, and (b) features were scaled in order to have mean 0 and standard deviation 1." %}
 
@@ -326,7 +326,7 @@ visualize_images(
 {: class="collapse" id="cv3"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/23_0.png"
+   src="/assets/images/posts/ml/clustering/23_0.jpg"
    alt="The TF-Flowers Dataset."
    figcaption="Fig. 3: The TF-Flowers Dataset." %}
     
@@ -768,7 +768,7 @@ plt.tight_layout();
 {: class="collapse" id="cv4"}
     
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/35_0.png"
+   src="/assets/images/posts/ml/clustering/35_0.jpg"
    alt="Effect of each initialization procedure over the initial state of the model."
    figcaption="Fig. 4: Effect of each initialization procedure over the initial state of the model." %}
 
@@ -825,7 +825,7 @@ del ctr, cte, c0, c1, p0_train, p0_test, p1_train, p1_test
 {: class="collapse" id="cv5"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/37_0.png"
+   src="/assets/images/posts/ml/clustering/37_0.jpg"
    alt="Effect of data standardization over K-Means's initial configuration."
    figcaption="Fig. 5: Effect of data standardization over K-Means's initial configuration." %}
     
@@ -885,7 +885,7 @@ report.groupby('k').mean().round(2).T
 
 <div>
   <div class="table-responsive"><table class="dataframe table table-hover">
-    <thead>
+    <thead class="table-dark">
       <tr style="text-align: right;">
         <th>k</th>
         <th>2</th>
@@ -989,7 +989,7 @@ plt.tight_layout();
 {: class="collapse" id="cv6"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/43_0.png"
+   src="/assets/images/posts/ml/clustering/43_0.jpg"
    alt="Metrics over number of clusters k."
    figcaption="Fig. 6: Metrics over number of clusters k." %}
 
@@ -1086,7 +1086,7 @@ visualize_clusters(
 {: class="collapse" id="cv7"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/49_0.png"
+   src="/assets/images/posts/ml/clustering/49_0.jpg"
    alt="K-Means Clustering over Cluster.dat Dataset."
    figcaption="Fig. 7: K-Means Clustering over Cluster.dat Dataset." %}
 
@@ -1148,7 +1148,7 @@ report.groupby('k').mean().round(2).T
 
 <div>
 <div class="table-responsive"><table class="dataframe table table-hover">
-  <thead>
+  <thead class="table-dark">
     <tr style="text-align: right;">
       <th>k</th>
       <th>2</th>
@@ -1252,7 +1252,7 @@ plt.tight_layout();
 {: class="collapse" id="cv8"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/55_0.png"
+   src="/assets/images/posts/ml/clustering/55_0.jpg"
    alt="Metrics over number of clusters k."
    figcaption="Fig. 8: Metrics over number of clusters k." %}
 
@@ -1364,7 +1364,7 @@ visualize_clusters(
 {: class="collapse" id="cv9"}
     
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/61_0.png"
+   src="/assets/images/posts/ml/clustering/61_0.jpg"
    alt="K-Means clustering over Boston Dataset."
    figcaption="Fig. 9: K-Means clustering over Boston Dataset." %}
     
@@ -1435,7 +1435,7 @@ visualize_images(
 {: class="collapse" id="cv10"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/69_0.png"
+   src="/assets/images/posts/ml/clustering/69_0.jpg"
    alt="Initial color book."
    figcaption="Fig. 10: Initial color book." %}
 
@@ -1563,7 +1563,7 @@ visualize_images(
 {: class="collapse" id="cv11"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/71_0.png"
+   src="/assets/images/posts/ml/clustering/71_0.jpg"
    alt="Optimized color book"
    figcaption="Fig. 11: Optimized color book." %}
 
@@ -1599,14 +1599,14 @@ Encoding 8 images:
 ```
 
 <div id="carouselFlowersKmeans"
-     class="carousel slide"
+     class="carousel slide carousel-dark"
      data-bs-ride="carousel"
      alt="Color quantization results over images in TF-Flowers Test Subset."
 >
   <div class="carousel-inner">
-    <div class="carousel-item active"><img src="/assets/images/posts/ml/clustering/73_1.png" class="d-block w-100"></div>
-    <div class="carousel-item"><img src="/assets/images/posts/ml/clustering/73_2.png" class="d-block w-100"></div>
-    <div class="carousel-item"><img src="/assets/images/posts/ml/clustering/73_3.png" class="d-block w-100"></div>
+    <div class="carousel-item active"><img src="/assets/images/posts/ml/clustering/73_1.jpg" class="d-block w-100"></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/clustering/73_2.jpg" class="d-block w-100"></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/clustering/73_3.jpg" class="d-block w-100"></div>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselFlowersKmeans"  data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -1995,7 +1995,7 @@ report
 ```
 <div>
 <div class="table-responsive"><table class="dataframe table table-hover">
-  <thead>
+  <thead class="table-dark">
     <tr style="text-align: right;">
       <th></th>
       <th>config_id</th>
@@ -2168,7 +2168,7 @@ visualize_clusters(
 
     
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/91_0.png"
+   src="/assets/images/posts/ml/clustering/91_0.jpg"
    alt="Hierarchical Clustering over Cluster.dat Dataset."
    figcaption="Fig. 13: Hierarchical Clustering over Cluster.dat Dataset." %}
     
@@ -2221,7 +2221,7 @@ report
 
 <div>
 <div class="table-responsive"><table class="dataframe table table-hover">
-  <thead>
+  <thead class="table-dark">
     <tr style="text-align: right;">
       <th></th>
       <th>config_id</th>
@@ -2376,7 +2376,7 @@ visualize_clusters(
 
     
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/101_0.png"
+   src="/assets/images/posts/ml/clustering/101_0.jpg"
    alt="Hierarchical Clustering over Boston Dataset."
    figcaption="Fig. 14: Hierarchical Clustering over Boston Dataset." %}
     
@@ -2442,7 +2442,7 @@ plt.tight_layout()
 {: class="collapse" id="cv15"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/103_0.png"
+   src="/assets/images/posts/ml/clustering/103_0.jpg"
    alt="Effect of the different linkages over the clustering's final configuration."
    figcaption="Fig. 15: Effect of the different linkages over the clustering's final configuration." %}
     
@@ -2501,7 +2501,7 @@ del e, b_cov_train, b_cov_test, b_cor_train, b_cor_test
 {: class="collapse" id="cv16"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/107_0.png"
+   src="/assets/images/posts/ml/clustering/107_0.jpg"
    alt="Effect of data standardization over Eigen Decomposition."
    figcaption="Fig. 16: Effect of data standardization over Eigen Decomposition." %}
 
@@ -2563,7 +2563,7 @@ report.groupby('energy').mean().round(2).T
 
 <div>
 <div class="table-responsive"><table class="dataframe table table-hover">
-  <thead>
+  <thead class="table-dark">
     <tr style="text-align: right;">
       <th>energy</th>
       <th>0.500</th>
@@ -2649,7 +2649,7 @@ report.groupby('k').mean().round(2).T
 ```
 <div>
 <div class="table-responsive"><table class="dataframe table table-hover">
-  <thead>
+  <thead class="table-dark">
     <tr style="text-align: right;">
       <th>k</th>
       <th>2</th>
@@ -2765,7 +2765,7 @@ plt.tight_layout();
 {: class="collapse" id="cv17"}
     
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/116_0.png"
+   src="/assets/images/posts/ml/clustering/116_0.jpg"
    alt="Metrics over number of clusters k."
    figcaption="Fig. 17: Metrics over number of clusters k." %}
 
@@ -2870,7 +2870,7 @@ visualize_clusters(
 {: class="collapse" id="cv18"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/122_0.png"
+   src="/assets/images/posts/ml/clustering/122_0.jpg"
    alt="K-Means clustering over the Boston dataset after dimensionalty reduction was performed."
    figcaption="Fig. 18: K-Means clustering over the Boston dataset after dimensionalty reduction was performed." %}
 
@@ -2915,7 +2915,7 @@ report
 ```
 <div>
 <div class="table-responsive"><table class="dataframe table table-hover">
-  <thead>
+  <thead class="table-dark">
     <tr style="text-align: right;">
       <th></th>
       <th>config_id</th>
@@ -3063,7 +3063,7 @@ visualize_clusters(
 {: class="collapse" id="cv19"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/133_0.png"
+   src="/assets/images/posts/ml/clustering/133_0.jpg"
    alt="Hierarchical clustering over the Boston dataset after dimensionality reduction was performed."
    figcaption="Fig. 19: Hierarchical clustering over the Boston dataset after dimensionality reduction was performed." %}
     
