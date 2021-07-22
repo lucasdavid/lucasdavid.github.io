@@ -1,0 +1,38 @@
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand text-decoration-none" href="/" title="Home">Lucas David</a>
+    <button class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="me-auto"></ul>
+      <ul class="navbar-nav  mb-2 mb-lg-0 small">
+        <li class="nav-item">
+          <a class="nav-link fw-bold text-decoration-none" aria-current="page" href="/">Home</a>
+        </li>
+
+        <li class="nav-item"><a href="/" class="nav-link fw-bold text-decoration-none">Posts</a></li>
+        <li class="nav-item"><a href="/projects" class="nav-link fw-bold text-decoration-none">Projects</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold text-decoration-none" href="#" id="nbd-links-social" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Social
+          </a>
+          <ul class="dropdown-menu small dropdown-menu-end" aria-labelledby="nbd-links-social">
+            {% if site.footer-links.github %}<li><a class="dropdown-item" target="_blank" href="https://github.com/{{ site.footer-links.github }}">Github</a></li>{% endif %}
+            {% if site.footer-links.linkedin %}<li><a class="dropdown-item" target="_blank" href="https://www.linkedin.com/in/{{ site.footer-links.linkedin }}">Linkedin</a></li>{% endif %}
+            {% if site.footer-links.stackoverflow %}<li><a class="dropdown-item" target="_blank" href="http://stackoverflow.com/{{ site.footer-links.stackoverflow }}">Stackoverflow</a></li>{% endif %}
+            {% if site.footer-links.youtube %}<li><a class="dropdown-item" target="_blank" href="https://youtube.com/{{ site.footer-links.youtube }}">Youtube</a></li>{% endif %}
+            {% if site.footer-links.facebook %}<li><a class="dropdown-item" target="_blank" href="https://www.facebook.com/{{ site.footer-links.facebook }}">Facebook</a></li>{% endif %}
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

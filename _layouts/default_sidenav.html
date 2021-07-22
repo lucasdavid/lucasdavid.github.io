@@ -3,7 +3,6 @@ layout: default
 ---
 
 {% include index/navbar.html %}
-{% include index/videos.html %}
 
 <div class="container-fluid">
   <div class="row">
@@ -14,21 +13,9 @@ layout: default
     </div>
     <div class="col-12 col-lg-9 col-lg-9 col-xl-6 offset-xl-1 pt-4">
       <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
-      <div class="list-group list-group-flush">
-        {% for post in paginator.posts %}
-        <div>
-          {% include posts/preview.html post=post %}
-        </div>
-        <hr class="mt-4 mb-4 mb-0 thin">
-        {% endfor %}
-      </div>
-      <div class="mt-3 mb-4">
-        {% include index/pagination.html %}
-      </div>
+      {{ content }}
+
       <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
     </div>
   </div>
 </div>
-
-
-
