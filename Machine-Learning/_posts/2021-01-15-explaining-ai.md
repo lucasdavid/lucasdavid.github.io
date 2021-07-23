@@ -1,11 +1,11 @@
 ---
 layout: post
-title: Explaining Machine Learning Models Using Gradients
-excerpt: Saliency analysis using <i>SmoothGrad</i>.
+title: Explaining Machine Learning Models
+excerpt: Explainability using tree decision visualization, weight composition, and gradient-based saliency maps.
 first_p:
 toc: true
 date: 2021-01-15 16:12:00
-lead_image: /assets/images/posts/ml/explaining/cam/grad/1.png
+lead_image: /assets/images/posts/ml/explaining/cam/grad/1.jpg
 first_p: |-
   Estimators that are hard to explain are also hard to trust, jeopardizing
   the adoption of these models by a broader audience.
@@ -32,6 +32,72 @@ Research on explaining methods for ML has gained traction in the past years.
 However, intelligent systems have been around for many decates now.
 So, is this really a new problem? And if not, what's different?
 
+{% include posts/collapse-btn.html id="collapseSetup" text="show setup code" %}
+```python
+import numpy as np
+import pandas as pd
+
+from sklearn import datasets
+from sklearn.datasets import fetch_openml
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+import IPython.display as display
+import PIL.Image
+
+def download_image(url, path):
+    r = requests.get(url, allow_redirects=True)
+    with open(path, 'wb') as f:
+        f.write(r.content)
+    return path
+
+def as_image_vector(x):
+    x = x.numpy()
+    x = x / 2 + .5
+    x *= 255
+
+    return np.clip(x, 0, 255).astype('uint8')
+
+def print_predictions(model, x, top=5):
+    y = model.predict(x)
+    y = tf.nn.softmax(y)
+    predictions = decode_predictions(y.numpy(), top)
+
+    for ix, p in enumerate(predictions):
+        print(f'Sample {ix}:',
+              *(f'  {pred}: {100*prob:.2f}' for _, pred, prob in p),
+              sep='\n', end='\n\n')
+
+def plot(y, titles=None, rows=1, i0=0):
+    from math import ceil
+    
+    for i, image in enumerate(y):
+        if image is None:
+            plt.subplot(rows, ceil(len(y) / rows), i0+i+1)
+            plt.axis('off')
+            continue
+
+        t = titles[i] if titles else None
+        plt.subplot(rows, ceil(len(y) / rows), i0+i+1, title=t)
+        plt.imshow(image)
+        plt.axis('off')
+
+def plot_images_and_salency_maps(images, saliency, labels):
+    grads_titles = [f'{_p[0][1]} {_p[0][2]:.2%}' for _p in decode_predictions(labels, top=1)]
+
+    plt.figure(figsize=(16, 5))
+    plot([*images, *saliency],
+        titles=sorted([os.path.splitext(os.path.basename(f))[0] for f in IMAGES])
+               + grads_titles,
+        rows=2)
+    plt.tight_layout()
+
+sns.set_style("whitegrid", {'axes.grid' : False})
+```
+{: class="collapse" id="collapseSetup"}
+
+
 ## Explaining Classic Artificial Intelligence Agents
 Most classic artificial intelligence systems --- derived from the symbolic approach of AI --- were pretty straight forward: they would rely heavily on the ideas of planning and search over a rational optimization space through a sequence of rational actions.
 For example, path-finding is an important problem for movement optimization systems (used in games, robotics), where one must travel from point A to point B using the least amount of effort (time, steps etc), and can be solved using algorithms like *Dijkstra's* or *A\**.
@@ -39,7 +105,7 @@ For example, path-finding is an important problem for movement optimization syst
 {% include figure.html
    src="https://upload.wikimedia.org/wikipedia/commons/2/23/Dijkstras_progress_animation.gif"
    alt="Gif illustrating Dijkstra's algorithm behavior around an obstacle."
-   figcaption="Dijkstra's algorithm path-finding around an obstacle. Available at <a href=\"https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm\" target=\"_blank\">wikipedia</a>."
+   figcaption="Figure 1. Dijkstra's algorithm path-finding around an obstacle. Available at <a href=\"https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm\" target=\"_blank\">wikipedia</a>."
    classed="rounded mx-auto d-block" %}
 
 Similarly, one could "solve" board games such as Othelo or Chess by describing valid states of the environment, the valid moves available and an utility function associated with the probability could. Search algorithms --- such as Alpha-Beta Prunning and Monte-Carlo Tree Search --- can then be employed to search for the best utility state (and the path that will take us there).
@@ -48,30 +114,300 @@ Similarly, one could "solve" board games such as Othelo or Chess by describing v
 {% include figure.html
    src="https://upload.wikimedia.org/wikipedia/commons/2/21/MCTS-steps.svg"
    alt="An illustration of the Monte Carlo tree search algorithm."
-   figcaption="An illustration of the Monte Carlo tree search algorithm searching for the state of best utility for the current player. Available at <a href=\"https://en.wikipedia.org/wiki/Monte_Carlo_tree_search\" target=\"_blank\">wikipedia</a>."
+   figcaption="Figure 2. An illustration of the Monte Carlo tree search algorithm searching for the state of best utility for the current player. Available at <a href=\"https://en.wikipedia.org/wiki/Monte_Carlo_tree_search\" target=\"_blank\">wikipedia</a>."
    classed="rounded mx-auto d-block" %}
 
 These systems are easy to explain precisely because of the way they were built: they are iterative, rational and direct by nature. If the environment and the actions can be drawn or represented in some form, then we can simply draw the sequence of decisions that comprise the reasioning of the model. In the path-finding example above, we can see exactly which sections of the map are being scanned, until the shortest-path is found between the source the the green dot. As for the MCTS, we can guarantee the solution otimality (with respect to the local search space expanded) by simple inspection.
 
 ## Explaining Decision-based Models
 Classifiers and regression models are agents whose sole action sets consist on giving answers. When explaining such agents, we tend to focus on **why** some answer was given. So the problem of explaining an answering agent reduces to explaining the answer itself.
+Consider the toy example problem below:
 
-Decision trees are classic answering models that are trivially explained. One can simply draw its decision paths in order to check for irregularities or inconsistencies:
+```python
+ds = datasets.load_breast_cancer()
+
+x = pd.DataFrame(ds.data, columns=ds.feature_names)
+y = ds.target_names[ds.target]
+
+x.head().round(2)
+```
+
+<div class="table-responsive">
+<table class="dataframe table table-hover">
+  <thead class="table-dark">
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean radius</th>
+      <th>mean texture</th>
+      <th>mean perimeter</th>
+      <th>mean area</th>
+      <th>mean smoothness</th>
+      <th>mean compactness</th>
+      <th>mean concavity</th>
+      <th>mean concave points</th>
+      <th>mean symmetry</th>
+      <th>mean fractal dimension</th>
+      <th>radius error</th>
+      <th>texture error</th>
+      <th>perimeter error</th>
+      <th>area error</th>
+      <th>smoothness error</th>
+      <th>compactness error</th>
+      <th>concavity error</th>
+      <th>concave points error</th>
+      <th>symmetry error</th>
+      <th>fractal dimension error</th>
+      <th>worst radius</th>
+      <th>worst texture</th>
+      <th>worst perimeter</th>
+      <th>worst area</th>
+      <th>worst smoothness</th>
+      <th>worst compactness</th>
+      <th>worst concavity</th>
+      <th>worst concave points</th>
+      <th>worst symmetry</th>
+      <th>worst fractal dimension</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>17.99</td>
+      <td>10.38</td>
+      <td>122.80</td>
+      <td>1001.0</td>
+      <td>0.12</td>
+      <td>0.28</td>
+      <td>0.30</td>
+      <td>0.15</td>
+      <td>0.24</td>
+      <td>0.08</td>
+      <td>1.10</td>
+      <td>0.91</td>
+      <td>8.59</td>
+      <td>153.40</td>
+      <td>0.01</td>
+      <td>0.05</td>
+      <td>0.05</td>
+      <td>0.02</td>
+      <td>0.03</td>
+      <td>0.01</td>
+      <td>25.38</td>
+      <td>17.33</td>
+      <td>184.60</td>
+      <td>2019.0</td>
+      <td>0.16</td>
+      <td>0.67</td>
+      <td>0.71</td>
+      <td>0.27</td>
+      <td>0.46</td>
+      <td>0.12</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>20.57</td>
+      <td>17.77</td>
+      <td>132.90</td>
+      <td>1326.0</td>
+      <td>0.08</td>
+      <td>0.08</td>
+      <td>0.09</td>
+      <td>0.07</td>
+      <td>0.18</td>
+      <td>0.06</td>
+      <td>0.54</td>
+      <td>0.73</td>
+      <td>3.40</td>
+      <td>74.08</td>
+      <td>0.01</td>
+      <td>0.01</td>
+      <td>0.02</td>
+      <td>0.01</td>
+      <td>0.01</td>
+      <td>0.00</td>
+      <td>24.99</td>
+      <td>23.41</td>
+      <td>158.80</td>
+      <td>1956.0</td>
+      <td>0.12</td>
+      <td>0.19</td>
+      <td>0.24</td>
+      <td>0.19</td>
+      <td>0.28</td>
+      <td>0.09</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>19.69</td>
+      <td>21.25</td>
+      <td>130.00</td>
+      <td>1203.0</td>
+      <td>0.11</td>
+      <td>0.16</td>
+      <td>0.20</td>
+      <td>0.13</td>
+      <td>0.21</td>
+      <td>0.06</td>
+      <td>0.75</td>
+      <td>0.79</td>
+      <td>4.58</td>
+      <td>94.03</td>
+      <td>0.01</td>
+      <td>0.04</td>
+      <td>0.04</td>
+      <td>0.02</td>
+      <td>0.02</td>
+      <td>0.00</td>
+      <td>23.57</td>
+      <td>25.53</td>
+      <td>152.50</td>
+      <td>1709.0</td>
+      <td>0.14</td>
+      <td>0.42</td>
+      <td>0.45</td>
+      <td>0.24</td>
+      <td>0.36</td>
+      <td>0.09</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>11.42</td>
+      <td>20.38</td>
+      <td>77.58</td>
+      <td>386.1</td>
+      <td>0.14</td>
+      <td>0.28</td>
+      <td>0.24</td>
+      <td>0.11</td>
+      <td>0.26</td>
+      <td>0.10</td>
+      <td>0.50</td>
+      <td>1.16</td>
+      <td>3.44</td>
+      <td>27.23</td>
+      <td>0.01</td>
+      <td>0.07</td>
+      <td>0.06</td>
+      <td>0.02</td>
+      <td>0.06</td>
+      <td>0.01</td>
+      <td>14.91</td>
+      <td>26.50</td>
+      <td>98.87</td>
+      <td>567.7</td>
+      <td>0.21</td>
+      <td>0.87</td>
+      <td>0.69</td>
+      <td>0.26</td>
+      <td>0.66</td>
+      <td>0.17</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>20.29</td>
+      <td>14.34</td>
+      <td>135.10</td>
+      <td>1297.0</td>
+      <td>0.10</td>
+      <td>0.13</td>
+      <td>0.20</td>
+      <td>0.10</td>
+      <td>0.18</td>
+      <td>0.06</td>
+      <td>0.76</td>
+      <td>0.78</td>
+      <td>5.44</td>
+      <td>94.44</td>
+      <td>0.01</td>
+      <td>0.02</td>
+      <td>0.06</td>
+      <td>0.02</td>
+      <td>0.02</td>
+      <td>0.01</td>
+      <td>22.54</td>
+      <td>16.67</td>
+      <td>152.20</td>
+      <td>1575.0</td>
+      <td>0.14</td>
+      <td>0.20</td>
+      <td>0.40</td>
+      <td>0.16</td>
+      <td>0.24</td>
+      <td>0.08</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+Decision trees are classic answering models that are trivially explained.
+One can simply draw its decision paths in order to check for irregularities or inconsistencies:
+
+```python
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import plot_tree
+
+decision_tree = DecisionTreeClassifier().fit(x, y)
+```
+
+{% include posts/collapse-btn.html id="cv1" %}
+```python
+def plot_tree_fullscreen(decision_tree):
+  plt.figure(figsize=(16, 9))
+  annotations = plot_tree(
+    decision_tree,
+    feature_names=ds.feature_names,
+    class_names=ds.target_names,
+    filled=True,
+    precision=1
+  )
+
+  for o in annotations:
+    if o.arrow_patch is not None:
+      o.arrow_patch.set_edgecolor('black')
+      o.arrow_patch.set_linewidth(3)
+
+plot_tree_fullscreen(decision_tree)
+```
+{: class="collapse" id="cv1"}
 
 {% include figure.html
-   src="https://upload.wikimedia.org/wikipedia/commons/4/48/DecisionCalcs.jpg"
-   alt="Diagram of a decision tree model fit to answer 'proceed' or 'settle' in judicial cases."
-   figcaption="Diagram of a decision tree model fit to answer 'proceed' or 'settle' in judicial cases. Available at <a href=\"https://en.wikipedia.org/wiki/Decision_tree\" target=\"_blank\">wikipedia</a>." %}
+   src="/assets/images/posts/ml/explaining/explaining_scikit_learn_11_0.jpg"
+   figcaption="Figure 3. The decision tree model trained over the Breast Cancer Dataset." %}
 
-And so are Random Forests, which although much larger and difficult to draw, can be just as easily summarized. One could check the rate in which each feature appears in the forest's trees. If a feature's occurrence is high, then that
-feature was frequently determinant for the forest's overall decision process.
-On the other hand, a feature that rarely appears has less impact in the answer.
+
+And so are Random Forests, which although much larger and difficult to draw, can be just as easily summarized.
+
+```python
+from sklearn.ensemble import RandomForestClassifier
+rf = RandomForestClassifier().fit(x, y)
+```
 
 {% include figure.html
    src="https://upload.wikimedia.org/wikipedia/commons/7/76/Random_forest_diagram_complete.png"
    alt="Diagram of a random forest model, combining its trees with the majority-voting strategy."
-   figcaption="Diagram of a random forest model, combining its trees with the majority-voting strategy. Available at <a href=\"whttps://en.wikipedia.org/wiki/Random_forest\" target=\"_blank\">wikipedia</a>." %}
+   figcaption="Figure 4. Diagram of a random forest model, combining its trees with the majority-voting strategy. Available at <a href=\"whttps://en.wikipedia.org/wiki/Random_forest\" target=\"_blank\">wikipedia</a>." %}
 
+
+One could check the rate in which each feature appears in the forest's trees. If a feature's occurrence is high, then that
+feature was frequently determinant for the forest's overall decision process.
+On the other hand, a feature that rarely appears has less impact in the answer.
+
+{% include posts/collapse-btn.html id="cv2" %}
+```python
+def plot_feature_importances(model):
+  plt.figure(figsize=(12, 6))
+  sns.barplot(x=ds.feature_names, y=model.feature_importances_)
+
+  plt.xticks(rotation=90)
+  plt.tight_layout()
+
+plot_feature_importances(rf)
+```
+{: class="collapse" id="cv2"}
+
+{% include figure.html
+   src="/assets/images/posts/ml/explaining/explaining_scikit_learn_14_0.jpg"
+   figcaption="Figure 5. Importance per feature for a Random Forest model trained over the Breast Cancer Dataset." %}
 
 
 ## Explaining Deep Convolutional Networks
@@ -85,7 +421,7 @@ Differently from search algorithms, connectionist models are complicated in natu
 {% include figure.html
    src="/assets/images/posts/ml/deep/inception.png"
    alt="Inception Architecture. A well-established network architecture for convolutional models."
-   figcaption="Inception Architecture. A well-established network architecture for convolutional models."
+   figcaption="Figure 6. Inception Architecture. A well-established network architecture for convolutional models."
    classed="rounded mx-auto d-block" %}
 
 Each blue box represents a set of convolutions between an 3D input signal and multiple kernels and the application of a non-linear function (relu, most likely).
@@ -94,12 +430,10 @@ Given an input image and the feed-forward signal of that image through the netwo
 Many solutions were studied over the last years. Some of them involved patching-out parts of the image and observing how it affected the answer (see this [article](https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf)). If a given region was occluded and the answer changed drastically, then that would mean that the region in question was *important* for the model's decision process. One could then reapply this procedure over and over, across the entire input sample, and finally draw a heatmap of importance:
 
 {% include figure.html
-   src="/assets/images/posts/ml/explaining/zeilerECCV2014-fig6.png"
+   src="/assets/images/posts/ml/explaining/zeilerECCV2014-fig6.jpg"
    alt="Effect of image occlusion in the classifier's answer (columns (a) and (d))."
-   figcaption="Effect of image occlusion in the classifier's answer (columns <i>a</i> and <i>d</i>). Available at: <a href=\"https://arxiv.org/pdf/1908.04351.pdf\">arxiv.org/1908.04351</a>."
+   figcaption="Figure 7. Effect of image occlusion in the classifier's answer (columns <i>a</i> and <i>d</i>). Available at: <a href=\"https://arxiv.org/pdf/1908.04351.pdf\">arxiv.org/1908.04351</a>."
    classed="rounded mx-auto d-block" %}
-
-
 
 Finally, the networks could be verified by checking the heatmaps. If a model were to make right predictions, but focusing on unrelated regions, then we would know that some artificial information was being injected into training, overfitting the model.
 
@@ -134,7 +468,9 @@ IMAGES = [
   'https://www.petcare.com.au/wp-content/uploads/2017/09/Dalmatian-2.jpg',
   'http://www.aviationexplorer.com/Diecast_Airplanes_Aircraft/delta_Airbus_diecast_airplane.jpg',
 ]
-
+```
+{% include posts/collapse-btn.html id="cv3" %}
+```python
 os.makedirs(os.path.join(DATA_DIR, 'test'), exist_ok=True)
 for i in IMAGES:
     _, f = os.path.split(i)
@@ -145,11 +481,12 @@ images_set = tf.keras.preprocessing.image_dataset_from_directory(
 
 images, labels = next(iter(images_set.take(1)))
 ```
+{: class="collapse" id="cv3"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/explaining/inputs.png"
+   src="/assets/images/posts/ml/explaining/inputs.jpg"
    alt="Input images for our model. Common instances of classes present in the imagenet dataset (dogs, bears, airplanes)."
-   figcaption="Input images for our model. Common instances of classes present in the imagenet dataset (dogs, bears, airplanes)."
+   figcaption="Figure 8. Input images for our model. Common instances of classes present in the imagenet dataset (dogs, bears, airplanes)."
    classed="rounded mx-auto d-block" %}
 
 In a real case, you would have your own trained network. However, considering all of these images belong to a class in the imagenet dataset, I'll just go ahead and
@@ -322,9 +659,9 @@ plt.tight_layout();
 ```
 
 {% include figure.html
-   src="/assets/images/posts/ml/explaining/vanilla-grads.png"
+   src="/assets/images/posts/ml/explaining/vanilla-grads.jpg"
    alt="Input images optimized to maximize each unit described in UNIT_NAMES."
-   figcaption="Input images optimized to maximize each unit described in <code>UNIT_NAMES</code>."  %}
+   figcaption="Figure 9. Input images optimized to maximize each unit described in <code>UNIT_NAMES</code>."  %}
 
 I **think** I can see dumbells in the first image and dots in the dalmatian image, but
 I'm not sure if this is just my brain trying to look for evidence of correctness.
@@ -353,9 +690,9 @@ def visualize(unit):
     return loss, i
 ```
 {% include figure.html
-   src="/assets/images/posts/ml/explaining/vanilla-grads-aug.png"
+   src="/assets/images/posts/ml/explaining/vanilla-grads-aug.jpg"
    alt="Input images optimized to maximize each unit described in UNIT_NAMES using augmentation."
-   figcaption="Input images optimized to maximize each unit described in <code>UNIT_NAMES</code> using augmentation (rotation and translation)."  %}
+   figcaption="Figure 10. Input images optimized to maximize each unit described in <code>UNIT_NAMES</code> using augmentation (rotation and translation)."  %}
 
 It looks a lot better, I'd say. We see circles in *dumbell*, clear dark spots in *dalmatian* green in the *bell pepper* and *lemon* and squares in *computer keyboard*.
 
@@ -411,9 +748,9 @@ s /= tf.reduce_max(s, axis=(1, 2), keepdims=True)
 plot_images_and_salency_maps(as_image_vector(images), s.numpy(), y.numpy())
 ```
 {% include figure.html
-   src="/assets/images/posts/ml/explaining/vanilla-saliency.png"
+   src="/assets/images/posts/ml/explaining/vanilla-saliency.jpg"
    alt="Input images and saliency activation maps, considering their most activating units."
-   figcaption="Input images and saliency activation maps, considering their most activating units." %}
+   figcaption="Figure 11. Input images and saliency activation maps, considering their most activating units." %}
 
 So the network clearly points out for the right regions in the dalmatian, bear and the golden retriever. The other ones seem a little blurred.
 
@@ -448,9 +785,9 @@ s /= tf.reduce_max(s, axis=(1, 2), keepdims=True)
 plot_images_and_salency_maps(as_image_vector(images), s.numpy(), y.numpy())
 ```
 {% include figure.html
-   src="/assets/images/posts/ml/explaining/smoothgrad-saliency.png"
+   src="/assets/images/posts/ml/explaining/smoothgrad-saliency.jpg"
    alt="Input images and saliency activation maps, considering their most activating units."
-   figcaption="Input images and saliency activation maps, considering their most activating units. Obtained using the SmoothGrad method."  %}
+   figcaption="Figure 12. Input images and saliency activation maps, considering their most activating units. Obtained using the SmoothGrad method."  %}
 
 Much better, isn't it? 
 
@@ -468,64 +805,3 @@ I'll try and bring more examples of those in the future. :-)
 
 - Simonyan, Karen, Andrea Vedaldi, and Andrew Zisserman. "Deep inside convolutional networks: Visualising image classification models and saliency maps." arXiv preprint arXiv:1312.6034 (2013). [1312.6034](https://arxiv.org/abs/1312.6034)
 - Smilkov, Daniel, Nikhil Thorat, Been Kim, Fernanda Viégas, and Martin Wattenberg. "Smoothgrad: removing noise by adding noise." arXiv preprint arXiv:1706.03825 (2017). [1706.03825](https://arxiv.org/abs/1706.03825)
-
-## Appendix
-Some of the util functions that I have used during the post are listed below.
-You can use them to download, preprocess or visualize images.
-
-```py
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-import IPython.display as display
-import PIL.Image
-
-sns.set_style("whitegrid", {'axes.grid' : False})  # remove grid from image plot.
-
-def download_image(url, path):
-    r = requests.get(url, allow_redirects=True)
-    with open(path, 'wb') as f:
-        f.write(r.content)
-    return path
-
-def as_image_vector(x):
-    x = x.numpy()
-    x = x / 2 + .5
-    x *= 255
-
-    return np.clip(x, 0, 255).astype('uint8')
-
-def print_predictions(model, x, top=5):
-    y = model.predict(x)
-    y = tf.nn.softmax(y)
-    predictions = decode_predictions(y.numpy(), top)
-
-    for ix, p in enumerate(predictions):
-        print(f'Sample {ix}:',
-              *(f'  {pred}: {100*prob:.2f for _, pred, prob in p),
-              sep='\n', end='\n\n')
-
-def plot(y, titles=None, rows=1, i0=0):
-    from math import ceil
-    
-    for i, image in enumerate(y):
-        if image is None:
-            plt.subplot(rows, ceil(len(y) / rows), i0+i+1)
-            plt.axis('off')
-            continue
-
-        t = titles[i] if titles else None
-        plt.subplot(rows, ceil(len(y) / rows), i0+i+1, title=t)
-        plt.imshow(image)
-        plt.axis('off')
-
-def plot_images_and_salency_maps(images, saliency, labels):
-    grads_titles = [f'{_p[0][1]} {_p[0][2]:.2%}' for _p in decode_predictions(labels, top=1)]
-
-    plt.figure(figsize=(16, 5))
-    plot([*images, *saliency],
-        titles=sorted([os.path.splitext(os.path.basename(f))[0] for f in IMAGES])
-               + grads_titles,
-        rows=2)
-    plt.tight_layout()
-```

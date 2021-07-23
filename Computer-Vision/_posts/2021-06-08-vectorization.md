@@ -196,7 +196,7 @@ visualize(tf.cast(images, tf.uint8), labels)
 {% include figure.html
    src="/assets/images/posts/cv/vectorization/tfflowers.png"
    alt="A few samples in the TF-Flowers dataset."
-   figcaption="A few samples in the TF-Flowers dataset." %}
+   figcaption="Figure 1. A few samples in the TF-Flowers dataset." %}
 
 
 ## Challenges
@@ -289,7 +289,7 @@ visualize(
 {% include figure.html
    src="/assets/images/posts/cv/vectorization/tfflowers-sepia.png"
    alt="The samples in the TF-Flowers dataset, after the Sepia filter is applied."
-   figcaption="The samples in the TF-Flowers dataset, after the Sepia filter is applied." %}
+   figcaption="Figure 2. The samples in the TF-Flowers dataset, after the Sepia filter is applied." %}
     
 
 ### *Challenge:* Transform a batch of RGB images into gray-scale images.
@@ -330,7 +330,7 @@ visualize(
 {% include figure.html
    src="/assets/images/posts/cv/vectorization/tfflowers-gray.png"
    alt="Samples in the TF-Flowers dataset converted to gray-scale."
-   figcaption="Samples in the TF-Flowers dataset converted to gray-scale." %}
+   figcaption="Figure 3. Samples in the TF-Flowers dataset converted to gray-scale." %}
 
 
 ### *Challenge:* Apply the following filters to the monochromatic images.
@@ -417,7 +417,7 @@ Finally, we can imagine that a 2-D signal (such as images) is reflected when bot
    src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Comparison_convolution_correlation.svg/1280px-Comparison_convolution_correlation.svg.png"
    classed="w-lg-50"
    alt="Comparison between convolution, cross-correlation and autocorrelation. From Wikipedia."
-   figcaption="Comparison between convolution, cross-correlation and autocorrelation. From <a href=\"https://en.wikipedia.org/wiki/Cross-correlation\" target=\"_blank\">Wikipedia</a>." %}
+   figcaption="Figure 4. Comparison between convolution, cross-correlation and autocorrelation. From <a href=\"https://en.wikipedia.org/wiki/Cross-correlation\" target=\"_blank\">Wikipedia</a>." %}
 
 #### Using TensorFlow's Native Conv2D Implementation
 
@@ -768,7 +768,7 @@ visualize(
 {% include figure.html
    src="/assets/images/posts/cv/vectorization/results.png"
    alt="Convolution between the samples in TF-Flowers and hand-craft kernels."
-   figcaption="Convolution between the samples in TF-Flowers and hand-craft kernels."
+   figcaption="Figure 5. Convolution between the samples in TF-Flowers and hand-craft kernels."
    classed="w-xl-130"
     %}
 

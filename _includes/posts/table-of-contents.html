@@ -1,13 +1,14 @@
-{% if page.layout == "post" %}
-  <div class="col-12 col-xl-2 d-none d-xl-block on-this-page">
-    <nav class="sticky-top">
-      <div class="small text-secondary bg-white p-2">
-        <div class="border-bottom pt-4 mb-2 pl-2 pr-2">
-          On this page
-        </div>
-        {% toc %}
-      </div>
-      
-    </nav>
+<div class="small">
+  <p class="border-bottom"><strong>On this page</strong></p>
+  {% toc %}
+</div>
+
+Usage:
+<div class="d-none d-xxl-block col-xxl-3">
+  {% if page.layout == "post" %}
+  <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+  <div class="sticky-lg-top" style="padding-top: 5em;">
+    {% include posts/table-of-contents.html %}
   </div>
-{% endif %}
+  {% endif %}
+</div>

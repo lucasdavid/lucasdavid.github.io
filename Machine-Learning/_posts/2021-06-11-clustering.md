@@ -215,7 +215,7 @@ plt.tight_layout();
 {% include figure.html
    src="/assets/images/posts/ml/clustering/14_0.jpg"
    alt="The Cluster.dat Dataset: (a) the features in their original value range, and (b) features were scaled in order to have 0 mean and standard deviation 1."
-   figcaption="Fig. 1: The Cluster.dat Dataset: (a) the features in their original value range, and (b) features were scaled in order to have mean 0 and standard deviation 1." %}
+   figcaption="Figure 1: The Cluster.dat Dataset: (a) the features in their original value range, and (b) features were scaled in order to have mean 0 and standard deviation 1." %}
 
 ### Boston
 
@@ -268,7 +268,7 @@ plt.tight_layout();
 {% include figure.html
    src="/assets/images/posts/ml/clustering/18_0.jpg"
    alt="The Boston Dataset: (a) the features in their original value range, and (b) features were scaled in order to have mean 0 and standard deviation 1."
-   figcaption="Fig. 2: The Boston Dataset: (a) the features in their original value range, and (b) features were scaled in order to have mean 0 and standard deviation 1." %}
+   figcaption="Figure 2: The Boston Dataset: (a) the features in their original value range, and (b) features were scaled in order to have mean 0 and standard deviation 1." %}
 
 ### TF-Flowers
 
@@ -328,7 +328,7 @@ visualize_images(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/23_0.jpg"
    alt="The TF-Flowers Dataset."
-   figcaption="Fig. 3: The TF-Flowers Dataset." %}
+   figcaption="Figure 3: The TF-Flowers Dataset." %}
     
 
 ## Part-1: Clustering Methods
@@ -770,7 +770,7 @@ plt.tight_layout();
 {% include figure.html
    src="/assets/images/posts/ml/clustering/35_0.jpg"
    alt="Effect of each initialization procedure over the initial state of the model."
-   figcaption="Fig. 4: Effect of each initialization procedure over the initial state of the model." %}
+   figcaption="Figure 4: Effect of each initialization procedure over the initial state of the model." %}
 
 The `normal_clusters` initialization procedure considers the mean and standard deviation of the training set's distribution, which means points drawn from this procedure will belong to the set's distribution and assume reasonable values in each feature.
 For datasets with complex shapes (with holes close to its features' average values), this method might create unreasonable clusters, which lie on empty sections of the dimensional space. In the example above, we see clusters lying in between the data masses.
@@ -827,7 +827,7 @@ del ctr, cte, c0, c1, p0_train, p0_test, p1_train, p1_test
 {% include figure.html
    src="/assets/images/posts/ml/clustering/37_0.jpg"
    alt="Effect of data standardization over K-Means's initial configuration."
-   figcaption="Fig. 5: Effect of data standardization over K-Means's initial configuration." %}
+   figcaption="Figure 5: Effect of data standardization over K-Means's initial configuration." %}
     
 Without standardization, samples are not correctly aggregated because of the different proportions of each axis.
 
@@ -991,7 +991,7 @@ plt.tight_layout();
 {% include figure.html
    src="/assets/images/posts/ml/clustering/43_0.jpg"
    alt="Metrics over number of clusters k."
-   figcaption="Fig. 6: Metrics over number of clusters k." %}
+   figcaption="Figure 6: Metrics over number of clusters k." %}
 
 
 ##### Training
@@ -1088,7 +1088,7 @@ visualize_clusters(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/49_0.jpg"
    alt="K-Means Clustering over Cluster.dat Dataset."
-   figcaption="Fig. 7: K-Means Clustering over Cluster.dat Dataset." %}
+   figcaption="Figure 7: K-Means Clustering over Cluster.dat Dataset." %}
 
 
 ##### Discussions
@@ -1254,7 +1254,7 @@ plt.tight_layout();
 {% include figure.html
    src="/assets/images/posts/ml/clustering/55_0.jpg"
    alt="Metrics over number of clusters k."
-   figcaption="Fig. 8: Metrics over number of clusters k." %}
+   figcaption="Figure 8: Metrics over number of clusters k." %}
 
 
 ##### Training
@@ -1366,7 +1366,7 @@ visualize_clusters(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/61_0.jpg"
    alt="K-Means clustering over Boston Dataset."
-   figcaption="Fig. 9: K-Means clustering over Boston Dataset." %}
+   figcaption="Figure 9: K-Means clustering over Boston Dataset." %}
     
 
 ##### Discussions
@@ -1437,7 +1437,7 @@ visualize_images(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/69_0.jpg"
    alt="Initial color book."
-   figcaption="Fig. 10: Initial color book." %}
+   figcaption="Figure 10: Initial color book." %}
 
 
 ```python
@@ -1565,7 +1565,7 @@ visualize_images(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/71_0.jpg"
    alt="Optimized color book"
-   figcaption="Fig. 11: Optimized color book." %}
+   figcaption="Figure 11: Optimized color book." %}
 
 ##### Transforming Images
 {% include posts/collapse-btn.html id="cv12" %}
@@ -2170,7 +2170,7 @@ visualize_clusters(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/91_0.jpg"
    alt="Hierarchical Clustering over Cluster.dat Dataset."
-   figcaption="Fig. 13: Hierarchical Clustering over Cluster.dat Dataset." %}
+   figcaption="Figure 13: Hierarchical Clustering over Cluster.dat Dataset." %}
     
 
 
@@ -2378,7 +2378,7 @@ visualize_clusters(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/101_0.jpg"
    alt="Hierarchical Clustering over Boston Dataset."
-   figcaption="Fig. 14: Hierarchical Clustering over Boston Dataset." %}
+   figcaption="Figure 14: Hierarchical Clustering over Boston Dataset." %}
     
 
 
@@ -2444,7 +2444,7 @@ plt.tight_layout()
 {% include figure.html
    src="/assets/images/posts/ml/clustering/103_0.jpg"
    alt="Effect of the different linkages over the clustering's final configuration."
-   figcaption="Fig. 15: Effect of the different linkages over the clustering's final configuration." %}
+   figcaption="Figure 15: Effect of the different linkages over the clustering's final configuration." %}
     
 
 
@@ -2503,7 +2503,7 @@ del e, b_cov_train, b_cov_test, b_cor_train, b_cor_test
 {% include figure.html
    src="/assets/images/posts/ml/clustering/107_0.jpg"
    alt="Effect of data standardization over Eigen Decomposition."
-   figcaption="Fig. 16: Effect of data standardization over Eigen Decomposition." %}
+   figcaption="Figure 16: Effect of data standardization over Eigen Decomposition." %}
 
 
 ### K-Means
@@ -2767,7 +2767,7 @@ plt.tight_layout();
 {% include figure.html
    src="/assets/images/posts/ml/clustering/116_0.jpg"
    alt="Metrics over number of clusters k."
-   figcaption="Fig. 17: Metrics over number of clusters k." %}
+   figcaption="Figure 17: Metrics over number of clusters k." %}
 
 
 ##### Training
@@ -2872,7 +2872,7 @@ visualize_clusters(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/122_0.jpg"
    alt="K-Means clustering over the Boston dataset after dimensionalty reduction was performed."
-   figcaption="Fig. 18: K-Means clustering over the Boston dataset after dimensionalty reduction was performed." %}
+   figcaption="Figure 18: K-Means clustering over the Boston dataset after dimensionalty reduction was performed." %}
 
 ##### Discussions
 We do not see the curse of dimensionality in this set. In fact, as this set has been highly curated, all of its columns represent complementary information and it is impossible to reduce dimensionality without loosing some residual information.
@@ -3065,7 +3065,7 @@ visualize_clusters(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/133_0.jpg"
    alt="Hierarchical clustering over the Boston dataset after dimensionality reduction was performed."
-   figcaption="Fig. 19: Hierarchical clustering over the Boston dataset after dimensionality reduction was performed." %}
+   figcaption="Figure 19: Hierarchical clustering over the Boston dataset after dimensionality reduction was performed." %}
     
 
 ##### Discussions

@@ -1,0 +1,45 @@
+<div class="projects">
+  <h3 class="display-6 mt-4 mb-4" id="repos">Repos</h3>
+  <div>
+    {% assign repos = site.github.public_repositories | where:'fork', false | sort: 'stargazers_count' | reverse %}
+    {% for r in repos limit: 12 %}
+    <h6><a href="{{ r.html_url }}" class="text-decoration-none" target="_blank">{{r.name}}</a></h6>
+    <p class="small mt-0 mb-1">{{r.description}}</p>
+    <p class="text-muted mb-3" style="font-size: .7em;">
+      {{r.stargazers_count}} stars • Last pushed at {{r.pushed_at | date: "%b %e, %Y" }}
+    </p>
+    {% endfor %}
+  </div>
+  <hr class="thin mb-4" />
+
+  <h3 class="display-6 mt-4 mb-4" id="reports">Reports</h3>
+  <div>
+    {% assign reports = site.data.reports | sort: 'date' | reverse %}
+    {% for r in reports %}
+    <h6>
+      <a href="{{ r.url }}" class="text-decoration-none" target="_blank">{{r.name}}</a>
+      <small class="keywords-container">
+        {% include posts/badges.html tags=r.keywords %}
+      </small>
+    </h6>
+    <p class="small mt-0 mb-1">{{r.description}}</p>
+    <p class="text-muted mb-3" style="font-size: .7em;">Published at {{r.date | date: "%b %e, %Y" }}</p>
+    {% endfor %}
+  </div>
+  <hr class="thin mb-4" />
+
+  <h3 class="display-6 mt-4 mb-4" id="events">Events</h3>
+  <div>
+    {% for o in site.data.events %}
+    <h6>
+      <a href="{{ o.url }}" class="text-decoration-none" target="_blank">{{o.name}}</a>
+    </h6>
+    <p class="small mt-0 mb-1">
+      {{o.description}}
+    </p>
+    <p class="text-muted mb-3" style="font-size: .7em;">
+      <span title="role">{{o.role}}</span> • <a href="{{ o.url }}">{{ o.url }}</a>
+    </p>
+    {% endfor %}
+  </div>
+</div>
