@@ -132,9 +132,7 @@ visualize([*images, *grays], image_files, cmap='gray');
 
 ### Edge-Based Segmentation
 
-Scikit-image implements many of the border extraction methods available in the literature, such as Sobel, Prewitt and Scharr.
-The can be trivially used as described below. In my program, I sub-sampled a few of these methods and added to a dictionary
-of available border methods. The user can then select which method to use by passing the argument `--border`.
+Scikit-image implements many of the border extraction methods available in the literature, such as Sobel, Prewitt and Scharr. The can be trivially used as described below.
 
 ```python
 %%time

@@ -1,0 +1,46 @@
+<script>
+    var mainNav = document.getElementById('mainNav'),
+        navBrand = document.getElementById('mainNavBrand'),
+        postTitle = document.getElementById('postTitle'),
+        bar = document.getElementById('readProgressBar');
+
+    function navbarInvertAnimated() {
+        var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        
+        if (bar) {
+            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var scrolled = (winScroll / height) * 100;
+
+            bar.style.width = scrolled + "%";
+        }
+
+        if (winScroll > 150) {
+            if (navBrand) {
+                navBrand.hidden = true;
+            }
+            if (mainNav) {
+                mainNav.classList.remove('navbar-dark', 'bg-dark');
+                mainNav.classList.add('navbar-light', 'bg-white', 'shadow-sm');
+            }
+            if (postTitle) {
+                postTitle.classList.remove('display-4');
+                postTitle.classList.add('small');
+            }
+            
+        } else {
+            if (navBrand) {
+                navBrand.hidden = false;
+            }
+            if (mainNav) {
+                mainNav.classList.remove('navbar-light', 'bg-white', 'shadow-sm');
+                mainNav.classList.add('navbar-dark', 'bg-dark');
+            }
+            if (postTitle) {
+                postTitle.classList.remove('small');
+                postTitle.classList.add('display-4');
+            }
+        }
+    }
+
+    window.onscroll = navbarInvertAnimated;
+</script>

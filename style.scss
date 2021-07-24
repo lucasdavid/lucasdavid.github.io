@@ -291,3 +291,11 @@ figure > figcaption {
     color: $gray2;
   }
 }
+
+.navbar {
+  height: 55px;
+}
+
+.navbar-animated {
+  transition: all .3s;
+}

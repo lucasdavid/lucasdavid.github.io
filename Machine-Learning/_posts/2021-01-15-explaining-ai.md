@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Explaining Machine Learning Models Using Gradients
-excerpt: Saliency analysis using <i>SmoothGrad</i>.
+title: Explaining Machine Learning Models
+excerpt: Explainability using tree decision visualization, weight composition, and gradient-based saliency maps.
 first_p:
 toc: true
 date: 2021-01-15 16:12:00

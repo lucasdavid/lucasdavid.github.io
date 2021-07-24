@@ -7,8 +7,11 @@
   </div>
   <p class="pt-2">
     <small>
-      Hello! I'm currently studying Machine Learning/Computer Vision at University of Campinas.
-      — <a href="mailto:lucas.david@ic.unicamp.br" class="text-decoration-none fw-bold">lucas.david@ic.unicamp.br</a>
+      {% if include.showHello %}
+        Hello! I'm currently studying Machine Learning/Computer Vision at University of Campinas.
+        —
+      {% endif %}
+      <a href="mailto:lucas.david@ic.unicamp.br" class="text-decoration-none fw-bold">lucas.david@ic.unicamp.br</a>
     </small>
   </p>
 </div>

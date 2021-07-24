@@ -3,7 +3,7 @@ layout: default_sidenav
 title: Projects
 ---
 
-<h1 class="display-4 mb-4">{{ page.title }}</h1>
+<h1 class="display-4 mb-4 fw-bold">{{ page.title }}</h1>
 
 ## GitHub Repositories
 

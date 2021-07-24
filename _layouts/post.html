@@ -3,11 +3,13 @@ layout: default_sidenav
 ---
 
 <article class="post">
-  <h1 class="display-4 fw-bold">
-    {{ page.title }}
-  </h1>
-  <div class="right-align mb-4">
-    <p class="small text-muted">{{ page.excerpt }} <em>— {{ page.date | date: "%B %e, %Y" }}</em></p>
+  <div class="sticky-lg-top pt-2">
+    <h1 id="postTitle" class="display-4 fw-bold">
+      {{ page.title }}
+    </h1>
+    <div class="right-align mb-4">
+      <p class="small text-muted">{{ page.excerpt }} <em>— {{ page.date | date: "%B %e, %Y" }}</em></p>
+    </div>
   </div>
 
   <div class="mt-4 mb-4">
@@ -21,3 +23,7 @@ layout: default_sidenav
 </article>
 
 {% include disqus.html %}
+
+<div class="progress fixed-bottom rounded-0" style="height: 3px;">
+  <div id="readProgressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
