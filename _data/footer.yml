@@ -1,0 +1,10 @@
+- title:
+  description:
+- title: Supporting Study Material
+  description: |-
+    If you are an undergrad student and are looking for additional study material,
+    check out our collaborative project <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
+- title: Algorithms in TensorFlow
+  description: |-
+    I'm implementing all algorithms I find interesting using Tensorflow.
+    You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">algorithms-in-tensorflow</a>.

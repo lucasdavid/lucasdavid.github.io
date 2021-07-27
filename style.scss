@@ -6,20 +6,11 @@
 //
 
 @import '_variables';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap');
 
 // Fixes images in popup boxes from Google Translate
 .gmnoprint img {
   max-width: none;
-}
-
-// Specify the color of the selection
-::-moz-selection {
-  color: $black;
-  background: $lightGray;
-}
-::selection {
-  color: $black;
-  background: $lightGray;
 }
 
 .accordion-button:not(.collapsed) {
@@ -53,15 +44,6 @@ a {
 //
 // Headers
 //
-.profile-container {}
-
-@media (min-width: $size-lg) {
-  .profile-container {
-    margin-top: 20vh;
-  }
-}
-
-
 .brand-logo {
   font-size:27px;
   font-weight: 200;
@@ -86,6 +68,19 @@ h1, h2, h3, h4 {
 
 .text-gray {
   color: $darkGray;
+}
+
+
+.navbar-animated {
+  transition: all .3s;
+}
+
+//
+// Index
+//
+.hero {
+  margin-top: 5vh;
+  margin-bottom: 5vh;
 }
 
 //
@@ -203,9 +198,10 @@ hr {
   background-color: $purple;
 }
 
-.bg-darker {
-  background-color: rgba(0, 0, 0, 0.9);
+.bg-black {
+  background-color: black;
 }
+.bg-gray { background-color: $lightGray; }
 
 .text-gray {
   color: #ccc;
@@ -292,10 +288,28 @@ figure > figcaption {
   }
 }
 
-.navbar {
-  height: 55px;
-}
-
-.navbar-animated {
-  transition: all .3s;
-}
+//
+// Shapes
+//
+.curve-container__curve {
+  margin-bottom:0;
+  padding-bottom:0;
+  position:relative;
+  display:block
+ }
+ .curve-container__curve.curve-one path.plain {
+  fill:#f4f5f7
+ }
+ .curve-container__curve.curve-two path.plain {
+  fill:#0052cc
+ }
+ .curve-container__curve.curve-three path.plain {
+  fill:#fff
+ }
+ .curve-container__curve.curve-four path.plain {
+  fill:#344563
+ }
+ .curve-container__curve.curve-five path.plain {
+  fill:#deebff
+ }
+ 

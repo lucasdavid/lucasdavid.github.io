@@ -1,0 +1,76 @@
+- name: Treinamento de redes neurais como um processo evolutivo (in Portuguese)
+  description: |-
+    Exemplifying the training of neural networks as an evolutionary process.
+    Network parameters are modeled as individuals and genetic algorithm is used to optimize the population accordingly.
+  url: https://raw.githubusercontent.com/Comp-UFSCar/artificial-intelligence/master/reports/nn-training-with-genetic-algorithms/report.pdf
+  date: 2016-06-01 12:00:00
+  format: PDF report
+  keywords:
+    - Machine Learning
+    - Genetic Algorithms
+    - Portuguese
+- name: Redes Artificiais de Arquitetura Variante (in Portuguese)
+  description: Searching network architectures using Hill-Climbing and Genetic Algorithms.
+  url: https://raw.githubusercontent.com/lucasdavid/unicamp-ia004-neural-networks-2/master/mutant-networks/docs/course-final-report/report.pdf
+  date: 2016-12-05 18:10:00
+  format: PDF report
+  keywords:
+    - Machine Learning
+    - Local Optimization
+    - Genetic Algorithms
+    - Portuguese
+
+- name: Rede Neural Convolucional Paralelizada em PyCUDA (in Portuguese)
+  description: GPU implementations for the mathematical operations commonly employed in the development of convolutional networks.
+  url: https://raw.githubusercontent.com/lucasdavid/convolutional/master/report.pdf
+  date: 2017-12-14 12:06:00
+  format: PDF report
+  keywords:
+    - Machine Learning
+    - CUDA
+    - Portuguese
+
+- name: "MO443 - Assignment 1: Image Manipulation"
+  description: Implementation of basic operations over images using Python programming language.
+  url: https://raw.githubusercontent.com/lucasdavid/unicamp-mo443-image-processing/main/assignment-1/report.pdf
+  date: 2021-04-06 12:52:00
+  format: PDF report
+  keywords:
+    - Computer Vision
+    - Vectorization
+- name: "MO443 - Assignment 2: Discrete Fourier Transform"
+  description: Application of the Discrete Fourier Transform over images using TensorFlow.
+  url: https://raw.githubusercontent.com/lucasdavid/unicamp-mo443-image-processing/main/assignment-2/report.pdf
+  date: 2021-05-07 12:52:00
+  format: PDF report
+  keywords:
+    - Computer Vision
+    - FFT
+- name: "MO443 - Assignment 3: Image Segmentation"
+  description: Segmentation of geometric shapes and blood cells using classic Computer Vision techniques.
+  url: https://raw.githubusercontent.com/lucasdavid/unicamp-mo443-image-processing/main/assignment-3/report.pdf
+  date: 2021-06-12 12:52:00
+  format: PDF report
+  keywords:
+    - Computer Vision
+    - Segmentation
+- name: "MO443 - Assignment 4: Texture Descriptors"
+  description: Application of texture-describing methods to extract descriptors of texture samples.
+  url: https://raw.githubusercontent.com/lucasdavid/unicamp-mo443-image-processing/main/assignment-4/report.pdf
+  date: 2021-06-16 12:00:00
+  format: PDF report
+  keywords:
+    - Computer Vision
+    - Texture
+- name: "MO444 - Final Report: Classificando impacto humano sobre a floresta amazônica a partir de imagens de satélite (in Portuguese)"
+  description: |-
+    Application of multiple strategies involving deep convolutional networks in the solution of the
+    "Planet: Understanding the Amazon from Space" challenge.
+  url: https://raw.githubusercontent.com/lucasdavid/unicamp-mo444-machine-learning/main/assignment-4/report.pdf
+  date: 2021-06-19 23:00:00
+  format: PDF report
+  keywords:
+    - Satellite Imagery
+    - Multi-label
+    - Convolutional Networks
+    - Portuguese

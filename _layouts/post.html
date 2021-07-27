@@ -1,9 +1,10 @@
 ---
-layout: default_sidenav
+layout: grid_with_sidenav_min
+config: some-value
 ---
 
 <article class="post">
-  <div class="sticky-lg-top pt-2">
+  <div class="pt-2">
     <h1 id="postTitle" class="display-4 fw-bold">
       {{ page.title }}
     </h1>
@@ -22,8 +23,12 @@ layout: default_sidenav
   </div>
 </article>
 
-{% include disqus.html %}
+{% if jekyll.environment == "production" %}
+{% include config/disqus.html %}
+{% endif %}
 
 <div class="progress fixed-bottom rounded-0" style="height: 3px;">
   <div id="readProgressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 </div>
+
+{% include config/mathjax.html %}

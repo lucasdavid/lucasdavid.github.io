@@ -1,13 +1,14 @@
-<div class="ps-3 pe-3">
+<div class="ps-3 pe-3 {{ include.sidebarClassed }}">
   <div class="text-center">
     <a href="/" title="Home">
       <img src="/assets/images/infra/aloy.thumbnail" alt="Aloy, a character from Horizon Zero Dawn."
         class="img-fluid rounded-circle" style="width:100px" />
     </a>
   </div>
-  <p class="pt-2">
+  <p class="pt-2 {{ include.sidebarTextClassed }}">
     <small>
-      {% if include.showHello %}
+      {% if include.hideHello %}
+      {% else %}
         Hello! I'm currently studying Machine Learning/Computer Vision at University of Campinas.
         —
       {% endif %}

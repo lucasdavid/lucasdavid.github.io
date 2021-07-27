@@ -1,24 +1,15 @@
-<footer class="page-footer bg-light pb-4">
+<footer class="page-footer bg-gray p-2">
     <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 1vh"></div>
-    <div class="container pb-4">
+    <div class="container">
         <div class="row">
-            <div class="col-12 d-none d-lg-block col-lg-4 p-4 pb-2"></div>
-            <div class="col-12 col-md-6 col-lg-4 p-4 pb-2">
-                <h5>Algorithms in TensorFlow</h5>
+            {% for entry in site.data.footer %}
+            <div class="col-12 col-md-6 col-lg-4">
+                <h5>{{ entry.title }}</h5>
                 <p class="text-body">
-                    I'm implementing all algorithms I find interesting using Tensorflow.
-                    You can check it out at
-                    <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">algorithms-in-tensorflow</a>.
+                    {{ entry.description }}
                 </p>
             </div>
-            <div class="col-12 col-md-6 col-lg-4 p-4 pb-2">
-                <h5>Supporting Study Material</h5>
-                <p class="text-body">
-                    If you are an undergrad student and are looking for additional study material,
-                    check out our collaborative project
-                    <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
-                </p>
-            </div>
+            {% endfor %}
         </div>
         <div class=" text-end">
             <hr class="mb-3">

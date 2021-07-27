@@ -3,8 +3,6 @@ title: Lucas David
 description: my personal website/blog
 avatar: /assets/profile-s.jpg
 
-paginate_path: "/page/:num/"
-
 footer-links:
   dribbble:
   email: lucas.david@ic.unicamp.br
@@ -31,7 +29,7 @@ url: "https://lucasdavid.github.io/"
 baseurl: ""
 
 paginate: 12
-paginate_path: "/page:num/"
+paginate_path: "/blog/:num/"
 
 permalink: /blog/:categories/:title/
 version: v3.8

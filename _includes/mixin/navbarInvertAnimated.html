@@ -1,46 +1,45 @@
 <script>
-    var mainNav = document.getElementById('mainNav'),
-        navBrand = document.getElementById('mainNavBrand'),
-        postTitle = document.getElementById('postTitle'),
-        bar = document.getElementById('readProgressBar');
+  var LG_WIDTH = 992;
 
-    function navbarInvertAnimated() {
-        var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-        
-        if (bar) {
-            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            var scrolled = (winScroll / height) * 100;
+  var navbarAnimator = {
+    mainNav: document.getElementById('mainNav'),
+    navBrand: document.getElementById('mainNavBrand'),
+    bar: document.getElementById('readProgressBar'),
+    navBarInverted: false
+  };
 
-            bar.style.width = scrolled + "%";
-        }
+  function navbarInvertAnimated() {
+    var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
 
-        if (winScroll > 150) {
-            if (navBrand) {
-                navBrand.hidden = true;
-            }
-            if (mainNav) {
-                mainNav.classList.remove('navbar-dark', 'bg-dark');
-                mainNav.classList.add('navbar-light', 'bg-white', 'shadow-sm');
-            }
-            if (postTitle) {
-                postTitle.classList.remove('display-4');
-                postTitle.classList.add('small');
-            }
-            
-        } else {
-            if (navBrand) {
-                navBrand.hidden = false;
-            }
-            if (mainNav) {
-                mainNav.classList.remove('navbar-light', 'bg-white', 'shadow-sm');
-                mainNav.classList.add('navbar-dark', 'bg-dark');
-            }
-            if (postTitle) {
-                postTitle.classList.remove('small');
-                postTitle.classList.add('display-4');
-            }
-        }
+    if (navbarAnimator.bar) {
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var scrolled = (winScroll / height) * 100;
+
+      navbarAnimator.bar.style.width = scrolled + "%";
     }
 
+    var shouldInvert = winScroll > 150;
+
+    if (shouldInvert == navbarAnimator.navBarInverted)
+      return;
+
+    if (shouldInvert) {
+      if (navbarAnimator.navBrand) navbarAnimator.navBrand.hidden = true;
+      if (navbarAnimator.mainNav) {
+        navbarAnimator.mainNav.classList.remove('navbar-dark', 'bg-dark');
+        navbarAnimator.mainNav.classList.add('navbar-light', 'bg-white', 'shadow-sm');
+      }
+    } else {
+      if (navbarAnimator.navBrand) navbarAnimator.navBrand.hidden = false;
+      if (navbarAnimator.mainNav) {
+        navbarAnimator.mainNav.classList.remove('navbar-light', 'bg-white', 'shadow-sm');
+        navbarAnimator.mainNav.classList.add('navbar-dark', 'bg-dark');
+      }
+    }
+    navbarAnimator.navBarInverted = shouldInvert;
+  }
+
+  if (document.documentElement.clientWidth >= LG_WIDTH) {
     window.onscroll = navbarInvertAnimated;
+  }
 </script>

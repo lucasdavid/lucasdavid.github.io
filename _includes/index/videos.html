@@ -1,34 +1,19 @@
-<div class="" style="background-color: black;">
-    <div class="container">
-        <div id="carouselVideos" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active ratio ratio-16x9">
-                    <iframe src="https://www.youtube.com/embed/ZmXyJqcAv8A?controls=0&amp;autoplay=1"
-                        title="YouTube video player" frameborder="0"
-                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
-                </div>
-                <div class="carousel-item ratio ratio-16x9">
-                    <iframe src="https://www.youtube.com/embed/IPrAttcVRIY?controls=0&autoplay=1&amp;start=4"
-                        title="YouTube video player" frameborder="0"
-                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
-                </div>
-                <div class="carousel-item ratio ratio-16x9">
-                    <iframe src="https://www.youtube.com/embed/n-5PvVGxibg?controls=0&autoplay=1"
-                        title="YouTube video player" frameborder="0"
-                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
-                </div>
+<div class="container videos">
+    {% assign videos_count = site.data.videos | size %}
+    
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-{{videos_count}} g-4">
+        {% for v in site.data.videos %}
+        <div class="col">
+          <div class="card border-0 bg-light h-100">
+            <a href="{{ v.source }}" target="_blank">
+                <img src="https://img.youtube.com/vi/{{v.id}}/sddefault.jpg" class="card-img-top">
+            </a>
+            <div class="card-body">
+              <h6 class="card-title"><a href="{{ v.source }}" target="_blank" class="text-decoration-none">{{ v.title }}</a></h6>
+              <p class="card-text"></p>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselVideos" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselVideos" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+          </div>
         </div>
-    </div>
+        {% endfor %}
+      </div>
 </div>
