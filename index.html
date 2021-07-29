@@ -2,25 +2,30 @@
 layout: default
 ---
 
-<div class="empty-v-space d-none d-md-block" style="margin-bottom: 15vh"></div>
 <div class="container">
   {% include index/hero.html %}
 </div>
-<div class="empty-v-space d-none d-md-block" style="margin-bottom: 25vh"></div>
 
 <div class="bg-gray pt-4">
   <div class="container-fluid">
     <div clas="row">
       <div class="col-12 col-lg-9 offset-lg-3 col-xl-8 offset-xxl-3 col-xxl-6">
         <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
-        <h3 class="display-6 mb-4" id="presentations">Presentations</h3>
+        <h3 class="display-6 mb-4" id="blog-posts">
+          Blog Posts
+        </h3>
       </div>
     </div>
   </div>
+  <div class="container">
+    {% assign latests_posts = site.posts | slice: 0, 4 %}
+    {% include mixin/cards.html id='highlighted-posts' items=latests_posts %}
 
-  {% include index/videos.html %}
-
-  <div class="empty-v-space" style="margin-bottom: 5vh"></div>
+    <p class="text-center mt-4 small">
+      <a href="{{site.baseurl}}/blog" class="link-secondary small">see all posts</a>
+    </p>
+  </div>
+  <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
   <svg class="curve-container__curve curve-three" viewBox="10 -20 1870 210" version="1.1"
     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <path class="plain fill-" fill="#f4f5f7"
@@ -28,6 +33,19 @@ layout: default
       id="Path"></path>
   </svg>
 </div>
+
+<div class="container-fluid">
+  <div clas="row">
+    <div class="col-12 col-lg-9 offset-lg-3 col-xl-8 offset-xxl-3 col-xxl-6">
+      <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+      <h3 class="display-6 mb-4" id="presentations">Presentations</h3>
+    </div>
+  </div>
+</div>
+<div class="container">
+  {% include index/videos.html %}
+</div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
 
 <div class="container-fluid">
   <div class="row">
