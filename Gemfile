@@ -6,3 +6,5 @@ gem 'jekyll-feed'
 gem 'jekyll-github-metadata'
 gem 'github-pages'
 gem 'jekyll-compress-images'
+# gem 'jekyll-toc'
+# gem 'jekyll-scholar', group: :jekyll_plugins
