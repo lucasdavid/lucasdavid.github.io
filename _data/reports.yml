@@ -1,3 +1,9 @@
+- name: A Study of the ISOMAP Algorithm and Its Applications in Machine Learning (Undergraduate final report)
+  description: A study of the foundations of nonlinear dimensionality reduction through Manifold Learning.
+  url: https://drive.google.com/file/d/12a3USe7XVGJ-NmszGzRV5By4UHMOVZGb/view?usp=sharing
+  date: 2015-12-07 10:00:00
+  keywords:
+    - Manifold Learning
 - name: Treinamento de redes neurais como um processo evolutivo (in Portuguese)
   description: |-
     Exemplifying the training of neural networks as an evolutionary process.
@@ -6,7 +12,6 @@
   date: 2016-06-01 12:00:00
   format: PDF report
   keywords:
-    - Machine Learning
     - Genetic Algorithms
     - Portuguese
 - name: Redes Artificiais de Arquitetura Variante (in Portuguese)
@@ -15,7 +20,6 @@
   date: 2016-12-05 18:10:00
   format: PDF report
   keywords:
-    - Machine Learning
     - Local Optimization
     - Genetic Algorithms
     - Portuguese
@@ -26,10 +30,16 @@
   date: 2017-12-14 12:06:00
   format: PDF report
   keywords:
-    - Machine Learning
     - CUDA
     - Portuguese
-
+- name: "Connoisseur: Provenance Analysis in Paintings (MSc dissertation)"
+  description: |-
+    A comparative analysis of multiple convolutional networks-based strategies to identify and classify art-related digital
+    artifacts. In a first stage, we conduct our experiments over the VGDB2016 dataset, comprising art pieces from Vincent
+    van Gogh and his peers. We then expand our strategy to a broader multi-class scenario, seeking to distinguish paintings
+    from 1,584 different authors.
+  url: http://repositorio.unicamp.br/jspui/handle/REPOSIP/335058
+  date: 2019-09-23 18:34:10
 - name: "MO443 - Assignment 1: Image Manipulation"
   description: Implementation of basic operations over images using Python programming language.
   url: https://raw.githubusercontent.com/lucasdavid/unicamp-mo443-image-processing/main/assignment-1/report.pdf
