@@ -93,6 +93,18 @@ def plot_images_and_salency_maps(images, saliency, labels):
         rows=2)
     plt.tight_layout()
 
+def plot_heatmaps(images, maps, rows=1, cols=None, i0=0, full=True):
+    if full: plt.figure(figsize=(16, 4 * rows))
+    for ix, (i, m) in enumerate(zip(images, maps)):
+        plt.subplot(rows, cols or len(images), i0+ix+1)
+        plot_heatmap(i, m)
+    if full: plt.tight_layout()
+
+def plot_heatmap(i, m):
+    plt.imshow(i)
+    plt.imshow(m, cmap='jet', alpha=0.5)
+    plt.axis('off')
+
 sns.set_style("whitegrid", {'axes.grid' : False})
 ```
 {: class="collapse" id="collapseSetup"}
@@ -394,20 +406,97 @@ On the other hand, a feature that rarely appears has less impact in the answer.
 
 {% include posts/collapse-btn.html id="cv2" %}
 ```python
-def plot_feature_importances(model):
+def plot_feature_importances(feature_importances):
   plt.figure(figsize=(12, 6))
-  sns.barplot(x=ds.feature_names, y=model.feature_importances_)
+  sns.barplot(x=ds.feature_names, y=feature_importances)
 
   plt.xticks(rotation=90)
   plt.tight_layout()
 
-plot_feature_importances(rf)
+plot_feature_importances(rf.feature_importances_)
 ```
 {: class="collapse" id="cv2"}
 
 {% include figure.html
    src="/assets/images/posts/ml/explaining/explaining_scikit_learn_14_0.jpg"
    figcaption="Figure 5. Importance per feature for a Random Forest model trained over the Breast Cancer Dataset." %}
+
+
+## Explaining Linear Geometric Models
+
+Linear geometric models, such as Linear Regression, Logistic Regression, Linear Support Vector Machines and [many others](https://scikit-learn.org/stable/modules/linear_model.html){:target='_blank'},
+estimate a variable of interest as a linear combination of the features:
+
+$$ p = w\cdot x + b = w_0x_0+w_1x_1+\ldots+w_fx_f + b $$
+
+Interpretation is straight forward for this model:
+s $w_i \to 0$, the variations in feature $i$ becomes less relevant to the overall combination $p$;
+When $w_i$ assumes a strongly positive value, then feature $i$ positively contributes to the estimation of $p$.
+Conversely, $w_i$ assuming a negative value implies that feature $i$ negatively contributes to $p$.
+
+As the parameters $w$ are also use to scale the individual features $x$, they are in different scales and 
+cannot be directly compared. This can be remedied by normalizing features into a single scale:
+
+```python
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+p = make_pipeline(
+  StandardScaler(),
+  LogisticRegression()
+).fit(x, y)
+
+lm = p.named_steps['logisticregression']
+
+w, b = lm.coef_, lm.intercept_
+plot_feature_importances(w.ravel())
+```
+
+{% include figure.html
+   src="/assets/images/posts/ml/explaining/explaining_scikit_learn_15_0.jpg"
+   figcaption="Figure 6. Importance per feature for a Logistic Regression model trained over the Breast Cancer Dataset." %}
+
+This can also be acomplished when reducing the set with Principal Component Analysis, considering the whole pipeline can be
+seen as a sequence of matrix multiplications, which is an associative operation:
+
+$$y = (XR)W +b \iff y = X(RW) + b$$
+
+```python
+from sklearn.decomposition import PCA
+
+lm = make_pipeline(
+  StandardScaler(),
+  PCA(n_components=0.99),
+  LogisticRegression()
+).fit(x, y)
+
+w = (lm.named_steps['pca'].components_.T
+     @ lm.named_steps['logisticregression'].coef_.T)
+```
+
+{% include posts/collapse-btn.html id="cv3" %}
+```python
+print(
+  f'Original dimensions: {x.shape[1]}',
+  f'Reduced dimensions:  {lm.named_steps["pca"].explained_variance_ratio_.shape[0]}',
+  f'Energy retained:     {lm.named_steps["pca"].explained_variance_ratio_.sum():.2%}',
+  sep='\n'
+)
+
+plot_feature_importances(w.ravel())
+```
+{: class="collapse" id="cv3"}
+
+```python
+Original dimensions: 30
+Reduced dimensions:  17
+Energy retained:     99.11%
+```
+
+{% include figure.html
+   src="/assets/images/posts/ml/explaining/explaining_scikit_learn_19_0.jpg"
+   figcaption="Figure 6. Importance per feature for a Logistic Regression model trained over the Breast Cancer Dataset." %}
 
 
 ## Explaining Deep Convolutional Networks
@@ -421,7 +510,7 @@ Differently from search algorithms, connectionist models are complicated in natu
 {% include figure.html
    src="/assets/images/posts/ml/deep/inception.png"
    alt="Inception Architecture. A well-established network architecture for convolutional models."
-   figcaption="Figure 6. Inception Architecture. A well-established network architecture for convolutional models."
+   figcaption="Figure 7. Inception Architecture. A well-established network architecture for convolutional models."
    classed="rounded mx-auto d-block" %}
 
 Each blue box represents a set of convolutions between an 3D input signal and multiple kernels and the application of a non-linear function (relu, most likely).
@@ -432,7 +521,7 @@ Many solutions were studied over the last years. Some of them involved patching-
 {% include figure.html
    src="/assets/images/posts/ml/explaining/zeilerECCV2014-fig6.jpg"
    alt="Effect of image occlusion in the classifier's answer (columns (a) and (d))."
-   figcaption="Figure 7. Effect of image occlusion in the classifier's answer (columns <i>a</i> and <i>d</i>). Available at: <a href=\"https://arxiv.org/pdf/1908.04351.pdf\">arxiv.org/1908.04351</a>."
+   figcaption="Figure 8. Effect of image occlusion in the classifier's answer (columns <i>a</i> and <i>d</i>). Available at: <a href=\"https://arxiv.org/pdf/1908.04351.pdf\">arxiv.org/1908.04351</a>."
    classed="rounded mx-auto d-block" %}
 
 Finally, the networks could be verified by checking the heatmaps. If a model were to make right predictions, but focusing on unrelated regions, then we would know that some artificial information was being injected into training, overfitting the model.
@@ -469,7 +558,7 @@ IMAGES = [
   'http://www.aviationexplorer.com/Diecast_Airplanes_Aircraft/delta_Airbus_diecast_airplane.jpg',
 ]
 ```
-{% include posts/collapse-btn.html id="cv3" %}
+{% include posts/collapse-btn.html id="cv4" %}
 ```python
 os.makedirs(os.path.join(DATA_DIR, 'test'), exist_ok=True)
 for i in IMAGES:
@@ -486,7 +575,7 @@ images, labels = next(iter(images_set.take(1)))
 {% include figure.html
    src="/assets/images/posts/ml/explaining/inputs.jpg"
    alt="Input images for our model. Common instances of classes present in the imagenet dataset (dogs, bears, airplanes)."
-   figcaption="Figure 8. Input images for our model. Common instances of classes present in the imagenet dataset (dogs, bears, airplanes)."
+   figcaption="Figure 9. Input images for our model. Common instances of classes present in the imagenet dataset (dogs, bears, airplanes)."
    classed="rounded mx-auto d-block" %}
 
 In a real case, you would have your own trained network. However, considering all of these images belong to a class in the imagenet dataset, I'll just go ahead and
@@ -651,17 +740,18 @@ Sample 7:
   red_fox: 0.00%
 ```
 
-Looks good. Now we just need to know if these images make sense:
+{% include posts/collapse-btn.html id="cv5" %}
 ```py
 plt.figure(figsize=(16, 9))
 plot(as_image_vector(o), UNIT_NAMES, rows=2)
 plt.tight_layout();
 ```
+{: class="collapse" id="cv5"}
 
 {% include figure.html
    src="/assets/images/posts/ml/explaining/vanilla-grads.jpg"
    alt="Input images optimized to maximize each unit described in UNIT_NAMES."
-   figcaption="Figure 9. Input images optimized to maximize each unit described in <code>UNIT_NAMES</code>."  %}
+   figcaption="Figure 10. Input images optimized to maximize each unit described in <code>UNIT_NAMES</code>."  %}
 
 I **think** I can see dumbells in the first image and dots in the dalmatian image, but
 I'm not sure if this is just my brain trying to look for evidence of correctness.
@@ -692,7 +782,7 @@ def visualize(unit):
 {% include figure.html
    src="/assets/images/posts/ml/explaining/vanilla-grads-aug.jpg"
    alt="Input images optimized to maximize each unit described in UNIT_NAMES using augmentation."
-   figcaption="Figure 10. Input images optimized to maximize each unit described in <code>UNIT_NAMES</code> using augmentation (rotation and translation)."  %}
+   figcaption="Figure 11. Input images optimized to maximize each unit described in <code>UNIT_NAMES</code> using augmentation (rotation and translation)."  %}
 
 It looks a lot better, I'd say. We see circles in *dumbell*, clear dark spots in *dalmatian* green in the *bell pepper* and *lemon* and squares in *computer keyboard*.
 
@@ -739,6 +829,8 @@ def gradients(inputs, units):
 
 Finally, we observe which pixels are most important when classifying the image label
 by considering their absolute value (added across its RGB channels):
+
+{% include posts/collapse-btn.html id="cv6" %}
 ```py
 _, g = gradients(images, p)
 
@@ -747,12 +839,16 @@ s /= tf.reduce_max(s, axis=(1, 2), keepdims=True)
 
 plot_images_and_salency_maps(as_image_vector(images), s.numpy(), y.numpy())
 ```
+{: class="collapse" id="cv6"}
+
 {% include figure.html
    src="/assets/images/posts/ml/explaining/vanilla-saliency.jpg"
    alt="Input images and saliency activation maps, considering their most activating units."
    figcaption="Figure 11. Input images and saliency activation maps, considering their most activating units." %}
 
 So the network clearly points out for the right regions in the dalmatian, bear and the golden retriever. The other ones seem a little blurred.
+
+#### Smooth Gradients
 
 An improvement for this strategy is described in [SmoothGrad: removing noise by adding noise](https://arxiv.org/pdf/1706.03825.pdf).
 In the article, the authors comment that gradients may vary sharply at small scales due to meaningless variations in small portions of the input space, generating a misrepresentation of pixels' importances.
@@ -776,7 +872,7 @@ def smooth_gradients(inputs, units, num_samples=50, noise=.2):
   return loss, tf.reduce_mean(grads, axis=1)
 ```
 
-And finally, we just apply it onto our images:
+{% include posts/collapse-btn.html id="cv7" %}
 ```py
 _, g = smooth_gradients(images, p, num_samples=20)
 
@@ -784,24 +880,130 @@ s = tf.reduce_sum(tf.abs(g), axis=-1)
 s /= tf.reduce_max(s, axis=(1, 2), keepdims=True)
 plot_images_and_salency_maps(as_image_vector(images), s.numpy(), y.numpy())
 ```
+{: class="collapse" id="cv7"}
+
 {% include figure.html
    src="/assets/images/posts/ml/explaining/smoothgrad-saliency.jpg"
    alt="Input images and saliency activation maps, considering their most activating units."
-   figcaption="Figure 12. Input images and saliency activation maps, considering their most activating units. Obtained using the SmoothGrad method."  %}
+   figcaption="Figure 13. Input images and saliency activation maps, considering their most activating units. Obtained using the SmoothGrad method."  %}
 
-Much better, isn't it? 
+Much better, isn't it?
+
+#### Full Gradients
+
+Another interesting idea can be found in the article [Full-gradient representation for neural network visualization](https://arxiv.org/pdf/1905.00780.pdf).
+This approach's main idea is to form the saliency map by considering both gradient saliency and the individual contributions of each bias factor in the network:
+
+$$
+f(x) = ψ(∇_xf(x)\odot x) +∑_{l\in L}∑_{c\in c_l} ψ(f^b(x)_c)
+$$
+
+We can extract the bias tensor from most layers in a TensorFlow model by accessing tehir `layer.bias` attribute.
+The Batch-Norm layer, however, has what we call an implict bias.
+
+> Let the Batch-Norm (BN) of a input signal $x$ be $\text{bn}(x) = \frac{x - \mu}{\sigma}w + b$,
+  then its rectified bias is $b^r = -\frac{\mu}{\sigma}w + b$.
+
+All of this is expressed in the following python code:
+
+```python
+def activation_gain(y, units):
+    return tf.gather(y, units, axis=1, batch_dims=1)
+
+def extract_bias(layer):
+  if isinstance(layer, tf.keras.layers.BatchNormalization):
+    return (
+        -layer.moving_mean * layer.gamma
+        / tf.sqrt(layer.moving_variance + 1e-07)
+        + layer.beta)
+
+  if hasattr(layer, 'bias') and layer.bias is not None:
+    return layer.bias
+
+def psi(x):
+  x = tf.abs(x)
+  x = standardize(x)
+
+  return x
+
+layers = [(l, extract_bias(l)) for ix, l in enumerate(nn.layers[1:-1])]
+layers = [(l, b) for l, b in layers if b is not None]
+
+intermediates = [l.output for l, _ in layers]
+biases = [b for _, b in layers]
+
+print(len(biases), 'layers with bias were found.')
+
+nn_s = tf.keras.Model(nn.inputs, [nn.output, *intermediates], name='spacial_model')
+```
+```python
+@tf.function
+def fullgrads(inputs, units):
+  with tf.GradientTape() as tape:
+    tape.watch(inputs)
+    y, *ia = nn_s(inputs, training=False)
+    loss = activation_gain(y, units)
+  
+  dydx, *dydas = tape.gradient(loss, [inputs, *ia])
+
+  maps = tf.reduce_sum(psi(dydx * inputs), axis=-1)
+
+  Gb = [ig * tf.reshape(b, (1, 1, 1, -1)) for ig, b in zip(dydas, biases)]
+  for b in Gb:
+      b = psi(b)
+      maps += tf.reduce_sum(tf.image.resize(b, config.data.image_size), axis=-1)
+
+  return loss, dydx, maps
+```
+
+{% include posts/collapse-btn.html id="cv8" %}
+```python
+r = zip(*[fullgrads(x[ix:ix+1], preds[ix:ix+1]) for ix in range(len(images))])
+_, g, maps = (tf.concat(e, axis=0) for e in r)
+
+maps = normalize(maps)
+
+s = normalize(tf.reduce_sum(tf.abs(g), axis=-1))
+
+plot_heatmaps(to_image(images), maps)
+```
+{: class="collapse" id="cv8"}
+
+<div id="carouselBorders"
+     class="carousel slide carousel-dark overflow-hidden"
+     data-bs-ride="carousel"
+     alt="Results from multiple border extraction methods over images containing simple geometric shapes."
+     style="height: 120px">
+  <div class="carousel-inner">
+    <div class="carousel-item active"><img src="/assets/images/posts/ml/explaining/fullgrads-1.jpg" class="d-block w-100"></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/fullgrads-2.jpg" class="d-block w-100"></div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselBorders"  data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselBorders"  data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
 
 ## Final Considerations
 AI explaining is a very long subject, containing many different strategies.
-This post illustrates a few examples of it and briefly explains how classification gradient
+In this post, I illustrated a  illustrates a few examples of it and briefly explains how classification gradient
 can be used to explain predictions in Computer Vision.
 
-There are many other methods around. Some consider the sign of the gradients,
-in order to only capture what positively affects the output (Guided backpropagation).
-Others will focus on general localization instead of fine-details (CAM).
-I'll try and bring more examples of those in the future. :-)
+This is pretty much an open research field, with many methods coming to light in the past years.
+Some filter the back-propagated signal, in order to only capture what positively affects the output
+(Guided backpropagation).
+Others will focus on general localization instead of fine-gain details (CAM), resulting in 
+maps that better separates classes coexisting in a single sample.
+I'll talk a little bit more about these in the [next post]({% post_url Machine-Learning/2021-03-23-cam %}).
+
 
 ## References
 
 - Simonyan, Karen, Andrea Vedaldi, and Andrew Zisserman. "Deep inside convolutional networks: Visualising image classification models and saliency maps." arXiv preprint arXiv:1312.6034 (2013). [1312.6034](https://arxiv.org/abs/1312.6034)
 - Smilkov, Daniel, Nikhil Thorat, Been Kim, Fernanda Viégas, and Martin Wattenberg. "Smoothgrad: removing noise by adding noise." arXiv preprint arXiv:1706.03825 (2017). [1706.03825](https://arxiv.org/abs/1706.03825)
+- Srinivas, Suraj, and François Fleuret. "Full-gradient representation for neural network visualization." arXiv preprint arXiv:1905.00780 (2019).
+  [1905.00780](https://arxiv.org/pdf/1905.00780.pdf)
