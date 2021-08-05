@@ -93,18 +93,6 @@ def plot_images_and_salency_maps(images, saliency, labels):
         rows=2)
     plt.tight_layout()
 
-def plot_heatmaps(images, maps, rows=1, cols=None, i0=0, full=True):
-    if full: plt.figure(figsize=(16, 4 * rows))
-    for ix, (i, m) in enumerate(zip(images, maps)):
-        plt.subplot(rows, cols or len(images), i0+ix+1)
-        plot_heatmap(i, m)
-    if full: plt.tight_layout()
-
-def plot_heatmap(i, m):
-    plt.imshow(i)
-    plt.imshow(m, cmap='jet', alpha=0.5)
-    plt.axis('off')
-
 sns.set_style("whitegrid", {'axes.grid' : False})
 ```
 {: class="collapse" id="collapseSetup"}
@@ -891,8 +879,10 @@ Much better, isn't it?
 
 #### Full Gradients
 
-Another interesting idea can be found in the article [Full-gradient representation for neural network visualization](https://arxiv.org/pdf/1905.00780.pdf).
-This approach's main idea is to form the saliency map by considering both gradient saliency and the individual contributions of each bias factor in the network:
+Another interesting idea can be found in the article 
+[Full-gradient representation for neural network visualization](https://arxiv.org/pdf/1905.00780.pdf).
+This approach's main idea is to combine the saliency information previously found with the individual contributions
+of each bias factor in the network, forming a "full gradient map":
 
 $$
 f(x) = ψ(∇_xf(x)\odot x) +∑_{l\in L}∑_{c\in c_l} ψ(f^b(x)_c)
@@ -964,6 +954,18 @@ _, g, maps = (tf.concat(e, axis=0) for e in r)
 maps = normalize(maps)
 
 s = normalize(tf.reduce_sum(tf.abs(g), axis=-1))
+
+def plot_heatmaps(images, maps, rows=1, cols=None, i0=0, full=True):
+    if full: plt.figure(figsize=(16, 4 * rows))
+    for ix, (i, m) in enumerate(zip(images, maps)):
+        plt.subplot(rows, cols or len(images), i0+ix+1)
+        plot_heatmap(i, m)
+    if full: plt.tight_layout()
+
+def plot_heatmap(i, m):
+    plt.imshow(i)
+    plt.imshow(m, cmap='jet', alpha=0.5)
+    plt.axis('off')
 
 plot_heatmaps(to_image(images), maps)
 ```

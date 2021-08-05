@@ -15,4 +15,8 @@
       <a href="mailto:lucas.david@ic.unicamp.br" class="text-decoration-none fw-bold">lucas.david@ic.unicamp.br</a>
     </small>
   </p>
+
+  {% if include.summary %}
+  {% include {{ include.summary }} %}
+  {% endif %}
 </div>

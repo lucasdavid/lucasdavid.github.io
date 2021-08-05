@@ -1,4 +1,4 @@
-<div class="projects">
+<div id="projects-container" class="projects">
   <h3 class="display-6 mt-4 mb-4" id="repos">Repos</h3>
   <div>
     {% assign repos = site.github.public_repositories | where:'fork', false | sort: 'stargazers_count' | reverse %}
