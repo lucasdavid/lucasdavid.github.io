@@ -1,10 +1,19 @@
+- name: "Educação e tecnologia: desafios para a construção de conhecimento por meio da computação"
+  description: |-
+    Será abordada a relação entre educação e computação, que se torna cada vez mais próxima. Mais precisamente, os objetos de
+    aprendizagem, elementos essenciais nos processos de ensino e aprendizagem da educação a distância ou projetos de educação complementar.
+  url: https://drive.google.com/file/d/1xPHwWlhExZv7G95VWb1tn7JTTB0AtUY6/view?usp=sharing
+  keywords:
+    - Portuguese
+    - Education
+  date: 2013-01-15 00:00:00
 - name: A Study of the ISOMAP Algorithm and Its Applications in Machine Learning (Undergraduate final report)
   description: A study of the foundations of nonlinear dimensionality reduction through Manifold Learning.
   url: https://drive.google.com/file/d/12a3USe7XVGJ-NmszGzRV5By4UHMOVZGb/view?usp=sharing
   date: 2015-12-07 10:00:00
   keywords:
     - Manifold Learning
-- name: Treinamento de redes neurais como um processo evolutivo (in Portuguese)
+- name: Treinamento de redes neurais como um processo evolutivo
   description: |-
     Exemplifying the training of neural networks as an evolutionary process.
     Network parameters are modeled as individuals and genetic algorithm is used to optimize the population accordingly.
@@ -12,19 +21,19 @@
   date: 2016-06-01 12:00:00
   format: PDF report
   keywords:
-    - Genetic Algorithms
     - Portuguese
-- name: Redes Artificiais de Arquitetura Variante (in Portuguese)
+    - Genetic Algorithms
+- name: Redes Artificiais de Arquitetura Variante
   description: Searching network architectures using Hill-Climbing and Genetic Algorithms.
   url: https://raw.githubusercontent.com/lucasdavid/unicamp-ia004-neural-networks-2/master/mutant-networks/docs/course-final-report/report.pdf
   date: 2016-12-05 18:10:00
   format: PDF report
   keywords:
+    - Portuguese
     - Local Optimization
     - Genetic Algorithms
-    - Portuguese
 
-- name: Rede Neural Convolucional Paralelizada em PyCUDA (in Portuguese)
+- name: Rede Neural Convolucional Paralelizada em PyCUDA
   description: GPU implementations for the mathematical operations commonly employed in the development of convolutional networks.
   url: https://raw.githubusercontent.com/lucasdavid/convolutional/master/report.pdf
   date: 2017-12-14 12:06:00
@@ -72,7 +81,7 @@
   keywords:
     - Computer Vision
     - Texture
-- name: "MO444 - Final Report: Classificando impacto humano sobre a floresta amazônica a partir de imagens de satélite (in Portuguese)"
+- name: "MO444 - Final Report: Classificando impacto humano sobre a floresta amazônica a partir de imagens de satélite"
   description: |-
     Application of multiple strategies involving deep convolutional networks in the solution of the
     "Planet: Understanding the Amazon from Space" challenge.
