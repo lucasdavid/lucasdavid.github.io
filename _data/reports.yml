@@ -12,7 +12,17 @@
   url: https://drive.google.com/file/d/12a3USe7XVGJ-NmszGzRV5By4UHMOVZGb/view?usp=sharing
   date: 2015-12-07 10:00:00
   keywords:
+    - Dimensionality Reduction
     - Manifold Learning
+    - ISOMAP
+- name: A Study of the ISOMAP Algorithm and Its Applications in Machine Learning (Undergraduate final presentation)
+  description: Presentation of linear and non-linear classic dimensionality reduction methods.
+  url: https://slides.com/lucasdavid/isomap/fullscreen
+  date: 2015-12-07 12:00:00
+  keywords:
+    - Dimensionality Reduction
+    - Manifold Learning
+    - ISOMAP
 - name: Treinamento de redes neurais como um processo evolutivo
   description: |-
     Exemplifying the training of neural networks as an evolutionary process.
