@@ -34,31 +34,39 @@ layout: default
   </svg>
 </div>
 
-<div class="container-fluid">
-  <div clas="row">
-    <div class="col-12 col-lg-9 offset-lg-3 col-xl-8 offset-xxl-3 col-xxl-6">
-      <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
-      <h3 class="display-6 mb-4" id="presentations">Presentations</h3>
-    </div>
-  </div>
-</div>
-<div class="container">
-  {% include index/videos.html %}
-</div>
-<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
-
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-12 col-lg-3 col-xxl-2 offset-xxl-1">
-      <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
-      <div class="sticky-lg-top pt-4 d-none d-lg-block">
-        {% include sidebar.html %}
+<div data-bs-spy="scroll"
+     data-bs-target="#nav-scrollspy"
+     data-bs-offset="0"
+     tabindex="0">
+  <div>
+    <div class="container-fluid">
+      <div clas="row">
+        <div class="col-12 col-lg-9 offset-lg-3 col-xl-8 offset-xxl-3 col-xxl-6">
+          <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+          <h3 class="display-6 mb-4" id="presentations">Presentations</h3>
+        </div>
       </div>
     </div>
-    <div class="col-12 col-lg-9 col-xl-8 col-xxl-6 offset-xxl-0">
-      <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
-      {% include index/projects.html %}
-      <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+    <div class="container">
+      {% include index/videos.html %}
+    </div>
+  </div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 col-lg-3 col-xxl-2 offset-xxl-1">
+        <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+        <div class="sticky-lg-top pt-4 d-none d-lg-block">
+          {% include sidebar.html summary="index/projects-index.html" %}
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-9 col-xl-8 col-xxl-6 offset-xxl-0">
+        <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+        {% include index/projects.html %}
+        <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+      </div>
     </div>
   </div>
 </div>
