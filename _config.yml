@@ -2,6 +2,7 @@ name: Lucas David
 title: Lucas David
 description: my personal website/blog
 avatar: /assets/profile-s.jpg
+repository: lucasdavid/lucasdavid.github.io
 
 footer-links:
   dribbble:
@@ -47,7 +48,10 @@ plugins:
   - jekyll-paginate
   - jekyll-feed
   - jekyll-github-metadata
-  # - jekyll-toc
+  - jekyll-compress-images
+  - jekyll-archives
+  - jekyll-toc
+  - jekyll-scholar
 
 exclude:
   - Gemfile
@@ -56,10 +60,29 @@ exclude:
   - README.md
   - CNAME
   - vendor/
+  - _compress_images_cache.yml
 
 compress_images:
   images_path: "assets/images/**/*.{gif,png,jpg,jpeg,svg}"
 
+  imageoptim:
+    verbose: false
+
 toc:
-  min_level: 1 # default: 1
-  max_level: 4 # default: 6
+  min_level: 1
+  max_level: 4
+
+jekyll-archives:
+  enabled:
+    - categories
+    - tags
+  permalinks:
+    year: '/blog/:year/'
+    month: '/blog/:year/:month/'
+    day: '/blog/:year/:month/:day/'
+    tag: '/blog/tag/:name/'
+    category: '/blog/category/:name/'
+
+scholar:
+  style: ieee
+  bibliography: '**/*.bib{,tex}'

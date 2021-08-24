@@ -12,9 +12,9 @@ toc: true
 date: 2021-06-11 15:58:00
 lead_image: /assets/images/posts/ml/clustering/103_0.jpg
 tags:
-  - TensorFlow
+  - ML
   - Clustering
-  - Machine Learning
+  - TensorFlow
 ---
 
 <span class="display-6">This</span>
@@ -104,7 +104,7 @@ def split_dataset(*tensors, test_size):
               for x in tensors), ())
 
 def standardize(x, center=True, scale=True, return_stats=False, axis=0):
-  """Standardize data based on its mean and standard-deviation [4].
+  """Standardize data based on its mean and standard-deviation.
   """
   u, s = None, None
   if center:
@@ -219,13 +219,13 @@ plt.tight_layout();
 
 ### Boston
 
-This dataset represents the association between physical and social attributes of properties in Boston and their respective evaluations (in thousands of dollars) [3].
+This dataset represents the association between physical and social attributes of properties in Boston and their respective evaluations (in thousands of dollars) {% cite harrison197881 %}.
 In here, we use the Boston dataset to illustrate an structured ML problem.
 
 It comprises 506 samples and 13 features.
 For the purposes of this work, we opted to exclude column `B` from our analysis.
 The information contained in this column is originally described as
-*"1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town"* [3].
+*"1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town"* {% cite harrison197881 %}.
 
 {% include posts/collapse-btn.html id="cv2" %}
 ```python
@@ -335,7 +335,7 @@ visualize_images(
 
 ### K-Means
 
-Our K-Means implementation was developed on top of the TensorFlow library, and was expressed in its primal optimization form [5].
+Our K-Means implementation was developed on top of the TensorFlow library, and was expressed in its primal optimization form {% cite wiki:K-means_clustering %}.
 
 Let:
 
@@ -547,18 +547,18 @@ In this section, we describe the metrics employed to evaluate K-Means, as well a
 
 * Within Cluster Sum of Squares (WCSS)
 
-  Computes the sum (macro average, really) of distances between each sample and its respective cluster's centroid [1].
+  Computes the sum (macro average, really) of distances between each sample and its respective cluster's centroid {% cite kriegel2017 %}.
   This function (K-Means primal form) is used as loss function in our opt function.
 
   Def: $Σ_i^k Σ_{x \in c_i} \|\|x - \bar{x}_{c_i}\|\|^2$
 
 * Between Cluster Sum of Squares (BCSS)
 
-  Computes the sum (macro average, really) distance between each sample $x\in c_i$ to the centroids of the clusters $c_k\in C\setminus c_i$ [1].
+  Computes the sum (macro average, really) distance between each sample $x\in c_i$ to the centroids of the clusters $c_k\in C\setminus c_i$ {% cite kriegel2017 %}.
 
   Def: $Σ_i^k Σ_{x \in X \setminus c_i} \|\|x - \bar{x}_{c_i}\|\|^2$
 
-* Silhouette [2]
+* Silhouette {% cite pedregosa2011 %}
 
   In our *silhouette* implementation, we used the one-hot encoding representation to select the corresponding samples of each cluster when computing avg. inter/intra cluster distance between samples $\{x_0, x_1, \ldots, x_n\}$ and clusters $\{c_0, c_1,\ldots, l_k\}$:
 
@@ -3076,8 +3076,4 @@ The results obtained here were very similar to the ones without the use of PCA. 
 
 ## References
 
-1. Kriegel, HP., Schubert, E. & Zimek, A. The (black) art of runtime evaluation: Are we comparing algorithms or implementations?. Knowl Inf Syst 52, 341–378 (2017). https://doi.org/10.1007/s10115-016-1004-2
-2. Pedregosa, F. et. al. Scikit-learn: Machine Learning in Python: *sklearn.metrics.silhouette_score*. Accessed at Apr. 12 2021. [link](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html)
-3. Harrison, D. and Rubinfeld, D.L. `Hedonic prices and the demand for clean air', J. Environ. Economics & Management, vol.5, 81-102, 1978. [link](https://www.cs.toronto.edu/~delve/data/boston/bostonDetail.html)
-4. Pedregosa, F. et. al. Scikit-learn: Machine Learning in Python: *Data Standardization*. Accessed at Apr. 15 2021. [link](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html#sklearn.preprocessing.StandardScaler)
-5. Wikipedia. k-means clustering. Accessed at Apr. 17 2021. [link](https://en.wikipedia.org/wiki/K-means_clustering)
+{% bibliography --file Machine-Learning/clustering %}

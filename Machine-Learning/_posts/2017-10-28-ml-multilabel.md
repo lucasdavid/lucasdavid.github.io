@@ -12,8 +12,8 @@ date: 2017-10-26 21:43:00
 lead_image: /assets/images/posts/ml/multilabel/dataset.png
 tags:
   - ML
-  - neural networks
-  - multi-label classification
+  - Classification
+  - Multi-label
 ---
 
 <span class="display-6">In</span>

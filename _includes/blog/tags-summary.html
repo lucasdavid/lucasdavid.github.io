@@ -1,8 +1,0 @@
-<div id="tags-summary">
-  <h5 class="mt-4">Sections</h5>
-  <ul class="mb-4 small list-unstyled">
-    {% for c in site.categories | sort %}
-    <li><a href="/blog/sections/{{ c[0] }}" class="link-secondary">{{ c[0] | replace: "-", " " }}</a></li>
-    {% endfor %}
-  </ul>
-</div>

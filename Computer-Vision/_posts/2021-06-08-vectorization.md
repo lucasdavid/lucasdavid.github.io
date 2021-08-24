@@ -15,8 +15,6 @@ lead_image: /assets/images/posts/cv/vectorization/cover.png
 tags:
   - Computer Vision
   - TensorFlow
-  - Numpy
-  - Python
 ---
 
 In this post, I thought I shared an assignment I have recently done for a Computer Vision class.

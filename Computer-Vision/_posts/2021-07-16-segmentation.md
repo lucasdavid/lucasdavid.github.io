@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Classic Segmentation
+title: Segmentation and Detection
 excerpt: "A comparison between edge-based segmentation, Felzenszwalb's method and morphological segmentation."
 first_p: |-
   Following the pattern of my previous posts,
@@ -15,9 +15,6 @@ lead_image: /assets/images/posts/cv/segmentation/cover.jpg
 tags:
   - Computer Vision
   - Segmentation
-  - Edge detection
-  - Morphology
-  - Blood cell segmentation
 ---
 
 <span class="display-6">Following</span> the pattern of my previous posts,
@@ -116,8 +113,8 @@ def plot_detection_boxes(p, ax=None, linewidth=1):
 ## Segmentation and Detection of Simple Geometric Shapes
 
 Using scikit-image, multiple segmentation strategies are available.
-For instance, one can extract borders and label the connected regions;
-or find central regions and apply label expansion methods such as Watershed.
+For instance, one can extract borders {% cite torre4767769 %} and label the connected regions;
+or find central regions and apply label expansion methods such as Watershed {% cite strahler1957quantitative %}.
 
 In the following sections, we exemplify two strategies (edge-based segmentation and the Felzenszwalb's method)
 over simple geometric shapes, illustrated in the figure below.
@@ -137,7 +134,8 @@ visualize([*images, *grays], image_files, cmap='gray');
 
 ### Edge-Based Segmentation
 
-Scikit-image implements many of the border extraction methods available in the literature, such as Sobel, Prewitt and Scharr. The can be trivially used as described below.
+Scikit-image implements many of the border extraction methods available in the literature, such as Sobel, Prewitt and Scharr {% cite torre4767769 %}.
+The can be trivially used as described below.
 
 ```python
 %%time
@@ -273,7 +271,7 @@ Object 6 has an intermediate size, while the remaining objects are small.
 
 ### Segmentation using Felzenszwalb's Method
 
-This segmentation method was described in "Efficient graph-based image segmentation", by Felzenszwalb et. al. [1]
+This segmentation method was described in "Efficient graph-based image segmentation", by Felzenszwalb et. al. {% cite felzenszwalb2004 %}
 It consists of representing the pixel-color intensity in an image as a grid and find $N$ partitions representing similarity.
 As the algorithm progresses, the closest partitions (with respect to a connection predicate) are iteratively merged.
 The final number of partitions is minimum (optimal) while still respecting the connection predicate.
@@ -666,10 +664,8 @@ histogram_objects(props)
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_46_0.png.jpg"
    figcaption="Figure 19. Histograms of areas detected in objects in each image." %}
 
-The segmentation results over samples in the BCCD dataset are shown in Fig. 18 and Fig. 19. Through inspection, we notice this strategy is robust against small grains in the image, and correctly segments red blood cells presenting light-shaded interiors. It also automatically ignores the background and does not interpret its regions as new objects --- through the usage of Otsu's method ---. Notwithstanding, long cell chains (which are smashed against each other) are incorrectly segmented as a single object, regardless of their color differences (an effect observed in the first, second, third, fifth, ninth and tenth images).
-
+The segmentation results over samples in the BCCD dataset are shown in Fig. 18 and Fig. 19. Through inspection, we notice this strategy is robust against small grains in the image, and correctly segments red blood cells presenting light-shaded interiors. It also automatically ignores the background and does not interpret its regions as new objects --- through the usage of Otsu's method {% cite otsu4310076 %} ---. Notwithstanding, long cell chains (which are smashed against each other) are incorrectly segmented as a single object, regardless of their color differences (an effect observed in the first, second, third, fifth, ninth and tenth images).
 
 ## References
 
-- Felzenszwalb, Pedro F., and Daniel P. Huttenlocher. "Efficient graph-based image segmentation." In: *International journal of computer vision (IJCV)* 59.2 (2004), pp. 167-181. [10.1023/B:VISI.0000022288.19776.77](https://link.springer.com/article/10.1023/B:VISI.0000022288.19776.77)
-- Otsu, Nobuyuki. "A threshold selection method from gray-level histograms." In: *IEEE transactions on systems, man, and cybernetics* 9.1 (1979), pp. 62-66. [a6m33bio/otsu](https://cw.fel.cvut.cz/b201/_media/courses/a6m33bio/otsu.pdf)
+{% bibliography --file Computer-Vision/segmentation --cited_in_order %}
