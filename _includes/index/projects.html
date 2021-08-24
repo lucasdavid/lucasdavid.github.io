@@ -19,7 +19,7 @@
     <h6>
       <a href="{{ r.url }}" class="text-decoration-none" target="_blank">{{r.name}}</a>
       <small class="keywords-container">
-        {% include posts/badges.html tags=r.keywords %}
+        {% include posts/badges.html tags=r.keywords link_prefix='#' %}
       </small>
     </h6>
     <p class="small mt-0 mb-1">{{r.description}}</p>

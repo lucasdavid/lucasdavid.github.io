@@ -1,3 +1,8 @@
-{% for t in include.tags %}
-<span class="badge bg-light text-secondary fw-light p-2">{{t}}</span>
-{% endfor %}
+<div class="badges-container">
+  {% for t in include.tags %}
+    <a href="{{ include.link_prefix }}{{ t | downcase | replace: ' ', '-' }}"
+       class="btn btn-light text-secondary text-decoration-none p-2"
+       style="font-size: 0.8em;"
+       >{{t}}</a>
+  {% endfor %}
+</div>

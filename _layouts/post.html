@@ -24,9 +24,7 @@ layout: default
         </div>
       
         <div class="mt-4 mb-4">
-          <small>
-            {% include posts/badges.html tags=page.tags %}
-          </small>
+          {% include posts/badges.html tags=page.tags link_prefix='/blog/tag/' %}
         </div>
         <div class="article-content">
           {{ content }}

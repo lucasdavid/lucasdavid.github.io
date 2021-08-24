@@ -16,10 +16,9 @@ date: 2017-10-26 21:43:00
 lead_image: /assets/images/posts/ml/nonlinear/cover.png
 tags:
   - ML
-  - logistic regression
-  - classification
-  - networks
-  - Portuguese language
+  - Classification
+  - Portuguese
+  - Scikit-Learn
 ---
 
 <span class="display-6">Felizmente,</span>
@@ -550,6 +549,5 @@ tivemos um bom resultado sobre **digits**. A verdade é que esse conjunto
 os problemas comumente encontrados em problemas reais, o que o simplificou
 à um ponto extremo.
 
-No próximo [post](/ml-convolution/), nós vamos ver alguns problemas mais
-complicados e como redes neurais (profundas) podem ser utilizadas
-para resolvê-los.
+No próximo [post]({% post_url Intro-to-Machine-Learning/2017-12-24-ml-convolution %}), nós vamos ver
+alguns problemas mais complicados e como redes neurais (profundas) podem ser utilizadas para resolvê-los.

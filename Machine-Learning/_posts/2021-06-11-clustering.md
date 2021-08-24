@@ -12,9 +12,9 @@ toc: true
 date: 2021-06-11 15:58:00
 lead_image: /assets/images/posts/ml/clustering/103_0.jpg
 tags:
-  - TensorFlow
+  - ML
   - Clustering
-  - Machine Learning
+  - TensorFlow
 ---
 
 <span class="display-6">This</span>

@@ -15,9 +15,6 @@ lead_image: /assets/images/posts/cv/segmentation/cover.jpg
 tags:
   - Computer Vision
   - Segmentation
-  - Edge detection
-  - Morphology
-  - Blood cell segmentation
 ---
 
 <span class="display-6">Following</span> the pattern of my previous posts,

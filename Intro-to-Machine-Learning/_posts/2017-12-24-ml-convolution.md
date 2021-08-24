@@ -19,10 +19,8 @@ color: purple darken-3
 lead_image: /assets/images/posts/ml/deep/conv_outputs.jpg
 tags:
   - ML
-  - classification
-  - computer vision
-  - convolutional networks
-  - Portuguese language
+  - Computer Vision
+  - Portuguese
 ---
 
 <span class="display-6">Na</span>

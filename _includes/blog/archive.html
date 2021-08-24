@@ -1,0 +1,18 @@
+<div>
+  <div id="categories-summary">
+    <h5 class="mt-4">Categories</h5>
+    <p class="small lh-lg">
+      {% for c in site.categories | sort %}
+      <a href="/blog/category/{{ c[0] | downcase | replace: ' ', '-' }}" type="button" role="button" class="badge bg-light text-dark">{{ c[0] | replace: '-', ' ' }}</a>
+      {% endfor %}
+    </p>
+  </div>
+  <div id="tags-summary">
+    <h5 class="mt-4">Tags</h5>
+    <p class="small lh-lg">
+      {% for c in site.tags | sort %}
+      <a href="/blog/tag/{{ c[0] | downcase | replace: ' ', '-' }}" type="button" role="button" class="badge bg-light text-dark">{{ c[0] | replace: '-', ' ' }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</div>

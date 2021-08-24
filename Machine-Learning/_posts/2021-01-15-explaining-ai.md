@@ -13,9 +13,9 @@ first_p: |-
   I'll show two related methods this post.
 tags:
   - ML
-  - neural networks
-  - Explaining
-  - SmoothGrad
+  - AI Explaining
+  - Scikit-Learn
+  - TensorFlow
 ---
 
 <span class="display-6">While</span>
