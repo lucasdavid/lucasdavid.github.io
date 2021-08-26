@@ -51,6 +51,7 @@ plugins:
   - jekyll-compress-images
   - jekyll-archives
   - jekyll-toc
+  - jekyll-scholar
 
 exclude:
   - Gemfile
@@ -68,8 +69,8 @@ compress_images:
     verbose: false
 
 toc:
-  min_level: 1 # default: 1
-  max_level: 4 # default: 6
+  min_level: 1
+  max_level: 4
 
 jekyll-archives:
   enabled:
@@ -81,3 +82,7 @@ jekyll-archives:
     day: '/blog/:year/:month/:day/'
     tag: '/blog/tag/:name/'
     category: '/blog/category/:name/'
+
+scholar:
+  style: ieee
+  bibliography: '**/*.bib{,tex}'

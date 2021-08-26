@@ -11,6 +11,5 @@ group :jekyll_plugins do
   gem 'jekyll-compress-images'
   gem 'jekyll-archives'
   gem 'jekyll-toc'
-
-  # gem 'jekyll-scholar'
+  gem 'jekyll-scholar'
 end

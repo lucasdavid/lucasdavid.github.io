@@ -34,6 +34,10 @@
     clear: both;
 }
 
+:target {
+  scroll-margin-top: 80px;
+}
+
 body {
   background: white; // #f8f9fa;
 }
@@ -297,20 +301,24 @@ figure > figcaption {
   padding-bottom:0;
   position:relative;
   display:block
- }
+}
  .curve-container__curve.curve-one path.plain {
   fill:#f4f5f7
- }
- .curve-container__curve.curve-two path.plain {
+}
+.curve-container__curve.curve-two path.plain {
   fill:#0052cc
- }
- .curve-container__curve.curve-three path.plain {
+}
+.curve-container__curve.curve-three path.plain {
   fill:#fff
- }
- .curve-container__curve.curve-four path.plain {
+}
+.curve-container__curve.curve-four path.plain {
   fill:#344563
- }
- .curve-container__curve.curve-five path.plain {
+}
+.curve-container__curve.curve-five path.plain {
   fill:#deebff
- }
- 
+}
+
+ol.bibliography {
+  list-style: none;
+  padding-left: 0;
+}
