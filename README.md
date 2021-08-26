@@ -4,30 +4,36 @@ Code for personal web page and blog.
 
 ## Development
 
-Plugins used:
-```rb
-group :jekyll_plugins do
-   gem 'jekyll-sitemap'
-   gem 'jekyll-paginate'
-   gem 'jekyll-feed'
-   gem 'jekyll-github-metadata'
-   gem 'jekyll-compress-images'
-   gem 'jekyll-archives'
-   gem 'jekyll-toc'
-   gem 'jekyll-scholar'
-end
+Jekyll plugins used:
+```
+jekyll-sitemap
+jekyll-paginate
+jekyll-feed
+jekyll-github-metadata
+jekyll-compress-images
+jekyll-archives
+jekyll-toc
+jekyll-scholar
+```
+
+JS/CSS used:
+```
+Bootstrap
+AnchorJS
+Bootstrap Icons
+Google Fonts
 ```
 
 Building with docker:
 ```
 docker build -t ldavid/lucasdavid.github.io .
-docker run -v $(pwd):/site -p 4000 \
-       ldavid/lucasdavid.github.io \
-       bundle exec jekyll serve \
-       -H 0.0.0.0 -P 4000 \
-       --drafts \
-       --force_polling
+docker run --rm -p 4000:4000 -p 35729:35729 -v $(pwd):/site ldavid/lucasdavid.github.io
 ```
+
+Note: changes in gems require docker rebuild.
+
+## Deployment
 
 Deployment works through GitHub actions,
 and builds in the gh-pages branch.
+The [jekyll.yml](.github/workflows/jekyll.yml) workflow takes care of this.
