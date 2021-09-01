@@ -105,7 +105,7 @@ For example, path-finding is an important problem for movement optimization syst
 {% include figure.html
    src="https://upload.wikimedia.org/wikipedia/commons/2/23/Dijkstras_progress_animation.gif"
    alt="Gif illustrating Dijkstra's algorithm behavior around an obstacle."
-   figcaption="Figure 1. Dijkstra's algorithm path-finding around an obstacle. Available at <a href=\"https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm\" target=\"_blank\">wikipedia</a>."
+   caption="Dijkstra's algorithm path-finding around an obstacle. Available at <a href=\"https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm\" target=\"_blank\">wikipedia</a>."
    classed="rounded mx-auto d-block" %}
 
 Similarly, one could "solve" board games such as Othelo or Chess by describing valid states of the environment, the valid moves available and an utility function associated with the probability could. Search algorithms --- such as Alpha-Beta Prunning and Monte-Carlo Tree Search --- can then be employed to search for the best utility state (and the path that will take us there).
@@ -114,7 +114,7 @@ Similarly, one could "solve" board games such as Othelo or Chess by describing v
 {% include figure.html
    src="https://upload.wikimedia.org/wikipedia/commons/2/21/MCTS-steps.svg"
    alt="An illustration of the Monte Carlo tree search algorithm."
-   figcaption="Figure 2. An illustration of the Monte Carlo tree search algorithm searching for the state of best utility for the current player. Available at <a href=\"https://en.wikipedia.org/wiki/Monte_Carlo_tree_search\" target=\"_blank\">wikipedia</a>."
+   caption="An illustration of the Monte Carlo tree search algorithm searching for the state of best utility for the current player. Available at <a href=\"https://en.wikipedia.org/wiki/Monte_Carlo_tree_search\" target=\"_blank\">wikipedia</a>."
    classed="rounded mx-auto d-block" %}
 
 These systems are easy to explain precisely because of the way they were built: they are iterative, rational and direct by nature. If the environment and the actions can be drawn or represented in some form, then we can simply draw the sequence of decisions that comprise the reasioning of the model. In the path-finding example above, we can see exactly which sections of the map are being scanned, until the shortest-path is found between the source the the green dot. As for the MCTS, we can guarantee the solution otimality (with respect to the local search space expanded) by simple inspection.
@@ -134,8 +134,8 @@ x.head().round(2)
 
 <div class="table-responsive">
 <table class="dataframe table table-hover">
-  <thead class="table-dark">
-    <tr style="text-align: right;">
+  <thead>
+    <tr>
       <th></th>
       <th>mean radius</th>
       <th>mean texture</th>
@@ -372,7 +372,7 @@ plot_tree_fullscreen(decision_tree)
 
 {% include figure.html
    src="/assets/images/posts/ml/explaining/explaining_scikit_learn_11_0.jpg"
-   figcaption="Figure 3. The decision tree model trained over the Breast Cancer Dataset." %}
+   caption="The decision tree model trained over the Breast Cancer Dataset." %}
 
 
 And so are Random Forests, which although much larger and difficult to draw, can be just as easily summarized.
@@ -385,7 +385,7 @@ rf = RandomForestClassifier().fit(x, y)
 {% include figure.html
    src="https://upload.wikimedia.org/wikipedia/commons/7/76/Random_forest_diagram_complete.png"
    alt="Diagram of a random forest model, combining its trees with the majority-voting strategy."
-   figcaption="Figure 4. Diagram of a random forest model, combining its trees with the majority-voting strategy. Available at <a href=\"whttps://en.wikipedia.org/wiki/Random_forest\" target=\"_blank\">wikipedia</a>." %}
+   caption="Diagram of a random forest model, combining its trees with the majority-voting strategy. Available at <a href=\"whttps://en.wikipedia.org/wiki/Random_forest\" target=\"_blank\">wikipedia</a>." %}
 
 
 One could check the rate in which each feature appears in the forest's trees. If a feature's occurrence is high, then that
@@ -407,7 +407,7 @@ plot_feature_importances(rf.feature_importances_)
 
 {% include figure.html
    src="/assets/images/posts/ml/explaining/explaining_scikit_learn_14_0.jpg"
-   figcaption="Figure 5. Importance per feature for a Random Forest model trained over the Breast Cancer Dataset." %}
+   caption="Importance per feature for a Random Forest model trained over the Breast Cancer Dataset." %}
 
 
 ## Explaining Linear Geometric Models
@@ -443,7 +443,7 @@ plot_feature_importances(w.ravel())
 
 {% include figure.html
    src="/assets/images/posts/ml/explaining/explaining_scikit_learn_15_0.jpg"
-   figcaption="Figure 6. Importance per feature for a Logistic Regression model trained over the Breast Cancer Dataset." %}
+   caption="Importance per feature for a Logistic Regression model trained over the Breast Cancer Dataset." %}
 
 This can also be acomplished when reducing the set with Principal Component Analysis, considering the whole pipeline can be
 seen as a sequence of matrix multiplications, which is an associative operation:
@@ -484,7 +484,7 @@ Energy retained:     99.11%
 
 {% include figure.html
    src="/assets/images/posts/ml/explaining/explaining_scikit_learn_19_0.jpg"
-   figcaption="Figure 6. Importance per feature for a Logistic Regression model trained over the Breast Cancer Dataset." %}
+   caption="Importance per feature for a Logistic Regression model trained over the Breast Cancer Dataset." %}
 
 
 ## Explaining Deep Convolutional Networks
@@ -498,7 +498,7 @@ Differently from search algorithms, connectionist models are complicated in natu
 {% include figure.html
    src="/assets/images/posts/ml/deep/inception.png"
    alt="Inception Architecture. A well-established network architecture for convolutional models."
-   figcaption="Figure 7. Inception Architecture. A well-established network architecture for convolutional models."
+   caption="Inception Architecture. A well-established network architecture for convolutional models."
    classed="rounded mx-auto d-block" %}
 
 Each blue box represents a set of convolutions between an 3D input signal and multiple kernels and the application of a non-linear function (relu, most likely).
@@ -509,7 +509,7 @@ Many solutions were studied over the last years. Some of them involved patching-
 {% include figure.html
    src="/assets/images/posts/ml/explaining/zeilerECCV2014-fig6.jpg"
    alt="Effect of image occlusion in the classifier's answer (columns (a) and (d))."
-   figcaption="Figure 8. Effect of image occlusion in the classifier's answer (columns <i>a</i> and <i>d</i>). Available at: <a href=\"https://arxiv.org/pdf/1908.04351.pdf\">arxiv.org/1908.04351</a>."
+   caption="Effect of image occlusion in the classifier's answer (columns <i>a</i> and <i>d</i>). Available at: <a href=\"https://arxiv.org/pdf/1908.04351.pdf\">arxiv.org/1908.04351</a>."
    classed="rounded mx-auto d-block" %}
 
 Finally, the networks could be verified by checking the heatmaps. If a model were to make right predictions, but focusing on unrelated regions, then we would know that some artificial information was being injected into training, overfitting the model.
@@ -563,7 +563,7 @@ images, labels = next(iter(images_set.take(1)))
 {% include figure.html
    src="/assets/images/posts/ml/explaining/inputs.jpg"
    alt="Input images for our model. Common instances of classes present in the imagenet dataset (dogs, bears, airplanes)."
-   figcaption="Figure 9. Input images for our model. Common instances of classes present in the imagenet dataset (dogs, bears, airplanes)."
+   caption="Input images for our model. Common instances of classes present in the imagenet dataset (dogs, bears, airplanes)."
    classed="rounded mx-auto d-block" %}
 
 In a real case, you would have your own trained network. However, considering all of these images belong to a class in the imagenet dataset, I'll just go ahead and
@@ -739,7 +739,7 @@ plt.tight_layout();
 {% include figure.html
    src="/assets/images/posts/ml/explaining/vanilla-grads.jpg"
    alt="Input images optimized to maximize each unit described in UNIT_NAMES."
-   figcaption="Figure 10. Input images optimized to maximize each unit described in <code>UNIT_NAMES</code>."  %}
+   caption="Input images optimized to maximize each unit described in <code>UNIT_NAMES</code>."  %}
 
 I **think** I can see dumbells in the first image and dots in the dalmatian image, but
 I'm not sure if this is just my brain trying to look for evidence of correctness.
@@ -770,7 +770,7 @@ def visualize(unit):
 {% include figure.html
    src="/assets/images/posts/ml/explaining/vanilla-grads-aug.jpg"
    alt="Input images optimized to maximize each unit described in UNIT_NAMES using augmentation."
-   figcaption="Figure 11. Input images optimized to maximize each unit described in <code>UNIT_NAMES</code> using augmentation (rotation and translation)."  %}
+   caption="Input images optimized to maximize each unit described in <code>UNIT_NAMES</code> using augmentation (rotation and translation)."  %}
 
 It looks a lot better, I'd say. We see circles in *dumbell*, clear dark spots in *dalmatian* green in the *bell pepper* and *lemon* and squares in *computer keyboard*.
 
@@ -832,7 +832,7 @@ plot_images_and_salency_maps(as_image_vector(images), s.numpy(), y.numpy())
 {% include figure.html
    src="/assets/images/posts/ml/explaining/vanilla-saliency.jpg"
    alt="Input images and saliency activation maps, considering their most activating units."
-   figcaption="Figure 11. Input images and saliency activation maps, considering their most activating units." %}
+   caption="Input images and saliency activation maps, considering their most activating units." %}
 
 So the network clearly points out for the right regions in the dalmatian, bear and the golden retriever. The other ones seem a little blurred.
 
@@ -873,7 +873,7 @@ plot_images_and_salency_maps(as_image_vector(images), s.numpy(), y.numpy())
 {% include figure.html
    src="/assets/images/posts/ml/explaining/smoothgrad-saliency.jpg"
    alt="Input images and saliency activation maps, considering their most activating units."
-   figcaption="Figure 13. Input images and saliency activation maps, considering their most activating units. Obtained using the SmoothGrad method."  %}
+   caption="Input images and saliency activation maps, considering their most activating units. Obtained using the SmoothGrad method."  %}
 
 Much better, isn't it?
 

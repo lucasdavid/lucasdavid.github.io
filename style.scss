@@ -35,11 +35,11 @@
 }
 
 :target {
-  scroll-margin-top: 80px;
+  scroll-margin-top: $navbar-height + 20px;
 }
 
 body {
-  background: white; // #f8f9fa;
+  background: white;
 }
 
 a {
@@ -75,10 +75,9 @@ h1, h2, h3, h4 {
   font-weight: 300;
 }
 
-.text-gray {
-  color: $darkGray;
+.navbar {
+  min-height: $navbar-height;
 }
-
 
 .navbar-animated {
   transition: all .3s;
@@ -124,12 +123,16 @@ h1, h2, h3, h4 {
     font-style: italic;
   }
 
+  p {
+    text-align: justify;
+    hyphens: auto;
+  }
+
   .comments {
     margin-top: 10px;
   }
-}
 
-.post-image-preview {
+  counter-reset: figure;
 }
 
 .gist {
@@ -140,10 +143,6 @@ h1, h2, h3, h4 {
 .gist .blob-wrapper.data {
    max-height:400px;
    overflow:auto;
-}
-
-.entry {
-  text-align: justify;
 }
 
 .thumbnail {
@@ -179,12 +178,6 @@ hr {
   margin-bottom: 5%;
 }
 
-.image-container {
-}
-.image-container > img {
-  height:150px;
-}
-
 .btn-floating-up {
   margin-top:-32px;
 }
@@ -203,31 +196,22 @@ hr {
   border-bottom: 1px solid #eee;
 }
 
-.bg-purple {
-  background-color: $purple;
-}
-
-.bg-black {
-  background-color: black;
-}
+.bg-purple { background-color: $purple; }
+.bg-black { background-color: black; }
 .bg-gray { background-color: $lightGray; }
-
-.text-gray {
-  color: #ccc;
-}
-
-.bg-white {
-  background-color: white;
-}
-
+.bg-white { background-color: white; }
+.text-gray { color: $darkGray; }
 //
 // Figures
 //
-figure > figcaption {
+.figure-caption {
   font-size: .8em;
-  color: #888;
-}
 
+  .title::before {
+    counter-increment: figure;
+    content: "Figure " counter(figure) ". ";
+  }
+}
 
 .carousel-control-prev, .carousel-control-next {
   background: none;
@@ -239,6 +223,15 @@ figure > figcaption {
   .w-xl-130 {
     width: 130%;
     margin-left: -15%;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .w-xl-150 {
+    width: 150%;
+    margin-left: -25%;
 
     img {
       width: 100%;
@@ -318,7 +311,26 @@ figure > figcaption {
   fill:#deebff
 }
 
+// tables
+.table > thead > tr > th:first-child {
+  text-align: left;
+}
+
+/* Turn off the numbered items for the IEEE style list */
 ol.bibliography {
   list-style: none;
-  padding-left: 0;
+  font-size: .8em;
+}
+
+ol.bibliography li {}
+ol.bibliography li + li {
+  // margin-bottom: .5em;
+}
+ol.bibliography { counter-reset: item }
+ol.bibliography li:before { 
+    content: "[" counter(item) "] "; 
+    counter-increment: item; 
+    width:3em;
+    position:absolute;
+    text-indent:-2em;
 }

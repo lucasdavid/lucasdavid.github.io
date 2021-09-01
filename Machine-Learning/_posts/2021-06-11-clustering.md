@@ -215,7 +215,7 @@ plt.tight_layout();
 {% include figure.html
    src="/assets/images/posts/ml/clustering/14_0.jpg"
    alt="The Cluster.dat Dataset: (a) the features in their original value range, and (b) features were scaled in order to have 0 mean and standard deviation 1."
-   figcaption="Figure 1: The Cluster.dat Dataset: (a) the features in their original value range, and (b) features were scaled in order to have mean 0 and standard deviation 1." %}
+   caption="The Cluster.dat Dataset: (a) the features in their original value range, and (b) features were scaled in order to have mean 0 and standard deviation 1." %}
 
 ### Boston
 
@@ -268,7 +268,7 @@ plt.tight_layout();
 {% include figure.html
    src="/assets/images/posts/ml/clustering/18_0.jpg"
    alt="The Boston Dataset: (a) the features in their original value range, and (b) features were scaled in order to have mean 0 and standard deviation 1."
-   figcaption="Figure 2: The Boston Dataset: (a) the features in their original value range, and (b) features were scaled in order to have mean 0 and standard deviation 1." %}
+   caption="The Boston Dataset: (a) the features in their original value range, and (b) features were scaled in order to have mean 0 and standard deviation 1." %}
 
 ### TF-Flowers
 
@@ -328,7 +328,7 @@ visualize_images(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/23_0.jpg"
    alt="The TF-Flowers Dataset."
-   figcaption="Figure 3: The TF-Flowers Dataset." %}
+   caption="The TF-Flowers Dataset." %}
     
 
 ## Part-1: Clustering Methods
@@ -769,8 +769,7 @@ plt.tight_layout();
     
 {% include figure.html
    src="/assets/images/posts/ml/clustering/35_0.jpg"
-   alt="Effect of each initialization procedure over the initial state of the model."
-   figcaption="Figure 4: Effect of each initialization procedure over the initial state of the model." %}
+   caption="Effect of initialization procedure over the initial state of the model." %}
 
 The `normal_clusters` initialization procedure considers the mean and standard deviation of the training set's distribution, which means points drawn from this procedure will belong to the set's distribution and assume reasonable values in each feature.
 For datasets with complex shapes (with holes close to its features' average values), this method might create unreasonable clusters, which lie on empty sections of the dimensional space. In the example above, we see clusters lying in between the data masses.
@@ -826,10 +825,8 @@ del ctr, cte, c0, c1, p0_train, p0_test, p1_train, p1_test
 
 {% include figure.html
    src="/assets/images/posts/ml/clustering/37_0.jpg"
-   alt="Effect of data standardization over K-Means's initial configuration."
-   figcaption="Figure 5: Effect of data standardization over K-Means's initial configuration." %}
-    
-Without standardization, samples are not correctly aggregated because of the different proportions of each axis.
+   title="Effect of data standardization over K-Means's initial configuration."
+   caption="Without standardization, samples are not correctly aggregated because of the different proportions of each axis." %}
 
 In the example above, the unstandardized feature $y$ ranged within the interval $[0, 30]$, which profoundly affected the $l^2$ distance.
 Conversely, variations in feature $x\in [250, 3750]$ caused a smaller impact on clustering configuration.
@@ -885,8 +882,8 @@ report.groupby('k').mean().round(2).T
 
 <div>
   <div class="table-responsive"><table class="dataframe table table-hover">
-    <thead class="table-dark">
-      <tr style="text-align: right;">
+    <thead>
+      <tr>
         <th>k</th>
         <th>2</th>
         <th>3</th>
@@ -990,8 +987,9 @@ plt.tight_layout();
 
 {% include figure.html
    src="/assets/images/posts/ml/clustering/43_0.jpg"
-   alt="Metrics over number of clusters k."
-   figcaption="Figure 6: Metrics over number of clusters k." %}
+   title="Clustering metrics for each choice of number of clusters k, considering the Cluster.dat dataset."
+   caption="The highest decrease in WCSS is observed when using exactly 3 clusters, hence this is the optimal k according to the Elbow technique. Maximum Average Sihouette is also observed when $k=3$."
+   classed="w-xl-130" %}
 
 
 ##### Training
@@ -1088,7 +1086,7 @@ visualize_clusters(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/49_0.jpg"
    alt="K-Means Clustering over Cluster.dat Dataset."
-   figcaption="Figure 7: K-Means Clustering over Cluster.dat Dataset." %}
+   caption="K-Means Clustering over Cluster.dat Dataset." %}
 
 
 ##### Discussions
@@ -1107,7 +1105,6 @@ Further inspection --- and information around the problem domain --- is needed i
 #### Application over The Boston Dataset
 
 ##### Searching K
-
 
 ```python
 %%time
@@ -1148,8 +1145,8 @@ report.groupby('k').mean().round(2).T
 
 <div>
 <div class="table-responsive"><table class="dataframe table table-hover">
-  <thead class="table-dark">
-    <tr style="text-align: right;">
+  <thead>
+    <tr>
       <th>k</th>
       <th>2</th>
       <th>3</th>
@@ -1253,8 +1250,9 @@ plt.tight_layout();
 
 {% include figure.html
    src="/assets/images/posts/ml/clustering/55_0.jpg"
-   alt="Metrics over number of clusters k."
-   figcaption="Figure 8: Metrics over number of clusters k." %}
+   title="Clustering metrics for each choice of number of clusters k, considering the Boston dataset."
+   caption='The WCSS graph does not show any "elbow". The highest Silhouette occurs for 2 clusters.'
+   classed="w-xl-130" %}
 
 
 ##### Training
@@ -1366,7 +1364,7 @@ visualize_clusters(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/61_0.jpg"
    alt="K-Means clustering over Boston Dataset."
-   figcaption="Figure 9: K-Means clustering over Boston Dataset." %}
+   caption="K-Means clustering over Boston Dataset." %}
     
 
 ##### Discussions
@@ -1437,7 +1435,8 @@ visualize_images(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/69_0.jpg"
    alt="Initial color book."
-   figcaption="Figure 10: Initial color book." %}
+   caption="Initial color book."
+   classed="w0" %}
 
 
 ```python
@@ -1448,8 +1447,7 @@ try: clusters = kmeans_fit(
        clusters,
        steps=Config.tf_flowers.steps,
        tol=Config.tf_flowers.tol,
-       verbose=2
-      )
+       verbose=2)
 except KeyboardInterrupt: print('\ninterrupted')
 else: print('done')
 
@@ -1565,7 +1563,8 @@ visualize_images(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/71_0.jpg"
    alt="Optimized color book"
-   figcaption="Figure 11: Optimized color book." %}
+   caption="Optimized color book."
+   classed="w0" %}
 
 ##### Transforming Images
 {% include posts/collapse-btn.html id="cv12" %}
@@ -1991,13 +1990,12 @@ Wall time: 39 s
 ```
 
 ```python
-report
+report.set_index('config_id')
 ```
 <div>
 <div class="table-responsive"><table class="dataframe table table-hover">
-  <thead class="table-dark">
-    <tr style="text-align: right;">
-      <th></th>
+  <thead>
+    <tr>
       <th>config_id</th>
       <th>params</th>
       <th>Loss</th>
@@ -2012,7 +2010,6 @@ report
   <tbody>
     <tr>
       <th>0</th>
-      <td>0</td>
       <td>{'linkage': 'average', 'max_e': 0.4, 'metric':...</td>
       <td>123.149075</td>
       <td>0.238661</td>
@@ -2024,7 +2021,6 @@ report
     </tr>
     <tr>
       <th>1</th>
-      <td>1</td>
       <td>{'linkage': 'average', 'max_e': 0.5, 'metric':...</td>
       <td>172.522433</td>
       <td>0.334346</td>
@@ -2036,7 +2032,6 @@ report
     </tr>
     <tr>
       <th>2</th>
-      <td>2</td>
       <td>{'linkage': 'average', 'max_e': 0.6, 'metric':...</td>
       <td>188.875987</td>
       <td>0.366039</td>
@@ -2048,7 +2043,6 @@ report
     </tr>
     <tr>
       <th>3</th>
-      <td>3</td>
       <td>{'linkage': 'average', 'max_e': 0.7, 'metric':...</td>
       <td>210.212608</td>
       <td>0.407389</td>
@@ -2060,7 +2054,6 @@ report
     </tr>
     <tr>
       <th>4</th>
-      <td>4</td>
       <td>{'linkage': 'average', 'max_e': 0.8, 'metric':...</td>
       <td>271.661438</td>
       <td>0.526476</td>
@@ -2072,7 +2065,6 @@ report
     </tr>
     <tr>
       <th>5</th>
-      <td>5</td>
       <td>{'linkage': 'average', 'max_e': 0.9, 'metric':...</td>
       <td>333.998196</td>
       <td>0.647283</td>
@@ -2084,7 +2076,6 @@ report
     </tr>
     <tr>
       <th>6</th>
-      <td>6</td>
       <td>{'linkage': 'average', 'max_e': 1.0, 'metric':...</td>
       <td>333.998196</td>
       <td>0.647283</td>
@@ -2170,7 +2161,7 @@ visualize_clusters(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/91_0.jpg"
    alt="Hierarchical Clustering over Cluster.dat Dataset."
-   figcaption="Figure 13: Hierarchical Clustering over Cluster.dat Dataset." %}
+   caption="Hierarchical Clustering over Cluster.dat Dataset." %}
     
 
 
@@ -2216,14 +2207,13 @@ CPU times: user 18.4 s, sys: 130 ms, total: 18.5 s
 Wall time: 18.4 s
 ```
 ```python
-report
+report.set_index('config_id')
 ```
 
 <div>
 <div class="table-responsive"><table class="dataframe table table-hover">
-  <thead class="table-dark">
-    <tr style="text-align: right;">
-      <th></th>
+  <thead>
+    <tr>
       <th>config_id</th>
       <th>params</th>
       <th>Loss</th>
@@ -2238,7 +2228,6 @@ report
   <tbody>
     <tr>
       <th>0</th>
-      <td>0</td>
       <td>{'linkage': 'average', 'max_e': 3.0, 'metric':...</td>
       <td>845.158726</td>
       <td>1.853418</td>
@@ -2250,7 +2239,6 @@ report
     </tr>
     <tr>
       <th>1</th>
-      <td>1</td>
       <td>{'linkage': 'average', 'max_e': 4.0, 'metric':...</td>
       <td>1117.561158</td>
       <td>2.450792</td>
@@ -2262,7 +2250,6 @@ report
     </tr>
     <tr>
       <th>2</th>
-      <td>2</td>
       <td>{'linkage': 'average', 'max_e': 5.0, 'metric':...</td>
       <td>1462.803239</td>
       <td>3.207902</td>
@@ -2274,7 +2261,6 @@ report
     </tr>
     <tr>
       <th>3</th>
-      <td>3</td>
       <td>{'linkage': 'average', 'max_e': 6.0, 'metric':...</td>
       <td>1947.314461</td>
       <td>4.270426</td>
@@ -2378,8 +2364,7 @@ visualize_clusters(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/101_0.jpg"
    alt="Hierarchical Clustering over Boston Dataset."
-   figcaption="Figure 14: Hierarchical Clustering over Boston Dataset." %}
-    
+   caption="Hierarchical Clustering over Boston Dataset." %}
 
 
 ##### Discussions
@@ -2444,9 +2429,7 @@ plt.tight_layout()
 {% include figure.html
    src="/assets/images/posts/ml/clustering/103_0.jpg"
    alt="Effect of the different linkages over the clustering's final configuration."
-   figcaption="Figure 15: Effect of the different linkages over the clustering's final configuration." %}
-    
-
+   caption="Effect of the different linkages over the clustering's final configuration." %}
 
 Single linkage is capable of finding non-linear relationships, where clusters are associated by their closest link, so non-spherical shaped clusters might appear (such as the pink one in the first plot). A downside of this linkage is the possible construction of unbalance clusters when data density varies across the space.
 This behavior can be observed in the Boston Dataset, were samples in the left-center are closely positioned, in opposite of the few samples on the right-bottom.
@@ -2503,7 +2486,7 @@ del e, b_cov_train, b_cov_test, b_cor_train, b_cor_test
 {% include figure.html
    src="/assets/images/posts/ml/clustering/107_0.jpg"
    alt="Effect of data standardization over Eigen Decomposition."
-   figcaption="Figure 16: Effect of data standardization over Eigen Decomposition." %}
+   caption="Effect of data standardization over Eigen Decomposition." %}
 
 
 ### K-Means
@@ -2563,8 +2546,8 @@ report.groupby('energy').mean().round(2).T
 
 <div>
 <div class="table-responsive"><table class="dataframe table table-hover">
-  <thead class="table-dark">
-    <tr style="text-align: right;">
+  <thead>
+    <tr>
       <th>energy</th>
       <th>0.500</th>
       <th>0.850</th>
@@ -2649,8 +2632,8 @@ report.groupby('k').mean().round(2).T
 ```
 <div>
 <div class="table-responsive"><table class="dataframe table table-hover">
-  <thead class="table-dark">
-    <tr style="text-align: right;">
+  <thead>
+    <tr>
       <th>k</th>
       <th>2</th>
       <th>3</th>
@@ -2766,8 +2749,9 @@ plt.tight_layout();
     
 {% include figure.html
    src="/assets/images/posts/ml/clustering/116_0.jpg"
-   alt="Metrics over number of clusters k."
-   figcaption="Figure 17: Metrics over number of clusters k." %}
+   title="Clustering metrics for each choice of number of clusters k, considering the Boston dataset reduced with PCA."
+   caption="Results are quite similar to the ones obtained without dimensionality reduction."
+   classed="w-xl-130" %}
 
 
 ##### Training
@@ -2872,7 +2856,7 @@ visualize_clusters(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/122_0.jpg"
    alt="K-Means clustering over the Boston dataset after dimensionalty reduction was performed."
-   figcaption="Figure 18: K-Means clustering over the Boston dataset after dimensionalty reduction was performed." %}
+   caption="K-Means clustering over the Boston dataset after dimensionalty reduction was performed." %}
 
 ##### Discussions
 We do not see the curse of dimensionality in this set. In fact, as this set has been highly curated, all of its columns represent complementary information and it is impossible to reduce dimensionality without loosing some residual information.
@@ -2911,13 +2895,12 @@ CPU times: user 18.8 s, sys: 144 ms, total: 18.9 s
 Wall time: 18.9 s
 ```
 ```python
-report
+report.set_index('config_id')
 ```
 <div>
 <div class="table-responsive"><table class="dataframe table table-hover">
-  <thead class="table-dark">
-    <tr style="text-align: right;">
-      <th></th>
+  <thead>
+    <tr>
       <th>config_id</th>
       <th>params</th>
       <th>Loss</th>
@@ -2932,7 +2915,6 @@ report
   <tbody>
     <tr>
       <th>0</th>
-      <td>0</td>
       <td>{'linkage': 'average', 'max_e': 3.0, 'metric':...</td>
       <td>885.413789</td>
       <td>1.941697</td>
@@ -2944,7 +2926,6 @@ report
     </tr>
     <tr>
       <th>1</th>
-      <td>1</td>
       <td>{'linkage': 'average', 'max_e': 4.0, 'metric':...</td>
       <td>1148.176471</td>
       <td>2.517931</td>
@@ -2956,7 +2937,6 @@ report
     </tr>
     <tr>
       <th>2</th>
-      <td>2</td>
       <td>{'linkage': 'average', 'max_e': 5.0, 'metric':...</td>
       <td>1453.954900</td>
       <td>3.188498</td>
@@ -2968,7 +2948,6 @@ report
     </tr>
     <tr>
       <th>3</th>
-      <td>3</td>
       <td>{'linkage': 'average', 'max_e': 6.0, 'metric':...</td>
       <td>1940.056698</td>
       <td>4.254510</td>
@@ -3065,7 +3044,7 @@ visualize_clusters(
 {% include figure.html
    src="/assets/images/posts/ml/clustering/133_0.jpg"
    alt="Hierarchical clustering over the Boston dataset after dimensionality reduction was performed."
-   figcaption="Figure 19: Hierarchical clustering over the Boston dataset after dimensionality reduction was performed." %}
+   caption="Hierarchical clustering over the Boston dataset after dimensionality reduction was performed." %}
     
 
 ##### Discussions

@@ -1,0 +1,9 @@
+<div id="{{include.type }}-summary">
+  <h6 class="mt-4">{{include.title}}</h6>
+  <p>
+    {% for c in include.tags | sort %}
+    <a href="/blog/{{include.type}}/{{ c[0] | downcase | replace: ' ', '-' }}" type="button" role="button"
+       class="btn btn-outline-secondary text-decoration-none p-0 ps-1 pe-1 fw-bold {% if page.type == include.type and page.title == c[0] %}active{% endif %}"
+       style="font-size:0.8em">{{ c[0] | replace: '-', ' ' }}</a>
+    {% endfor %}
+</div>

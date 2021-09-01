@@ -38,7 +38,7 @@ Vamos voltar à imagem da introdução:
 {% include figure.html
    src="/assets/images/posts/ml/intro/ml-computing.png"
    alt="Aprendizado de máquina"
-   figcaption="Aprendizado de máquina clássico." %}
+   caption="Aprendizado de máquina clássico." %}
 
 O aprendizado de máquina clássico se focou em preencher a lacuna do centro
 do fluxo. O "como" resolver um problema. Os modelos clássicos, portanto,
@@ -72,7 +72,7 @@ ser vistos como uma extensão do aprendizado de máquina 'clássico':
 {% include figure.html
    src="/assets/images/posts/ml/deep/dml-computing.png"
    alt="Aprendizado de máquina 'profundo'"
-   figcaption="Aprendizado de máquina profundo." %}
+   caption="Aprendizado de máquina profundo." %}
 
 ## Descrição das camadas convolucionais
 
@@ -82,7 +82,7 @@ Considere a imagem do urso koala abaixo:
 {% include figure.html
    src="/assets/images/posts/ml/deep/koala.jpg"
    alt="A imagem de um koala sobre uma árvore."
-   figcaption="A fotografia de um koala sobre uma árvore." %}
+   caption="A fotografia de um koala sobre uma árvore." %}
 
 Primeiramente, confirme que você tem a biblioteca keras instalada com
 `pip install --upgrade keras`. Com o código abaixo, podemos carregar o koala
