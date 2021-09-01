@@ -11,7 +11,7 @@ tags:
   - Patterns
 ---
 
-<span class="display-6">No</span>, this isn't a post saying that you shouldn't create variables called `aux1`, `aux2` and `aux3` (you shouldn't, though).
+<span>No</span>, this isn't a post saying that you shouldn't create variables called `aux1`, `aux2` and `aux3` (you shouldn't, though).
 
 [Conventions](https://en.wikipedia.org/wiki/Coding_conventions) are created by people. They encapsulate, inherently, these same people's preconceptions and opinions. Bottom line is: they are not necessary logical (although, in many cases, much study is done before adopting a convention). Therefore, it is okay to disagree with conventions and what they state.
 

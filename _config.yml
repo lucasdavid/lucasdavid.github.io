@@ -1,7 +1,7 @@
 name: Lucas David
 title: Lucas David
 description: my personal website/blog
-avatar: /assets/profile-s.jpg
+avatar: /assets/images/infra/favicon.ico
 repository: lucasdavid/lucasdavid.github.io
 
 footer-links:
@@ -65,8 +65,8 @@ exclude:
 compress_images:
   images_path: "assets/images/**/*.{gif,png,jpg,jpeg,svg}"
 
-  imageoptim:
-    verbose: false
+imageoptim:
+  verbose: false
 
 toc:
   min_level: 1
@@ -84,5 +84,5 @@ jekyll-archives:
     category: '/blog/category/:name/'
 
 scholar:
-  style: ieee
+  style: assets/ieee
   bibliography: '**/*.bib{,tex}'

@@ -1,4 +1,5 @@
 <div id="projects-container" class="projects">
+  {% if site.github.public_repositories %}
   <h3 class="display-6 mt-4 mb-4" id="repos">Repos</h3>
   <div>
     {% assign repos = site.github.public_repositories | where:'fork', false | sort: 'stargazers_count' | reverse %}
@@ -11,6 +12,7 @@
     {% endfor %}
   </div>
   <hr class="thin mb-4" />
+  {% endif %}
 
   <h3 class="display-6 mt-4 mb-4" id="reports">Reports</h3>
   <div>

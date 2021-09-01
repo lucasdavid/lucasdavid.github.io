@@ -1,19 +1,19 @@
 <div id="{{ include.id }}" class="{{ include.id }} {{ include.classed }}">
-  {% assign items_count = include.items | size %}
-  
-  <div class="row row-cols-1 row-cols-md-3 row-cols-lg-{{items_count}} g-4">
+  <div class="row row-cols-1 row-cols-md-3 row-cols-lg-{{include.cols | default: 4}} g-4">
       {% for p in include.items %}
       <div class="col">
-        <div class="card border-0 bg-light h-100">
-          <div class="overflow-hidden">
+        <div class="card border-0 bg-white h-100">
+          <div class="overflow-hidden bg-white">
             <a href="{{ site.baseurl }}{{ p.url }}">
-              <img src="{{ site.baseurl }}{{ p.lead_image }}" class="card-img-top" style="height: 100px; width: auto;">
+              <img src="{{ site.baseurl }}{{ p.lead_image }}" 
+                   class="card-img-top"
+                   style="height:100px; width:auto" />
           </a>
           </div>
           <div class="card-body">
             <h6 class="card-title"><a href="{{ p.url }}" target="_blank" class="text-decoration-none">{{ p.title }}</a></h6>
-            <p class="card-text">{{ p.excerpt }}</p>
-            <p class="card-text"><small class="text-muted">{{ p.date | date: "%b %e, %Y" }}</small></p>
+            <p class="card-text small">{{ p.excerpt }}</p>
+            <p class="card-text small text-muted">{{ p.date | date: "%b %e, %Y" }}</p>
           </div>
         </div>
       </div>

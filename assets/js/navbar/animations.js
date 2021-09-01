@@ -6,6 +6,7 @@ var navbarAnimator = {
   mainNav: document.getElementById('mainNav'),
   navBrand: document.getElementById('mainNavBrand'),
   bar: document.getElementById('readProgressBar'),
+  sideBar: document.getElementById('sidebar'),
   navBarInverted: false
 };
 
@@ -42,5 +43,5 @@ function navbarInvertAnimated() {
 }
 
 if (document.documentElement.clientWidth >= LG_WIDTH) {
-  window.onscroll = navbarInvertAnimated;
+  window.addEventListener('scroll', navbarInvertAnimated);
 }

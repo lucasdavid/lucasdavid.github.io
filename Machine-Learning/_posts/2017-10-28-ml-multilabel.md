@@ -4,9 +4,9 @@ title: Multilabel Learning Problems
 excerpt: Dealing with ML classification problems that deal where samples aren't mutually disjointed.
 first_p: |-
   In classic classification with networks, samples belong to a single class.
-  We usually code this relationship using one-hot encoding: a label $i$ is
-  transformed into a vector $[0, 0, ... 1.0, ..., 0, 0]$, where the $1$ is at
-  the position $i$ of the vector.
+  We usually code this relationship using one-hot encoding: a label i is
+  transformed into a vector [0, 0, ... 1, ..., 0, 0], where the number 1 is located
+  in the i-th position in the target vector.
 toc: true
 date: 2017-10-26 21:43:00
 lead_image: /assets/images/posts/ml/multilabel/dataset.png
@@ -16,11 +16,10 @@ tags:
   - Multi-label
 ---
 
-<span class="display-6">In</span>
-classic classification with networks, samples belong to a single class.
-We usually code this relationship using one-hot encoding: a label $i$ is
-transformed into a vector $[0, 0, ... 1.0, ..., 0, 0]$, where the $1$ is at
-the position $i$ of the vector.
+<span>In</span>
+classic classification with networks, samples belong to a single class. We usually code this relationship using
+one-hot encoding: a label $i$ is transformed into a vector $[0, 0, ... 1, ..., 0, 0]$, where the number $1$ is
+located at the i-th position in the target vector.
 
 ```python
 import numpy as np
@@ -61,7 +60,7 @@ about when that's not the case?
 {% include figure.html
    src="/assets/images/posts/ml/multilabel/dataset.png"
    alt="Samples from the multi-label dataset 'Image Data for Multi-Instance Multi-Label Learning'."
-   figcaption="Samples from the multi-label dataset 'Image Data for Multi-Instance Multi-Label Learning'. Note that some instances are associated with more than one label (mountains and sea or sea and sunset). Available at: <a href=\"https://www.lamda.nju.edu.cn/data_MIMLimage.ashx\">lamda.nju.edu.cn</a>" %}
+   caption="Samples from the multi-label dataset 'Image Data for Multi-Instance Multi-Label Learning'. Note that some instances are associated with more than one label (mountains and sea or sea and sunset). Available at: <a href=\"https://www.lamda.nju.edu.cn/data_MIMLimage.ashx\">lamda.nju.edu.cn</a>" %}
 
 First, we must convert `target` to a binary encoding:
 
@@ -120,9 +119,9 @@ From the figure above, we can see this *loss function* contains two terms.
 Differently from the categorical cross-entropy, all units directly contribute to the summation through
 one of the terms.
 
-## Multi-label using Tensorflow
+## Multi-label using TensorFlow
 
-It's not commont for recent Tensorflow implementations to add the final layer (either softmax or sigmoid),
+It's not commont for recent TensorFlow implementations to add the final layer (either softmax or sigmoid),
 as it increases numeric instability when computing gradients. So you should declare the network as:
 
 
@@ -251,7 +250,7 @@ plot_predictions(disc, test_ds)
 {% include figure.html
    src="/assets/images/posts/ml/multilabel/preds.png"
    alt="Samples from the dataset's test split and its predictions."
-   figcaption="Samples from the dataset's test split and its predictions." %}
+   caption="Samples from the dataset's test split and its predictions." %}
 
 Finally, it might be interesting to verify for the individual results for each label:
 ```py

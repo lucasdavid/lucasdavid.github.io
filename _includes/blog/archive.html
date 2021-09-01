@@ -1,19 +1,4 @@
-<div>
-  <div id="categories-summary">
-    <h6 class="mt-4">Categories</h6>
-    <p class="small lh-lg">
-      {% for c in site.categories | sort %}
-      <a href="/blog/category/{{ c[0] | downcase | replace: ' ', '-' }}" type="button" role="button"
-        class="badge bg-light text-dark">{{ c[0] | replace: '-', ' ' }}</a>
-      {% endfor %}
-    </p>
-  </div>
-  <div id="tags-summary">
-    <h6 class="mt-4">Tags</h6>
-    <p class="small lh-lg">
-      {% for c in site.tags | sort %}
-      <a href="/blog/tag/{{ c[0] | downcase | replace: ' ', '-' }}" type="button" role="button"
-        class="badge bg-light text-dark">{{ c[0] | replace: '-', ' ' }}</a>
-      {% endfor %}
-  </div>
+<div class="archive-links small">
+  {% include mixin/tags.html type='category' tags=site.categories title='Categories' %}
+  {% include mixin/tags.html type='tag' tags=site.tags title='Tags' %}
 </div>

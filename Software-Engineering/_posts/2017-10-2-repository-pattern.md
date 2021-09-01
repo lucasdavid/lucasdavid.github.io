@@ -10,7 +10,7 @@ tags:
   - Patterns
 ---
 
-<span class="display-6">Real</span> life applications might have to communicate with more than one data source. Data might be coming from/going to different places and it's hard to keep it simple, as you have to implement the interaction with all of these places individually. The [repository pattern](http://docs.spring.io/spring-data/data-commons/docs/1.6.1.RELEASE/reference/html/repositories.html) abstracts the data layer (how you store and retrieve your resources), making it transparent to the business layer. It's important to keep in mind that it does not replace an [ORM](https://ycoding.wordpress.com/2015/05/03/object-relational-mapping/), which is specifically defined to map model classes to database entities.
+<span>Real</span> life applications might have to communicate with more than one data source. Data might be coming from/going to different places and it's hard to keep it simple, as you have to implement the interaction with all of these places individually. The [repository pattern](http://docs.spring.io/spring-data/data-commons/docs/1.6.1.RELEASE/reference/html/repositories.html) abstracts the data layer (how you store and retrieve your resources), making it transparent to the business layer. It's important to keep in mind that it does not replace an [ORM](https://ycoding.wordpress.com/2015/05/03/object-relational-mapping/), which is specifically defined to map model classes to database entities.
 
 ## Example #1: invisible database
 [Spring](https://spring.io/) has one of the greatest Repository Pattern implementations, although these are specifically designed to abstract databases. Here, the repositories are interfaces and the queries are built based on the methods signatures.

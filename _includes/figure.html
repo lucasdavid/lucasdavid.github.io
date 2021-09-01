@@ -1,6 +1,10 @@
-<div style="position: relative; z-index: 1;">
-    <figure class="figure {{ include.classed }}">
-        <img src="{{ include.src }}" alt="{{ include.alt }}" class="figure-img img-fluid rounded" />
-        <figcaption>{{ include.figcaption }}</figcaption>
-    </figure>
+<div style="position: relative; z-index: 1;" class="{{ include.containerClassed }}">
+  <figure class="figure {{ include.classed | default: 'w-100' }}">
+    <img src="{{ include.src }}" alt="{{ include.alt }}" class="figure-img img-fluid rounded mx-auto d-block" />
+    <figcaption class="figure-caption {{ include.captionClassed | default: 'text-start' }}">
+      <strong class="title">{{include.title}}</strong>
+
+      {{ include.caption }}
+    </figcaption>
+  </figure>
 </div>

@@ -11,7 +11,7 @@ tags:
   - DevOps
 ---
 
-<span class="display-6">Some</span>
+<span>Some</span>
 weeks ago, I've started this blog with this [very subject](https://ycoding.wordpress.com/2015/05/03/14/). Today, as requested by a reader, I'll go back and try to talk a little bit more about versioning (focusing on [GIT](http://git-scm.com/)), it's problems and how to avoid/fix them.
 
 Versioning is great. If you're coding alone, it provides you cool features, like saving, branching, rolling back, reverting, peeking previous states etc. In the other hand, if you're working with a team, it becomes even more important:, as it's a way to automate what can be automated, stop wasting so much time on team management and focus on your domain problem.
