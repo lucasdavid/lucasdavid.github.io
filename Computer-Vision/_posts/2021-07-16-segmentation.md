@@ -17,7 +17,7 @@ tags:
   - Segmentation
 ---
 
-<span class="display-6">Following</span> the pattern of my previous posts,
+<span>Following the pattern</span> of my previous posts,
 this one is based on an assignment submitted to the class of 2021/1 of course
 Introduction to Image Processing (MO443) at Universidade Estadual de Campinas.
 Its goal is to apply segmentation algorithms over images and extract characteristics of the objects using
@@ -129,7 +129,7 @@ visualize([*images, *grays], image_files, cmap='gray');
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_7_0.png.jpg"
    alt="Simple colored geometric shapes."
-   figcaption="Figure 1. Simple colored geometric shapes." %}
+   caption="Simple colored geometric shapes." %}
 
 
 ### Edge-Based Segmentation
@@ -210,7 +210,7 @@ visualize(filled, rows=1, cmap='gray_r');
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_12_0.png.jpg"
    alt="The figure displays three binary images, in which the geometric shapes are filled with the color black, and the background is shown in white."
-   figcaption="Figure 3. Binary filling of the borders previously extracted." %}
+   caption="Binary filling of the borders previously extracted." %}
 
 Notice we used the color map `gray_r`, indicating objects were filled with the value `1` while the background is represented with the value `0`.
 As each object is now represented by a distinct connected component, we can extract properties using functions in the `skimage.measure` module:
@@ -255,11 +255,11 @@ plot_all_segments(grays, segments, props)
     
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_14_0.png.jpg"
-   figcaption="Figure 4. Segmentation of the objects in the three original images using edge detection and binary fill of wholes. Segmentation maps are overlayed with objects, while the bounding boxes used to delimit each object was extracted as a property in <code>regionprops_table</code>." %}
+   caption="Segmentation of the objects in the three original images using edge detection and binary fill of wholes. Segmentation maps are overlayed with objects, while the bounding boxes used to delimit each object was extracted as a property in <code>regionprops_table</code>." %}
 
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_14_1.png.jpg"
-   figcaption="Figure 5. Histograms of areas detected from objects in each input image." %}
+   caption="Histograms of areas detected from objects in each input image." %}
 
 A simple way to count objects based on their overall area is to use histograms.
 Fig. 5 illustrate this application over each image. In the first, forms are separated into two similar groups:
@@ -285,8 +285,8 @@ props[0].head().round(2)
 ```
 
 <div class="table-responsive"><table class="dataframe table table-hover">
-  <thead class="table-dark">
-    <tr style="text-align: right;">
+  <thead>
+    <tr>
       <th></th>
       <th>label</th>
       <th>area</th>
@@ -391,12 +391,12 @@ plot_all_segments(grays, segments, props)
 ```
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_20_0.png.jpg"
-   figcaption="Figure 6. Segmentation of the objects in the three original images using the Felzenszwalb's method." %}
+   caption="Segmentation of the objects in the three original images using the Felzenszwalb's method." %}
 
 Similar results are obtained with Felzenszwalb, with respect to the area of objects:
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_20_1.png.jpg"
-   figcaption="Figure 7. Histograms of areas detected from objects in each scenario." %}
+   caption="Histograms of areas detected from objects in each scenario." %}
 
 
 ## BCCD Dataset
@@ -429,7 +429,7 @@ for ax, p in zip(axes, bccd_samples):
 
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_22_0.png.jpg"
-   figcaption="Figure 8. A few samples from the BCCD dataset. Cells are annotated in RBC (red blood cells), WBC (white blood cells) and Platelets." %}
+   caption="A few samples from the BCCD dataset. Cells are annotated in RBC (red blood cells), WBC (white blood cells) and Platelets." %}
 
 
 ### Segmentation using Felzenszwalb's Method
@@ -465,7 +465,7 @@ search_felzenszwalb(bccd_images[3])
 ```
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_25_0.png.jpg"
-   figcaption="Figure 9. Effect of the parameters <code>scale</code> and <code>min_size</code> over segmentation." %}
+   caption="Effect of the parameters <code>scale</code> and <code>min_size</code> over segmentation." %}
 
 The segmentation results of samples in the BCCD dataset are shown in Fig. 10. The method has correctly segmented many of the blood cells in some samples (such as in the third and fifth images). However, a few drawbacks are noticeable as well: this method is strongly affected by small grains, and will often recognize small microorganisms that were captured by the microscope while photographing the blood cells. Furthermore, cells that were smashed together seem to have been classified as a single object (first and eighth images).
 
@@ -493,7 +493,7 @@ plot_all_segments_and_bboxes(images, segments, props)
 
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_28_0.png.jpg"
-   figcaption="Figure 10. Segmentation results over samples in the BCCD dataset. " %}
+   caption="Segmentation results over samples in the BCCD dataset. " %}
 
 {% include posts/collapse-btn.html id="cv4" %}
 ```python
@@ -515,7 +515,7 @@ histogram_objects(props, percentile=95)
 
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_29_0.png.jpg"
-   figcaption="Figure 11. Histogram of areas detected from objects in samples in the BCCD dataset." %}
+   caption="Histogram of areas detected from objects in samples in the BCCD dataset." %}
 
 Finally, Felzenszwalb's method will indistinguishably segment the background sections of the image into regions, as these sections also present color information. It is therefore necessary to employ heuristics that discriminate foreground/background in order to separate it.
 
@@ -534,7 +534,7 @@ plot_all_segments_and_bboxes(images, bccd_samples, segments_rbc, props_rbc)
 ```
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_31_0.png.jpg"
-   figcaption="Figure 12. Segmentation results over samples in the BCCD dataset. Only objects with area between $1e3$ and $2e4$ are shown." %}
+   caption="Segmentation results over samples in the BCCD dataset. Only objects with area between $1e3$ and $2e4$ are shown." %}
 
 
 ```python
@@ -542,7 +542,7 @@ histogram_objects(props_rbc)
 ```
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_32_0.png.jpg"
-   figcaption="Figure 13. Histogram of areas detected from objects in the samples in the BCCD dataset. Only objects with area between $1e3$ and $2e4$ account for this statistics." %}
+   caption="Histogram of areas detected from objects in the samples in the BCCD dataset. Only objects with area between $1e3$ and $2e4$ account for this statistics." %}
 
 #### Pre-Processing: Filtering Noise
 
@@ -570,7 +570,7 @@ visualize(grays[:5] + grays_bilateral[:5], figsize=(16, 5));
 ```
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_36_0.png.jpg"
-   figcaption="Figure 14. Application of the <code>mean_bilateral</code>. From top to bottom: (a) the original samples in the BCCD dataset, (b) the corresponding sample cleaned from noise." %}
+   caption="Application of the <code>mean_bilateral</code>. From top to bottom: (a) the original samples in the BCCD dataset, (b) the corresponding sample cleaned from noise." %}
 
 Fig. 14 illustrates the application of `mean_bilateral` over samples in the BCCD dataset.
 We observe that much of the noise is either removed or attenuated.
@@ -584,7 +584,7 @@ search_felzenszwalb(grays_bilateral[4])
 ```
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_37_0.png.jpg"
-   figcaption="Figure 15. Effect of the parameters <code>scale</code> and <code>min_size</code> over segmentation, after preprocessing with <code>mean_bilateral</code> was performed." %}
+   caption="Effect of the parameters <code>scale</code> and <code>min_size</code> over segmentation, after preprocessing with <code>mean_bilateral</code> was performed." %}
 
 We can now apply to each sample in our subset:
 
@@ -609,14 +609,14 @@ plot_all_segments_and_bboxes(images, bccd_samples, segments_rbc, props_rbc)
 ```
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_40_0.png.jpg"
-   figcaption="Figure 16. Segmentation results over samples BCCD dataset, preprocessing samples with <code>mean_bilateral</code> and post-processing them by sub-selecting objects within a reasonable overall area." %}
+   caption="Segmentation results over samples BCCD dataset, preprocessing samples with <code>mean_bilateral</code> and post-processing them by sub-selecting objects within a reasonable overall area." %}
 
 ```python
 histogram_objects(props_rbc)
 ```
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_41_0.png.jpg"
-   figcaption="Figure 17. Histogram of areas for each image in the BCCD dataset." %}
+   caption="Histogram of areas for each image in the BCCD dataset." %}
 
 From Fig. 16 and Fig. 17 show our cleaned segmentation results.
 The algorithm seems much more focused on cells now!
@@ -655,14 +655,14 @@ plot_all_segments_and_bboxes(images, bccd_samples, segments, props)
 ```
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_45_0.png.jpg"
-   figcaption="Figure 18. Segmentation results over samples in the BCCD dataset using Morphological operators." %}
+   caption="Segmentation results over samples in the BCCD dataset using Morphological operators." %}
 
 ```python
 histogram_objects(props)
 ```
 {% include figure.html
    src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_46_0.png.jpg"
-   figcaption="Figure 19. Histograms of areas detected in objects in each image." %}
+   caption="Histograms of areas detected in objects in each image." %}
 
 The segmentation results over samples in the BCCD dataset are shown in Fig. 18 and Fig. 19. Through inspection, we notice this strategy is robust against small grains in the image, and correctly segments red blood cells presenting light-shaded interiors. It also automatically ignores the background and does not interpret its regions as new objects --- through the usage of Otsu's method {% cite otsu4310076 %} ---. Notwithstanding, long cell chains (which are smashed against each other) are incorrectly segmented as a single object, regardless of their color differences (an effect observed in the first, second, third, fifth, ninth and tenth images).
 

@@ -1,0 +1,10 @@
+<div id="{{include.type }}-summary">
+  <h6 class="mt-4">{{include.title}}</h6>
+  <p>
+    {% for c in include.tags | sort %}
+      <a href="{% if page.type == include.type and page.title == c[0] %}/blog{% else %}/blog/{{include.type}}/{{ c[0] | downcase | replace: ' ', '-' }}{% endif %}"
+         class="me-1 {% unless page.type == include.type and page.title == c[0] %}link-dark{% endunless %}"
+         type="button" role="button"
+         >{{ c[0] | replace: '-', ' ' }}</a>
+    {% endfor %}
+</div>
