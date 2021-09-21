@@ -17,7 +17,7 @@ tags:
   - Segmentation
 ---
 
-<span class="display-6">Following</span> the pattern of my previous posts,
+<span class="display-6">Following the pattern</span> of my previous posts,
 this one is based on an assignment submitted to the class of 2021/1 of course
 Introduction to Image Processing (MO443) at Universidade Estadual de Campinas.
 Its goal is to apply segmentation algorithms over images and extract characteristics of the objects using

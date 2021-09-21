@@ -82,7 +82,7 @@ for its interesting properties {%cite han1995influence %}.
 Firstly, it is bounded to the real interval $[0, 1]$, and differentiable on each and every point
 of its domain. It is monotonically increasing, which means it does not affect the rank between the
 input logits ($\arg\max_i S(x) = \arg\max_i x$) {%cite han1995influence %}. It's derivative is a bell
-function, with the highest value in 0. It is convex in $[-\inf, 0]$ and concave $[0, \inf]$ {%cite han1995influence %},
+function, with the highest value in 0. It is convex in $[-\infty, 0]$ and concave $[0, \infty]$ {%cite han1995influence %},
 so it saturates when outputting close to its extremities.
 
 Let $l = x\cdot w + b$ be the result of the last dense layer in the network (the inner
@@ -490,7 +490,7 @@ as it also appears in the denominator of the softmax function in the terms $p_j 
 
 Without loss of generality, the log of a ratio is always negative:
 
-$$p_i \in (0, 1] \implies \log p_i \in (-\inf, 0] \implies -\log p_i \in [0, \inf)$$
+$$p_i \in (0, 1] \implies \log p_i \in (-\infty, 0] \implies -\log p_i \in [0, \infty)$$
 
 Categorical CE is minimum when the probability factor $p_i = 1, \forall i \mid y_i = 1$,
 and grows as the classification probability decreases. Therefore, the `Optimizer` instance
@@ -575,7 +575,7 @@ E(y, p) &= -\sum_i y_i \log p_i \\
         &= - \big[y_0 \log p_0 + (1-y_0) \log (1-p_0)\big] 
 \end{align}$$
 
-In this case, only two classes are available (a Bernoulli variable $i\in \{0, 1\}$), such
+In this case, only two classes are available (a Bernoulli variable $i\in \\{0, 1\\}$), such
 that $p_0 = 1-p_1$. Hence, this problem is represented with a single probability number
 (a single predicted target number).
 
@@ -639,7 +639,7 @@ as a regularization strategy {% cite mukhoti2020calibrating %}.
 
 Binary Focal CE is defined as:
 
-$$E(y, p) = - \big[α (1-p)^γ y \log p + (1-α) p^γ (1-y) \log (1-p)\big]$$
+$$L_\text{focal}(y, p) = - \big[α (1-p)^γ y \log p + (1-α) p^γ (1-y) \log (1-p)\big]$$
 
 Where $α=0.25$ and $γ=2$, commonly.
 
@@ -654,11 +654,11 @@ Let $x$ be a sample of the set, associated with labels $y$ s.t. $y_l = 1$. Furth
 let $p$ be the association probability value, estimated by a given classifier. If this
 same classifier is certain about its prediction, then
 
-$$p_l \to 1 \implies (1 - p_l)^γ \to 0 \implies \text{FL}(y, p)_l \to 0$$
+$$p_l \to 1 \implies (1 - p_l)^γ \to 0 \implies L_\text{focal}(y, p)_l \to 0$$
 
 Conversely, for a $k$ s.t. $y_k=0$, if the classifier is certain about its prediction, then
 
-$$p_k \to 0 \implies p_k^γ \to 0 \implies \text{FL}(y, p)_k \to 0$$
+$$p_k \to 0 \implies p_k^γ \to 0 \implies L_\text{focal}(y, p)_k \to 0$$
 
 #### Implementation
 
@@ -676,6 +676,44 @@ def focal_loss_with_logits(y, l, a=0.1, gamma=2):
     axis=-1)
 ```
 
+### Hinge Loss
+Hinge can be used to create "quasi-SVM" networks, in which the search for a solution that
+maximizes the separation margin between two class groups is performed. It is defined as
+{% cite rosasco2004loss %}:
+
+$$L_\text{hinge}(y, p) = \max(1 - yp, 0)$$
+
+Where $y,p\in\\{-1, 1\\}$.
+
+#### Intuition
+
+This function measures if --- and by how much --- the proposed margin is being violated by samples
+that belong to the opposite class. As samples of class -1 and 1 are incorrectly estimated to be
+of class 1 and -1, respectively, $-yp \gg 0 \implies L_\text{hinge} \gg 0$.
+The function will also penalize any samples that are correctly classified, but fall under the margin.
+For example, let $y = -1$ and $p=-0.8$, then
+
+$$L_\text{hinge}(y, p) = \max(1- (-1)(-0.8), 0) = \max(1-0.8, 0) = 0.2$$
+
+Finally, for any other sample correctly classified with $\|p\| \ge 1, L_\text{hinge}(y,p) = 0$,
+and no further gradient updates are performed.
+
+{% include figure.html
+   src="https://i.stack.imgur.com/Ifeze.png"
+   title="The Hinge Loss Function."
+   caption='Incorrectly estimated samples are penalized with a large hinge loss value, as well as correctly classified samples that fall in the confidence margin. Conversely, correctly classified samples are ignored with a null loss value. Available at <a href="https://math.stackexchange.com/q/2899178">stackexchange/q/2899178</a>.' %}
+
+#### Implementation
+
+Hinge loss' implementation is quite simple, and can be found at [keras/losses.py#L1481](https://github.com/keras-team/keras/blob/3a33d53ea4aca312c5ad650b4883d9bac608a32e/keras/losses.py#L1481):
+
+```py
+def hinge(y, p):
+  if tf.reduce_all((y == 0) | (y == 1)):
+    y = 2*y - 1  # convert to (-1, 1)
+
+  return tf.reduce_mean(tf.maximum(1. - y * p, 0.), axis=-1)
+```
 
 ## Final Considerations
 Classification problems are very particular, in the sense that the predicted variable

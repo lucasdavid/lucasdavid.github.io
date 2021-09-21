@@ -45,7 +45,7 @@ Abaixo estão alguns exemplos de funções de ativação.
 
     $$\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}} $$
 
-- **rectifier linear unit** (relu), restringindo a saída ao intervalo $[0, \inf)$:
+- **rectifier linear unit** (relu), restringindo a saída ao intervalo $[0, \infty)$:
 
     $$\text{relu}(x) = \max(x, 0) $$
 

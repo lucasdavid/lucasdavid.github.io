@@ -341,11 +341,11 @@ Let:
 
 - $X$ be the set of observations
 - $k\in\mathbb{Z}$ the number of clusters
-- $C = \{C_1, C_2, \ldots, C_k\}$ a set of $k$ clusters,
-  represented by their respective "centers" $\{c_1, c_2, \ldots, c_k\}$ 
+- $C = \\{C_1, C_2, \ldots, C_k\\}$ a set of $k$ clusters,
+  represented by their respective "centers" $\\{c_1, c_2, \ldots, c_k\\}$ 
 
 A given sample $x\in X$ is said contained in cluster
-$C_i\in C$ $\iff i=\text{argmin}_j \|\|x-c_j\|\|^2$. That is, $x$ is closer to $c_i$ than to any other $c_j, \forall j\in [1, k] \setminus \{i\}$.
+$C_i\in C$ $\iff i=\text{argmin}_j \|\|x-c_j\|\|^2$. That is, $x$ is closer to $c_i$ than to any other $c_j, \forall j\in [1, k] \setminus \\{i\\}$.
 
 K-Means's prime form can be described as a non-linear optimization problem over the cost function $J(X, C)$:
 
@@ -560,7 +560,7 @@ In this section, we describe the metrics employed to evaluate K-Means, as well a
 
 * Silhouette {% cite pedregosa2011 %}
 
-  In our *silhouette* implementation, we used the one-hot encoding representation to select the corresponding samples of each cluster when computing avg. inter/intra cluster distance between samples $\{x_0, x_1, \ldots, x_n\}$ and clusters $\{c_0, c_1,\ldots, l_k\}$:
+  In our *silhouette* implementation, we used the one-hot encoding representation to select the corresponding samples of each cluster when computing avg. inter/intra cluster distance between samples $\\{x_0, x_1, \ldots, x_n\\}$ and clusters $\\{c_0, c_1,\ldots, l_k\\}$:
 
   $$\begin{align}
   D &= \begin{bmatrix}
