@@ -19,7 +19,7 @@ tags:
 
 <span class="display-6">This</span>
 post is based on an assignment submitted to a Machine Learning class
-at Universidade Estadual de Campinas, and its content was equally divided among
+at Universidade Estadual de Campinas, and its challenges were equally divided among
 Jonathan ([email](mailto:j146667@dac.unicamp.br)) and I.
 
 Here, our goal is to apply unsupervised learning methods to solve clustering and
@@ -2447,7 +2447,7 @@ In a set of many features within different intervals, some features present larg
 In such cases, the sigular components will focus on modeling these directions, as their composition represent the highest total variance of the set.
 While this is interesting in many analytical cases, it is usually an unwanted behavior in Machine Learning: features should be favored based on how well they explain the overall data, independently of their natural variance.
 
-A second formulation of the PCA can then be defined over the correlation matrix $\frac{XX^\intercal}{\sigma(X)^2}$. In this form, all features will vary in the same interval ($\mu_X=0, \sigma =1$), and the singular components will exclusevely model the relationship between the variables.
+A second formulation of the PCA can then be defined over the correlation matrix $\frac{XX^\intercal}{\sigma(X)^2}$. In this form, all features will vary in the same interval ($\mu_X=0, \sigma =1$), and the singular components will exclusively model the relationship between the variables.
 An easy way to achieve this form is to simply standardize the data (dividing each column by its standard deviation) before applying PCA. The new set will have $\sigma(X')=1$ and its covariance and correlation matrices will be the same. The two scatterplots below show the difference between the two formulations on the Boston Dataset.
 
 For the purposes of this assignment, all our PCA runs are based on the decomposition of the correlation matrix.
