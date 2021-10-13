@@ -3,11 +3,11 @@
       {% for p in include.items %}
       <div class="col">
         <div class="card border-0 bg-white h-100">
-          <div class="overflow-hidden bg-white">
+          <div class="overflow-hidden bg-white" style="height:100px">
             <a href="{{ site.baseurl }}{{ p.url }}">
               <img src="{{ site.baseurl }}{{ p.lead_image }}" 
                    class="card-img-top"
-                   style="height:100px; width:auto" />
+                   style="height:auto; width:100%" />
           </a>
           </div>
           <div class="card-body">

@@ -15,7 +15,7 @@ layout: default
     <div class="container">
       <h3 class="display-6 mb-4" id="blog-posts"> Blog Posts</h3>
 
-      {% assign latests_posts = site.posts | slice: 0, 10 %}
+      {% assign latests_posts = site.posts | slice: 0, 5 %}
       {% include mixin/cards.html id='highlighted-posts' items=latests_posts cols=5 %}
     
       <p class="text-center mt-4 small">
