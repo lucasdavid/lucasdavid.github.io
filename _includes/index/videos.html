@@ -1,19 +1,20 @@
 <div class="videos">
-    {% assign videos_count = site.data.videos | size %}
-    
-    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-{{videos_count}} g-4">
-        {% for v in site.data.videos %}
-        <div class="col">
-          <div class="card border-0 bg-light h-100">
-            <a href="{{ v.source }}" target="_blank">
-                <img src="https://img.youtube.com/vi/{{v.id}}/sddefault.jpg" class="card-img-top">
-            </a>
-            <div class="card-body">
-              <h6 class="card-title"><a href="{{ v.source }}" target="_blank" class="text-decoration-none">{{ v.title }}</a></h6>
-              <p class="card-text"></p>
-            </div>
-          </div>
+  {% assign videos_count = site.data.videos | size %}
+
+  <div class="row row-cols-1 row-cols-md-3 row-cols-lg-{{videos_count}} g-4">
+    {% for v in site.data.videos %}
+    <div class="col">
+      <div class="card border-0 bg-light h-100">
+        <a href="{{ v.source }}" target="_blank">
+          <img src="https://img.youtube.com/vi/{{v.id}}/sddefault.jpg" class="card-img-top">
+        </a>
+        <div class="card-body">
+          <h6 class="card-title"><a href="{{ v.source }}" target="_blank" class="text-decoration-none">{{ v.title }}</a>
+          </h6>
+          <p class="card-text"></p>
         </div>
-        {% endfor %}
       </div>
+    </div>
+    {% endfor %}
+  </div>
 </div>
