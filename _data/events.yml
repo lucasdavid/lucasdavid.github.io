@@ -1,3 +1,8 @@
+- name: "IEEE Symposium Series on Computational Intelligence (Dec. 2021)"
+  url: https://attend.ieee.org/ssci-2021/
+  role: Speaker
+  description: |-
+    "Connoisseur: Provenance Analysis in Paintings," presented in the Applications of Deep Learning II track.
 - name: "The 19th International Conference on Computer Analysis of Images and Patterns (Sep. 2021)"
   url: https://cyprusconferences.org/caip2021/
   role: Speaker
@@ -5,7 +10,7 @@
     "Authentication of Vincent van Gogh's Work," presented in the Biometrics, Cryprography and Security track.
 - name: "Dextra's Data Week (Nov. 2020)"
   url: https://www.dextra.com.br/
-  role: Presenter
+  role: Speaker
   description: |-
     "Superpowers with Natural Language Processing," illustrating commercial cases for natural language processing techniques and algorithms.
 - name: DevFest, GDG Campinas (Nov. 2018)
@@ -14,7 +19,7 @@
   description: Participant in Computing Conference organized by GDG Campinas.
 - name: 3rd Online National Congress on Mechanic Engineer and Automation (CONAENGE 2018)
   url: https://conaenge.com.br/conaenge-2018/
-  role: Co-Presenter
+  role: Co-Speaker
   description: |-
     Co-speaker for poster titled "Anomaly Detection and Failure Prediction in Industrial Machinery" (in Portuguese),
     describing the work performed at Solvian Tech for its multiple clients.
@@ -24,5 +29,6 @@
   description: Computing Week at Universidade Estadual de Campinas.
 - name: SECOMP UFScar 2015
   url: https://www.facebook.com/secompufscar/
-  role: Presenter
+  role: Speaker
   description: Computing Week at Universidade Federal de São Carlos.
+ 
