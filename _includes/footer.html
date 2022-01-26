@@ -1,10 +1,10 @@
-<footer class="page-footer bg-light pt-4 pb-4 d-print-none">
+<footer class="page-footer bg-light d-print-none">
   <div class="container">
-    <div class="row mb-4">
+    <div class="row">
       {% for entry in site.data.footer %}
       <div class="col small">
         <h6>{{ entry.title }}</h6>
-        <p class="text-body text-muted">
+        <p>
           {{ entry.description }}
         </p>
       </div>
