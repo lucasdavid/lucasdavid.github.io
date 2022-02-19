@@ -34,10 +34,6 @@
     clear: both;
 }
 
-:target {
-  scroll-margin-top: $navbar-height + 20px;
-}
-
 body {
   background: white;
 }
@@ -81,10 +77,13 @@ h1, h2, h3, h4 {
 .navbar {
   min-height: $navbar-height;
 }
+// .navbar-animated {
+//   transition: all .3s;
+// }
+// :target {
+//   scroll-margin-top: $navbar-height + 20px;
+// }
 
-.navbar-animated {
-  transition: all .3s;
-}
 
 //
 // Index

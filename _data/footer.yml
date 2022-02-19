@@ -5,7 +5,10 @@
 - title: Algorithms in TensorFlow
   description: |-
     I'm implementing all algorithms I find interesting using TensorFlow.
-    You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">algorithms-in-tensorflow</a>.
+    You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">github.com/lucasdavid/algorithms-in-tensorflow</a>.
+- title: TF-Experiment
+  description: |-
+    And environment to run Machine Learning experiments based on components and mixins. Available at <a href="https://github.com/lucasdavid/tf-experiment">github.com/lucasdavid/tf-experiment</a>.
 - title: Mineração de Dados Complexos
   description: |-
     Information around the extension program "Mineração de Dados Complexos (in Portuguese)" is available at

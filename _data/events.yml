@@ -1,3 +1,8 @@
+- name: "17th International Conference on Computer Vision Theory and Applications (Feb. 2022)"
+  url: https://visapp.scitevents.org/?y=2022
+  role: Speaker
+  description: |-
+    "MinMax-CAM: Improving Focus of CAM-based Visualization Techniques in Multi-label Problems"
 - name: "IEEE Symposium Series on Computational Intelligence (Dec. 2021)"
   url: https://attend.ieee.org/ssci-2021/
   role: Speaker

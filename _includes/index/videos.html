@@ -1,7 +1,7 @@
 <div class="videos">
   {% assign videos_count = site.data.videos | size %}
 
-  <div class="row row-cols-1 row-cols-md-3 row-cols-lg-{{videos_count}} g-4">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
     {% for v in site.data.videos %}
     <div class="col">
       <div class="card border-0 bg-light h-100">

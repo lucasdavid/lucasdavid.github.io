@@ -1,19 +1,21 @@
-- id: IPrAttcVRIY
+- id: 'IPrAttcVRIY'
   title: Aquarium (YouTube)
-  source: https://www.youtube.com/v/IPrAttcVRIY?controls=0&start=4
-- id: n-5PvVGxibg
+  source: 'https://www.youtube.com/v/IPrAttcVRIY&start=4'
+- id: 'n-5PvVGxibg'
   title: NAO navigation in V-REP environment with QLearning (YouTube)
-  source: https://www.youtube.com/v/n-5PvVGxibg?controls=0
-- id: 0E3MRv5LT4w
+  source: 'https://www.youtube.com/v/n-5PvVGxibg'
+- id: '0E3MRv5LT4w'
   title: Computer Graphics Assignment 3 Presentation (YouTube)
-  source: https://www.youtube.com/v/0E3MRv5LT4w?controls=0
-- id: 4ZMSX-1PhoM
-  title: Classificando impacto humano sobre a floresta amazônica a partir de imagens de satélite (YouTube)
-  source: https://www.youtube.com/v/4ZMSX-1PhoM?controls=0
-- id: 4Y7LL9fSHUM
-  title: Adversarial Feature Hallucination Networks for FSL of Provenance in Paintings - IA-386
-  source: https://www.youtube.com/v/4Y7LL9fSHUM?controls=0
-# - title: Titanfall 2 Ion Gameplay (YouTube)
-#   source: https://www.youtube.com/v/ZmXyJqcAv8A?controls=0
-# - title: The Last of Us Gameplay (YouTube)
-#   source: https://www.youtube.com/v/RCSquW5E5aU?controls=0
+  source: 'https://www.youtube.com/v/0E3MRv5LT4w'
+- id: '4ZMSX-1PhoM'
+  title: 'Classificando impacto humano sobre a floresta amazônica a partir de imagens de satélite (YouTube)'
+  source: 'https://www.youtube.com/v/4ZMSX-1PhoM'
+- id: '4Y7LL9fSHUM'
+  title: 'Adversarial Feature Hallucination Networks for FSL of Provenance in Paintings - IA-386'
+  source: 'https://www.youtube.com/v/4Y7LL9fSHUM'
+- id: 'ZmXyJqcAv8A'
+  title: 'Titanfall 2 Ion Gameplay'
+  source: 'https://www.youtube.com/v/ZmXyJqcAv8A'
+# - id: 'RCSquW5E5aU'
+#   title: 'The Last of Us Gameplay'
+#   source: 'https://www.youtube.com/v/RCSquW5E5aU'
