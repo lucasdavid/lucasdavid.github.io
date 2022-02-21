@@ -10,6 +10,17 @@ var navbarAnimator = {
   navBarInverted: false
 };
 
+function trackPostReadingProgress() {
+  var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+
+  if (navbarAnimator.bar) {
+    var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    var scrolled = (winScroll / height) * 100;
+
+    navbarAnimator.bar.style.width = scrolled + "%";
+  }
+}
+
 function navbarInvertAnimated() {
   var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
 
@@ -43,5 +54,5 @@ function navbarInvertAnimated() {
 }
 
 if (document.documentElement.clientWidth >= LG_WIDTH) {
-  window.addEventListener('scroll', navbarInvertAnimated);
+  window.addEventListener('scroll', trackPostReadingProgress);
 }
