@@ -3,6 +3,7 @@ FROM bretfisher/jekyll-serve
 WORKDIR /site
 ADD . /site/
 
+RUN gem update bundler
 RUN bundle install --retry 5 --jobs 20
 
 ENTRYPOINT [ "/usr/bin/env" ]
