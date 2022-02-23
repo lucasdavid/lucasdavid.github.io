@@ -1,26 +1,21 @@
-name: Jekyll Deploy
+name: Build and deploy Jekyll site to GitHub Pages
 
 on:
   push:
     branches:
       - master
+
 jobs:
-  deploy:
+  github-pages:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      - name: Cache gems
-        uses: actions/cache@v1
+      - uses: actions/cache@v2
         with:
-          path: vendor/gems
-          key: ${{ runner.os }}-build-${{ hashFiles('**/Gemfile.lock') }}
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile') }}
           restore-keys: |
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-
-      - name: Build & Deploy to GitHub Pages
-        uses: DavidS/jekyll-deploy@main
-        env:
-          JEKYLL_ENV: production
-          GH_PAGES_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}
+            ${{ runner.os }}-gems-
+      - uses: helaili/jekyll-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
