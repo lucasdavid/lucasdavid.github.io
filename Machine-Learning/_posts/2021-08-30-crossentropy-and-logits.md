@@ -15,7 +15,7 @@ first_p: |-
   numerical libraries such as TensorFlow.
 toc: true
 date: 2021-08-30 17:29:00
-lead_image: /assets/images/posts/ml/deducing-ce-wl/softmax.jpg
+lead_image: /assets/images/posts/ml/deducing-ce-wl/softmax.webp
 tags:
   - ML
   - Classification
@@ -105,7 +105,7 @@ plt.tight_layout();
 {: class="collapse" id="csigmoid"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/deducing-ce-wl/sigmoid.jpg"
+   src="/assets/images/posts/ml/deducing-ce-wl/sigmoid.webp"
    title="The Sigmoid activation function."
    caption="This function is monotonically increasing and has a single inflection point at $x = 0$." %}
 
@@ -132,7 +132,7 @@ $$\begin{align}
 \end{align}$$
 
 {% include figure.html
-   src="/assets/images/posts/ml/deducing-ce-wl/sigmoid-derivative.jpg"
+   src="/assets/images/posts/ml/deducing-ce-wl/sigmoid-derivative.webp"
    alt="The derivative of the Sigmoid activation function."
    caption="The derivative Sigmoid activation function."
    containerClassed="text-center" %}
@@ -176,7 +176,7 @@ plt.tight_layout();
 {: class="collapse" id="csoftmax"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/deducing-ce-wl/softmax.jpg"
+   src="/assets/images/posts/ml/deducing-ce-wl/softmax.webp"
    title="The Softmax activation function."
    caption="(a) The activation intensity of softmax function for the first component (class). (b) The activation intensity of the softmax function for the second component (class)."
    classed='w-xl-130' %}
@@ -377,7 +377,7 @@ plot_accuracy_lines(
 ```
 {: class="collapse" id="c2"}
 {% include figure.html
-   src="/assets/images/posts/ml/deducing-ce-wl/softmax_and_logit_normalization_benchmark_5_0.jpg"
+   src="/assets/images/posts/ml/deducing-ce-wl/softmax_and_logit_normalization_benchmark_5_0.webp"
    title="Comparison between training a CNN using softmax predictions and simple logits normalization over the CIFAR10 dataset."
    caption="We observe a stable increase in the score metrics when training with the softmax function. On the other hand, normalized logits will briefly produce an increase in the metrics, followed by a diverging progression of the aformentioned metrics."
     %}
@@ -698,7 +698,7 @@ Finally, for any other sample correctly classified with $\|p\| \ge 1, L_\text{hi
 and no further gradient updates are performed.
 
 {% include figure.html
-   src="https://i.stack.imgur.com/Ifeze.png"
+   src="https://i.stack.imgur.com/Ifeze.webp"
    title="The Hinge Loss Function."
    caption='Incorrectly estimated samples are penalized with a large hinge loss value, as well as correctly classified samples that fall in the confidence margin. Conversely, correctly classified samples are ignored with a null loss value. Available at <a href="https://math.stackexchange.com/q/2899178">stackexchange/q/2899178</a>.' %}
 

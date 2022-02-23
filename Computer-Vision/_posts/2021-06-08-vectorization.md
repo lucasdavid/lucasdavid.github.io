@@ -11,7 +11,7 @@ first_p: |-
   importance: vectorization.
 toc: true
 date: 2021-06-08 12:22:00
-lead_image: /assets/images/posts/cv/vectorization/cover.png
+lead_image: /assets/images/posts/cv/vectorization/cover.webp
 tags:
   - Computer Vision
   - TensorFlow
@@ -192,7 +192,7 @@ visualize(tf.cast(images, tf.uint8), labels)
 {: class="collapse" id="csetup"}
 
 {% include figure.html
-   src="/assets/images/posts/cv/vectorization/tfflowers.png"
+   src="/assets/images/posts/cv/vectorization/tfflowers.webp"
    alt="A few samples in the TF-Flowers dataset."
    caption="A few samples in the TF-Flowers dataset." %}
 
@@ -285,7 +285,7 @@ visualize(
 {: class="collapse" id="cv3"}
 
 {% include figure.html
-   src="/assets/images/posts/cv/vectorization/tfflowers-sepia.png"
+   src="/assets/images/posts/cv/vectorization/tfflowers-sepia.webp"
    alt="The samples in the TF-Flowers dataset, after the Sepia filter is applied."
    caption="The samples in the TF-Flowers dataset, after the Sepia filter is applied." %}
     
@@ -326,7 +326,7 @@ visualize(
 {: class="collapse" id="cv2"}
 
 {% include figure.html
-   src="/assets/images/posts/cv/vectorization/tfflowers-gray.png"
+   src="/assets/images/posts/cv/vectorization/tfflowers-gray.webp"
    alt="Samples in the TF-Flowers dataset converted to gray-scale."
    caption="Samples in the TF-Flowers dataset converted to gray-scale." %}
 
@@ -412,7 +412,7 @@ The signals are associated in an inverted fashion, which is illustrated in the s
 Finally, we can imagine that a 2-D signal (such as images) is reflected when both $(x, y)$ axes are reflected. This is equivalent of rotating the image in $180^\circ$.
 
 {% include figure.html
-   src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Comparison_convolution_correlation.svg/1280px-Comparison_convolution_correlation.svg.png"
+   src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Comparison_convolution_correlation.svg/1280px-Comparison_convolution_correlation.svg.webp"
    classed="w-lg-50"
    alt="Comparison between convolution, cross-correlation and autocorrelation. From Wikipedia."
    caption="Comparison between convolution, cross-correlation and autocorrelation. From <a href=\"https://en.wikipedia.org/wiki/Cross-correlation\" target=\"_blank\">Wikipedia</a>." %}
@@ -764,7 +764,7 @@ visualize(
 {: class="collapse" id="cv1"}
 
 {% include figure.html
-   src="/assets/images/posts/cv/vectorization/results.png"
+   src="/assets/images/posts/cv/vectorization/results.webp"
    alt="Convolution between the samples in TF-Flowers and hand-craft kernels."
    caption="Convolution between the samples in TF-Flowers and hand-craft kernels."
    classed="w-xl-130"

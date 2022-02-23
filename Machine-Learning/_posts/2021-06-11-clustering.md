@@ -10,7 +10,7 @@ first_p: |-
   datasets, including a bonus color quantization example.
 toc: true
 date: 2021-06-11 15:58:00
-lead_image: /assets/images/posts/ml/clustering/103_0.jpg
+lead_image: /assets/images/posts/ml/clustering/103_0.webp
 tags:
   - ML
   - Clustering
@@ -213,7 +213,7 @@ plt.tight_layout();
 {: class="collapse" id="cv1"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/14_0.jpg"
+   src="/assets/images/posts/ml/clustering/14_0.webp"
    alt="The Cluster.dat Dataset: (a) the features in their original value range, and (b) features were scaled in order to have 0 mean and standard deviation 1."
    caption="The Cluster.dat Dataset: (a) the features in their original value range, and (b) features were scaled in order to have mean 0 and standard deviation 1." %}
 
@@ -266,7 +266,7 @@ plt.tight_layout();
 
     
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/18_0.jpg"
+   src="/assets/images/posts/ml/clustering/18_0.webp"
    alt="The Boston Dataset: (a) the features in their original value range, and (b) features were scaled in order to have mean 0 and standard deviation 1."
    caption="The Boston Dataset: (a) the features in their original value range, and (b) features were scaled in order to have mean 0 and standard deviation 1." %}
 
@@ -326,7 +326,7 @@ visualize_images(
 {: class="collapse" id="cv3"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/23_0.jpg"
+   src="/assets/images/posts/ml/clustering/23_0.webp"
    alt="The TF-Flowers Dataset."
    caption="The TF-Flowers Dataset." %}
     
@@ -768,7 +768,7 @@ plt.tight_layout();
 {: class="collapse" id="cv4"}
     
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/35_0.jpg"
+   src="/assets/images/posts/ml/clustering/35_0.webp"
    caption="Effect of initialization procedure over the initial state of the model." %}
 
 The `normal_clusters` initialization procedure considers the mean and standard deviation of the training set's distribution, which means points drawn from this procedure will belong to the set's distribution and assume reasonable values in each feature.
@@ -824,7 +824,7 @@ del ctr, cte, c0, c1, p0_train, p0_test, p1_train, p1_test
 {: class="collapse" id="cv5"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/37_0.jpg"
+   src="/assets/images/posts/ml/clustering/37_0.webp"
    title="Effect of data standardization over K-Means's initial configuration."
    caption="Without standardization, samples are not correctly aggregated because of the different proportions of each axis." %}
 
@@ -986,7 +986,7 @@ plt.tight_layout();
 {: class="collapse" id="cv6"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/43_0.jpg"
+   src="/assets/images/posts/ml/clustering/43_0.webp"
    title="Clustering metrics for each choice of number of clusters k, considering the Cluster.dat dataset."
    caption="The highest decrease in WCSS is observed when using exactly 3 clusters, hence this is the optimal k according to the Elbow technique. Maximum Average Sihouette is also observed when $k=3$."
    classed="w-xl-130" %}
@@ -1084,7 +1084,7 @@ visualize_clusters(
 {: class="collapse" id="cv7"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/49_0.jpg"
+   src="/assets/images/posts/ml/clustering/49_0.webp"
    alt="K-Means Clustering over Cluster.dat Dataset."
    caption="K-Means Clustering over Cluster.dat Dataset." %}
 
@@ -1249,7 +1249,7 @@ plt.tight_layout();
 {: class="collapse" id="cv8"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/55_0.jpg"
+   src="/assets/images/posts/ml/clustering/55_0.webp"
    title="Clustering metrics for each choice of number of clusters k, considering the Boston dataset."
    caption='The WCSS graph does not show any "elbow". The highest Silhouette occurs for 2 clusters.'
    classed="w-xl-130" %}
@@ -1362,7 +1362,7 @@ visualize_clusters(
 {: class="collapse" id="cv9"}
     
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/61_0.jpg"
+   src="/assets/images/posts/ml/clustering/61_0.webp"
    alt="K-Means clustering over Boston Dataset."
    caption="K-Means clustering over Boston Dataset." %}
     
@@ -1433,7 +1433,7 @@ visualize_images(
 {: class="collapse" id="cv10"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/69_0.jpg"
+   src="/assets/images/posts/ml/clustering/69_0.webp"
    alt="Initial color book."
    caption="Initial color book."
    classed="w0" %}
@@ -1561,7 +1561,7 @@ visualize_images(
 {: class="collapse" id="cv11"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/71_0.jpg"
+   src="/assets/images/posts/ml/clustering/71_0.webp"
    alt="Optimized color book"
    caption="Optimized color book."
    classed="w0" %}
@@ -1603,9 +1603,9 @@ Encoding 8 images:
      alt="Color quantization results over images in TF-Flowers Test Subset."
 >
   <div class="carousel-inner">
-    <div class="carousel-item active"><img src="/assets/images/posts/ml/clustering/73_1.jpg" class="d-block w-100"></div>
-    <div class="carousel-item"><img src="/assets/images/posts/ml/clustering/73_2.jpg" class="d-block w-100"></div>
-    <div class="carousel-item"><img src="/assets/images/posts/ml/clustering/73_3.jpg" class="d-block w-100"></div>
+    <div class="carousel-item active"><img src="/assets/images/posts/ml/clustering/73_1.webp" class="d-block w-100"></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/clustering/73_2.webp" class="d-block w-100"></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/clustering/73_3.webp" class="d-block w-100"></div>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselFlowersKmeans"  data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -2159,7 +2159,7 @@ visualize_clusters(
 
     
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/91_0.jpg"
+   src="/assets/images/posts/ml/clustering/91_0.webp"
    alt="Hierarchical Clustering over Cluster.dat Dataset."
    caption="Hierarchical Clustering over Cluster.dat Dataset." %}
     
@@ -2362,7 +2362,7 @@ visualize_clusters(
 
     
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/101_0.jpg"
+   src="/assets/images/posts/ml/clustering/101_0.webp"
    alt="Hierarchical Clustering over Boston Dataset."
    caption="Hierarchical Clustering over Boston Dataset." %}
 
@@ -2427,7 +2427,7 @@ plt.tight_layout()
 {: class="collapse" id="cv15"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/103_0.jpg"
+   src="/assets/images/posts/ml/clustering/103_0.webp"
    alt="Effect of the different linkages over the clustering's final configuration."
    caption="Effect of the different linkages over the clustering's final configuration." %}
 
@@ -2484,7 +2484,7 @@ del e, b_cov_train, b_cov_test, b_cor_train, b_cor_test
 {: class="collapse" id="cv16"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/107_0.jpg"
+   src="/assets/images/posts/ml/clustering/107_0.webp"
    alt="Effect of data standardization over Eigen Decomposition."
    caption="Effect of data standardization over Eigen Decomposition." %}
 
@@ -2748,7 +2748,7 @@ plt.tight_layout();
 {: class="collapse" id="cv17"}
     
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/116_0.jpg"
+   src="/assets/images/posts/ml/clustering/116_0.webp"
    title="Clustering metrics for each choice of number of clusters k, considering the Boston dataset reduced with PCA."
    caption="Results are quite similar to the ones obtained without dimensionality reduction."
    classed="w-xl-130" %}
@@ -2854,7 +2854,7 @@ visualize_clusters(
 {: class="collapse" id="cv18"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/122_0.jpg"
+   src="/assets/images/posts/ml/clustering/122_0.webp"
    alt="K-Means clustering over the Boston dataset after dimensionalty reduction was performed."
    caption="K-Means clustering over the Boston dataset after dimensionalty reduction was performed." %}
 
@@ -3042,7 +3042,7 @@ visualize_clusters(
 {: class="collapse" id="cv19"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/clustering/133_0.jpg"
+   src="/assets/images/posts/ml/clustering/133_0.webp"
    alt="Hierarchical clustering over the Boston dataset after dimensionality reduction was performed."
    caption="Hierarchical clustering over the Boston dataset after dimensionality reduction was performed." %}
     

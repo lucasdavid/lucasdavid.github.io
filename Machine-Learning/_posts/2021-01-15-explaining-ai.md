@@ -5,7 +5,7 @@ excerpt: Explainability using tree decision visualization, weight composition, a
 first_p:
 toc: true
 date: 2021-01-15 16:12:00
-lead_image: /assets/images/posts/ml/explaining/cam/grad/1.jpg
+lead_image: /assets/images/posts/ml/explaining/cam/grad/1.webp
 first_p: |-
   Estimators that are hard to explain are also hard to trust, jeopardizing
   the adoption of these models by a broader audience.
@@ -371,7 +371,7 @@ plot_tree_fullscreen(decision_tree)
 {: class="collapse" id="cv1"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/explaining/explaining_scikit_learn_11_0.jpg"
+   src="/assets/images/posts/ml/explaining/explaining_scikit_learn_11_0.webp"
    caption="The decision tree model trained over the Breast Cancer Dataset." %}
 
 
@@ -383,7 +383,7 @@ rf = RandomForestClassifier().fit(x, y)
 ```
 
 {% include figure.html
-   src="https://upload.wikimedia.org/wikipedia/commons/7/76/Random_forest_diagram_complete.png"
+   src="https://upload.wikimedia.org/wikipedia/commons/7/76/Random_forest_diagram_complete.webp"
    alt="Diagram of a random forest model, combining its trees with the majority-voting strategy."
    caption="Diagram of a random forest model, combining its trees with the majority-voting strategy. Available at <a href=\"whttps://en.wikipedia.org/wiki/Random_forest\" target=\"_blank\">wikipedia</a>." %}
 
@@ -406,7 +406,7 @@ plot_feature_importances(rf.feature_importances_)
 {: class="collapse" id="cv2"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/explaining/explaining_scikit_learn_14_0.jpg"
+   src="/assets/images/posts/ml/explaining/explaining_scikit_learn_14_0.webp"
    caption="Importance per feature for a Random Forest model trained over the Breast Cancer Dataset." %}
 
 
@@ -442,7 +442,7 @@ plot_feature_importances(w.ravel())
 ```
 
 {% include figure.html
-   src="/assets/images/posts/ml/explaining/explaining_scikit_learn_15_0.jpg"
+   src="/assets/images/posts/ml/explaining/explaining_scikit_learn_15_0.webp"
    caption="Importance per feature for a Logistic Regression model trained over the Breast Cancer Dataset." %}
 
 This can also be acomplished when reducing the set with Principal Component Analysis, considering the whole pipeline can be
@@ -483,7 +483,7 @@ Energy retained:     99.11%
 ```
 
 {% include figure.html
-   src="/assets/images/posts/ml/explaining/explaining_scikit_learn_19_0.jpg"
+   src="/assets/images/posts/ml/explaining/explaining_scikit_learn_19_0.webp"
    caption="Importance per feature for a Logistic Regression model trained over the Breast Cancer Dataset." %}
 
 
@@ -496,7 +496,7 @@ to artificial intelligence --- the idea that intelligence can be achieved by con
 Differently from search algorithms, connectionist models are complicated in nature, which poses higher difficulties in understanding them. Suppose you have a conventional image classification network:
 
 {% include figure.html
-   src="/assets/images/posts/ml/deep/inception.png"
+   src="/assets/images/posts/ml/deep/inception.webp"
    alt="Inception Architecture. A well-established network architecture for convolutional models."
    caption="Inception Architecture. A well-established network architecture for convolutional models."
    classed="rounded mx-auto d-block" %}
@@ -507,7 +507,7 @@ Given an input image and the feed-forward signal of that image through the netwo
 Many solutions were studied over the last years. Some of them involved patching-out parts of the image and observing how it affected the answer (see this [article](https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf)). If a given region was occluded and the answer changed drastically, then that would mean that the region in question was *important* for the model's decision process. One could then reapply this procedure over and over, across the entire input sample, and finally draw a heatmap of importance:
 
 {% include figure.html
-   src="/assets/images/posts/ml/explaining/zeilerECCV2014-fig6.jpg"
+   src="/assets/images/posts/ml/explaining/zeilerECCV2014-fig6.webp"
    alt="Effect of image occlusion in the classifier's answer (columns (a) and (d))."
    caption="Effect of image occlusion in the classifier's answer (columns <i>a</i> and <i>d</i>). Available at: <a href=\"https://arxiv.org/pdf/1908.04351.pdf\">arxiv.org/1908.04351</a>."
    classed="rounded mx-auto d-block" %}
@@ -538,12 +538,12 @@ INPUT_SHAPE = [299, 299, 3]
 
 DATA_DIR = 'images/'
 IMAGES = [
-  'https://raw.githubusercontent.com/keisen/tf-keras-vis/master/examples/images/goldfish.jpg',
-  'https://raw.githubusercontent.com/keisen/tf-keras-vis/master/examples/images/bear.jpg',
-  'https://raw.githubusercontent.com/keisen/tf-keras-vis/master/examples/images/soldiers.jpg',
-  'https://3.bp.blogspot.com/-W__wiaHUjwI/Vt3Grd8df0I/AAAAAAAAA78/7xqUNj8ujtY/s400/image02.png',
-  'https://www.petcare.com.au/wp-content/uploads/2017/09/Dalmatian-2.jpg',
-  'http://www.aviationexplorer.com/Diecast_Airplanes_Aircraft/delta_Airbus_diecast_airplane.jpg',
+  'https://raw.githubusercontent.com/keisen/tf-keras-vis/master/examples/images/goldfish.webp',
+  'https://raw.githubusercontent.com/keisen/tf-keras-vis/master/examples/images/bear.webp',
+  'https://raw.githubusercontent.com/keisen/tf-keras-vis/master/examples/images/soldiers.webp',
+  'https://3.bp.blogspot.com/-W__wiaHUjwI/Vt3Grd8df0I/AAAAAAAAA78/7xqUNj8ujtY/s400/image02.webp',
+  'https://www.petcare.com.au/wp-content/uploads/2017/09/Dalmatian-2.webp',
+  'http://www.aviationexplorer.com/Diecast_Airplanes_Aircraft/delta_Airbus_diecast_airplane.webp',
 ]
 ```
 {% include posts/collapse-btn.html id="cv4" %}
@@ -561,7 +561,7 @@ images, labels = next(iter(images_set.take(1)))
 {: class="collapse" id="cv3"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/explaining/inputs.jpg"
+   src="/assets/images/posts/ml/explaining/inputs.webp"
    alt="Input images for our model. Common instances of classes present in the imagenet dataset (dogs, bears, airplanes)."
    caption="Input images for our model. Common instances of classes present in the imagenet dataset (dogs, bears, airplanes)."
    classed="rounded mx-auto d-block" %}
@@ -737,7 +737,7 @@ plt.tight_layout();
 {: class="collapse" id="cv5"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/explaining/vanilla-grads.jpg"
+   src="/assets/images/posts/ml/explaining/vanilla-grads.webp"
    alt="Input images optimized to maximize each unit described in UNIT_NAMES."
    caption="Input images optimized to maximize each unit described in <code>UNIT_NAMES</code>."  %}
 
@@ -768,7 +768,7 @@ def visualize(unit):
     return loss, i
 ```
 {% include figure.html
-   src="/assets/images/posts/ml/explaining/vanilla-grads-aug.jpg"
+   src="/assets/images/posts/ml/explaining/vanilla-grads-aug.webp"
    alt="Input images optimized to maximize each unit described in UNIT_NAMES using augmentation."
    caption="Input images optimized to maximize each unit described in <code>UNIT_NAMES</code> using augmentation (rotation and translation)."  %}
 
@@ -830,7 +830,7 @@ plot_images_and_salency_maps(as_image_vector(images), s.numpy(), y.numpy())
 {: class="collapse" id="cv6"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/explaining/vanilla-saliency.jpg"
+   src="/assets/images/posts/ml/explaining/vanilla-saliency.webp"
    alt="Input images and saliency activation maps, considering their most activating units."
    caption="Input images and saliency activation maps, considering their most activating units." %}
 
@@ -871,7 +871,7 @@ plot_images_and_salency_maps(as_image_vector(images), s.numpy(), y.numpy())
 {: class="collapse" id="cv7"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/explaining/smoothgrad-saliency.jpg"
+   src="/assets/images/posts/ml/explaining/smoothgrad-saliency.webp"
    alt="Input images and saliency activation maps, considering their most activating units."
    caption="Input images and saliency activation maps, considering their most activating units. Obtained using the SmoothGrad method."  %}
 
@@ -977,8 +977,8 @@ plot_heatmaps(to_image(images), maps)
      alt="Results from multiple border extraction methods over images containing simple geometric shapes."
      style="height: 120px">
   <div class="carousel-inner">
-    <div class="carousel-item active"><img src="/assets/images/posts/ml/explaining/fullgrads-1.jpg" class="d-block w-100"></div>
-    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/fullgrads-2.jpg" class="d-block w-100"></div>
+    <div class="carousel-item active"><img src="/assets/images/posts/ml/explaining/fullgrads-1.webp" class="d-block w-100"></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/fullgrads-2.webp" class="d-block w-100"></div>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselBorders"  data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>

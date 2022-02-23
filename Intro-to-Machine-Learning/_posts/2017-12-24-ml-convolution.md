@@ -16,7 +16,7 @@ first_p: |-
 toc: true
 date: 2017-12-24 21:17:00
 color: purple darken-3
-lead_image: /assets/images/posts/ml/deep/conv_outputs.jpg
+lead_image: /assets/images/posts/ml/deep/conv_outputs.webp
 tags:
   - ML
   - Computer Vision
@@ -36,7 +36,7 @@ Por quê precisamos da ideia de *deep-learning* e *deep-models*, então?
 Vamos voltar à imagem da introdução:
 
 {% include figure.html
-   src="/assets/images/posts/ml/intro/ml-computing.png"
+   src="/assets/images/posts/ml/intro/ml-computing.webp"
    alt="Aprendizado de máquina"
    caption="Aprendizado de máquina clássico." %}
 
@@ -70,7 +70,7 @@ Eles são integrados ao início do *pipeline* de processamento e podem, portanto
 ser vistos como uma extensão do aprendizado de máquina 'clássico':
 
 {% include figure.html
-   src="/assets/images/posts/ml/deep/dml-computing.png"
+   src="/assets/images/posts/ml/deep/dml-computing.webp"
    alt="Aprendizado de máquina 'profundo'"
    caption="Aprendizado de máquina profundo." %}
 
@@ -80,7 +80,7 @@ Vamos entender como as redes convolucionais funcionam na prática.
 Considere a imagem do urso koala abaixo:
 
 {% include figure.html
-   src="/assets/images/posts/ml/deep/koala.jpg"
+   src="/assets/images/posts/ml/deep/koala.webp"
    alt="A imagem de um koala sobre uma árvore."
    caption="A fotografia de um koala sobre uma árvore." %}
 
@@ -100,7 +100,7 @@ def preprocess_input(x):
   # transform pixel' values in [0, 255] to [-1.0, 1.0] interval.
   return x / 127.5 - 1.
 
-koala = img_to_array(load_img('./koala.jpg', target_size=input_shape))
+koala = img_to_array(load_img('./koala.webp', target_size=input_shape))
 x = np.expand_dims(koala, 0)
 x = preprocess_input(x)
 print(x.shape)
@@ -125,7 +125,7 @@ de um determinado padrão:
 
 <center>
   <figure>
-    <img src="/assets/images/posts/ml/deep/conv.jpg"
+    <img src="/assets/images/posts/ml/deep/conv.webp"
          alt="Exemplo de Hadamard entre uma região local de um sinal de entrada e um kernel, seguido de uma soma redutiva."
          class="img-fluid" />
     
@@ -294,7 +294,7 @@ saída desta rede convolucional, criando assim um *pipeline* completo -- porém 
 
 <center>
 <figure>
-  <img src="/assets/images/posts/ml/deep/convnet.png"
+  <img src="/assets/images/posts/ml/deep/convnet.webp"
        class="figure-img img-fluid rounded" >
   <figcaption>
     Exemplo de rede convolucional aplicada ao processamento de imagens.
@@ -330,7 +330,7 @@ automóvel, pássaro etc).
 
 <center>
 <figure>
-  <img src="/assets/images/posts/ml/deep/cifar10.png" width="400"
+  <img src="/assets/images/posts/ml/deep/cifar10.webp" width="400"
        class="figure-img img-fluid rounded">
   <figcaption>
     Exemplo de amostras em cifar10.
@@ -394,7 +394,7 @@ from keras.preprocessing.image import load_img, img_to_array
 
 target_shape = [299, 299, 3]
 
-koala = img_to_array(load_img('koala.jpg', target_size=target_shape))
+koala = img_to_array(load_img('koala.webp', target_size=target_shape))
 # faz um conjunto contendo 1 imagem.
 x = np.array([koala])
 # processa x para as mesmas condições
@@ -527,13 +527,13 @@ for _z in z:
         index += 1
 
 plt.tight_layout()
-plt.savefig('conv_outputs.jpg')
+plt.savefig('conv_outputs.webp')
 plt.clf()
 ```
 
 <center>
 <figure>
-<img src="/assets/images/posts/ml/deep/conv_outputs.jpg"
+<img src="/assets/images/posts/ml/deep/conv_outputs.webp"
      class="figure-img img-fluid rounded" >
   <figcaption>
   Visualização das saídas produzidas pelas camadas observadas, quando a rede é alimentada com o koala.

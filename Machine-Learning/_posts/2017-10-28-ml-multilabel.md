@@ -9,7 +9,7 @@ first_p: |-
   in the i-th position in the target vector.
 toc: true
 date: 2017-10-26 21:43:00
-lead_image: /assets/images/posts/ml/multilabel/dataset.png
+lead_image: /assets/images/posts/ml/multilabel/dataset.webp
 tags:
   - ML
   - Classification
@@ -58,7 +58,7 @@ $1.0$. That's ideal when dealing with mutually disjointed classes, but what
 about when that's not the case?
 
 {% include figure.html
-   src="/assets/images/posts/ml/multilabel/dataset.png"
+   src="/assets/images/posts/ml/multilabel/dataset.webp"
    alt="Samples from the multi-label dataset 'Image Data for Multi-Instance Multi-Label Learning'."
    caption="Samples from the multi-label dataset 'Image Data for Multi-Instance Multi-Label Learning'. Note that some instances are associated with more than one label (mountains and sea or sea and sunset). Available at: <a href=\"https://www.lamda.nju.edu.cn/data_MIMLimage.ashx\">lamda.nju.edu.cn</a>" %}
 
@@ -248,7 +248,7 @@ def plot_predictions(model, ds, take=1):
 plot_predictions(disc, test_ds)
 ```
 {% include figure.html
-   src="/assets/images/posts/ml/multilabel/preds.png"
+   src="/assets/images/posts/ml/multilabel/preds.webp"
    alt="Samples from the dataset's test split and its predictions."
    caption="Samples from the dataset's test split and its predictions." %}
 

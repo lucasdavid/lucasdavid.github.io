@@ -36,7 +36,7 @@ I hear way to many people complaining how hard it's to fix GIT conflicts. Before
 
 The image bellow illustrates how GIT represents a conflict. To solve it, you must manually re-write the entire region/delete one of the versions and erase the lines 1, 4 and 6. Finally, it'll allow you to commit.
 
-![A conflict example](https://help.github.com/assets/images/mac/changes/merge_conflict_sample.png)
+![A conflict example](https://help.github.com/assets/images/mac/changes/merge_conflict_sample.webp)
 
 > **#1** Please, keep in mind that GIT didn't create conflicts. They exist whether you're using a versioning tool or simply grabbing your mates codes and manually merging them. Seriously. IT IS NOT easier to keep swapping a hundred different .zip files through email.
 
