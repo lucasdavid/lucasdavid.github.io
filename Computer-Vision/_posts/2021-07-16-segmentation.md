@@ -127,7 +127,7 @@ grays = [skimage.color.rgb2gray(i) for i in images]
 visualize([*images, *grays], image_files, cmap='gray');
 ```
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_7_0.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_7_0.webp"
    alt="Simple colored geometric shapes."
    caption="Simple colored geometric shapes." %}
 
@@ -176,14 +176,14 @@ for n, s in zip(method_names, segments):
      data-bs-ride="carousel"
      alt="Results from multiple border extraction methods over images containing simple geometric shapes.">
   <div class="carousel-inner">
-    <div class="carousel-item active"><img src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_10_1.webp.webp" class="d-block w-100"></div>
-    <div class="carousel-item"><img src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_10_2.webp.webp" class="d-block w-100"></div>
-    <div class="carousel-item"><img src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_10_3.webp.webp" class="d-block w-100"></div>
-    <div class="carousel-item"><img src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_10_4.webp.webp" class="d-block w-100"></div>
-    <div class="carousel-item"><img src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_10_5.webp.webp" class="d-block w-100"></div>
-    <div class="carousel-item"><img src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_10_6.webp.webp" class="d-block w-100"></div>
-    <div class="carousel-item"><img src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_10_7.webp.webp" class="d-block w-100"></div>
-    <div class="carousel-item"><img src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_10_8.webp.webp" class="d-block w-100"></div>
+    <div class="carousel-item active"><img src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_10_1.webp" class="d-block w-100"></div>
+    <div class="carousel-item"><img src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_10_2.webp" class="d-block w-100"></div>
+    <div class="carousel-item"><img src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_10_3.webp" class="d-block w-100"></div>
+    <div class="carousel-item"><img src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_10_4.webp" class="d-block w-100"></div>
+    <div class="carousel-item"><img src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_10_5.webp" class="d-block w-100"></div>
+    <div class="carousel-item"><img src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_10_6.webp" class="d-block w-100"></div>
+    <div class="carousel-item"><img src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_10_7.webp" class="d-block w-100"></div>
+    <div class="carousel-item"><img src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_10_8.webp" class="d-block w-100"></div>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselBorders"  data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -208,7 +208,7 @@ filled = [ndimage.binary_fill_holes(s) for s in segments]
 visualize(filled, rows=1, cmap='gray_r');
 ```
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_12_0.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_12_0.webp"
    alt="The figure displays three binary images, in which the geometric shapes are filled with the color black, and the background is shown in white."
    caption="Binary filling of the borders previously extracted." %}
 
@@ -254,11 +254,11 @@ plot_all_segments(grays, segments, props)
 
     
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_14_0.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_14_0.webp"
    caption="Segmentation of the objects in the three original images using edge detection and binary fill of wholes. Segmentation maps are overlayed with objects, while the bounding boxes used to delimit each object was extracted as a property in <code>regionprops_table</code>." %}
 
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_14_1.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_14_1.webp"
    caption="Histograms of areas detected from objects in each input image." %}
 
 A simple way to count objects based on their overall area is to use histograms.
@@ -390,12 +390,12 @@ I found `min_size` to be of little importance in these examples, as it is applie
 plot_all_segments(grays, segments, props)
 ```
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_20_0.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_20_0.webp"
    caption="Segmentation of the objects in the three original images using the Felzenszwalb's method." %}
 
 Similar results are obtained with Felzenszwalb, with respect to the area of objects:
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_20_1.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_20_1.webp"
    caption="Histograms of areas detected from objects in each scenario." %}
 
 
@@ -428,7 +428,7 @@ for ax, p in zip(axes, bccd_samples):
 {: class="collapse" id="cv2"}
 
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_22_0.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_22_0.webp"
    caption="A few samples from the BCCD dataset. Cells are annotated in RBC (red blood cells), WBC (white blood cells) and Platelets." %}
 
 
@@ -464,7 +464,7 @@ def search_felzenszwalb(image, params=None, figsize=(16, 13)):
 search_felzenszwalb(bccd_images[3])
 ```
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_25_0.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_25_0.webp"
    caption="Effect of the parameters <code>scale</code> and <code>min_size</code> over segmentation." %}
 
 The segmentation results of samples in the BCCD dataset are shown in Fig. 10. The method has correctly segmented many of the blood cells in some samples (such as in the third and fifth images). However, a few drawbacks are noticeable as well: this method is strongly affected by small grains, and will often recognize small microorganisms that were captured by the microscope while photographing the blood cells. Furthermore, cells that were smashed together seem to have been classified as a single object (first and eighth images).
@@ -492,7 +492,7 @@ plot_all_segments_and_bboxes(images, segments, props)
 {: class="collapse" id="cv3"}
 
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_28_0.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_28_0.webp"
    caption="Segmentation results over samples in the BCCD dataset. " %}
 
 {% include posts/collapse-btn.html id="cv4" %}
@@ -514,7 +514,7 @@ histogram_objects(props, percentile=95)
 {: class="collapse" id="cv4"}
 
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_29_0.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_29_0.webp"
    caption="Histogram of areas detected from objects in samples in the BCCD dataset." %}
 
 Finally, Felzenszwalb's method will indistinguishably segment the background sections of the image into regions, as these sections also present color information. It is therefore necessary to employ heuristics that discriminate foreground/background in order to separate it.
@@ -533,7 +533,7 @@ segments_rbc = [s*np.isin(s, p.label) for s, p in zip(segments, props_rbc)]
 plot_all_segments_and_bboxes(images, bccd_samples, segments_rbc, props_rbc)
 ```
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_31_0.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_31_0.webp"
    caption="Segmentation results over samples in the BCCD dataset. Only objects with area between $1e3$ and $2e4$ are shown." %}
 
 
@@ -541,7 +541,7 @@ plot_all_segments_and_bboxes(images, bccd_samples, segments_rbc, props_rbc)
 histogram_objects(props_rbc)
 ```
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_32_0.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_32_0.webp"
    caption="Histogram of areas detected from objects in the samples in the BCCD dataset. Only objects with area between $1e3$ and $2e4$ account for this statistics." %}
 
 #### Pre-Processing: Filtering Noise
@@ -569,7 +569,7 @@ grays_bilateral = [mean_bilateral_fn(i, selem20) for i in images]
 visualize(grays[:5] + grays_bilateral[:5], figsize=(16, 5));
 ```
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_36_0.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_36_0.webp"
    caption="Application of the <code>mean_bilateral</code>. From top to bottom: (a) the original samples in the BCCD dataset, (b) the corresponding sample cleaned from noise." %}
 
 Fig. 14 illustrates the application of `mean_bilateral` over samples in the BCCD dataset.
@@ -583,7 +583,7 @@ the effect of varying `scale` and `min_size` over a sample in the BCCD dataset. 
 search_felzenszwalb(grays_bilateral[4])
 ```
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_37_0.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_37_0.webp"
    caption="Effect of the parameters <code>scale</code> and <code>min_size</code> over segmentation, after preprocessing with <code>mean_bilateral</code> was performed." %}
 
 We can now apply to each sample in our subset:
@@ -608,14 +608,14 @@ segments_rbc = [s*np.isin(s, p.label) for s, p in zip(segments, props_rbc)]
 plot_all_segments_and_bboxes(images, bccd_samples, segments_rbc, props_rbc)
 ```
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_40_0.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_40_0.webp"
    caption="Segmentation results over samples BCCD dataset, preprocessing samples with <code>mean_bilateral</code> and post-processing them by sub-selecting objects within a reasonable overall area." %}
 
 ```python
 histogram_objects(props_rbc)
 ```
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_41_0.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_41_0.webp"
    caption="Histogram of areas for each image in the BCCD dataset." %}
 
 From Fig. 16 and Fig. 17 show our cleaned segmentation results.
@@ -654,14 +654,14 @@ Wall time: 1.11 s
 plot_all_segments_and_bboxes(images, bccd_samples, segments, props)
 ```
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_45_0.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_45_0.webp"
    caption="Segmentation results over samples in the BCCD dataset using Morphological operators." %}
 
 ```python
 histogram_objects(props)
 ```
 {% include figure.html
-   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_46_0.webp.webp"
+   src="/assets/images/posts/cv/segmentation/2021-07-16-segmentation_46_0.webp"
    caption="Histograms of areas detected in objects in each image." %}
 
 The segmentation results over samples in the BCCD dataset are shown in Fig. 18 and Fig. 19. Through inspection, we notice this strategy is robust against small grains in the image, and correctly segments red blood cells presenting light-shaded interiors. It also automatically ignores the background and does not interpret its regions as new objects --- through the usage of Otsu's method {% cite otsu4310076 %} ---. Notwithstanding, long cell chains (which are smashed against each other) are incorrectly segmented as a single object, regardless of their color differences (an effect observed in the first, second, third, fifth, ninth and tenth images).

@@ -698,7 +698,7 @@ Finally, for any other sample correctly classified with $\|p\| \ge 1, L_\text{hi
 and no further gradient updates are performed.
 
 {% include figure.html
-   src="https://i.stack.imgur.com/Ifeze.webp"
+   src="https://i.stack.imgur.com/Ifeze.png"
    title="The Hinge Loss Function."
    caption='Incorrectly estimated samples are penalized with a large hinge loss value, as well as correctly classified samples that fall in the confidence margin. Conversely, correctly classified samples are ignored with a null loss value. Available at <a href="https://math.stackexchange.com/q/2899178">stackexchange/q/2899178</a>.' %}
 
