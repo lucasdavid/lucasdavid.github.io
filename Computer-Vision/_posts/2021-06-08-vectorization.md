@@ -505,7 +505,6 @@ For analytical convenience, I imagined this case to have the following character
 I considered the following signals in my use-case:
 
 $$\begin{align}
-  \label{eq:use_case}
   s &= \begin{bmatrix}
      1 & 2 & 3 & 4 & 5 \\
      6 & 7 & 8 & 9 & 10 \\
@@ -542,7 +541,6 @@ The indexing procedure can be described by the following steps.
 The use-case represented above can therefore be indexed as:
 
 $$\begin{align}
-  \label{eq:use_case_index_matrix}
   M_s = \begin{bmatrix}
     00 & 01 & 02 & 10 & 11 & 12 \\
     01 & 02 & 03 & 11 & 12 & 13 \\
