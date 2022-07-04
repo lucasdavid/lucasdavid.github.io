@@ -105,8 +105,8 @@ plt.tight_layout();
 {: class="collapse" id="csigmoid"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/deducing-ce-wl/sigmoid.webp"
-   title="The Sigmoid activation function."
+   src="/assets/images/posts/ml/deducing-ce-wl/sigmoid.jpg"
+   title="The <i>Sigmoid</i> activation function."
    caption="This function is monotonically increasing and has a single inflection point at $x = 0$." %}
 
 In Mathematics, the *logit* (logistic unit) function is the inverse of the sigmoid function {% cite cramer2003logit %}:
@@ -123,18 +123,19 @@ $$\nabla S = \Bigg[\frac{\partial S}{\partial x_0}, \frac{\partial S}{\partial x
 
 And,
 
-$$\begin{align}
+$$\begin{align}\begin{split}
 \frac{\partial S}{\partial x_i} &= \frac{\partial}{\partial x_i} \frac{1}{1+e^{-x}}
 = -(1+e^{-x})^{-2} \frac{\partial}{\partial x_i} (1+e^{-x}) \\
 &= -\frac{-e^{-x}}{(1+e^{-x})^2} = \frac{e^{-x}}{(1+e^{-x})(1+e^{-x})} \\
 &= S \frac{e^{-x} + 1 - 1}{1+e^{-x}} = S \Bigg[\frac{e^{-x} + 1}{1+e^{-x}} - \frac{1}{1+e^{-x}}\Bigg] \\
 &= S (1 - S)
-\end{align}$$
+\end{split}\end{align}$$
 
 {% include figure.html
-   src="/assets/images/posts/ml/deducing-ce-wl/sigmoid-derivative.webp"
+   src="/assets/images/posts/ml/deducing-ce-wl/sigmoid-derivative.jpg"
    alt="The derivative of the Sigmoid activation function."
-   caption="The derivative Sigmoid activation function."
+   title="The derivative <i>Sigmoid</i> activation function."
+   caption="This function is symmetric and centered on the point 0."
    containerClassed="text-center" %}
 
 ### Softmax
@@ -176,10 +177,9 @@ plt.tight_layout();
 {: class="collapse" id="csoftmax"}
 
 {% include figure.html
-   src="/assets/images/posts/ml/deducing-ce-wl/softmax.webp"
-   title="The Softmax activation function."
-   caption="(a) The activation intensity of softmax function for the first component (class). (b) The activation intensity of the softmax function for the second component (class)."
-   classed='w-xl-130' %}
+   src="/assets/images/posts/ml/deducing-ce-wl/softmax.jpg"
+   title="The <i>Softmax</i> activation function."
+   caption="(a) The activation intensity of softmax function for the first component (class). (b) The activation intensity of the softmax function for the second component (class)." %}
 
 #### Jacobian
 While the *softmax* function preserves the shape of the input vector, each output element
@@ -194,33 +194,66 @@ $$\frac{\partial}{\partial x_i} \text{softmax}_i(x) = \frac{\partial}{\partial x
 Using the quotient rule:
 
 $$\begin{align}
+\begin{split}
 \frac{\partial}{\partial x_i} \text{softmax}_i(x)
 &= \frac{\Big (\frac{\partial}{\partial x_i} e^{x_i} \Big) \sum_j e^{x_j} - e^{x_i} \frac{\partial}{\partial x_i} \sum_j e^{x_j}}{(\sum_j e^{x_j})^2} \\
 &= \frac{e^{x_i}\sum_j e^{x_j} - e^{x_i}e^{x_i}}{(\sum_j e^{x_j})^2} \\
 &= \frac{e^{x_i}}{\sum_j e^{x_j}}\frac{(\sum_j e^{x_j} - e^{x_i})}{\sum_j e^{x_j}} \\
 &= \text{softmax}_i(x) (1 - \text{softmax}_i(x))
-\end{align}$$
+\end{split}\end{align}$$
 
 For the elements outside of the main diagonal:
 
 $$\begin{align}
-\frac{\partial}{\partial x_l} \text{softmax}_i(x)
+\begin{split}\frac{\partial}{\partial x_l} \text{softmax}_i(x)
 &= \frac{\Big(\frac{\partial}{\partial x_l} e^{x_i}\Big) \sum_j e^{x_j} - e^{x_i} \frac{\partial}{\partial x_l} \sum_j e^j}{(\sum_j e^{x_j})^2} \\
 &= \frac{0 - e^{x_i}e^{x_l}}{(\sum_j e^{x_j})^2} \\
 &= -\text{softmax}_i(x) \text{softmax}_l(x)
-\end{align}$$
+\end{split}\end{align}$$
 
 Then,
 
-$$\mathbf{J} \text{softmax} =
+$$\begin{align}
+\begin{split}
+\mathbf{J} \text{softmax} &=
   \begin{bmatrix}
     \text{sm}_0(1-\text{sm}_0) &    -\text{sm}_0\text{sm}_1 & \ldots & -\text{sm}_0\text{sm}_n \\
     -\text{sm}_1\text{sm}_0    & \text{sm}_1(1-\text{sm}_1) & \ldots & -\text{sm}_1\text{sm}_n \\
     \vdots                     &                     \vdots & \ddots & \vdots \\
     -\text{sm}_n\text{sm}_0 & -\text{sm}_n\text{sm}_1 & \ldots & \text{sm}_n(1-\text{sm}_n)
-  \end{bmatrix}$$
+  \end{bmatrix} \\
+  &= \text{sm}_i (I - \text{sm}_j)
+\end{split}\end{align}$$
 
 Where $\text{sm}_i = \text{softmax}_i(x)$.
+
+
+```py
+z = tf.stack(tf.meshgrid(x, x), axis=-1)
+y = tf.nn.softmax(z)
+i = tf.eye(2)
+
+y = y[..., tf.newaxis]
+
+y_grad = y * (i-y)
+y_grad = tf.reduce_sum(y_grad, axis=-1)
+```
+
+{% include posts/collapse-btn.html id="csm_grad" %}
+```py
+fig = plt.figure(figsize=(16, 6))
+show_sm_surface(fig.add_subplot(121, projection = '3d'), a, b, y_grad, sm=0, title='(a)')
+show_sm_surface(fig.add_subplot(122, projection = '3d'), a, b, y_grad, sm=1, title='(b)')
+
+plt.tight_layout();
+```
+{: class="collapse" id="csm_grad"}
+
+{% include figure.html
+   src="/assets/images/posts/ml/deducing-ce-wl/softmax-derivative.jpg"
+   title="The derivative of the <i>Softmax</i> activation function."
+   caption="The components of the Jacobian are added to account for all partial contributions of each logit. A more detailed representation can be view by plotting each partial derivative in the Jacobian separatelly (producing four charts)." %}
+
 
 #### Comparison with Normalized Logits
 In a first thought, a simple normalization could also be used as activation function in classification models,
@@ -509,7 +542,7 @@ $$\exists! k \mid y_k = 1 \implies E(y, p) = -\log(p_k)$$
 This form, commonly known as *Sparse CE*, can be written in the following way in TensorFlow:
 ```py
 def sparse_categorical_crossentropy(y, p, axis=-1):
-  p = tf.gather(p, y, axis=axis, batch_dims=axis)
+  p = tf.gather(p, y, axis=axis, batch_dims=1)
   p = -tf.math.log(p)
 
   return p
@@ -559,7 +592,7 @@ This can be simplified even further if samples are associated with a single clas
 def sparse_softmax_cross_entropy_with_logits(y, l, axis=-1):
   return (
     tf.math.log(tf.reduce_sum(tf.math.exp(l), axis=axis, keep_dims=True))
-    -tf.gather(l, y, axis=axis, batch_dims=axis)
+    -tf.gather(l, y, axis=axis, batch_dims=1)
   )
 
 # Or tf.nn.sparse_softmax_cross_entropy_with_logits
@@ -697,8 +730,22 @@ $$L_\text{hinge}(y, p) = \max(1- (-1)(-0.8), 0) = \max(1-0.8, 0) = 0.2$$
 Finally, for any other sample correctly classified with $\|p\| \ge 1, L_\text{hinge}(y,p) = 0$,
 and no further gradient updates are performed.
 
+
+```py
+x = tf.reshape(tf.range(-4, 4, delta=.1), (-1, 1))
+y = tf.losses.hinge(tf.ones(x.shape), x)
+```
+{% include posts/collapse-btn.html id="c_hinge" %}
+```py
+sns.lineplot(x=x.numpy().ravel(), y=y.numpy().ravel())
+plt.axvline(1., 0, 5, linestyle=':')
+plt.text(1., 2., "Decision Boundary", horizontalalignment='right', weight='semibold', rotation=90)
+plt.tight_layout();
+```
+{: class="collapse" id="c_hinge"}
+
 {% include figure.html
-   src="https://i.stack.imgur.com/Ifeze.png"
+   src="/assets/images/posts/ml/deducing-ce-wl/hinge.jpg"
    title="The Hinge Loss Function."
    caption='Incorrectly estimated samples are penalized with a large hinge loss value, as well as correctly classified samples that fall in the confidence margin. Conversely, correctly classified samples are ignored with a null loss value. Available at <a href="https://math.stackexchange.com/q/2899178">stackexchange/q/2899178</a>.' %}
 
