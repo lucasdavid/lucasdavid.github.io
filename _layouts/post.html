@@ -37,9 +37,11 @@ layout: default
     </div>
     <div id="table-of-contents-container"
          class="col-12 col-lg-12 col-xl-2">
+      {% if page.toc %}
       <div class="pt-4 pb-4" style="z-index: 0;">
         {% include posts/table-of-contents.html %}
       </div>
+      {% endif %}
     </div>
   </div>
 </div>

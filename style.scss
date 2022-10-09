@@ -196,12 +196,18 @@ hr {
 }
 
 .bg-purple { background-color: $purple; }
+.bg-teal { background-color: teal; }
+.bg-crimson { background-color: crimson; }
+.bg-lime { background-color: limegreen; }
+.bg-lightblue { background-color: #33a3ff; }
 .bg-black { background-color: black; }
 .bg-gray { background-color: $lightGray; }
 .bg-white { background-color: white; }
 
 .text-gray { color: $gray; }
 .text-dark-gray { color: $darkGray; }
+
+.border-gray { border-color: $lightGray; }
 //
 // Figures
 //

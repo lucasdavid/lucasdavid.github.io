@@ -1,12 +1,18 @@
 <footer class="page-footer bg-light d-print-none">
   <div class="container">
-    <div class="row">
+    <div class="row mb-4">
       {% for entry in site.data.footer %}
-      <div class="col small">
-        <h6>{{ entry.title }}</h6>
-        <p>
-          {{ entry.description }}
-        </p>
+      <div class="col">
+        <div class="card border-white bg-white">
+          <div class="card-body small">
+            <h6 class="card-title">{{ entry.title }}</h6>
+            <p class="card-text">
+              {{ entry.description }}
+            </p>
+          </div>
+          
+        </div>
+        
       </div>
       {% endfor %}
     </div>
