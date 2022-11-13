@@ -1,8 +1,8 @@
 - title: Keras Explainable
   description: |-
     Clean implementations for AI explaining methods in Keras.
-    [Code](https://github.com/lucasdavid/keras-explainable) and
-    [docs](https://lucasdavid.github.io/keras-explainable/) are available.
+    <a href="https://github.com/lucasdavid/keras-explainable" target="_new">Code</a> and
+    <a href="https://lucasdavid.github.io/keras-explainable" target="_new">docs</a> are available.
 - title: Supporting Study Material
   description: |-
     If you are an undergrad student and are looking for additional study material,
