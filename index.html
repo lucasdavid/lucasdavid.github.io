@@ -5,13 +5,13 @@ classed: sticky-top
 
 {% include index/hero.html %}
 
-<div style="max-height: 500px; overflow: hidden;">
+<!-- <div style="max-height: 500px; overflow: hidden;">
   <img
     src="/assets/images/infra/background.jpg"
     class="img-fluid"
     alt="Photograph of the Sunset at the Open Museum of Astronomy, located at Campinas, Brasil. From my personal archive."
     >
-</div>
+</div> -->
 
 <div data-bs-spy="scroll" data-bs-target="#nav-scrollspy" data-bs-offset="0" tabindex="0">
   <div class="bg-gray pt-4">
@@ -23,7 +23,7 @@ classed: sticky-top
         {% include mixin/cards.html id='highlighted-posts' items=latests_posts cols=4 %}
 
         <p class="text-center mt-4 small">
-          <a href="{{site.baseurl}}/blog" class="link-secondary small">see all posts</a>
+          <a href="{{site.baseurl}}/blog" class="link-secondary">see all posts</a>
         </p>
     </div>
     <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>

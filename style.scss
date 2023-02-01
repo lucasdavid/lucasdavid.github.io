@@ -146,12 +146,11 @@ h1, h2, h3, h4 {
 
 hr {
   margin: 2em 0 3em 0;
-  border: 3px solid #efefef;
+  border: 3px solid #ccc;
 
   &.thin {
     border:none;
-    height: 1px;
-    color: #aaa;
+    border: 1px solid #ccc;
   }
 }
 
@@ -343,4 +342,9 @@ ol.bibliography li:before {
   margin-top: 10vh;
   padding-top: 10vh;
   padding-bottom: 5vh;
+}
+
+
+.nav-toggler-icon {
+  border-radius: 0;
 }

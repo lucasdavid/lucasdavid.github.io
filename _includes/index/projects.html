@@ -4,11 +4,15 @@
   <div>
     {% assign repos = site.github.public_repositories | where:'fork', false | sort: 'stargazers_count' | reverse %}
     {% for r in repos limit: 12 %}
-    <h6><a href="{{ r.html_url }}" class="text-decoration-none" target="_blank">{{r.name}}</a></h6>
-    <p class="small mt-0 mb-1">{{r.description}}</p>
-    <p class="text-muted mb-3" style="font-size: .7em;">
-      {{r.stargazers_count}} stars • Last pushed at {{r.pushed_at | date: "%b %e, %Y" }}
-    </p>
+    <div class="card border-0 rounded-0 bg-light h-100 p-2 pb-0 mb-2">
+      <div>
+        <h5><a href="{{ r.html_url }}" class="text-dark text-decoration-none" target="_blank">{{r.name}}</a></h5>
+        <p class="small mt-0 mb-1">{{r.description}}</p>
+        <p class="text-muted mb-3" style="font-size: .7em;">
+          {{r.stargazers_count}} stars • Last pushed at {{r.pushed_at | date: "%b %e, %Y" }}
+        </p>
+      </div>
+    </div>
     {% endfor %}
   </div>
   <hr class="thin mb-4" />
@@ -18,14 +22,20 @@
   <div>
     {% assign reports = site.data.reports | sort: 'date' | reverse %}
     {% for r in reports %}
-    <h6>
-      <a href="{{ r.url }}" class="text-decoration-none" target="_blank">{{r.name}}</a>
-    </h6>
-    <div class="small mb-2">
-      {% include posts/badges.html tags=r.keywords link_prefix='#' %}
+    <div class="card border-0 rounded-0 bg-light p-2 pb-0 mb-2">
+      <h5>
+        <a href="{{ r.url }}" class="link-dark text-decoration-none" target="_blank">{{r.name}}</a>
+        
+      </h5>
+      <p class="small mt-0 mb-1">{{r.description}}</p>
+      <p class="text-muted mb-3" style="font-size: .7em;">
+        Published at {{r.date | date: "%b %e, %Y" }}
+        <span class="navbar-text small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+        <span style="font-size: 1.2em;">
+          {% include posts/badges.html tags=r.keywords link_prefix='#' %}
+        </span>
+      </p>
     </div>
-    <p class="small mt-0 mb-1">{{r.description}}</p>
-    <p class="text-muted mb-3" style="font-size: .7em;">Published at {{r.date | date: "%b %e, %Y" }}</p>
     {% endfor %}
   </div>
   <hr class="thin mb-4" />
@@ -33,15 +43,17 @@
   <h3 class="display-6 mt-4 mb-4" id="events">Events</h3>
   <div>
     {% for o in site.data.events %}
-    <h6>
-      <a href="{{ o.url }}" class="text-decoration-none" target="_blank">{{o.name}}</a>
-    </h6>
-    <p class="small mt-0 mb-1">
-      {{o.description}}
-    </p>
-    <p class="text-muted mb-3" style="font-size: .7em;">
-      <span title="role">{{o.role}}</span> • <a href="{{ o.url }}">{{ o.url }}</a>
-    </p>
+    <div class="card border-0 rounded-0 bg-light p-2 pb-0 mb-2">
+      <h5>
+        <a href="{{ o.url }}" class="link-dark text-decoration-none" target="_blank">{{o.name}}</a>
+      </h5>
+      <p class="small mt-0 mb-1">
+        {{o.description}}
+      </p>
+      <p class="text-muted mb-3" style="font-size: .7em;">
+        <span title="role">{{o.role}}</span> • <a href="{{ o.url }}">{{ o.url }}</a>
+      </p>
+    </div>
     {% endfor %}
   </div>
 </div>
