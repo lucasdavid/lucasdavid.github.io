@@ -17,7 +17,9 @@ classed: sticky-top
   <div class="bg-gray pt-4">
     <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
     <div class="container">
-      <h3 class="display-6 mb-4" id="blog-posts"> Blog Posts</h3>
+      <h3 class="display-6 fw-bold mb-4" id="blog-posts">
+        <a href="/blog" class="link-dark text-decoration-none">Blog Posts</a>
+      </h3>
 
         {% assign latests_posts = site.posts | slice: 0, 8 %}
         {% include mixin/cards.html id='highlighted-posts' items=latests_posts cols=4 %}
@@ -28,7 +30,7 @@ classed: sticky-top
     </div>
     <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
     <div class="container">
-      <h3 class="display-6 mb-4" id="presentations">Presentations</h3>
+      <h3 class="display-6 fw-bold mb-4" id="presentations">Videos & Presentations</h3>
       
       {% include index/videos.html %}
     </div>

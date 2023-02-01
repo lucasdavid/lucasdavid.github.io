@@ -612,8 +612,14 @@ For kernels with an odd numbered width and height, this operation becomes trivia
 
 A particular case must be handled when one of the sizes of the kernel is even: adding $\lfloor H_k/2 \rfloor$ will result in an output signal larger than the input signal by exactly 1 pixel. I handled this case in the same manner NumPy seemly does, by adding more padding to the bottom/right than to the top/left.
 
+###### Usage Conditions and Limitations
+The input signal (images) must be in the shape of $(B_1, B_2, \ldots, B_n, H_s, W_s)$ and kernels must be in the shape of $(H_k, W_k, C)$. I also remark the following important limitations of this implementation:
 
-##### Complete Implementation, Usage Conditions and Limitations
+* This function is limited to the two dimensional spatial case, and will not work correctly for 3-D, 4-D and, more generally, n-D spatial signals, where $n > 3$.
+* Stride is always 1, which makes this function unsuitable for Atrous Convolution.
+
+
+##### Complete Implementation
 
 ```py
 from math import ceil, floor
@@ -671,18 +677,11 @@ def convolve2d(s, k, padding='VALID'):
   return correlate2d(s, k, padding)
 ```
 
-The input signal (images) must be in the shape of $(B_1, B_2, \ldots, B_n, H_s, W_s)$ and kernels must be in the shape of $(H_k, W_k, C)$. I also remark the following important limitations of this implementation:
-
-* This function is limited to the two dimensional spatial case, and will not work correctly for 3-D, 4-D and, more generally, n-D spatial signals, where $n > 3$.
-* Stride is always 1, making this function unsuitable for Atrous Convolution.
-
 #### Testing My Implementation Against Scipy's
 
 One way of testing this code is to compare the results with scipy's implementation.
 We can use the `np.testing.assert_almost_equal` function to compare arrays (up to the 6th decimal),
-which will either pass without errors or print how similar the two arrays are.
-
-However, scipy's implementation 
+which will either pass without errors or print how similar the two arrays are:
 
 ```python
 import scipy.signal
