@@ -12,12 +12,9 @@ layout: default
     </div>
     <div class="col-12 col-lg-12 col-xl-8 col-xxl-6 pt-4">
       <article class="post mb-4">
-        <h1 id="postTitle" class="">
-          {{ page.title }}
-        </h1>
+        <h1 id="postTitle" class="fw-bold">{{ page.title }}</h1>
         <p class="right-align mb-2 text-muted">
-          {{ page.excerpt }} 
-          <em>— {{ page.date | date: "%B %e, %Y" }}</em>
+          {{ page.excerpt }} <em>— {{ page.date | date: "%B %e, %Y" }}</em>
         </p>
         <div class="mt-2 mb-4">
           {% include posts/badges.html tags=page.tags link_prefix='/blog/tag/' %}
@@ -30,10 +27,6 @@ layout: default
       {% if jekyll.environment == "production" %}
       {% include config/disqus.html %}
       {% endif %}
-      
-      <div class="progress fixed-bottom rounded-0 d-none d-lg-block" style="height: 3px;">
-        <div id="readProgressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-      </div>
     </div>
     <div id="table-of-contents-container"
          class="col-12 col-lg-12 col-xl-2">
@@ -48,4 +41,3 @@ layout: default
 
 {% include config/mathjax.html %}
 {% include config/anchor.html %}
-<script src="/assets/js/navbar/animations.js"></script>

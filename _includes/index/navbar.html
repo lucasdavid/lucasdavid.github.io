@@ -1,21 +1,18 @@
-<nav id="mainNav" class="navbar navbar-light bg-white border-bottom shadow-sm navbar-expand-lg d-print-none {{ include.classed }}">
+<nav id="mainNav" class="navbar navbar-light bg-white border-gray border-bottom navbar-expand-lg d-print-none {{ include.classed }}">
   <div class="container">
     <button class="navbar-toggler rounded-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
       aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <a class="navbar-brand fw-bold text-decoration-none link-light p-1 bg-dark" href="/">Lucas David</a>
+    <a class="navbar-brand fw-bold text-decoration-none p-1" href="/">Lucas David</a>
 
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
 
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
       </ul>
-      <span class="navbar-text small">
-        <small>
-          <a href="#" class="fw-bold active text-decoration-none">{{ page.title }}</a>
-          {% if page.excerpt %} {{ page.excerpt }}{% endif %}
-        </small>
+      <span class="navbar-text navbar-excerpt">
+        {{ page.title }}
       </span>
       <span class="navbar-text small ms-2 me-2 sr-none" aria-hidden="true">•</span>
       <ul class="navbar-nav mb-2 mb-lg-0 small">

@@ -8,7 +8,7 @@
 @import '_variables';
 // @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap');
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
-
+@import url('https://fonts.googleapis.com/css2?family=Sen:wght@400;700&display=swap');
 
 @import "highlights";
 
@@ -34,9 +34,19 @@
     clear: both;
 }
 
+
+// Hypography
+
 body {
-  background: white;
+  // font-family: "Sen", sans-serif;
 }
+h1, h2, h3, h4 {
+  font-family: "Sen", sans-serif;
+}
+.display-1, .display-2, .display-5 {
+  font-family: "Sen", sans-serif;
+}
+
 
 a {
   text-decoration: none;
@@ -69,13 +79,15 @@ a {
   }
 }
 
-h1, h2, h3, h4 {
-  // margin-top: 1em;
-  font-weight: 300;
+.navbar {
+  font-family: "Sen", sans-serif;
+  min-height: $navbar-height;
 }
 
-.navbar {
-  min-height: $navbar-height;
+.navbar-excerpt {
+  // white-space: nowrap;
+  // overflow: hidden;
+  // text-overflow: ellipsis;
 }
 // .navbar-animated {
 //   transition: all .3s;
@@ -98,6 +110,9 @@ h1, h2, h3, h4 {
 //
 .article-content {
   color: $darkGray;
+  // font-family: 'Times New Roman', Times, serif;
+  // font-size: 1.1rem;
+  // line-height: 1.5rem;
 
   h2, h3, h4 {
     margin-top: 2em;
@@ -180,6 +195,10 @@ hr {
   margin-top:-32px;
 }
 
+.btn {
+  border-radius: 20px;
+}
+
 .icon-down {
   margin-top:.25em;
 }
@@ -202,6 +221,7 @@ hr {
 .bg-black { background-color: black; }
 .bg-gray { background-color: $lightGray; }
 .bg-white { background-color: white; }
+.bg-custom-gray { background: #f4f4f4;}
 
 .text-gray { color: $gray; }
 .text-dark-gray { color: $darkGray; }
@@ -248,10 +268,6 @@ hr {
     width: 50%;
   }
 }
-
-
-// Posts
-//
 
 .dataframe {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -339,9 +355,9 @@ ol.bibliography li:before {
 }
 
 .page-footer {
-  margin-top: 10vh;
+  font-family: "Sen", sans-serif;
   padding-top: 10vh;
-  padding-bottom: 5vh;
+  padding-bottom: 10vh;
 }
 
 
