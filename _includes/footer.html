@@ -1,11 +1,11 @@
-<footer class="page-footer bg-black text-light d-print-none">
+<footer class="page-footer text-bg-dark bg-black-subtle d-print-none">
   <div class="container">
-    <div class="row mb-4">
+    <div class="row g-1 mb-4">
       {% for entry in site.data.footer %}
       <div class="col">
-         <div class="card bg-black border-none">
-          <div class="card-body small">
-            <h6 class="card-title">{{ entry.title }}</h6>
+         <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+          <div class="card-body small pt-0 pb-0">
+            <h6 class="card-title fw-bold">{{ entry.title }}</h6>
             <p class="card-text">
               {{ entry.description }}
             </p>

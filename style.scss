@@ -122,7 +122,7 @@ a {
   h5, h6 {
     margin-top: 1em;
     margin-bottom: 1em;
-  }  
+  }
 
   blockquote {
     margin: 1.8em .8em;
@@ -219,6 +219,7 @@ hr {
 .bg-lime { background-color: limegreen; }
 .bg-lightblue { background-color: #33a3ff; }
 .bg-black { background-color: black; }
+.bg-black-subtle { background-color: #131313!important; }
 .bg-gray { background-color: $lightGray; }
 .bg-white { background-color: white; }
 .bg-custom-gray { background: #f4f4f4;}
@@ -245,7 +246,7 @@ hr {
 }
 
 
-@media (min-width: $size-xl) { 
+@media (min-width: $size-xl) {
   .w-xl-130 {
     width: 130%;
     margin-left: -15%;
@@ -346,9 +347,9 @@ ol.bibliography li + li {
   // margin-bottom: .5em;
 }
 ol.bibliography { counter-reset: item }
-ol.bibliography li:before { 
-    content: "[" counter(item) "] "; 
-    counter-increment: item; 
+ol.bibliography li:before {
+    content: "[" counter(item) "] ";
+    counter-increment: item;
     width:3em;
     position:absolute;
     text-indent:-2em;

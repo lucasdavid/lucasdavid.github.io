@@ -23,7 +23,7 @@ layout: default
           {{ content }}
         </div>
       </article>
-      
+
       {% if jekyll.environment == "production" %}
       {% include config/disqus.html %}
       {% endif %}
@@ -38,6 +38,7 @@ layout: default
     </div>
   </div>
 </div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
 
 {% include config/mathjax.html %}
 {% include config/anchor.html %}

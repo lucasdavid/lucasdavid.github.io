@@ -7,9 +7,9 @@
     <div class="col col-md-6 col-lg-4">
       <div class="card border-0 rounded-0 bg-light h-100 p-2 pb-0">
         <div>
-          <h5><a href="{{ r.html_url }}" class="text-dark text-decoration-none" target="_blank">{{r.name}}</a></h5>
-          <p class="small mt-0 mb-1">{{r.description}}</p>
-          <p class="text-muted mb-3" style="font-size: .7em;">
+          <h5><a href="{{ r.html_url }}" class="text-dark text-decoration-none stretched-link" target="_blank">{{r.name}}</a></h5>
+          <p class="small mt-0 mb-2">{{r.description}}</p>
+          <p class="text-muted mb-2" style="font-size: .7em;">
             {{r.stargazers_count}} stars • Last pushed at {{r.pushed_at | date: "%b %e, %Y" }}
           </p>
         </div>
@@ -18,6 +18,14 @@
 
     {% endfor %}
   </div>
+
+  <p class="text-center mt-4 small">
+    <a href="{{ site.github.owner_url }}"
+       role="button"
+       target="_blank"
+       class="btn btn-outline-dark text-decoration-none"
+       >see all repositories</a>
+  </p>
   <hr class="thin mb-4" />
   {% endif %}
 
@@ -27,11 +35,11 @@
     {% for r in reports %}
     <div class="card border-0 rounded-0 bg-light p-2 pb-0 mb-2">
       <h5>
-        <a href="{{ r.url }}" class="link-dark text-decoration-none" target="_blank">{{r.name}}</a>
+        <a href="{{ r.url }}" class="link-dark text-decoration-none stretched-link" target="_blank">{{r.name}}</a>
 
       </h5>
-      <p class="small mt-0 mb-1">{{r.description}}</p>
-      <p class="text-muted mb-3" style="font-size: .7em;">
+      <p class="small mt-0 mb-2">{{r.description}}</p>
+      <p class="text-muted mb-2" style="font-size: .7em;">
         Published at {{r.date | date: "%b %e, %Y" }}
         <span class="navbar-text small ms-2 me-2 sr-none" aria-hidden="true">•</span>
         <span style="font-size: 1.2em;">

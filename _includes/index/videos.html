@@ -4,10 +4,10 @@
   <div class="row row-cols-1 row-cols-md-3 g-2">
     {% for v in site.data.videos %}
     <div class="col">
-      <div class="card border-0 rounded-0 bg-light h-100">
+      <div class="card border-0 rounded-3 bg-white h-100">
         <div class="overflow-hidden bg-white" style="height:{{include.imageHeight | default: '200px'}}">
           <a href="{{ v.source }}" target="_blank">
-            <img src="https://img.youtube.com/vi/{{v.id}}/sddefault.jpg" class="card-img-top rounded-0" style="height:100%; width:100%; object-fit:cover;" >
+            <img src="https://img.youtube.com/vi/{{v.id}}/sddefault.jpg" class="card-img-top rounded-top-3" style="height:100%; width:100%; object-fit:cover;" >
           </a>
         </div>
         <div class="card-body">
@@ -23,7 +23,8 @@
   {% if site.footer-links.youtube %}
     <p class="text-center mt-4 small">
       <a href="https://youtube.com/{{ site.footer-links.youtube }}"
-         class="link-secondary"
+         class="btn btn-outline-dark text-decoration-none"
+         role="button"
          target="_blank"
          title="Youtube">see all videos</a>
     </p>

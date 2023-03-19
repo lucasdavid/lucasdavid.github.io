@@ -116,7 +116,7 @@ $$\text{logit}(p) = \log\Big(\frac{p}{1-p}\Big)$$
 
 #### Jacobian
 
-The *sigmoid* function does not associate different input numbers, so it does not have 
+The *sigmoid* function does not associate different input numbers, so it does not have
 cross-derivatives with respect to the inputs, and thus, $\text{diag}(\nabla S) = \mathbf{J} S$.
 
 $$\nabla S = \Bigg[\frac{\partial S}{\partial x_0}, \frac{\partial S}{\partial x_1}, \ldots, \frac{\partial S}{\partial x_n} \Bigg]$$
@@ -165,7 +165,7 @@ def show_sm_surface(ax, a, b, y, sm=0, title=None):
   ax.xaxis.pane.fill = False
   ax.yaxis.pane.fill = False
   ax.zaxis.pane.fill = False
-  
+
   if title: plt.title(title, y=-0.05)
 
 fig = plt.figure(figsize=(16, 6))
@@ -442,7 +442,7 @@ implying $l - \max(l) \le 0 \implies e^l_i \le 1$:
 def softmax(x, axis=-1):
   x -= tf.reduce_max(x, axis=axis, keep_dims=True)
   x = tf.math.exp(x)
-  
+
   return tf.math.divide_no_nan(
     x,
     tf.reduce_sum(x, axis=axis, keep_dims=True)
@@ -496,7 +496,7 @@ def train_step(model, x, y):
     p = network(x, training=True)
 
     loss = categorical_crossentropy(y, p)
-  
+
   trainable_variables = network.trainable_variables
   gradients = tape.gradient(loss, trainable_variables)
 
@@ -602,10 +602,10 @@ def sparse_softmax_cross_entropy_with_logits(y, l, axis=-1):
 The Binary CE is a special case of the Categorical CE {% cite sycorax2017260537 %},
 when the estimated variable belongs to a Bernoulli distribution:
 
-$$\begin{align}
+$$\begin{align}\begin{split}
 E(y, p) &= -\sum_i y_i \log p_i \\
-        &= - \big[y_0 \log p_0 + (1-y_0) \log (1-p_0)\big] 
-\end{align}$$
+        &= - \big[y_0 \log p_0 + (1-y_0) \log (1-p_0)\big]
+\end{split}\end{align}$$
 
 In this case, only two classes are available (a Bernoulli variable $i\in \\{0, 1\\}$), such
 that $p_0 = 1-p_1$. Hence, this problem is represented with a single probability number
@@ -614,19 +614,19 @@ that $p_0 = 1-p_1$. Hence, this problem is represented with a single probability
 #### Intuition
 Just like Categorical CE, we can draw a parallel between the Binary CE and the likelihood function:
 
-$$\begin{align}
+$$\begin{align}\begin{split}
 E(y, p) &= - \big[y_0 \log p_0 + (1-y_0) \log (1-p_0)\big] \\
         &= - \big[\log p_0^{y_0} + \log (1-p_0)^{1-y_0}\big] \\
         &= - \log \big[p_0^{y_0} (1-p_0)^{1-y_0}\big] \\
         &= - \log \big[p_0^{y_0} p_1^{y_1}\big] \\
         &= - \log \Big[ \prod_i p_i^{yi} \Big]
-\end{align}$$
+\end{split}\end{align}$$
 
 #### Binary CE from Logits
 
 Binary CE has a derivation with logits, similar to its *categorical* counterpart:
 
-$$\begin{align}
+$$\begin{align}\begin{split}
 E(y, l) &= - [y\log\text{sigmoid}(l) + (1-y)\log(1-\text{sigmoid}(l))] \\
         &= - \Big[y\log\Big(\frac{1}{1 + e^{-l}}\Big) + (1-y)\log\Big(1-\frac{1}{1+e^{-l}}\Big)\Big] \\
         &= - \Big[y(\log 1 -\log(1 + e^{-l})) + (1-y)(\log(1+e^{-l} -1) -\log(1+e^{-l}))\Big] \\
@@ -636,28 +636,28 @@ E(y, l) &= - [y\log\text{sigmoid}(l) + (1-y)\log(1-\text{sigmoid}(l))] \\
         &= l - yl +\log(1+e^{-l}) \\
         &= l(1 - y) -\log((1+e^{-l})^{-1}) \\
         &= l(1 - y) -\log(\text{sigmoid}(l))
-\end{align}$$
+\end{split}\end{align}$$
 
 #### Stability Tricks
 Binary CE becomes quite unstable for $l \ll 0$, as $\text{sigmoid}(l)\to 0$ and $-\log(\text{sigmoid}(l))\to \infty$ quickly.
 To circumvent this issue, the equation above is reformulated for negative logits to:
 
-$$\begin{align}
+$$\begin{align}\begin{split}
 E(y, l) &= l - yl +\log(1+e^{-l}) \\
         &= \log(e^l) - yl +\log(1 + e^{-l}) \\
         &= -yl +\log(e^l(1+e^{-l})) \\
         &= -yl +\log(e^l + 1)
-\end{align}$$
+\end{split}\end{align}$$
 
 And finally, both forms are combined conditioned to the numerical sign of the logit:
 
-$$\begin{align}
+$$\begin{align}\begin{split}
 E(y, l) &= \begin{cases}
   l &-yl +\log(e^{-l} + 1) & \text{if $l>0$} \\
     &-yl +\log(e^l + 1) & \text{otherwise}
   \end{cases} \\
   &= \max(l, 0) -yl +\log(e^{-|l|} + 1)
-\end{align}$$
+\end{split}\end{align}$$
 
 TensorFlow true implementation is available at [tensorflow/ops/ops/nn_impl.py#L115](https://github.com/tensorflow/tensorflow/blob/919f693420e35d00c8d0a42100837ae3718f7927/tensorflow/python/ops/nn_impl.py#L115).
 
@@ -702,7 +702,7 @@ def focal_loss_with_logits(y, l, a=0.1, gamma=2):
   p = tf.nn.sigmoid(l)
   a = tf.where(tf.equal(y, 1.), a, 1. -a)
   p = tf.where(tf.equal(y, 1.), 1. -p, p)
-  
+
   return tf.reduce_sum(
     a * p**gamma * ce,
     axis=-1)
