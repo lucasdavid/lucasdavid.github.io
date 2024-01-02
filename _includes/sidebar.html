@@ -1,19 +1,12 @@
 <div id="sidebar" class="ps-3 pe-3 {{ include.sidebarClassed }}">
-  <div class="text-center">
-    <a href="/" title="Home">
-      <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
-        class="img-fluid rounded-circle" style="width:100px" />
-    </a>
-  </div>
-  <p class="pt-2 {{ include.sidebarTextClassed }}">
-    <small>
-      {% if include.hideHello %}
-      {% else %}
-        Hello! I'm currently studying Machine Learning/Computer Vision at University of Campinas.
-        —
-      {% endif %}
-      <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
-    </small>
+  <a href="/" title="Home">
+    <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
+      class="img-fluid rounded-circle" style="width:100px" />
+  </a>
+  <p class="pt-2 {{ include.sidebarTextClassed }} small">
+    {% unless include.hideHello %}
+    {% endunless %}
+    <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
   </p>
 
   {% if include.summary %}

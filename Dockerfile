@@ -1,4 +1,4 @@
-FROM bretfisher/jekyll-serve
+FROM bretfisher/jekyll-serve:stable-20220916052939
 
 WORKDIR /site
 ADD . /site/

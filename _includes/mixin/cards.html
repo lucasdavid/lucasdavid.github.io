@@ -1,19 +1,21 @@
 <div id="{{ include.id }}" class="{{ include.id }} {{ include.classed }}">
-  <div class="row row-cols-1 row-cols-md-3 row-cols-lg-{{include.cols | default: 4}} g-4">
+  <div class="row g-2 row-cols-1 row-cols-md-3 row-cols-lg-{{include.cols | default: 4}}">
       {% for p in include.items %}
       <div class="col">
-        <div class="card border-0 bg-white h-100">
-          <div class="overflow-hidden bg-white" style="height:100px">
+        <div class="card border-0 rounded-3 bg-white h-100">
+          <div class="overflow-hidden bg-white" style="height:{{include.imageHeight | default: '100px'}}">
             <a href="{{ site.baseurl }}{{ p.url }}">
-              <img src="{{ site.baseurl }}{{ p.lead_image }}" 
-                   class="card-img-top"
+              <img src="{{ site.baseurl }}{{ p.lead_image }}"
+                   class="card-img-top rounded-top-3"
                    style="height:100%; width:100%; object-fit:cover;" />
           </a>
           </div>
           <div class="card-body">
-            <h6 class="card-title"><a href="{{ p.url }}" target="_blank" class="text-decoration-none">{{ p.title }}</a></h6>
-            <p class="card-text small">{{ p.excerpt }}</p>
-            <p class="card-text small text-muted">{{ p.date | date: "%b %e, %Y" }}</p>
+            <h5 class="card-title"><a href="{{ p.url }}" target="_blank" class="link-dark stretched-link">{{ p.title }}</a></h5>
+            <p class="card-text">{{ p.excerpt }}</p>
+            <p class="card-text">
+              <span class="badge rounded-pill text-bg-dark">{{ p.date | date: "%b %e, %Y" }}</span>
+            </p>
           </div>
         </div>
       </div>

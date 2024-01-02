@@ -1,41 +1,42 @@
 ---
 layout: default
-classed: sticky-top
 ---
 
 {% include index/hero.html %}
 
-<div style="height: 500px; overflow: hidden;">
+<!-- <div style="max-height: 500px; overflow: hidden;">
   <img
     src="/assets/images/infra/background.jpg"
     class="img-fluid"
     alt="Photograph of the Sunset at the Open Museum of Astronomy, located at Campinas, Brasil. From my personal archive."
     >
-</div>
+</div> -->
 
 <div data-bs-spy="scroll" data-bs-target="#nav-scrollspy" data-bs-offset="0" tabindex="0">
-  <div class="bg-gray pt-4">
+  <div class="bg-light pt-4">
     <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
     <div class="container">
-      <h3 class="display-6 mb-4" id="blog-posts"> Blog Posts</h3>
+      <h3 class="display-6 fw-bold mb-4" id="blog-posts">
+        <a href="/blog" class="link-dark text-decoration-none">Blog Posts</a>
+      </h3>
 
-        {% assign latests_posts = site.posts | slice: 0, 8 %}
-        {% include mixin/cards.html id='highlighted-posts' items=latests_posts cols=4 %}
+      {% assign latests_posts = site.posts | slice: 0, 8 %}
+      {% include mixin/cards.html id='highlighted-posts' items=latests_posts cols=4 %}
 
-        <p class="text-center mt-4 small">
-          <a href="{{site.baseurl}}/blog" class="link-secondary small">see all posts</a>
-        </p>
+      <p class="text-center mt-4 small">
+        <a href="{{site.baseurl}}/blog" role="button" class="btn btn-outline-dark text-decoration-none">see all posts</a>
+      </p>
     </div>
     <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
     <div class="container">
-      <h3 class="display-6 mb-4" id="presentations">Presentations</h3>
-      
+      <h3 class="display-6 fw-bold mb-4" id="presentations">Videos & Presentations</h3>
+
       {% include index/videos.html %}
     </div>
     <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
     <svg class="curve-container__curve curve-three" viewBox="10 -20 1870 210" version="1.1"
       xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-      <path class="plain fill-" fill="#f4f5f7"
+      <path class="plain fill-" fill="#f8f9fa"
         d="M977.9,76.2 C475.2,-17.4 0.2,132.5 0.2,132.5 L0.2,275.5 L1891.3,275.5 L1891.3,0.7 C1891.3,0.7 1480.6,169.8 977.9,76.2 Z"
         id="Path"></path>
     </svg>
@@ -51,6 +52,21 @@ classed: sticky-top
 
       <div class="col-12 col-lg-9 col-xl-8 col-xxl-6">
         {% include index/projects.html %}
+
+        <hr class="thin mb-4" />
+        <h3 class="display-6 fw-bold mb-4" id="events">Events</h3>
+        {% for o in site.data.events %}
+        <div class="card border-0 rounded-0 bg-light p-2 pb-0 mb-2">
+          <h5>
+            <a href="{{ o.url }}" class="link-dark text-decoration-none" target="_blank">{{o.name}}</a>
+          </h5>
+          <p class="small mt-0 mb-2">{{o.description}}</p>
+          <p class="text-muted mb-2" style="font-size: .7em;">
+            <span title="role">{{o.role}}</span> • <a href="{{ o.url }}">{{ o.url }}</a>
+          </p>
+        </div>
+        {% endfor %}
+
         <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
       </div>
     </div>
