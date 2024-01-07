@@ -1,6 +1,12 @@
 <div id="projects-container" class="projects">
   {% if site.github.public_repositories %}
-  <h3 class="display-6 fw-bold mb-4" id="repos">Repositories</h3>
+  <h3 class="display-6 fw-bold mb-4" id="repos">
+    <a href="{{ site.github.owner_url }}"
+       role="button"
+       target="_blank"
+       class="link-dark text-decoration-none"
+       >Repositories</a>
+  </h3>
   <div class="row g-2">
     {% assign repos = site.github.public_repositories | where:'fork', false | sort: 'stargazers_count' | reverse %}
     {% for r in repos limit: 12 %}
@@ -23,7 +29,7 @@
     <a href="{{ site.github.owner_url }}"
        role="button"
        target="_blank"
-       class="btn btn-outline-dark text-decoration-none"
+       class="btn btn-outline-primary text-decoration-none"
        >see all repositories</a>
   </p>
   <hr class="thin mb-4" />
