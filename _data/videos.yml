@@ -28,16 +28,16 @@
   source: 'https://www.youtube.com/v/0E3MRv5LT4w'
   excerpt: ''
   date: 2015-12-03 12:00:00
-- id: '4Y7LL9fSHUM'
-  title: 'Adversarial Feature Hallucination Networks for FSL of Provenance in Paintings - IA-386'
-  source: 'https://www.youtube.com/v/4Y7LL9fSHUM'
-  excerpt: 'Apresentação do projeto final da disciplina IA368CC da Faculdade de Engenharia Elétrica e de Computação da Universidade Estadual de Campinas, ofertada no segundo semestre de 2021.'
-  date: 2022-02-15 12:00:00
-- id: '4ZMSX-1PhoM'
-  title: 'Classificando impacto humano sobre a floresta amazônica a partir de imagens de satélite (YouTube)'
-  source: 'https://www.youtube.com/v/4ZMSX-1PhoM'
-  excerpt: 'Apresentação do projeto final da disciplina MC886/MO444 do Instituto de Computação (Unicamp), ofertada no primeiro semestre de 2021.'
-  date: 2021-07-11 12:00:00
+# - id: '4Y7LL9fSHUM'
+#  title: 'Adversarial Feature Hallucination Networks for FSL of Provenance in Paintings - IA-386'
+#  source: 'https://www.youtube.com/v/4Y7LL9fSHUM'
+#  excerpt: 'Apresentação do projeto final da disciplina IA368CC da Faculdade de Engenharia Elétrica e de Computação da Universidade Estadual de Campinas, ofertada no segundo semestre de 2021.'
+#  date: 2022-02-15 12:00:00
+#- id: '4ZMSX-1PhoM'
+#  title: 'Classificando impacto humano sobre a floresta amazônica a partir de imagens de satélite (YouTube)'
+#  source: 'https://www.youtube.com/v/4ZMSX-1PhoM'
+#  excerpt: 'Apresentação do projeto final da disciplina MC886/MO444 do Instituto de Computação (Unicamp), ofertada no primeiro semestre de 2021.'
+#  date: 2021-07-11 12:00:00
 # - id: 'ZmXyJqcAv8A'
 #   title: 'Titanfall 2 Ion Cover Gameplay - Surviving 3-to-1 outnumbered encounter'
 #   source: 'https://www.youtube.com/v/ZmXyJqcAv8A'

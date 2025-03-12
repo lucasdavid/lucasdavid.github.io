@@ -1,9 +1,23 @@
-- author: 'L. David and H. Pedrini, and Z. Dias'
+- author: 'L. David, H. Pedrini, and Z. Dias'
+  title: Learning Weakly Supervised Semantic Segmentation Through Cross-Supervision and Contrasting of Pixel-Level Pseudo-Labels
+  booktitle: '20th International Joint Conference on Computer Vision, Imaging and Computer Graphics Theory and Applications (VISAPP)'
+  volume: 3
+  pages: '154--165'
+  year: 2025
+  organization: 'SciTePress'
+  links:
+    - name: paper
+      href: 'https://www.scitepress.org/Papers/2025/132384/132384.pdf'
+    - name: code
+      href: 'https://github.com/lucasdavid/CSRM'
+    - name: doi
+      href: 'https://doi.org/10.5220/0013238400003912'
+- author: 'L. David, H. Pedrini, and Z. Dias'
   title: 'P-NOC: Adversarial training of CAM generating networks for robust weakly supervised semantic segmentation priors'
   journal: 'Journal of Visual Communication and Image Representation (JVCI)'
   volume: '102'
   pages: '104187'
-  year: '2024'
+  year: 2024
   issn: '1047-3203'
   links:
     - name: paper
@@ -31,7 +45,7 @@
   booktitle: 'International Joint Conference on Computer Vision, Imaging and Computer Graphics'
   pages: '222--247'
   year: 2022
-  organization: Springer Nature Switzerland Cham'
+  organization: 'Springer Nature Switzerland Cham'
   links:
     - name: paper
       href: 'https://link.springer.com/chapter/10.1007/978-3-031-45725-8_11'
@@ -49,7 +63,7 @@
       href: 'https://www.sciencedirect.com/science/article/abs/pii/S0169260724002487'
 - title: 'MinMax-CAM: Improving Focus of CAM-based Visualization Techniques in Multi-label Problems'
   author: 'L. David, H. Pedrini, and Z. Dias'
-  booktitle: '17th International Joint Conference on Computer Vision, Imaging and Computer Graphics Theory and Applications'
+  booktitle: '17th International Joint Conference on Computer Vision, Imaging and Computer Graphics Theory and Applications (VISAPP)'
   volume: 4
   pages: '106--117'
   year: 2022

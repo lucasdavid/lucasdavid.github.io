@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Optimizers and Surfaces
+title: Observing Optimizer Behavior over Search Surfaces
 excerpt: Visualizing the training process over various optimization surfaces.
 first_p: |-
   Training a Machine Learning model consists of traverse an optimization surface,

@@ -1,11 +1,11 @@
 <div class="videos">
   {% assign videos_count = site.data.videos | size %}
 
-  <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
     {% for v in site.data.videos %}
     <div class="col">
-      <div class="card border-0 rounded-0 bg-white h-100">
-        <div class="overflow-hidden bg-white" style="height:{{include.imageHeight | default: '140px'}}">
+      <div class="card card-animation-zoom border-0 rounded-0 bg-white h-100">
+        <div class="overflow-hidden bg-white" style="height:{{include.imageHeight | default: '180px'}}">
           <a href="{{ v.source }}" target="_blank">
             <img src="https://img.youtube.com/vi/{{v.id}}/sddefault.jpg"
                  alt="Preview cover for video '{{ v.title }}'"
@@ -14,13 +14,12 @@
           </a>
         </div>
         <div class="card-body">
-          <h5 class="card-title font-small"><a href="{{ v.source }}" target="_blank" class="link-dark text-decoration-none">{{ v.title }}</a>
-          </h5>
+          <h6 class="card-title"><a href="{{ v.source }}" target="_blank" class="link-dark text-decoration-none">{{ v.title }}</a></h6>
           <p class="card-text font-small">{{ v.excerpt }}</p>
         </div>
         <div class="card-footer border-0 bg-white">
-          <p class="card-text">
-            <small class="text-secondary">{{ v.date | date: "%b %e, %Y" }}</small>
+          <p class="card-text text-muted text-small mb-2" style="font-size: .7em;">
+            {{ v.date | date: "%b %e, %Y" }}
           </p>
         </div>
       </div>

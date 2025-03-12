@@ -10,7 +10,7 @@
 
     <div class="row g-2">
       {% assign repos = site.github.public_repositories | where:'fork', false | sort: 'stargazers_count' | reverse %}
-      {% for r in repos limit: 24 %}
+      {% for r in repos limit: 18 %}
       <div class="col col-md-6 col-lg-4 col-xl-3 col-xxl-2">
         <div class="card border-0 rounded-0 bg-light h-100 p-0 pb-0">
           <div class="card-body pb-0">

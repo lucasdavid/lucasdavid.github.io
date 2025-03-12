@@ -2,8 +2,8 @@
   <div class="row g-4 row-cols-1 row-cols-md-3 row-cols-lg-{{include.cols | default: 4}}">
       {% for p in include.items %}
       <div class="col">
-        <div class="card border-0 rounded-0 bg-white h-100">
-          <div class="overflow-hidden bg-white" style="height:{{include.imageHeight | default: '150px'}}">
+        <div class="card card-animation-zoom border-0 rounded-0 bg-white h-100">
+          <div class="card-img-box overflow-hidden bg-white" style="height:{{include.imageHeight | default: '180px'}}">
             <a href="{{ site.baseurl }}{{ p.url }}">
               <img src="{{ site.baseurl }}{{ p.lead_image }}"
                    alt="Lead image of the content '{{ p.title }}'"
@@ -12,12 +12,17 @@
           </a>
           </div>
           <div class="card-body">
-            <h5 class="card-title"><a href="{{ p.url }}" target="_blank" class="link-dark stretched-link text-decoration-none">{{ p.title }}</a></h5>
+            <h6 class="card-title"><a href="{{ p.url }}" target="_blank" class="link-dark stretched-link text-decoration-none">{{ p.title }}</a></h6>
+            <!-- <h6 class="card-text text-muted text-small"><small>{{ p.tags | first }}</small></h6> -->
             <p class="card-text">{{ p.excerpt }}</p>
           </div>
           <div class="card-footer border-0 bg-white">
-            <p class="card-text">
-              <small class="text-secondary">{{ p.date | date: "%b %e, %Y" }}</small>
+            <p class="card-text text-muted text-small mb-2" style="font-size: .7em;">
+              {{ p.date | date: "%b %e, %Y" }}
+              <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+              <span style="font-size: 1.2em;">
+                {% include posts/badges.html tags=p.tags link_prefix='#' classed='btn-light text-muted' %}
+              </span>
             </p>
           </div>
         </div>

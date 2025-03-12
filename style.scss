@@ -347,23 +347,10 @@ hr {
 .border-purple { border-color: $purple!important; }
 .border-teal { border-color: teal!important; }
 
-//
-// Figures
-//
-.figure-caption {
-  font-size: .8em;
 
-  .title::before {
-    counter-increment: figure;
-    content: "Figure " counter(figure) ". ";
-  }
-}
-
-.carousel-control-prev,
-.carousel-control-next {
-  background: none;
-  border: none;
-}
+//
+// Spacing, margins and paddings.
+//
 
 .w-35 {width: 35% !important;}
 .w-40 {width: 40% !important;}
@@ -711,6 +698,40 @@ hr {
     }
   }
 }
+
+//
+// Components
+//
+
+//
+// Figures
+//
+.figure-caption {
+  font-size: .8em;
+
+  .title::before {
+    counter-increment: figure;
+    content: "Figure " counter(figure) ". ";
+  }
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  background: none;
+  border: none;
+}
+
+.card.card-animation-zoom {
+  .card-img-top {
+    transition: all 0.2s ease-in-out;
+  }
+
+  &:hover {
+  .card-img-top {
+    transform: scale(1.1);
+  }
+}}
+
 
 .dataframe {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;

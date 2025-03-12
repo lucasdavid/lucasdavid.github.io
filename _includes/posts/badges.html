@@ -1,7 +1,7 @@
 <span class="badges-container">
   {% for t in include.tags %}
     <a href="{{ include.link_prefix }}{{ t | downcase | replace: ' ', '-' }}"
-       class="btn btn-dark badge rounded-pill text-bg-dark text-decoration-none"
+       class="btn badge rounded-pill {{ include.classed | default: 'btn-dark text-bg-dark' }} text-decoration-none"
        style="font-size: 0.8em;"
        type="button"
        role="button"
