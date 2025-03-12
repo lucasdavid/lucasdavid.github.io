@@ -1,0 +1,61 @@
+<nav id="mainNav" class="navbar navbar-light bg-white navbar-expand-lg d-print-none border-bottom border-light {{ include.classed }}">
+  <div class="container-xl">
+    <button class="navbar-toggler rounded-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand fw-bold text-decoration-none p-1" href="/">Lucas David</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <span class="navbar-text navbar-excerpt">
+        {{ page.title }}
+      </span>
+      <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+      <ul class="navbar-nav mb-2 mb-lg-0 font-small">
+        <li class="nav-item"><a href="/" class="nav-link fw-bold link-dark fs-6">Home</a></li>
+        <li class="nav-item"><a href="/blog" class="nav-link fw-bold link-dark fs-6">Blog</a></li>
+        <li class="nav-item"><a href="/publications" class="nav-link fw-bold link-dark fs-6">Publications</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold link-dark fs-6" href="#" id="nbd-links-social" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Social
+          </a>
+          <ul class="dropdown-menu font-small dropdown-menu-end" aria-labelledby="nbd-links-social">
+            {% if site.footer-links.github %}<li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://github.com/{{ site.footer-links.github }}">
+                <i aria-label="GitHub" class="bi bi-github link-dark sr-none"></i>
+                Github</a></li>{% endif %}
+            {% if site.footer-links.linkedin %}<li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://www.linkedin.com/in/{{ site.footer-links.linkedin }}">
+                <i class="bi bi-linkedin text-primary sr-none"></i>
+                Linkedin</a></li>{% endif %}
+
+            <li itemscope itemtype="https://schema.org/Person">
+              <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+                  target="orcid.widget"
+                  rel="me noopener noreferrer"
+                  class="dropdown-item text-decoration-none"
+                >
+                <img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 5px; width: 16px;">
+                ORCID</a>
+            </li>
+
+            {% if site.footer-links.stackoverflow %}<li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="http://stackoverflow.com/{{ site.footer-links.stackoverflow }}">
+                <i class="bi bi-code-slash link-dark sr-none"></i>
+                Stackoverflow</a></li>{% endif %}
+            {% if site.footer-links.youtube %}<li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://youtube.com/{{ site.footer-links.youtube }}">
+                <i class="bi bi-youtube text-danger sr-none"></i>
+                Youtube</a></li>{% endif %}
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

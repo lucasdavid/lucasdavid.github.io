@@ -1,0 +1,7 @@
+_site/
+.sass-cache/
+.idea/
+*metadata*
+vendor/
+.vscode/
+.jekyll-cache/

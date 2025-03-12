@@ -1,0 +1,19 @@
+<div id="sidebar" class="{{ include.sidebarClassed }}">
+  <div class="text-center">
+    <a href="/" title="Home">
+      <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
+        class="img-fluid rounded-circle" style="width:100px" />
+    </a>
+    <p class="{{ include.textClassed | default: 'pt-2 font-small' }}">
+      {% if include.text %}
+        {{include.text }}
+      {% else %}
+        <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
+      {% endif %}
+    </p>
+  </div>
+
+  {% if include.summary %}
+  {% include {{ include.summary }} %}
+  {% endif %}
+</div>

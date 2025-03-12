@@ -1,0 +1,86 @@
+name: Lucas David
+title: Lucas David
+description: my personal website/blog
+avatar: /assets/images/infra/favicon.ico
+repository: lucasdavid/lucasdavid.github.io
+
+footer-links:
+  dribbble:
+  email: mb37410l3@mozmail.com
+  flickr:
+  github: lucasdavid
+  instagram: ldaviddd
+  linkedin: ld7
+  pinterest:
+  rss:
+  twitter:
+  stackoverflow: "users/2429640/lucasdavid"
+  youtube: channel/UC7IWeKUy4OSlC5ripcQGD6Q
+  googleplus:
+
+
+disqus: lucasdavid-github-io
+comments: true
+
+google_analytics: G-LG7FZ8VCHM
+
+url: "https://lucasdavid.github.io/"
+
+baseurl: ""
+
+paginate: 12
+paginate_path: "/blog/:num/"
+
+permalink: /blog/:categories/:title/
+version: v3.8
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+
+sass:
+  style: :compressed
+
+plugins:
+  - jekyll-sitemap
+  - jekyll-paginate
+  - jekyll-feed
+  - jekyll-github-metadata
+  - jekyll-compress-images
+  - jekyll-archives
+  - jekyll-toc
+  - jekyll-scholar
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE
+  - README.md
+  - CNAME
+  - vendor/
+  - _compress_images_cache.yml
+
+# compress_images:
+#   images_path: "assets/images/**/*.{gif,png,jpg,jpeg,svg}"
+# imageoptim:
+#   verbose: false
+
+toc:
+  min_level: 1
+  max_level: 3
+
+jekyll-archives:
+  enabled:
+    - categories
+    - tags
+  permalinks:
+    year: '/blog/:year/'
+    month: '/blog/:year/:month/'
+    day: '/blog/:year/:month/:day/'
+    tag: '/blog/tag/:name/'
+    category: '/blog/category/:name/'
+
+scholar:
+  style: assets/ieee
+  bibliography: '**/*.bib{,tex}'

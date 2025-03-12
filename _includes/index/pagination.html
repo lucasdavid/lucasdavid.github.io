@@ -1,0 +1,33 @@
+{% if paginator.total_pages > 1 %}
+<ul class="nav nav-pills" aria-label="Post pagination">
+  {% if paginator.previous_page %}
+    <li class="nav-item">
+      <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}" class="nav-link">Previous</a>
+    </li>
+  {% else %}
+    <li class="nav-item"><a class="nav-link disabled" href="#!" tabindex="-1" aria-disabled="true">Previous</a>
+  {% endif %}
+
+  {% for page in (1..paginator.total_pages) %}
+    {% if page == paginator.page %}
+      <li class="nav-item"><a href="#!" class="nav-link disabled" tabindex="-1" aria-disabled="true"><strong>{{page}}</strong></a></li>
+    {% elsif page == 1 %}
+      <li class="nav-item"><a
+        href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}"
+        class="nav-link">{{page}}</a></li>
+    {% else %}
+      <li class="nav-item"><a
+        href="{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}"
+        class="nav-link">{{page}}</a></li>
+    {% endif %}
+  {% endfor %}
+
+  {% if paginator.next_page %}
+    <li class="nav-item">
+      <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}"
+         class="nav-link next">Next</a></li>
+  {% else %}
+    <li class="nav-item"><a class="nav-link disabled" href="#!" tabindex="-1" aria-disabled="true">Next</a></li>
+  {% endif %}
+</ul>
+{% endif %}

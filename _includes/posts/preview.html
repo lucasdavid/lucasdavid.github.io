@@ -1,0 +1,25 @@
+<h2>
+  <a href="{{ site.baseurl }}{{ post.url }}" class="link-dark fw-bold">{{ post.title }}</a>
+</h2>
+<p class="text-muted">{{ post.excerpt }}
+  –
+  <span class="text-muted">
+    <em>{{ post.date | date: "%b %e, %Y" }}</em>
+  </span>
+</p>
+
+{% if post.lead_image %}
+<div style="max-height: 200px; overflow-y: hidden" class="mb-2">
+  <a href="{{ site.baseurl }}{{ post.url }}">
+    <img src="{{ site.baseurl }}{{ post.lead_image }}"
+         alt="Lead image of the content '{{ post.title }}'"
+         class="figure-img img-fluid rounded {{ post.lead_image_classed }}"
+         style="{{ post.lead_image_style }}" />
+  </a>
+</div>
+{% endif %}
+<p class="text-justified text-dark-gray">
+  {{ post.first_p }}
+</p>
+
+{% include posts/badges.html tags=post.tags link_prefix='/blog/tag/' %}

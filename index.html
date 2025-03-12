@@ -1,0 +1,130 @@
+---
+layout: default
+---
+
+{% include index/hero.html %}
+
+<div data-bs-spy="scroll" data-bs-target="#nav-scrollspy" data-bs-offset="0" tabindex="0">
+  <svg id="visual" viewBox="0 0 1980 300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+    version="1.1" class="curve-container__curve curve-three">
+    <path d="M0 242L1980 135L1980 301L0 301Z" fill="#f6f6f6" stroke-linecap="round" stroke-linejoin="miter"></path>
+  </svg>
+  <div class="text-bg-light bg-gray pt-4 pt-lg-0">
+    <div class="container-xl">
+      <h3 class="display-6 fw-bold mb-4" id="blog-posts">
+        <a href="/blog" class="link-dark text-decoration-none">Blog Posts</a>
+      </h3>
+
+      {% assign latests_posts = site.posts | slice: 0, 8 %}
+      {% include mixin/cards.html id='highlighted-posts' items=latests_posts cols=4 %}
+
+      <p class="text-center font-small mt-4 mb-6">
+        <a href="{{site.baseurl}}/blog"
+           role="button"
+           class="btn btn-lg btn-primary btn-purple text-decoration-none"
+          >Check all posts</a>
+      </p>
+    </div>
+    <div class="container-xl">
+      <h3 class="display-6 fw-bold mb-4" id="presentations">Videos & Presentations</h3>
+
+      {% include index/videos.html %}
+    </div>
+    <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+    <svg class="curve-container__curve curve-three" viewBox="10 -20 1870 210" version="1.1"
+      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <path class="plain fill-" fill="#f6f6f6"
+        d="M977.9,76.2 C475.2,-17.4 0.2,132.5 0.2,132.5 L0.2,275.5 L1891.3,275.5 L1891.3,0.7 C1891.3,0.7 1480.6,169.8 977.9,76.2 Z"
+        id="Path"></path>
+    </svg>
+  </div>
+
+  <div class="empty-v-space d-block d-lg-none" style="margin-bottom: 1.5rem"></div>
+  <div class="empty-v-space d-none d-lg-block" style="margin-bottom: 5vh"></div>
+  <div class="container-xl align-content-center text-center">
+    <h2 class="display-1 fw-bold">Scientific Contributions</h2>
+    <p class="fs-5">
+      Bellow is a short (and unorganized) list of my scientific and technical contributions.
+    </p>
+  </div>
+  <div class="empty-v-space d-none d-lg-block" style="margin-bottom: 5vh"></div>
+
+  <div class="container-xl">
+    <div class="row">
+      <div class="col-12 col-lg-3">
+        <div class="sticky-lg-top pt-4 d-none d-lg-block">
+          {% include sidebar.html summary="index/projects-index.html" %}
+        </div>
+      </div>
+      <div class="col-12 col-lg-9">
+        <section>
+          <header>
+            <h3 class="display-6 fw-bold mb-4" id="publications">Publications</h3>
+          </header>
+
+          {% include index/publication-list.html publications=site.data.publications limit=10 %}
+
+          <div class="mt-4 mb-6">
+            <p class="text-center font-small">
+              <a href="{{site.baseurl}}/publications" role="button"
+                class="btn btn-lg btn-primary btn-purple text-decoration-none">See all publications</a>
+              <a href="https://scholar.google.com/citations?user=ektr5DEAAAAJ&hl=pt-BR" role="button" target="_blank"
+                class="btn btn-lg btn-outline-dark text-decoration-none ms-4">Check publications on Scholar <i
+                  class="bi bi-box-arrow-up-right ms-2 sr-none"></i></a>
+            </p>
+          </div>
+        </section>
+
+        <section class="mb-6">
+          <header>
+            <h3 class="display-6 fw-bold mb-4" id="reports">Reports</h3>
+          </header>
+          <div>
+            {% assign reports = site.data.reports | sort: 'date' | reverse %}
+            {% for r in reports %}
+            <div class="card border-0 rounded-0 bg-light mb-2">
+              <div class="card-body p-2">
+                <h6>
+                  <a href="{{ r.url }}" class="link-dark text-decoration-none stretched-link" target="_blank">{{r.name}}</a>
+                </h6>
+                <p class="font-small mt-0 mb-2">{{r.description}}</p>
+                <p class="card-text text-muted mb-2" style="font-size: .7em;">
+                  Published at {{r.date | date: "%b %e, %Y" }}
+                  <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+                  <span style="font-size: 1.2em;">
+                    {% include posts/badges.html tags=r.keywords link_prefix='#' %}
+                  </span>
+                </p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </section>
+
+        <section class="mb-4">
+          <h3 class="display-6 fw-bold mb-4" id="events">Events</h3>
+          {% for o in site.data.events %}
+          <div class="card border-0 rounded-0 bg-light mb-2">
+            <div class="card-body p-2">
+              <h6 class="card-title">
+                <a href="{{ o.url }}" class="link-dark text-decoration-none" target="_blank">{{o.name}}</a>
+              </h6>
+              <p class="card-text font-small">{{o.description}}</p>
+              <p class="card-text text-muted mb-0" style="font-size: .7em;">
+                <span title="role">{{o.role}}</span> • <a href="{{ o.url }}">{{ o.url }}</a>
+              </p>
+            </div>
+          </div>
+          {% endfor %}
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-xl mt-5">
+  {% include index/projects.html %}
+
+  <div class="empty-v-space d-block d-lg-none sr-none" style="margin-bottom: 3rem"></div>
+  <div class="empty-v-space d-none d-lg-block sr-none" style="margin-bottom: 10vh"></div>
+</div>

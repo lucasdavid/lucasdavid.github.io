@@ -1,0 +1,34 @@
+<h6><strong>Summary</strong></h6>
+<div class="accordion accordion-flush" id="categoriesAccordion">
+  {% assign cats = site.categories %}
+  {% for category in cats %}
+
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-heading{{ category | first }}">
+      <button class="accordion-button collapsed text-start text-light p-2 ps-0 pe-0" type="button" data-bs-toggle="collapse"
+        data-bs-target="#flush-collapse{{ category | first }}" aria-expanded="false"
+        aria-controls="flush-collapse{{ category | first }}"
+        style="font-size:.45em">
+        {{ category | first | replace: "-", " " }}
+      </button>
+    </h2>
+    <div id="flush-collapse{{ category | first }}" class="accordion-collapse collapse"
+      aria-labelledby="flush-heading{{ category | first }}" data-bs-parent="#categoriesAccordion">
+      <div class="accordion-body">
+        <ul class="list-unstyled fw-normal pb-1 font-small post-summary text-light">
+          {% for post in category.last %}
+          <li class="pt-1 pb-1">
+            <a href="{{ post.url }}" class="d-inline-flex text-start post-summary-item text-light">
+            {% if post.short_title == nil %}
+            {{ post.title }}
+            {% else %}
+            {{ post.short_title }}
+            {% endif %}
+            </a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>

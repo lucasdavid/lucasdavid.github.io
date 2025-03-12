@@ -1,0 +1,8 @@
+<div class="{{ include.containerClassed | default: 'text-center mb-1' }}" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none {{ include.hrClassed }}" />
+  <button
+    data-bs-target="#{{ include.id }}" aria-controls="{{ include.id }}"
+    class="btn rounded-5 {{ include.classed | default: 'btn-light' }}"
+    style="position: relative; margin-top: -2rem;"
+    type="button" data-bs-toggle="collapse" aria-expanded="false">{{ include.text | default: "show collapsed" }}</button>
+</div>

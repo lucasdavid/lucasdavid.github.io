@@ -1,0 +1,95 @@
+- author: 'L. David and H. Pedrini, and Z. Dias'
+  title: 'P-NOC: Adversarial training of CAM generating networks for robust weakly supervised semantic segmentation priors'
+  journal: 'Journal of Visual Communication and Image Representation (JVCI)'
+  volume: '102'
+  pages: '104187'
+  year: '2024'
+  issn: '1047-3203'
+  links:
+    - name: paper
+      href: 'https://www.sciencedirect.com/science/article/pii/S1047320324001421'
+    - name: arxiv
+      href: 'https://arxiv.org/abs/2305.12522'
+    - name: code
+      href: 'https://github.com/lucasdavid/PNOC'
+    - name: doi
+      href: 'https://doi.org/10.1016/j.jvcir.2024.104187'
+- author: 'L. David, L. Liborio, G. Paiva, M. Severo, E. Valle, H. Pedrini, and Z. Dias'
+  booktitle: '2023 IEEE Latin American Conference on Computational Intelligence (LA-CCI)'
+  title: 'Adversarial Feature Hallucination in a Supervised Contrastive Space for Few-Shot Learning of Provenance in Paintings'
+  year: '2023'
+  pages: '1-6'
+  links:
+    - name: paper
+      href: 'https://ieeexplore.ieee.org/document/10409405'
+    - name: code
+      href: 'https://github.com/lucasdavid/afhp'
+    - name: doi
+      href: https://doi.org/10.1109/LA-CCI58595.2023.10409405
+- title: 'MinMax-CAM: Increasing Precision of Explaining Maps by Contrasting Gradient Signals and Regularizing Kernel Usage'
+  author: 'L. David, H. Pedrini, and Z. Dias'
+  booktitle: 'International Joint Conference on Computer Vision, Imaging and Computer Graphics'
+  pages: '222--247'
+  year: 2022
+  organization: Springer Nature Switzerland Cham'
+  links:
+    - name: paper
+      href: 'https://link.springer.com/chapter/10.1007/978-3-031-45725-8_11'
+    - name: code
+      href: 'https://github.com/lucasdavid/minmax-cam'
+    - name: doi
+      href: 'https://doi.org/10.1007/978-3-031-45725-8_11'
+- title: 'Bias Assessment in Medical Imaging Analysis: A Case Study on Retinal OCT Image Classification.'
+  author: G. Bianchin, L. David, R. Padilha, A. P. da Silva, F. de Paula, L. Infante, L. Jorge, P. Xavier, and Z. Dias'
+  booktitle: 'ICAART (3)'
+  pages: '574--580'
+  year: 2022
+  links:
+    - name: paper
+      href: 'https://www.sciencedirect.com/science/article/abs/pii/S0169260724002487'
+- title: 'MinMax-CAM: Improving Focus of CAM-based Visualization Techniques in Multi-label Problems'
+  author: 'L. David, H. Pedrini, and Z. Dias'
+  booktitle: '17th International Joint Conference on Computer Vision, Imaging and Computer Graphics Theory and Applications'
+  volume: 4
+  pages: '106--117'
+  year: 2022
+  organization: 'SciTePress DOI: 10.5220/0010807800003124'
+  links:
+    - name: paper
+      href: 'https://www.scitepress.org/Link.aspx?doi=10.5220/0010807800003124'
+    - name: doi
+      href: 'https://doi.org/10.5220/0010807800003124'
+- title: 'Connoisseur: provenance analysis in paintings'
+  author: L. David, H. Pedrini, Z. Dias, and A. Rocha'
+  booktitle: 2021 IEEE Symposium Series on Computational Intelligence (SSCI)
+  pages: 1--8
+  year: 2021
+  organization: IEEE
+  links:
+    - name: paper
+      href: 'https://ieeexplore.ieee.org/document/9659547'
+    - name: code
+      href: 'https://github.com/lucasdavid/connoisseur'
+    - name: doi
+      href: 'https://doi.org/10.1109/SSCI50451.2021.9659547'
+- title: "Authentication of Vincent van Gogh's work"
+  author: 'L. David, H. Pedrini, Z. Dias, A. Rocha'
+  booktitle: 'International Conference on Computer Analysis of Images and Patterns (CAIP)'
+  pages: '371--380'
+  year: 2021
+  organization: 'Springer International Publishing Cham'
+  links:
+    - name: paper
+      href: 'https://link.springer.com/chapter/10.1007/978-3-030-89131-2_34'
+    - name: doi
+      href: 'https://doi.org/10.1007/978-3-030-89131-2_34'
+- title: 'A Study of the ISOMAP Algorithm and Its Applications in Machine Learning'
+  author: 'L. David'
+  booktitle: UFSCar
+  year: 2015
+  publisher: 'Universidade Federal de São Carlos'
+  links:
+    - name: paper
+      href: 'https://repositorio.ufscar.br/handle/ufscar/14806'
+    - name: code
+      href: 'https://github.com/lucasdavid/manifold-learning'

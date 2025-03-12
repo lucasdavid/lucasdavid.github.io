@@ -1,0 +1,7 @@
+<div style="{{ include.containerStyled }}" class="{{ include.containerClassed | default: 'text-center' }}">
+  <figure class="figure {{ include.figureClassed }}">
+    <img src="{{ include.src }}" alt="{{ include.alt | default: include.title }}" class="figure-img img-fluid rounded mx-auto d-block {{ include.classed | default: 'w-100' }}" />
+
+    {% include figcaption.html title=include.title caption=include.caption captionClassed=include.captionClassed %}
+  </figure>
+</div>

@@ -1,0 +1,20 @@
+- title: Keras Explainable
+  description: |-
+    Clean implementations for AI explaining methods in Keras.
+    <a href="https://github.com/lucasdavid/keras-explainable" target="_new">Code</a> and
+    <a href="https://lucasdavid.github.io/keras-explainable" target="_new">docs</a> are available.
+- title: Supporting Study Material
+  description: |-
+    If you are an undergrad student and are looking for additional study material,
+    check out our collaborative project <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
+- title: Algorithms in TensorFlow
+  description: |-
+    I'm implementing all algorithms I find interesting using TensorFlow.
+    You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">github.com/lucasdavid/algorithms-in-tensorflow</a>.
+- title: TF-Experiment
+  description: |-
+    And environment to run Machine Learning experiments based on components and mixins. Available at <a href="https://github.com/lucasdavid/tf-experiment">github.com/lucasdavid/tf-experiment</a>.
+- title: Mineração de Dados Complexos
+  description: |-
+    Information around the extension program "Mineração de Dados Complexos (in Portuguese)" is available at
+    <a href="https://www.ic.unicamp.br/~mdc/" target="_blank">ic.unicamp.br/~mdc/</a>.

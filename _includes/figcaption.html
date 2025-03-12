@@ -1,0 +1,7 @@
+{% if include.title or include.caption %}
+  <figcaption class="figure-caption {{ include.captionClassed | default: 'text-start' }}">
+    <strong class="title">{{include.title}}</strong>
+
+    {{ include.caption }}
+  </figcaption>
+{% endif %}

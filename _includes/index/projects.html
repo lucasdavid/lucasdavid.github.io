@@ -1,0 +1,39 @@
+<div id="projects-container" class="projects">
+  {% if site.github.public_repositories %}
+  <section>
+    <header>
+      <h3 class="display-6 fw-bold mb-4" id="repos">
+        <a href="{{ site.github.owner_url }}" role="button" target="_blank"
+          class="link-dark text-decoration-none">Projects</a>
+      </h3>
+    </header>
+
+    <div class="row g-2">
+      {% assign repos = site.github.public_repositories | where:'fork', false | sort: 'stargazers_count' | reverse %}
+      {% for r in repos limit: 24 %}
+      <div class="col col-md-6 col-lg-4 col-xl-3 col-xxl-2">
+        <div class="card border-0 rounded-0 bg-light h-100 p-0 pb-0">
+          <div class="card-body pb-0">
+            <h6 class="card-title "><a href="{{ r.html_url }}" class="text-dark text-decoration-none stretched-link"
+                target="_blank">{{r.name}}</a></h6>
+            <p class="card-text font-small mb-0">{{r.description}}</p>
+          </div>
+          <div class="card-footer mt-0 bg-light border-0">
+            <p class="text-muted mb-2" style="font-size: .7em;">
+              {{r.stargazers_count}} stars • Last pushed at {{r.pushed_at | date: "%b %e, %Y" }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+    </div>
+
+    <p class="text-center mt-4 font-small">
+      <a href="{{ site.github.owner_url }}" role="button" target="_blank"
+        class="btn btn-lg btn-outline-dark text-decoration-none"
+       >see repositories on GitHub <i class="bi bi-box-arrow-up-right ms-2 sr-none"></i></a>
+    </p>
+  </section>
+  {% endif %}
+</div>

@@ -1,0 +1,27 @@
+{% for i in include.publications limit: include.limit %}
+<div class="card border-0 rounded-0 bg-light h-100 p-0 pb-0 mb-2">
+  <div class="card-body p-2">
+    <p class="card-text font-small mb-1">
+      {{ i.author }}. "{{ i.title }},"
+      in <i>{{i.journal | default: i.booktitle}}</i>,
+      {% if i.publisher %}{{i.publisher}},{%endif%}
+
+      {% if i.volume %}
+        v.{{i.volume}},
+      {% endif %}
+      {{i.year}}{% if i.pages %}, pp. {{i.pages}}{% endif %}
+    </p>
+
+    {% if i.links %}
+      <p class="card-text text-muted mb-0" style="font-size: .8rem;">
+        {% assign l = i.links.first %}
+        <a href="{{l.href}}">{{l.name}}</a>
+        {%for l in i.links offset: 1 %}
+          <span class="font-small sr-none" aria-hidden="true">•</span>
+          <a href="{{l.href}}">{{l.name}}</a>
+        {% endfor %}
+      </p>
+    {% endif %}
+  </div>
+</div>
+{% endfor %}

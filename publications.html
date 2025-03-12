@@ -1,0 +1,22 @@
+---
+layout: default
+title: Publications
+---
+
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12 col-lg-3 col-xl-2 offset-xxl-1">
+      <div class="sticky-lg-top pt-4">
+        {% include sidebar.html hideHello=true sidebarClassed="text-center" %}
+      </div>
+    </div>
+    <div class="col-12 col-lg-9 col-xl-8 col-xxl-6 pt-4">
+      <header>
+        <h3 class="display-6 fw-bold mb-4" id="presentations">Publications</h3>
+        {% include index/publication-list.html publications=site.data.publications %}
+      </header>
+    </div>
+  </div>
+</div>
+<div class="empty-v-space d-none d-md-block" style="margin-bottom: 10vh"></div>

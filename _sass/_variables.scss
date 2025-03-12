@@ -1,0 +1,73 @@
+//
+// VARIABLES
+//
+
+// Spacing
+//
+$navbar-height: 72px;
+
+
+// Colors
+$blue: #1d8ecc;
+$salmon: #fa8072;
+
+// Grays
+$black: #000;
+$darkerGray: #222;
+$darkGray: #444;
+$gray: #666;
+$gray2: #6c757d;
+$lightGray: #f6f6f6; // rgb(246, 246, 246);
+$white: #fff;
+
+$purple: #6d16d1;
+$purple1: rgb(62, 76, 236);
+$purple2: rgb(76, 88, 223);
+$purple3: rgb(45, 58, 201);
+
+$teal: teal;
+$teal1: rgb(0, 114, 114);
+$teal2: rgb(0, 146, 146);
+
+// Font stacks
+$helvetica: Helvetica, Arial, sans-serif;
+$helveticaNeue: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$georgia: Georgia, serif;
+
+// Mobile breakpoints
+@mixin mobile {
+  @media screen and (max-width: 640px) {
+    @content;
+  }
+}
+
+$size-xs: 0;
+$size-sm: 576px;
+$size-md: 768px;
+$size-lg: 992px;
+$size-xl: 1200px;
+$size-xxl: 1400px;
+
+// Code
+
+$font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default;
+$font-size-base:          14px !default;
+
+$gray-base:              #000 !default;
+$gray-dark:              lighten($gray-base, 20%) !default;   // #333
+
+$border-radius-base:        4px !default;
+$border-radius-small: 3px !default;
+
+$line-height-base:        1.428571429 !default; // 20/14
+$line-height-computed: floor(($font-size-base * $line-height-base)) !default; // ~20px
+
+$code-color:                  #c7254e !default;
+$code-bg:                     #f9f2f4 !default;
+
+$kbd-color:                   #fff !default;
+$kbd-bg:                      #333 !default;
+
+$pre-bg:                      #f5f5f5 !default;
+$pre-color:                   $gray-dark !default;
+$pre-scrollable-max-height: 340px !default;

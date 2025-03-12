@@ -1,0 +1,4 @@
+- name: Comp-UFSCar
+  url: https://github.com/Comp-UFSCar
+  role: Editor
+  description: Contains a bunch of study material which you can use to help you through your undergrad classes.

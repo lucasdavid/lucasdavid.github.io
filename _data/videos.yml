@@ -1,0 +1,48 @@
+- id: 'PS1RbvNP0qo'
+  title: 'Exploring XAI Methods in ML Problems and Complementary Reg. Strategies in WSSS'
+  source: 'https://www.youtube.com/v/PS1RbvNP0qo'
+  excerpt: My qualifying exam presentation at IC - Unicamp, presented in the year of 2022.
+  date: 2023-04-30 12:00:00
+- id: 'PKs63mWvCgA'
+  title: 'Connoisseur: Provenance Analysis in Paintings (SSCI 2021)'
+  source: 'https://www.youtube.com/v/PKs63mWvCgA'
+  excerpt: 'Video presentation for the paper, presented at IEEE SSCI 2021.'
+  date: 2024-04-10 12:00:00
+- id: '0GwZKIT9AcY'
+  title: 'MinMax-CAM: Improving Focus of CAM-Based VisualizationTechniques in Multi-Label Problems'
+  source: 'https://www.youtube.com/v/0GwZKIT9AcY'
+  excerpt: 'Video presentation for the article, presented at VISAPP 2022.'
+  date: 2024-04-10 12:00:00
+- id: 'n-5PvVGxibg'
+  title: NAO navigation in V-REP environment with QLearning (YouTube)
+  source: 'https://www.youtube.com/v/n-5PvVGxibg'
+  excerpt: 'Q-Learning applied to the navigation problem, using NAO robot and V-REP simulation environment.'
+  date: 2016-06-29 12:00:00
+- id: 'IPrAttcVRIY'
+  title: Aquarium (YouTube)
+  source: 'https://www.youtube.com/v/IPrAttcVRIY&start=4'
+  excerpt: 'Aquarium project, written in Java.'
+  date: 2015-12-02 12:00:00
+- id: '0E3MRv5LT4w'
+  title: Computer Graphics Assignment 3 Presentation (YouTube)
+  source: 'https://www.youtube.com/v/0E3MRv5LT4w'
+  excerpt: ''
+  date: 2015-12-03 12:00:00
+- id: '4Y7LL9fSHUM'
+  title: 'Adversarial Feature Hallucination Networks for FSL of Provenance in Paintings - IA-386'
+  source: 'https://www.youtube.com/v/4Y7LL9fSHUM'
+  excerpt: 'Apresentação do projeto final da disciplina IA368CC da Faculdade de Engenharia Elétrica e de Computação da Universidade Estadual de Campinas, ofertada no segundo semestre de 2021.'
+  date: 2022-02-15 12:00:00
+- id: '4ZMSX-1PhoM'
+  title: 'Classificando impacto humano sobre a floresta amazônica a partir de imagens de satélite (YouTube)'
+  source: 'https://www.youtube.com/v/4ZMSX-1PhoM'
+  excerpt: 'Apresentação do projeto final da disciplina MC886/MO444 do Instituto de Computação (Unicamp), ofertada no primeiro semestre de 2021.'
+  date: 2021-07-11 12:00:00
+# - id: 'ZmXyJqcAv8A'
+#   title: 'Titanfall 2 Ion Cover Gameplay - Surviving 3-to-1 outnumbered encounter'
+#   source: 'https://www.youtube.com/v/ZmXyJqcAv8A'
+#   date: 2021-08-30 12:00:00
+# - id: 'RCSquW5E5aU'
+#   title: 'The Last of Us Gameplay'
+#   source: 'https://www.youtube.com/v/RCSquW5E5aU'
+#   date: 2021-08-30 12:00:00

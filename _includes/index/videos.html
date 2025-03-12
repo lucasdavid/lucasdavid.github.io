@@ -1,0 +1,40 @@
+<div class="videos">
+  {% assign videos_count = site.data.videos | size %}
+
+  <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+    {% for v in site.data.videos %}
+    <div class="col">
+      <div class="card border-0 rounded-0 bg-white h-100">
+        <div class="overflow-hidden bg-white" style="height:{{include.imageHeight | default: '140px'}}">
+          <a href="{{ v.source }}" target="_blank">
+            <img src="https://img.youtube.com/vi/{{v.id}}/sddefault.jpg"
+                 alt="Preview cover for video '{{ v.title }}'"
+                 class="card-img-top rounded-0"
+                 style="height:100%; width:100%; object-fit:cover;" >
+          </a>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title font-small"><a href="{{ v.source }}" target="_blank" class="link-dark text-decoration-none">{{ v.title }}</a>
+          </h5>
+          <p class="card-text font-small">{{ v.excerpt }}</p>
+        </div>
+        <div class="card-footer border-0 bg-white">
+          <p class="card-text">
+            <small class="text-secondary">{{ v.date | date: "%b %e, %Y" }}</small>
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if site.footer-links.youtube %}
+    <p class="text-center mt-4 font-small">
+      <a href="https://youtube.com/{{ site.footer-links.youtube }}"
+         class="btn btn-lg btn-outline-dark text-decoration-none"
+         role="button"
+         target="_blank"
+         title="Youtube">See all videos on YouTube <i class="bi bi-box-arrow-up-right ms-2 sr-none"></i></a>
+    </p>
+  {% endif %}
+</div>
