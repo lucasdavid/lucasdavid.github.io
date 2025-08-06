@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>A Vectorized Implementation of The Convolution Operation – Lucas David</title>
+  <meta charset="utf-8" />
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="image_src" type="image/png" href="img_path" />
+
+
+<meta name="description" content="Implementing a few numeric operations over images using Python programming language." />
+<meta property="og:description" content="Implementing a few numeric operations over images using Python programming language." />
+<meta property="og:image" content="" />
+
+<meta name="author" content="Lucas David" />
+
+
+<meta property="og:title" content="A Vectorized Implementation of The Convolution Operation" />
+<meta property="twitter:title" content="A Vectorized Implementation of The Convolution Operation" />
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<link rel="alternate" type="application/rss+xml" title="Lucas David - my personal website/blog"
+      href="/feed.xml" />
+
+  
+  
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LG7FZ8VCHM"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-LG7FZ8VCHM');
+	</script>
+
+
+  
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+  <nav id="mainNav" class="navbar navbar-light bg-white navbar-expand-lg d-print-none border-bottom border-light ">
+  <div class="container-xl">
+    <button class="navbar-toggler rounded-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand fw-bold text-decoration-none p-1" href="/">Lucas David</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <span class="navbar-text navbar-excerpt">
+        A Vectorized Implementation of The Convolution Operation
+      </span>
+      <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+      <ul class="navbar-nav mb-2 mb-lg-0 font-small">
+        <li class="nav-item"><a href="/" class="nav-link fw-bold link-dark fs-6">Home</a></li>
+        <li class="nav-item"><a href="/blog" class="nav-link fw-bold link-dark fs-6">Blog</a></li>
+        <li class="nav-item"><a href="/publications" class="nav-link fw-bold link-dark fs-6">Publications</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold link-dark fs-6" href="#" id="nbd-links-social" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Social
+          </a>
+          <ul class="dropdown-menu font-small dropdown-menu-end" aria-labelledby="nbd-links-social">
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://github.com/lucasdavid">
+                <i aria-label="GitHub" class="bi bi-github link-dark sr-none"></i>
+                Github</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://www.linkedin.com/in/ld7">
+                <i class="bi bi-linkedin text-primary sr-none"></i>
+                Linkedin</a></li>
+
+            <li itemscope itemtype="https://schema.org/Person">
+              <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+                  target="orcid.widget"
+                  rel="me noopener noreferrer"
+                  class="dropdown-item text-decoration-none"
+                >
+                <img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 5px; width: 16px;">
+                ORCID</a>
+            </li>
+
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="http://stackoverflow.com/users/2429640/lucasdavid">
+                <i class="bi bi-code-slash link-dark sr-none"></i>
+                Stackoverflow</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q">
+                <i class="bi bi-youtube text-danger sr-none"></i>
+                Youtube</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+</div>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12 col-xl-3 col-xxl-2 offset-xxl-1">
+      <div id="sidebar" class="">
+  <div class="text-center">
+    <a href="/" title="Home">
+      <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
+        class="img-fluid rounded-circle" style="width:100px" />
+    </a>
+    <p class="pt-2 font-small">
+      
+        <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
+      
+    </p>
+  </div>
+
+  
+</div>
+
+    </div>
+    <div id="table-of-contents-container-r" class="col-12 col-xl-3 col-xxl-2 order-xl-2">
+      
+      <div style="z-index: 0; font-size:0.8rem;">
+        <div id="table-of-contents" class="font-small">
+  <p class="border-bottom"><strong>Summary</strong></p>
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#whats-vectorization">What’s Vectorization</a></li>
+<li class="toc-entry toc-h2"><a href="#tf-flowers-image-dataset">TF-Flowers (Image Dataset)</a></li>
+<li class="toc-entry toc-h2"><a href="#challenges">Challenges</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#challenge-apply-the-sepia-filter-to-a-batch-of-images">Challenge: Apply the sepia filter to a batch of images.</a></li>
+<li class="toc-entry toc-h3"><a href="#challenge-transform-a-batch-of-rgb-images-into-gray-scale-images">Challenge: Transform a batch of RGB images into gray-scale images.</a></li>
+<li class="toc-entry toc-h3"><a href="#challenge-apply-the-following-filters-to-the-monochromatic-images">Challenge: Apply the following filters to the monochromatic images.</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+      </div>
+      
+    </div>
+    <div class="col-12 col-xl-6">
+      <article class="post mb-4">
+        <header class="">
+          <h1 id="postTitle" class="fw-bold">A Vectorized Implementation of The Convolution Operation</h1>
+          <p class="right-align mb-2 text-muted fs-5">
+            Implementing a few numeric operations over images using Python programming language. <em>— June  8, 2021</em>
+          </p>
+          <div class="mb-4">
+            <span class="badges-container">
+  
+    <a href="/blog/tag/computer-vision"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Computer Vision</a>
+  
+    <a href="/blog/tag/tensorflow"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >TensorFlow</a>
+  
+</span>
+
+          </div>
+        </header>
+        <div class="article-content" style="margin-top: 4rem;">
+          <p>In this post, I thought I shared an assignment I have recently done for a Computer Vision class.</p>
+
+<p>Although results in Computer Vision are easily represented and interpreted, the implementation
+of even the most basic operations can be quite challenging.
+Even when the idea behind some code is trivial, implementations on GitHub and other websites can
+be quite difficult to understand. A few reasons come to mind, but I believe one to be of paramount
+importance: vectorization.</p>
+
+<h2 id="whats-vectorization">What’s Vectorization</h2>
+<p>The idea behind <a href="https://en.wikipedia.org/wiki/Array_programming">vectorization</a> is to leverage
+the concurrency and cache mechanisms of modern processors (and clusters thereof) in order to more
+efficiently apply operations over an entire set of values, instead of sequentially executing these
+same operations over each value.
+For example, consider the basic add operation between two integers in Python:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>  <span class="c1"># 30
+</span></code></pre></div></div>
+
+<p>In order to add a set of numbers, you must use a for loop:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)):</span>
+  <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>As Python was created thinking in a broader context than scientific and numerical applications,
+  not all operators behave exactly as we have seen in linear algebra and calculus classes.
+  For example, adding two lists in python results
+  in the concatenation of these two lists: <code class="language-plaintext highlighter-rouge">[0, 1, 2] + [4, 3, 2] = [0, 1, 2, 4, 3, 2]</code>.
+  Additionally, all lists in Python are implemented as doubly linked rings, in which the last
+  element is doubly linked to the first element. Although this structure guarantees best insertion
+  and deletion times, it does not guarantee data contiguous allocation in memory,
+  thus not optimizing cache hit.</p>
+</blockquote>
+
+<p>Libraries such as NumPy, SciPy and TensorFlow play a important role in cPython vectorization.
+Being mostly written in the C and C++ programming language (while exposing a Python interface),
+they allow us to work with memory-contiguous arrays, and overwrite most numeric operators
+to match their counterparts’ behavior in scientific and numeric applications.</p>
+
+<p>Using numpy, you can transparently add two arrays using vectorization:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>  <span class="c1"># == (5, 5, 5, 5)
+</span></code></pre></div></div>
+
+<p>Of course, everything else also works:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>  <span class="c1"># pair-wise sum                   == (5, 5, 5, 5)
+</span><span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span>  <span class="c1"># pair-wise sub                   == (-5, -3, -1, 1)
+</span><span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>  <span class="c1"># pair-wise mul                   == (0, 4, 6, 6)
+</span><span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span>  <span class="c1"># pair-wise div                   == (0, 1/4, 2/3, 3/2)
+</span><span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span>  <span class="c1"># pair-wise mod                   == (0, 1, 2, 1)
+</span><span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">@</span> <span class="n">b</span>  <span class="c1"># matrix mul (inner product here) == 16
+</span><span class="n">c</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">a</span>  <span class="c1"># scalar mul                      == (0, 2, 4, 6)
+</span><span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span>   <span class="c1"># element-wise power              == (0, 1, 4, 9)
+</span></code></pre></div></div>
+
+<p>Other interesting examples:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># reshaping vector into matrix == ((0, 1)
+</span>                       <span class="c1">#                                  (2, 3))
+</span><span class="n">d</span> <span class="o">=</span> <span class="n">c</span><span class="p">.</span><span class="n">T</span>                <span class="c1"># transposing                  == ((0, 2),
+</span>                       <span class="c1">#                                  (1, 3))
+</span><span class="n">e</span> <span class="o">=</span> <span class="n">c</span> <span class="o">@</span> <span class="n">d</span>              <span class="c1"># matrix mul                   == ((1, 3),
+</span>                       <span class="c1">#                                  (3, 13))
+</span><span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="p">.</span><span class="n">ravel</span><span class="p">()</span>          <span class="c1"># re-linearizing matrix        == (1, 3, 3, 13)
+</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># random normal numbers  == (((n0, n1), (n2, n3)),
+</span>                              <span class="c1">#                            ((n4, n5), (n6, n7))
+</span>                              <span class="c1">#                            ((n8, n9), (n10, n11)))
+</span><span class="n">g</span> <span class="o">=</span> <span class="n">f</span> <span class="o">+</span> <span class="n">c</span>                     <span class="c1"># broad-cast sum         == (((n0+0, n1+1), (n2+2, n3+3)),
+</span>                              <span class="c1">#                            ((n4+0, n5+1), (n6+2, n7+3))
+</span>                              <span class="c1">#                            ((n8+0, n9+1), (n10+2, n11+3)))
+</span></code></pre></div></div>
+
+<p>As Machine Learning is full of linear algebra, we can efficiently represent pretty much
+any operation with vectorization:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">@</span> <span class="n">w</span> <span class="o">+</span> <span class="n">b</span>         <span class="c1"># dense layer of a NN, followed by ReLU activation
+</span><span class="n">np</span><span class="p">.</span><span class="n">maximum</span><span class="p">(,</span> <span class="mi">0</span><span class="p">)</span>   <span class="c1"># ReLU activation function
+</span><span class="n">e</span><span class="o">**</span><span class="n">x</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">e</span><span class="o">**-</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># Sigmoid activation function
+</span>
+<span class="n">x</span> <span class="o">-=</span> <span class="n">x</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Data standardization
+</span><span class="n">x</span> <span class="o">/=</span> <span class="n">x</span><span class="p">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>   <span class="c1">#
+</span>
+<span class="n">x</span> <span class="o">-=</span> <span class="n">x</span><span class="p">.</span><span class="nb">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>   <span class="c1"># Data normalization
+</span><span class="n">x</span> <span class="o">/=</span> <span class="n">x</span><span class="p">.</span><span class="nb">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>   <span class="c1">#
+</span></code></pre></div></div>
+
+<h2 id="tf-flowers-image-dataset">TF-Flowers (Image Dataset)</h2>
+
+<p>In order to demonstrate the results, I utilized 10 random images from the <a href="https://www.tensorflow.org/datasets/catalog/tf_flowers">TF-Flowers</a> dataset, which can be downloaded in the tf-records format using the <code class="language-plaintext highlighter-rouge">tensorflow-datasets</code> library.</p>
+
+<p>This dataset represents a multi-class (mono-label) image classification problem, and comprises 3,670 photographs of flowers associated with one of the following labels: <em>dandelion</em>, <em>daisy</em>, <em>tulips</em>, <em>sunflowers</em> or <em>roses</em>.</p>
+
+<p>During the loading procedure, 1% of the set is retrieved from the disk (approximately 37 samples). Samples are shuffled and the first batch of 10 images is retrieved. In these settings:</p>
+
+<ul>
+  <li>3,670 images are downloaded into disk (compressed tf-record format)</li>
+  <li>37 (approx.) references — consisting of filepaths and record shard-level address — are loaded into memory</li>
+  <li>10 samples and labels are effectively loaded into memory</li>
+</ul>
+
+<p>Images are represented by tensors of rank 3, of shape <code class="language-plaintext highlighter-rouge">(HEIGHT, WIDTH, 3)</code>.
+They are first loaded into memory as n-dimensional arrays of type <code class="language-plaintext highlighter-rouge">tf.uint8</code>. As many of the following operations are floating point precision, we opted to cast them imediately to <code class="language-plaintext highlighter-rouge">tf.float32</code>. This is the default dtype for most operations in TensorFlow graphs.</p>
+
+<p>Image may have different sizes, which prevents them from being directly stacked into a 4-rank tensor <code class="language-plaintext highlighter-rouge">(BATCH, HEIGHT, WIDTH, 3)</code>. We circumvented this problem using the following procedure:</p>
+
+<ol>
+  <li>
+    <p>Let $Q := (300, 300, 3)$ be a desired output shape and $S_I := (H, W, 3)$ be the actual shape of any given image $I$.<br />
+$I$ is resized so it’s smallest component (width or height) would match the smallest component of $Q$ (namely, 300), resulting in $I’$.</p>
+  </li>
+  <li>
+    <p>The largest component in the shape of $I’$ is now greater or equal to $300$. We extract the central crop of size $(300, 300)$ from $I’$, resulting inadvertly in an image of shape $(300, 300, 3)$.</p>
+  </li>
+</ol>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#csetup" aria-controls="csetup" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show setup code</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="csetup"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">ceil</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+<span class="kn">import</span> <span class="nn">tensorflow_datasets</span> <span class="k">as</span> <span class="n">tfds</span>
+
+
+<span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+    <span class="n">image_sizes</span> <span class="o">=</span> <span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+    <span class="n">images_used</span> <span class="o">=</span> <span class="mi">10</span>
+
+    <span class="n">buffer_size</span> <span class="o">=</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">images_used</span>
+    <span class="n">seed</span> <span class="o">=</span> <span class="mi">6714</span>
+
+<span class="k">def</span> <span class="nf">preprocessing_fn</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+  <span class="c1"># Adjust the image to be at least of size `Config.image_sizes`, which
+</span>  <span class="c1"># garantees the random_crop operation below will work.
+</span>  <span class="n">current</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="n">image</span><span class="p">)[:</span><span class="mi">2</span><span class="p">],</span> <span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+  <span class="n">target</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">Config</span><span class="p">.</span><span class="n">image_sizes</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+  <span class="n">ratio</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_max</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">math</span><span class="p">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">target</span> <span class="o">/</span> <span class="n">current</span><span class="p">))</span>
+  <span class="n">new_sizes</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">current</span><span class="o">*</span><span class="n">ratio</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">int32</span><span class="p">)</span>
+
+  <span class="n">image</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">image</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">new_sizes</span><span class="p">,</span> <span class="n">preserve_aspect_ratio</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+  <span class="c1"># Crop randomly.
+</span>  <span class="n">image</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">image</span><span class="p">.</span><span class="n">resize_with_crop_or_pad</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="o">*</span><span class="n">Config</span><span class="p">.</span><span class="n">image_sizes</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">image</span><span class="p">,</span> <span class="n">label</span>
+
+<span class="p">(</span><span class="n">train_ds</span><span class="p">,),</span> <span class="n">info</span> <span class="o">=</span> <span class="n">tfds</span><span class="p">.</span><span class="n">load</span><span class="p">(</span>
+  <span class="s">'tf_flowers'</span><span class="p">,</span>
+  <span class="n">split</span><span class="o">=</span><span class="p">[</span><span class="s">'train[:1%]'</span><span class="p">],</span>
+  <span class="n">with_info</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+  <span class="n">as_supervised</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">int2str</span> <span class="o">=</span> <span class="n">info</span><span class="p">.</span><span class="n">features</span><span class="p">[</span><span class="s">'label'</span><span class="p">].</span><span class="n">int2str</span>
+
+<span class="n">images_set</span> <span class="o">=</span> <span class="p">(</span><span class="n">train_ds</span>
+              <span class="p">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">Config</span><span class="p">.</span><span class="n">buffer_size</span><span class="p">,</span> <span class="n">Config</span><span class="p">.</span><span class="n">seed</span><span class="p">)</span>
+              <span class="p">.</span><span class="nb">map</span><span class="p">(</span><span class="n">preprocessing_fn</span><span class="p">,</span> <span class="n">num_parallel_calls</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">AUTOTUNE</span><span class="p">)</span>
+              <span class="p">.</span><span class="n">batch</span><span class="p">(</span><span class="n">Config</span><span class="p">.</span><span class="n">images_used</span><span class="p">)</span>
+              <span class="p">.</span><span class="n">take</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="n">images</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">images_set</span><span class="p">))</span>
+<span class="n">images</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">int2str</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">target</span><span class="p">]</span>
+
+<span class="n">visualize</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">uint8</span><span class="p">),</span> <span class="n">labels</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/cv/vectorization/tfflowers.webp" alt="A few samples in the TF-Flowers dataset." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    A few samples in the TF-Flowers dataset.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h2 id="challenges">Challenges</h2>
+<p>The following sections describe different challenges involving applying vectorized operations over images.</p>
+
+<h3 id="challenge-apply-the-sepia-filter-to-a-batch-of-images"><em>Challenge:</em> Apply the sepia filter to a batch of images.</h3>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">R</span> <span class="o">=</span> <span class="mf">0.393</span><span class="n">R</span> <span class="o">+</span> <span class="mf">0.769</span><span class="n">G</span> <span class="o">+</span> <span class="mf">0.189</span><span class="n">B</span>
+<span class="n">G</span> <span class="o">=</span> <span class="mf">0.349</span><span class="n">R</span> <span class="o">+</span> <span class="mf">0.686</span><span class="n">G</span> <span class="o">+</span> <span class="mf">0.168</span><span class="n">B</span>
+<span class="n">B</span> <span class="o">=</span> <span class="mf">0.272</span><span class="n">R</span> <span class="o">+</span> <span class="mf">0.534</span><span class="n">G</span> <span class="o">+</span> <span class="mf">0.131</span><span class="n">B</span>
+</code></pre></div></div>
+
+<p>One way to perform this is to separate the image tensor $I$ of shape <code class="language-plaintext highlighter-rouge">(B, H, W, 3)</code>  by its last axis, forming three tensors of shape <code class="language-plaintext highlighter-rouge">(B, H, W, 1)</code>.
+We multiply each and every component according to the rule above and concatenate the result:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">tf</span><span class="p">.</span><span class="n">function</span>
+<span class="k">def</span> <span class="nf">sepia</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+
+  <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+  <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">concat</span><span class="p">((</span><span class="mf">0.393</span><span class="o">*</span><span class="n">r</span> <span class="o">+</span> <span class="mf">0.769</span><span class="o">*</span><span class="n">g</span> <span class="o">+</span> <span class="mf">0.189</span><span class="o">*</span><span class="n">b</span><span class="p">,</span>
+                 <span class="mf">0.349</span><span class="o">*</span><span class="n">r</span> <span class="o">+</span> <span class="mf">0.686</span><span class="o">*</span><span class="n">g</span> <span class="o">+</span> <span class="mf">0.168</span><span class="o">*</span><span class="n">b</span><span class="p">,</span>
+                 <span class="mf">0.272</span><span class="o">*</span><span class="n">r</span> <span class="o">+</span> <span class="mf">0.534</span><span class="o">*</span><span class="n">g</span> <span class="o">+</span> <span class="mf">0.131</span><span class="o">*</span><span class="n">b</span><span class="p">),</span>
+                <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">clip_by_value</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>A more ellegant solution is to remember that every linear system (including $(R’, G’, B’)^\intercal$, described above) can be interpreted as a multiplication between the input matrix and a coefficient matrix:</p>
+
+\[\begin{align}
+X \cdot S &amp;= \begin{bmatrix}
+              \sum_k x_{0,k} s_{k,0} &amp; ... &amp; \sum_k \space x_{0,k}s_{k,m} \\
+              ... &amp; ... &amp; ... \\
+              \sum_k x_{n,k} s_{k,0} &amp; ... &amp; \sum_k \space x_{n,k}s_{k,m} \\
+            \end{bmatrix} \\
+\begin{bmatrix}
+R &amp; G &amp; B
+\end{bmatrix} \cdot \begin{bmatrix}
+0.393 &amp; 0.349 &amp; 0.272 \\
+0.769 &amp; 0.686 &amp; 0.534 \\
+0.189 &amp; 0.168 &amp; 0.131 \\
+\end{bmatrix} &amp;= \begin{bmatrix}
+                   0.393R + 0.769G + 0.189B \\
+                   0.349R + 0.686G + 0.168B \\
+                   0.272R + 0.534G + 0.131B
+                 \end{bmatrix}^T
+\end{align}\]
+
+<p>In our case, $I$ has rank 4 (not a matrix), but the same equivalence applies, as the matrix multiplication is a specific case of the tensor dot product.
+There are multiple ways to perform this operation in TensorFlow:</p>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">y = tf.matmul(x, s)</code>: inner-product over the inner-most indices in the input tensors (last axis of <code class="language-plaintext highlighter-rouge">x</code> and antepenultimate axis of <code class="language-plaintext highlighter-rouge">s</code>). This assumes the other axes represent batch-like information, and generalizes the matrix-multiplication operation for all cases (the input is a matrix, batch of matrix or batch of sequence of matrix, …).</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">y = x @ s</code>: override of <code class="language-plaintext highlighter-rouge">tf.matmul</code>, same resulting operation</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">y = tf.tensorproduct(x, s, 1)</code>: the tensor dot product over one rank (the last in <code class="language-plaintext highlighter-rouge">x</code> and first in <code class="language-plaintext highlighter-rouge">sepia_weights</code>):</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">y = tf.einsum('bhwc,ck-&gt;bhwk', x, s)</code>: Einstein’s summation over the rank <code class="language-plaintext highlighter-rouge">c</code> (last in <code class="language-plaintext highlighter-rouge">x</code> and first in <code class="language-plaintext highlighter-rouge">s</code>)</p>
+  </li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sepia_weights</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">constant</span><span class="p">(</span>
+  <span class="p">[[</span><span class="mf">0.393</span><span class="p">,</span> <span class="mf">0.349</span><span class="p">,</span> <span class="mf">0.272</span><span class="p">],</span>
+   <span class="p">[</span><span class="mf">0.769</span><span class="p">,</span> <span class="mf">0.686</span><span class="p">,</span> <span class="mf">0.534</span><span class="p">],</span>
+   <span class="p">[</span><span class="mf">0.189</span><span class="p">,</span> <span class="mf">0.168</span><span class="p">,</span> <span class="mf">0.131</span><span class="p">]]</span>
+<span class="p">)</span>
+
+<span class="o">@</span><span class="n">tf</span><span class="p">.</span><span class="n">function</span>
+<span class="k">def</span> <span class="nf">sepia</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">@</span> <span class="n">sepia_weights</span>
+  <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">clip_by_value</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+
+
+<span class="n">images_s</span> <span class="o">=</span> <span class="n">sepia</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv3" aria-controls="cv3" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-py collapse highlighter-rouge" id="cv3"><div class="highlight"><pre class="highlight"><code><span class="n">visualize</span><span class="p">(</span>
+  <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">images_s</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">uint8</span><span class="p">),</span>
+  <span class="n">labels</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/cv/vectorization/tfflowers-sepia.webp" alt="The samples in the TF-Flowers dataset, after the Sepia filter is applied." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    The samples in the TF-Flowers dataset, after the Sepia filter is applied.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h3 id="challenge-transform-a-batch-of-rgb-images-into-gray-scale-images"><em>Challenge:</em> Transform a batch of RGB images into gray-scale images.</h3>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">I</span> <span class="o">=</span> <span class="mf">0.2989</span><span class="n">R</span> <span class="o">+</span> <span class="mf">0.5870</span><span class="n">G</span> <span class="o">+</span> <span class="mf">0.1140</span><span class="n">B</span>
+</code></pre></div></div>
+
+<p>The solution is very similar to what was done above, except that the coefficient tensor is no
+longer a matrix, which preclude the usage of <code class="language-plaintext highlighter-rouge">@</code>. We use <code class="language-plaintext highlighter-rouge">tf.tensordot</code> to compute the inner
+product between the last axis of <code class="language-plaintext highlighter-rouge">x</code> and first (and only) axis of <code class="language-plaintext highlighter-rouge">gray_weights</code>.</p>
+
+<p>An acceptable alternative form would be <code class="language-plaintext highlighter-rouge">tf.einsum('bhwc,c-&gt;bhw', x, gray_weights)</code>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">gray_weights</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">constant</span><span class="p">([</span><span class="mf">0.2989</span><span class="p">,</span> <span class="mf">0.5870</span><span class="p">,</span> <span class="mf">0.1140</span><span class="p">])</span>
+
+<span class="o">@</span><span class="n">tf</span><span class="p">.</span><span class="n">function</span>
+<span class="k">def</span> <span class="nf">grayscale</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">tensordot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gray_weights</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+  <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>             <span class="c1"># restore 3rd rank (H, W, 1)
+</span>  <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">clip_by_value</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+
+<span class="n">images_g</span> <span class="o">=</span> <span class="n">grayscale</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv2" aria-controls="cv2" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-py collapse highlighter-rouge" id="cv2"><div class="highlight"><pre class="highlight"><code><span class="n">visualize</span><span class="p">(</span>
+  <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">images_g</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">uint8</span><span class="p">),</span>
+  <span class="n">labels</span><span class="p">,</span>
+  <span class="n">cmap</span><span class="o">=</span><span class="s">'gray'</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/cv/vectorization/tfflowers-gray.webp" alt="Samples in the TF-Flowers dataset converted to gray-scale." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Samples in the TF-Flowers dataset converted to gray-scale.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h3 id="challenge-apply-the-following-filters-to-the-monochromatic-images"><em>Challenge:</em> Apply the following filters to the monochromatic images.</h3>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#ckernels" aria-controls="ckernels" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show kernels</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="ckernels"><div class="highlight"><pre class="highlight"><code><span class="n">h17</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">constant</span><span class="p">(</span>
+  <span class="p">[</span>
+    <span class="p">[[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+     <span class="p">[</span><span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">],</span>
+     <span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]],</span>
+
+    <span class="p">[[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">],</span>
+     <span class="p">[</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">],</span>
+     <span class="p">[</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">]],</span>
+
+    <span class="p">[[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">],</span>
+     <span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">8.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">],</span>
+     <span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">]],</span>
+   
+    <span class="p">[[</span><span class="mi">1</span><span class="o">/</span><span class="mi">9</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">9</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">9</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">9</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">9</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">9</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">9</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">9</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">9</span><span class="p">]],</span>
+
+    <span class="p">[[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">],</span>
+     <span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">],</span>
+     <span class="p">[</span> <span class="mf">2.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">]],</span>
+
+    <span class="p">[[</span> <span class="mf">2.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">],</span>
+     <span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">],</span>
+     <span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">]],</span>
+
+    <span class="p">[[</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+     <span class="p">[</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+     <span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]],</span>
+  <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">h8</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">constant</span><span class="p">(</span>
+  <span class="p">[[</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">],</span>
+   <span class="p">[</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">],</span>
+   <span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">16.</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">],</span>
+   <span class="p">[</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">],</span>
+   <span class="p">[</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">]]</span>
+<span class="p">)</span>
+
+<span class="n">h9</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">256</span> <span class="o">*</span> <span class="n">tf</span><span class="p">.</span><span class="n">constant</span><span class="p">(</span>
+  <span class="p">[[</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">4.</span><span class="p">,</span>  <span class="mf">6.</span><span class="p">,</span>  <span class="mf">4.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+   <span class="p">[</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">16.</span><span class="p">,</span> <span class="mf">24.</span><span class="p">,</span> <span class="mf">16.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">],</span>
+   <span class="p">[</span><span class="mf">6.</span><span class="p">,</span> <span class="mf">24.</span><span class="p">,</span> <span class="mf">36.</span><span class="p">,</span> <span class="mf">24.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">],</span>
+   <span class="p">[</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">16.</span><span class="p">,</span> <span class="mf">24.</span><span class="p">,</span> <span class="mf">16.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">],</span>
+   <span class="p">[</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">4.</span><span class="p">,</span> <span class="mf">16.</span><span class="p">,</span>  <span class="mf">4.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]]</span>
+<span class="p">)</span>
+
+<span class="n">h89</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">stack</span><span class="p">((</span><span class="n">h8</span><span class="p">,</span> <span class="n">h9</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">h17</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">h17</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="n">h89</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">h89</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h4 id="convolution-basics">Convolution Basics</h4>
+
+<p>The convolution of a 1-D input sinal $f$ and a 1-D kernel $g$ is defined as the integration of the product between the two signals, when evaluated over the temporal component:</p>
+
+\[(f*g)(t) = \int f(\tau)g(t - \tau) d\tau\]
+
+<p>We observe from the equation above that one of the signals is reflected. This is essential so both functions are evaluated over the same time interval, resulting in the effect of “zipping” the two functions together.
+This effect is illustrated in the first column of the figure below.</p>
+
+<p>On the other hand, <em>Cross-correlation</em> is a similar operation in which $g$ slides over $f$ without the aforementioned reflection:</p>
+
+\[(f*g)(t) = \int f(\tau)g(t + \tau) d\tau\]
+
+<p>The signals are associated in an inverted fashion, which is illustrated in the second column of the figure below.</p>
+
+<p>Finally, we can imagine that a 2-D signal (such as images) is reflected when both $(x, y)$ axes are reflected. This is equivalent of rotating the image in $180^\circ$.</p>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Comparison_convolution_correlation.svg/1280px-Comparison_convolution_correlation.svg.webp" alt="Comparison between convolution, cross-correlation and autocorrelation. From Wikipedia." class="figure-img img-fluid rounded mx-auto d-block w-lg-50" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Comparison between convolution, cross-correlation and autocorrelation. From <a href="https://en.wikipedia.org/wiki/Cross-correlation" target="_blank">Wikipedia</a>.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h4 id="using-tensorflows-native-conv2d-implementation">Using TensorFlow’s Native Conv2D Implementation</h4>
+
+<p>Notwithstanding its name, the <code class="language-plaintext highlighter-rouge">tf.nn.conv2d(f, g)</code> function implements the cross-correlation function, and the convolution operation is supposedly performed by assuming the kernel $g$ is already reflected.</p>
+
+<p>In the example below, we observe the output signal is obtained by the <em>Cross-correlation</em> eq.:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">constant</span><span class="p">(</span>
+  <span class="p">[[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">],</span>
+   <span class="p">[</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">],</span>
+   <span class="p">[</span><span class="mf">7.</span><span class="p">,</span> <span class="mf">8.</span><span class="p">,</span> <span class="mf">9.</span><span class="p">]]</span>
+<span class="p">)</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">constant</span><span class="p">(</span>
+  <span class="p">[[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+   <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]]</span>
+<span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">conv2d</span><span class="p">(</span>
+  <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+  <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+  <span class="n">strides</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+  <span class="n">padding</span><span class="o">=</span><span class="s">'VALID'</span>
+<span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">'signal:'</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">sep</span><span class="o">=</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'kernel:'</span><span class="p">,</span> <span class="n">k</span><span class="p">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">sep</span><span class="o">=</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'s*k:'</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)).</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">sep</span><span class="o">=</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">signal</span><span class="p">:</span>
+<span class="p">[[</span><span class="mf">1.</span> <span class="mf">2.</span> <span class="mf">3.</span><span class="p">]</span>
+  <span class="p">[</span><span class="mf">4.</span> <span class="mf">5.</span> <span class="mf">6.</span><span class="p">]</span>
+  <span class="p">[</span><span class="mf">7.</span> <span class="mf">8.</span> <span class="mf">9.</span><span class="p">]]</span>
+<span class="n">kernel</span><span class="p">:</span>
+<span class="p">[[</span><span class="mf">1.</span> <span class="mf">1.</span><span class="p">]</span>
+  <span class="p">[</span><span class="mf">0.</span> <span class="mf">0.</span><span class="p">]]</span>
+<span class="n">s</span><span class="o">*</span><span class="n">k</span><span class="p">:</span>
+<span class="p">[[</span> <span class="mf">3.</span>  <span class="mf">5.</span><span class="p">]</span>
+  <span class="p">[</span> <span class="mf">9.</span> <span class="mf">11.</span><span class="p">]]</span>
+</code></pre></div></div>
+
+<p>This is a design decision which takes performance into account, as the rotation operations can be omitted during the feed-forward process. During training, kernels are correctly learnt through back-propagation by minimizing a given loss function (e.g. cross-entropy, N-pairs, focal loss).
+Interestingly enough, the differential of the <strong>real-valued</strong> cross-correlation with respect to its kernel (which is used to update the kernels) is the cross-correlation itself, rotated $180^\circ$ (e.g. convolution).</p>
+
+<p>In this case, in which the kernels are fixed, we assume they represent regular filters.
+We therefore rotate the kernels them before applying the <code class="language-plaintext highlighter-rouge">tf.nn.conv2d</code> function.</p>
+
+<p>This assignment can be trivially solved using this function:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">to_kernel</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span> <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="p">[...,</span> <span class="n">tf</span><span class="p">.</span><span class="n">newaxis</span><span class="p">]</span>
+  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span> <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="p">[...,</span> <span class="n">tf</span><span class="p">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>
+  
+  <span class="n">k</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">image</span><span class="p">.</span><span class="n">rot90</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">k</span>
+
+<span class="n">y17</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">images_g</span><span class="p">,</span> <span class="n">to_kernel</span><span class="p">(</span><span class="n">h17</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="s">'SAME'</span><span class="p">)</span>
+<span class="n">y89</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">images_g</span><span class="p">,</span> <span class="n">to_kernel</span><span class="p">(</span><span class="n">h89</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="s">'SAME'</span><span class="p">)</span>
+
+<span class="n">yr1c2</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span>
+  <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">images_g</span><span class="p">,</span> <span class="n">to_kernel</span><span class="p">(</span><span class="n">h17</span><span class="p">[...,</span> <span class="mi">0</span><span class="p">]),</span> <span class="mi">1</span><span class="p">,</span> <span class="s">'SAME'</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+  <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">images_g</span><span class="p">,</span> <span class="n">to_kernel</span><span class="p">(</span><span class="n">h17</span><span class="p">[...,</span> <span class="mi">1</span><span class="p">]),</span> <span class="mi">1</span><span class="p">,</span> <span class="s">'SAME'</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+<span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">concat</span><span class="p">((</span><span class="n">y17</span><span class="p">,</span> <span class="n">y89</span><span class="p">,</span> <span class="n">yr1c2</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">clip_by_value</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="vectorized-cross-correlation-implementation">Vectorized Cross-correlation Implementation</h4>
+
+<p>In this subsection, I present my implementation (and derivation thereof) of the 2-dimensional convolution function.
+For simplicity, it is implemented as the correlation between an input signal $s$ and the reflection of an input kernel $k$.</p>
+
+<h5 id="study-of-a-use-case">Study of a Use Case</h5>
+<p>I decided to start by considering a simple use case.
+For analytical convenience, I imagined this case to have the following characteristics:</p>
+
+<ul>
+  <li>Only one image $s$ and one kernel $k$ are involved in this operation.</li>
+  <li>No padding is performed in the input signal (i.e. <code class="language-plaintext highlighter-rouge">padding valid</code>).</li>
+  <li>$s$ and $k$ have different height and width values — namely, $(H_s, W_s)$ and $(H_k, W_k)$ —, and they are prime numbers. This is interesting when flattening a matrix into a vector, as prime numbers have distinct products and will result in dimensions that are easier to understand.</li>
+  <li>The kernel is not symmetric. Hence the convolution and cross-correlation functions will result in different signals.</li>
+</ul>
+
+<p>I considered the following signals in my use-case:</p>
+
+\[\begin{align}
+  s &amp;= \begin{bmatrix}
+     1 &amp; 2 &amp; 3 &amp; 4 &amp; 5 \\
+     6 &amp; 7 &amp; 8 &amp; 9 &amp; 10 \\
+     11 &amp; 12 &amp; 13 &amp; 14 &amp; 15 \\
+     16 &amp; 17 &amp; 18 &amp; 19 &amp; 20 \\
+     21 &amp; 22 &amp; 23 &amp; 24 &amp; 25 \\
+     26 &amp; 27 &amp; 28 &amp; 29 &amp; 30 \\
+     31 &amp; 32 &amp; 33 &amp; 34 &amp; 35
+  \end{bmatrix} \\
+  k &amp;= \begin{bmatrix}
+    0 &amp; 2 &amp; 1 \\
+    0 &amp; 1 &amp; 0
+  \end{bmatrix}
+\end{align}\]
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#ck2" aria-controls="ck2" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-py collapse highlighter-rouge" id="ck2"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">35</span><span class="p">).</span><span class="n">reshape</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+</code></pre></div></div>
+
+<p>I simulated the effect of a 2-D kernel $k$ sliding across the spatial dimensions of $s$ by “extracting” multiple non-mutually disjointed subsections of the image into a sequence of flattened patches, which could then be broadcast-multiplied by the flattened kernel and reduced with the sum operation.
+To make this “extraction” more efficient, an index-based mask was built and applied over the image. This approach requires the construction of two integer matrices $R$ and $C$ — each of shape $((H_s-H_k+1)(W_s-W_k+1), H_k W_s)$ —, but does not replicate the values contained within the input signal $s$. Rather, index-based masks create merely <code class="language-plaintext highlighter-rouge">views</code> of the n-dimensional arrays over which they are applied.</p>
+
+<p>The indexing procedure can be described by the following steps.</p>
+
+<ul>
+  <li>The window starts at the first valid position in matrix $s$, and references the sub-matrix $s[0:2,0:2]$ with the flatten index vector $[(0,0), (0,1), (0,2), (1,0), (1,1),(1,2)]$ or, for briefness, $\begin{bmatrix}00 &amp; 01 &amp; 02 &amp; 10 &amp; 11 &amp; 12\end{bmatrix}$.</li>
+  <li>$k$ slides horizontally until the last valid index of $s$, yielding $W_s-W_k+1$ index vectors in total.</li>
+  <li>The window resets at the column of $s$, but positioned at the next following row.</li>
+  <li>The three steps above are repeated for each valid vertical index ($H_s-H_k+1$ times), effectively covering all sections of the matrix $s$.</li>
+</ul>
+
+<p>The use-case represented above can therefore be indexed as:</p>
+
+\[\begin{align}
+  M_s = \begin{bmatrix}
+    00 &amp; 01 &amp; 02 &amp; 10 &amp; 11 &amp; 12 \\
+    01 &amp; 02 &amp; 03 &amp; 11 &amp; 12 &amp; 13 \\
+    02 &amp; 03 &amp; 04 &amp; 12 &amp; 13 &amp; 14 \\
+    \\
+    10 &amp; 11 &amp; 12 &amp; 20 &amp; 21 &amp; 22 \\
+    11 &amp; 12 &amp; 13 &amp; 21 &amp; 22 &amp; 23 \\
+    12 &amp; 13 &amp; 14 &amp; 22 &amp; 23 &amp; 24 \\
+    \ldots\\
+    50 &amp; 51 &amp; 52 &amp; 60 &amp; 61 &amp; 62 \\
+    51 &amp; 52 &amp; 53 &amp; 61 &amp; 62 &amp; 63 \\
+    52 &amp; 53 &amp; 54 &amp; 62 &amp; 63 &amp; 64 \\
+  \end{bmatrix}
+\end{align}\]
+
+<p>We can identify multiple patterns in the matrix above.</p>
+
+<p>Firstly, onto the vertical indexing (i.e., the index $r$ in the index pair $rc$, for $M_s = [rc]_{R\times C})$. In the first column, $r$ is arranged from $0$ to $H_s-H_k+1$, and each number repeats $W_s-W_k+1$ times. This can be expressed in numpy notation as:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">B</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">shape</span>
+<span class="n">KH</span><span class="p">,</span> <span class="n">KW</span><span class="p">,</span> <span class="n">KC</span> <span class="o">=</span> <span class="n">k</span><span class="p">.</span><span class="n">shape</span>
+
+<span class="n">r0</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="n">H</span><span class="o">-</span><span class="n">KH</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">r0</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">W</span><span class="o">-</span><span class="n">KW</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">r0</span> <span class="o">=</span> <span class="n">r0</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Across the rows, $r$ repeats itself $W_k$ times, and then it assumes the value $r+1$
+and repeats itself $W_k$ times once again. These two outer-most repetitions are due to the fact that the kernel has 2 rows. In a general case, we would observe $H_k$ repetitions:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">r1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="n">KH</span><span class="p">).</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">KH</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">r0</span> <span class="o">+</span> <span class="n">r1</span><span class="p">,</span> <span class="n">KW</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Notice that the addition between a column vector $r_0$ and a row vector $r_1$ will construct a matrix through broadcasting. The matrix $R$ now contains the first index in $M_s$.</p>
+
+<p>As for the horizontal indexing $c$, we observe the numbers are sequentially arranged in the first row from 0 to $W_k$, and that this sequence repeats $H_k$ times:</p>
+<pre><code class="language-`py">c0 = np.arange(KW)
+c0 = np.tile(c0, KH).reshape(1, -1)
+</code></pre>
+
+<p>Furthermore, $c$ increases by 1 each row (as our convolution slides by exactly 1 step), going up to the number of horizontal slide steps of $k$ onto $s$ ($W_s-W_k+1$).
+Adding this row vector to $c_0$ (a column vector) produces the index matrix for all horizontal slides of the kernel. Finally, we vertically tile (outer repeat) this matrix by the number of valid horizontal slide steps ($H_s-H_k + 1$):</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="n">W</span><span class="o">-</span><span class="n">KW</span><span class="o">+</span><span class="mi">1</span><span class="p">).</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">tile</span><span class="p">(</span><span class="n">c0</span> <span class="o">+</span> <span class="n">c1</span><span class="p">,</span> <span class="p">[</span><span class="n">H</span><span class="o">-</span><span class="n">KH</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p>Hence, $M_s = [R, C]$.</p>
+
+<h5 id="additional-considerations">Additional Considerations</h5>
+<h6 id="batching">Batching</h6>
+<p>As $M_s$ was constructed taking the width and height of the signals into consideration, it does not depend on the number of images, nor the number of kernels.
+Let $s$ be redefined as a signal of shape $(B_1, B_2, \ldots, B_n, H_s, W_s)$ (a batch of batches of \ldots batches of images), and $k$ a signal of shape $(H_k, W_k, C)$ This solution can be easily extended to a multi-image, multi-kernel scenario by broadcasting the index-mask selection of $s$ to all batch-like dimensions and dotting it with the flatten kernels:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">y</span> <span class="o">=</span> <span class="n">s</span><span class="p">[...,</span> <span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span> <span class="o">@</span> <span class="n">k</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h6 id="padding">Padding</h6>
+<p>As kernels of sizes greater than 0 slide across the spatial dimensions of an input signal $s$, they will occupy at most $(H_s-H_k+1)\times (W_s-W_k+1) &lt; H_s W_s$ positions, resulting in an output signal smaller than the input signal. More specifically, of shape $(B_1, B_2, \ldots, B_n, H_s-H_k+1, W_s-W_k+1, C)$.
+One can imagine many cases in which the maintenance of the signal size is desirable, such as maintaining locality between multiple applications of the convolution; or maintaining visualization consistency.</p>
+
+<p>In order to maintain a consistent signal shape, I implemented the flag <code class="language-plaintext highlighter-rouge">padding='SAME'</code>, what is sometimes referred to as <code class="language-plaintext highlighter-rouge">zero-padding</code>. I employed here a strategy similar to what is done in the NumPy and TensorFlow libraries: $(H_k-1, W_k-1)$ zeros are added to the input signal’s height and width respectively.
+During the convolution, the spatial dimensions of the input signal become $((H_s+H_k-1)-H_k+1, (W_s+W_k-1)-W_k+1) = (H_s, W_s)$.</p>
+
+<p>For kernels with an odd numbered width and height, this operation becomes trivial: we add $\lfloor H_k/2 \rfloor$ rows to both top and bottom extremities of the signal, and $\lfloor W_k/2 \rfloor$ columns to its left and right extremities.</p>
+
+<p>A particular case must be handled when one of the sizes of the kernel is even: adding $\lfloor H_k/2 \rfloor$ will result in an output signal larger than the input signal by exactly 1 pixel. I handled this case in the same manner NumPy seemly does, by adding more padding to the bottom/right than to the top/left.</p>
+
+<h6 id="usage-conditions-and-limitations">Usage Conditions and Limitations</h6>
+<p>The input signal (images) must be in the shape of $(B_1, B_2, \ldots, B_n, H_s, W_s)$ and kernels must be in the shape of $(H_k, W_k, C)$. I also remark the following important limitations of this implementation:</p>
+
+<ul>
+  <li>This function is limited to the two dimensional spatial case, and will not work correctly for 3-D, 4-D and, more generally, n-D spatial signals, where $n &gt; 3$.</li>
+  <li>Stride is always 1, which makes this function unsuitable for Atrous Convolution.</li>
+</ul>
+
+<h5 id="complete-implementation">Complete Implementation</h5>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">floor</span>
+
+<span class="n">_PADDINGS</span> <span class="o">=</span> <span class="p">(</span><span class="s">'VALID'</span><span class="p">,</span> <span class="s">'SAME'</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_validate_correlate2d_args</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">padding</span><span class="p">):</span>
+  <span class="k">assert</span> <span class="n">padding</span> <span class="ow">in</span> <span class="n">_PADDINGS</span><span class="p">,</span> <span class="p">(</span><span class="sa">f</span><span class="s">'Unknown value </span><span class="si">{</span><span class="n">padding</span><span class="si">}</span><span class="s"> for argument `padding`. '</span>
+                                <span class="sa">f</span><span class="s">'It must be one of the following: </span><span class="si">{</span><span class="n">_PADDINGS</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+  <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="sa">f</span><span class="s">'Input `s` must have shape [B, H, W]. '</span>
+                             <span class="sa">f</span><span class="s">'A tensor of shape </span><span class="si">{</span><span class="n">s</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s"> was passed.'</span><span class="p">)</span>
+  <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="sa">f</span><span class="s">'Kernels `k` must have shape [H, W, C]. '</span>
+                             <span class="sa">f</span><span class="s">'A tensor of shape </span><span class="si">{</span><span class="n">k</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s"> was passed.'</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">correlate2d</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">'VALID'</span><span class="p">):</span>
+  <span class="n">s</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">,</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+  <span class="n">_validate_correlate2d_args</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">padding</span><span class="p">)</span>
+
+  <span class="n">B</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">shape</span>
+  <span class="n">KH</span><span class="p">,</span> <span class="n">KW</span><span class="p">,</span> <span class="n">KC</span> <span class="o">=</span> <span class="n">k</span><span class="p">.</span><span class="n">shape</span>
+
+  <span class="k">if</span> <span class="n">padding</span> <span class="o">==</span> <span class="s">'SAME'</span><span class="p">:</span>
+    <span class="n">pt</span><span class="p">,</span> <span class="n">pb</span> <span class="o">=</span> <span class="n">floor</span><span class="p">((</span><span class="n">KH</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">ceil</span><span class="p">((</span><span class="n">KH</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">pl</span><span class="p">,</span> <span class="n">pr</span> <span class="o">=</span> <span class="n">floor</span><span class="p">((</span><span class="n">KW</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">ceil</span><span class="p">((</span><span class="n">KW</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">pad</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">pb</span><span class="p">),</span> <span class="p">(</span><span class="n">pl</span><span class="p">,</span> <span class="n">pr</span><span class="p">)))</span>
+    <span class="n">B</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">shape</span>
+  
+  <span class="c1"># Creating selection tile s[0:3, 0:3]
+</span>  <span class="c1">#   --&gt; [s[0,0], s[0,1], s[0,2], s[1,0], s[1,1], s[1,2]]
+</span>  <span class="n">r0</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="n">H</span><span class="o">-</span><span class="n">KH</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+  <span class="n">r0</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">W</span><span class="o">-</span><span class="n">KW</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+  <span class="n">r0</span> <span class="o">=</span> <span class="n">r0</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+  <span class="n">r1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="n">KH</span><span class="p">).</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">KH</span><span class="p">)</span>
+  <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">r0</span> <span class="o">+</span> <span class="n">r1</span><span class="p">,</span> <span class="n">KW</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+  <span class="n">c0</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="n">KW</span><span class="p">)</span>
+  <span class="n">c0</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">tile</span><span class="p">(</span><span class="n">c0</span><span class="p">,</span> <span class="n">KH</span><span class="p">).</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+  <span class="n">c1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="n">W</span><span class="o">-</span><span class="n">KW</span><span class="o">+</span><span class="mi">1</span><span class="p">).</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+  <span class="n">c</span> <span class="o">=</span> <span class="n">c0</span> <span class="o">+</span> <span class="n">c1</span>
+  <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">tile</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="p">[</span><span class="n">H</span><span class="o">-</span><span class="n">KH</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+  <span class="c1"># k.shape (3, 3) --&gt; (9, 1), in order to multiply
+</span>  <span class="c1"># and add-reduce in a single pass with "@".
+</span>  <span class="n">y</span> <span class="o">=</span> <span class="n">s</span><span class="p">[...,</span> <span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span> <span class="o">@</span> <span class="n">k</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">KC</span><span class="p">)</span>
+  <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">H</span><span class="o">-</span><span class="n">KH</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">W</span><span class="o">-</span><span class="n">KW</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">KC</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">y</span>
+
+<span class="k">def</span> <span class="nf">convolve2d</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">'VALID'</span><span class="p">):</span>
+  <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">rot90</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># reflect signal.
+</span>  <span class="k">return</span> <span class="n">correlate2d</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">padding</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="testing-my-implementation-against-scipys">Testing My Implementation Against Scipy’s</h4>
+
+<p>One way of testing this code is to compare the results with scipy’s implementation.
+We can use the <code class="language-plaintext highlighter-rouge">np.testing.assert_almost_equal</code> function to compare arrays (up to the 6th decimal),
+which will either pass without errors or print how similar the two arrays are:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">scipy.signal</span>
+
+<span class="k">for</span> <span class="n">padding</span> <span class="ow">in</span> <span class="p">(</span><span class="s">'valid'</span><span class="p">,</span> <span class="s">'same'</span><span class="p">):</span>
+  <span class="n">y_mine</span> <span class="o">=</span> <span class="n">correlate2d</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="n">padding</span><span class="p">.</span><span class="n">upper</span><span class="p">())</span>
+  <span class="n">y_scipy</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">(</span>
+    <span class="p">[</span>
+      <span class="p">[</span><span class="n">scipy</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">correlate2d</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">b</span><span class="p">],</span> <span class="n">k</span><span class="p">[...,</span> <span class="n">c</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="n">padding</span><span class="p">.</span><span class="n">lower</span><span class="p">())</span>
+       <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])]</span>
+      <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="p">]</span>
+  <span class="p">).</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># transpose to (B, H, W, C) format.
+</span>
+  <span class="n">np</span><span class="p">.</span><span class="n">testing</span><span class="p">.</span><span class="n">assert_almost_equal</span><span class="p">(</span>
+    <span class="n">y_mine</span><span class="p">,</span>
+    <span class="n">y_scipy</span>
+  <span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">'All tests passed (no exceptions raised).'</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>All tests passed (no exceptions raised).
+</code></pre></div></div>
+
+<h4 id="application-over-tf-flowers-image-samples">Application over TF-Flowers Image Samples</h4>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv1" aria-controls="cv1" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show code</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv1"><div class="highlight"><pre class="highlight"><code><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">concatenate</span><span class="p">(</span>
+  <span class="p">(</span><span class="n">convolve2d</span><span class="p">(</span><span class="n">images_g</span><span class="p">[...,</span> <span class="mi">0</span><span class="p">].</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">h17</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">'SAME'</span><span class="p">),</span>
+   <span class="n">convolve2d</span><span class="p">(</span><span class="n">images_g</span><span class="p">[...,</span> <span class="mi">0</span><span class="p">].</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">h89</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">'SAME'</span><span class="p">)),</span>
+  <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span>
+<span class="p">)</span>
+
+<span class="n">yr1c1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span>
+  <span class="n">convolve2d</span><span class="p">(</span><span class="n">images_g</span><span class="p">[...,</span> <span class="mi">0</span><span class="p">].</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">h17</span><span class="p">[...,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span> <span class="n">padding</span><span class="o">=</span><span class="s">'SAME'</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+  <span class="o">+</span> <span class="n">convolve2d</span><span class="p">(</span><span class="n">images_g</span><span class="p">[...,</span> <span class="mi">0</span><span class="p">].</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">h17</span><span class="p">[...,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">padding</span><span class="o">=</span><span class="s">'SAME'</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+<span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">y</span><span class="p">,</span> <span class="n">yr1c2</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">visualizing</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span>
+  <span class="n">tf</span><span class="p">.</span><span class="n">clip_by_value</span><span class="p">(</span>
+    <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span>
+      <span class="n">tf</span><span class="p">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">concat</span><span class="p">((</span><span class="n">images_g</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+      <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">images_g</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="p">),</span>
+    <span class="mi">0</span><span class="p">,</span>
+    <span class="mi">255</span>
+  <span class="p">),</span>
+  <span class="n">tf</span><span class="p">.</span><span class="n">uint8</span>
+<span class="p">).</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="n">visualizing</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="bp">None</span><span class="p">,</span>  <span class="c1"># empty cell (original images column)
+</span>  <span class="o">*</span><span class="n">tf</span><span class="p">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">h17</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)).</span><span class="n">numpy</span><span class="p">(),</span>  <span class="c1"># kernels 1 through 7
+</span>  <span class="o">*</span><span class="n">tf</span><span class="p">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">h89</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)).</span><span class="n">numpy</span><span class="p">(),</span>  <span class="c1"># kernels 8 and 9
+</span>  <span class="bp">None</span><span class="p">,</span>  <span class="c1"># empty cell (sqrt(s*h1^2+s^h2^2) column)
+</span>  <span class="o">*</span><span class="n">visualizing</span> <span class="c1"># images and convolution results
+</span><span class="p">]</span>
+
+<span class="n">titles</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="s">'original'</span><span class="p">,</span>
+  <span class="o">*</span><span class="p">(</span><span class="sa">f</span><span class="s">'$s*h_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s">$'</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">)),</span>
+  <span class="s">'$\sqrt{ {s*h_1}^2 + {s*h_2}^2}$'</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">visualize</span><span class="p">(</span>
+  <span class="n">visualizing</span><span class="p">,</span>
+  <span class="n">titles</span><span class="p">,</span>
+  <span class="n">rows</span><span class="o">=</span><span class="n">images_g</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="n">cols</span><span class="o">=</span><span class="n">y</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/cv/vectorization/results.webp" alt="Convolution between the samples in TF-Flowers and hand-craft kernels." class="figure-img img-fluid rounded mx-auto d-block w-xl-130" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Convolution between the samples in TF-Flowers and hand-craft kernels.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>The figure above illustrates the result of the convolution of multiple input
+images with each kernel. A brief description of each result is provided below.</p>
+
+<ul>
+  <li><strong>H1</strong> highlights regions containing vertical lines, in which the left side
+represents areas with higher activation intensity, while the ones in the right
+are dark regions.</li>
+  <li><strong>H2</strong> is similar to <code class="language-plaintext highlighter-rouge">H1</code>, but activates strongly over horizontal lines in
+which the top is brighter than the bottom.</li>
+  <li><strong>H3</strong> responds strongly to bright regions that are surrounded by dark regions
+in the input. It seems to extract fine edges regardless of their orientation.</li>
+  <li><strong>H4</strong> is the uniform blur filter. It runs across the image macro-averaging the
+pixel activation intensities, reducing their differences.</li>
+  <li><strong>H5</strong> detects diagonal (bottom-left to top-right) lines — this kernel is
+symmetric, hence the convolution results in the same signal as the correlation.</li>
+  <li><strong>H6</strong> similar to H5, but detects diagonal (top-left to bottom-right) lines.</li>
+  <li><strong>H7</strong> responds to regions with bright top-right corners and dark bottom-right
+corners, without taking into consideration the information in the in-between
+section (most of which is multiplied by 0).</li>
+  <li><strong>H8</strong> is an edge-detector like H3, but seemly results in more detailed edges
+for these highly-detailed input images.</li>
+  <li><strong>H9</strong> is the Gaussian blur filter. It weight-averages the differences between
+the intensities of the pixels giving the central region more importance.</li>
+  <li><strong>H10</strong> combines <code class="language-plaintext highlighter-rouge">H1</code> and <code class="language-plaintext highlighter-rouge">H2</code> into one signal that seems to respond to both
+vertical and horizontal lines in the same intensity.</li>
+</ul>
+
+        </div>
+      </article>
+
+      
+      <div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://lucasdavid-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      
+    </div>
+  </div>
+</div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+  integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"
+  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
+  integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '\\[', right: '\\]', display: true}, {left: '$', right: '$', display: false},{left: '\\(', right: '\\)', display: false}]});"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+<script>
+  anchors.options = { icon: '#' };
+  anchors.add();
+</script>
+
+
+  <!-- <svg id="visual" viewBox="0 0 1980 300"  class="curve-container__curve curve-three" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <path
+    d="M0 69L55 90.2C110 111.3 220 153.7 330 169.8C440 186 550 176 660 165.5C770 155 880 144 990 139.2C1100 134.3 1210 135.7 1320 137.7C1430 139.7 1540 142.3 1650 155.5C1760 168.7 1870 192.3 1925 204.2L1980 216L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#d3d3d3"></path>
+  <path
+    d="M0 89L55 107.8C110 126.7 220 164.3 330 191.3C440 218.3 550 234.7 660 243.8C770 253 880 255 990 252.3C1100 249.7 1210 242.3 1320 228.8C1430 215.3 1540 195.7 1650 174.5C1760 153.3 1870 130.7 1925 119.3L1980 108L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#6a6a6a"></path>
+  <path
+    d="M0 229L55 232.3C110 235.7 220 242.3 330 244.3C440 246.3 550 243.7 660 247.3C770 251 880 261 990 254.8C1100 248.7 1210 226.3 1320 223.5C1430 220.7 1540 237.3 1650 233.8C1760 230.3 1870 206.7 1925 194.8L1980 183L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#121212"></path>
+</svg> -->
+<footer class="page-footer text-bg-dark bg-black-subtle d-print-none">
+  <div class="container">
+    <div class="mt-4 mb-5">
+      
+        <div class="row g-1 mb-4">
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Keras Explainable</h6>
+                <p class="card-text text-light">
+                  Clean implementations for AI explaining methods in Keras.
+<a href="https://github.com/lucasdavid/keras-explainable" target="_new">Code</a> and
+<a href="https://lucasdavid.github.io/keras-explainable" target="_new">docs</a> are available.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Supporting Study Material</h6>
+                <p class="card-text text-light">
+                  If you are an undergrad student and are looking for additional study material,
+check out our collaborative project <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Algorithms in TensorFlow</h6>
+                <p class="card-text text-light">
+                  I'm implementing all algorithms I find interesting using TensorFlow.
+You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">github.com/lucasdavid/algorithms-in-tensorflow</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">TF-Experiment</h6>
+                <p class="card-text text-light">
+                  And environment to run Machine Learning experiments based on components and mixins. Available at <a href="https://github.com/lucasdavid/tf-experiment">github.com/lucasdavid/tf-experiment</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Mineração de Dados Complexos</h6>
+                <p class="card-text text-light">
+                  Information around the extension program "Mineração de Dados Complexos (in Portuguese)" is available at
+<a href="https://www.ic.unicamp.br/~mdc/" target="_blank">ic.unicamp.br/~mdc/</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+    </div>
+
+    <div class="text-end mt-4">
+      
+
+
+<div class="fs-2">
+  
+    <a href="https://github.com/lucasdavid"
+      target="_blank"
+      ><i
+      aria-label="GitHub"
+      class="bi bi-github link-light"></i></a>
+  
+  
+    <a href="https://www.linkedin.com/in/ld7"
+      target="_blank"
+      title="LinkedIn"><i class="bi bi-linkedin text-primary sr-none"></i></a>
+  
+  <span itemscope itemtype="https://schema.org/Person">
+    <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+       target="orcid.widget"
+       rel="me noopener noreferrer"
+       title="ORCID"
+      ><img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 7px; width: 32px;"></a>
+  </span>
+  
+  <a href="http://stackoverflow.com/users/2429640/lucasdavid"
+     target="_blank"
+     title="Stackoverflow"><i class="bi bi-code-slash link-light sr-none"></i></a>
+  
+    <a href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q"
+      target="_blank"
+      title="Youtube"><i class="bi bi-youtube text-danger sr-none"></i></a>
+  
+    <a href="mailto:mb37410l3@mozmail.com"
+      target="_blank"
+      title="Mail"><i class="bi bi-envelope-fill link-light sr-none"></i></a>
+  
+  <a href="assets/docs/lucas-david-resume.pdf"
+     target="_blank"
+     title="Resume"><i class="bi bi-person-lines-fill link-light sr-none"></i></a>
+</div>
+
+    </div>
+    <div class="text-end">
+      <p>
+        ® Lucas David. Todos os direitos reservados.
+      </p>
+    </div>
+</div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous" defer></script>
+
+</body>
+</html>

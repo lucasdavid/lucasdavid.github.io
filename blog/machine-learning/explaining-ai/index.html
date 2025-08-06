@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Explaining Machine Learning Models – Lucas David</title>
+  <meta charset="utf-8" />
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="image_src" type="image/png" href="img_path" />
+
+
+<meta name="description" content="Explainability using tree decision visualization, weight composition, and gradient-based saliency maps." />
+<meta property="og:description" content="Explainability using tree decision visualization, weight composition, and gradient-based saliency maps." />
+<meta property="og:image" content="" />
+
+<meta name="author" content="Lucas David" />
+
+
+<meta property="og:title" content="Explaining Machine Learning Models" />
+<meta property="twitter:title" content="Explaining Machine Learning Models" />
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<link rel="alternate" type="application/rss+xml" title="Lucas David - my personal website/blog"
+      href="/feed.xml" />
+
+  
+  
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LG7FZ8VCHM"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-LG7FZ8VCHM');
+	</script>
+
+
+  
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+  <nav id="mainNav" class="navbar navbar-light bg-white navbar-expand-lg d-print-none border-bottom border-light ">
+  <div class="container-xl">
+    <button class="navbar-toggler rounded-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand fw-bold text-decoration-none p-1" href="/">Lucas David</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <span class="navbar-text navbar-excerpt">
+        Explaining Machine Learning Models
+      </span>
+      <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+      <ul class="navbar-nav mb-2 mb-lg-0 font-small">
+        <li class="nav-item"><a href="/" class="nav-link fw-bold link-dark fs-6">Home</a></li>
+        <li class="nav-item"><a href="/blog" class="nav-link fw-bold link-dark fs-6">Blog</a></li>
+        <li class="nav-item"><a href="/publications" class="nav-link fw-bold link-dark fs-6">Publications</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold link-dark fs-6" href="#" id="nbd-links-social" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Social
+          </a>
+          <ul class="dropdown-menu font-small dropdown-menu-end" aria-labelledby="nbd-links-social">
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://github.com/lucasdavid">
+                <i aria-label="GitHub" class="bi bi-github link-dark sr-none"></i>
+                Github</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://www.linkedin.com/in/ld7">
+                <i class="bi bi-linkedin text-primary sr-none"></i>
+                Linkedin</a></li>
+
+            <li itemscope itemtype="https://schema.org/Person">
+              <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+                  target="orcid.widget"
+                  rel="me noopener noreferrer"
+                  class="dropdown-item text-decoration-none"
+                >
+                <img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 5px; width: 16px;">
+                ORCID</a>
+            </li>
+
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="http://stackoverflow.com/users/2429640/lucasdavid">
+                <i class="bi bi-code-slash link-dark sr-none"></i>
+                Stackoverflow</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q">
+                <i class="bi bi-youtube text-danger sr-none"></i>
+                Youtube</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+</div>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12 col-xl-3 col-xxl-2 offset-xxl-1">
+      <div id="sidebar" class="">
+  <div class="text-center">
+    <a href="/" title="Home">
+      <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
+        class="img-fluid rounded-circle" style="width:100px" />
+    </a>
+    <p class="pt-2 font-small">
+      
+        <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
+      
+    </p>
+  </div>
+
+  
+</div>
+
+    </div>
+    <div id="table-of-contents-container-r" class="col-12 col-xl-3 col-xxl-2 order-xl-2">
+      
+      <div style="z-index: 0; font-size:0.8rem;">
+        <div id="table-of-contents" class="font-small">
+  <p class="border-bottom"><strong>Summary</strong></p>
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#explaining-classic-artificial-intelligence-agents">Explaining Classic Artificial Intelligence Agents</a></li>
+<li class="toc-entry toc-h2"><a href="#explaining-decision-based-models">Explaining Decision-based Models</a></li>
+<li class="toc-entry toc-h2"><a href="#explaining-linear-geometric-models">Explaining Linear Geometric Models</a></li>
+<li class="toc-entry toc-h2"><a href="#explaining-deep-convolutional-networks">Explaining Deep Convolutional Networks</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#gradient-based-explaining-methods">Gradient-based Explaining Methods</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#final-considerations">Final Considerations</a></li>
+<li class="toc-entry toc-h2"><a href="#references">References</a></li>
+</ul>
+</div>
+
+      </div>
+      
+    </div>
+    <div class="col-12 col-xl-6">
+      <article class="post mb-4">
+        <header class="">
+          <h1 id="postTitle" class="fw-bold">Explaining Machine Learning Models</h1>
+          <p class="right-align mb-2 text-muted fs-5">
+            Explainability using tree decision visualization, weight composition, and gradient-based saliency maps. <em>— January 15, 2021</em>
+          </p>
+          <div class="mb-4">
+            <span class="badges-container">
+  
+    <a href="/blog/tag/ml"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >ML</a>
+  
+    <a href="/blog/tag/ai-explaining"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >AI Explaining</a>
+  
+    <a href="/blog/tag/scikit-learn"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Scikit-Learn</a>
+  
+    <a href="/blog/tag/tensorflow"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >TensorFlow</a>
+  
+</span>
+
+          </div>
+        </header>
+        <div class="article-content" style="margin-top: 4rem;">
+          <p><span class="fs-1" style="line-height:0">W</span>hile
+the current advancements in Machine Learning systems’ scoring are indeed impressive, they hit a wall a few years back with respect to their adoption by a broader audience. This has happened because these complex solutions failed to deliver one important human aspect: trust.
+As their decisions affect people’s lives  — from credit consession to self-driving assist systems —, ML must be reliable and trustworthy.
+As if it weren’t enough, trusting in machines is hard, specially when you are not a specialist or don’t know its inner workings. Remember that many countries today still conduct their public elections using paper-based ballot counting, which although much inefficient, can be verified by any interested citizen (and not only specialists).</p>
+
+<p>For even the simplest environments, many aspects may come into play and create unexpected scenarios were machines behave unreliably. Code bugs, structural fatigue, improper maintance and extreme running conditions are examples of such. In any case, it’s a given that machines operating in such scenarios should always feedback their decisions to the users, describing <strong>why</strong> they are being taken in order to inform interested parties, maintain logs of its behavior and facilitate troubleshooting.</p>
+
+<blockquote>
+  <p>People should <strong>not</strong> accept bindly automatic decisions. There’s a great book about this which everyone
+  shoud read: <a href="https://en.wikipedia.org/wiki/Weapons_of_Math_Destruction">Weapons of Math Destruction</a>, by Cathy O’Neil.</p>
+</blockquote>
+
+<p>Research on explaining methods for ML has gained traction in the past years.
+However, intelligent systems have been around for many decates now.
+So, is this really a new problem? And if not, what’s different?</p>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#collapseSetup" aria-controls="collapseSetup" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show setup code</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="collapseSetup"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">fetch_openml</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
+
+<span class="kn">import</span> <span class="nn">IPython.display</span> <span class="k">as</span> <span class="n">display</span>
+<span class="kn">import</span> <span class="nn">PIL.Image</span>
+
+<span class="k">def</span> <span class="nf">download_image</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">allow_redirects</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">content</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">path</span>
+
+<span class="k">def</span> <span class="nf">as_image_vector</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">numpy</span><span class="p">()</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">.</span><span class="mi">5</span>
+    <span class="n">x</span> <span class="o">*=</span> <span class="mi">255</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="p">.</span><span class="n">clip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'uint8'</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">print_predictions</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">predictions</span> <span class="o">=</span> <span class="n">decode_predictions</span><span class="p">(</span><span class="n">y</span><span class="p">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">top</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">predictions</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'Sample </span><span class="si">{</span><span class="n">ix</span><span class="si">}</span><span class="s">:'</span><span class="p">,</span>
+              <span class="o">*</span><span class="p">(</span><span class="sa">f</span><span class="s">'  </span><span class="si">{</span><span class="n">pred</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="mi">100</span><span class="o">*</span><span class="n">prob</span><span class="p">:.</span><span class="mi">2</span><span class="n">f</span><span class="si">}</span><span class="s">'</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">prob</span> <span class="ow">in</span> <span class="n">p</span><span class="p">),</span>
+              <span class="n">sep</span><span class="o">=</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s">'</span><span class="se">\n\n</span><span class="s">'</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">titles</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">i0</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">ceil</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">image</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">rows</span><span class="p">),</span> <span class="n">i0</span><span class="o">+</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">plt</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="s">'off'</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">t</span> <span class="o">=</span> <span class="n">titles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">titles</span> <span class="k">else</span> <span class="bp">None</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">rows</span><span class="p">),</span> <span class="n">i0</span><span class="o">+</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="s">'off'</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">plot_images_and_salency_maps</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">saliency</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+    <span class="n">grads_titles</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">_p</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s"> </span><span class="si">{</span><span class="n">_p</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]:.</span><span class="mi">2</span><span class="o">%</span><span class="si">}</span><span class="s">'</span> <span class="k">for</span> <span class="n">_p</span> <span class="ow">in</span> <span class="n">decode_predictions</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+
+    <span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+    <span class="n">plot</span><span class="p">([</span><span class="o">*</span><span class="n">images</span><span class="p">,</span> <span class="o">*</span><span class="n">saliency</span><span class="p">],</span>
+        <span class="n">titles</span><span class="o">=</span><span class="nb">sorted</span><span class="p">([</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">IMAGES</span><span class="p">])</span>
+               <span class="o">+</span> <span class="n">grads_titles</span><span class="p">,</span>
+        <span class="n">rows</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+<span class="n">sns</span><span class="p">.</span><span class="n">set_style</span><span class="p">(</span><span class="s">"whitegrid"</span><span class="p">,</span> <span class="p">{</span><span class="s">'axes.grid'</span> <span class="p">:</span> <span class="bp">False</span><span class="p">})</span>
+</code></pre></div></div>
+
+<h2 id="explaining-classic-artificial-intelligence-agents">Explaining Classic Artificial Intelligence Agents</h2>
+<p>Most classic artificial intelligence systems — derived from the symbolic approach of AI — were pretty straight forward: they would rely heavily on the ideas of planning and search over a rational optimization space through a sequence of rational actions.
+For example, path-finding is an important problem for movement optimization systems (used in games, robotics), where one must travel from point A to point B using the least amount of effort (time, steps etc), and can be solved using algorithms like <em>Dijkstra’s</em> or <em>A*</em>.</p>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Dijkstras_progress_animation.gif" alt="Gif illustrating Dijkstra's algorithm behavior around an obstacle." class="figure-img img-fluid rounded mx-auto d-block rounded mx-auto d-block" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Dijkstra's algorithm path-finding around an obstacle. Available at <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm" target="_blank">wikipedia</a>.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Similarly, one could “solve” board games such as Othelo or Chess by describing valid states of the environment, the valid moves available and an utility function associated with the probability could. Search algorithms — such as Alpha-Beta Prunning and Monte-Carlo Tree Search — can then be employed to search for the best utility state (and the path that will take us there).</p>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/MCTS-steps.svg" alt="An illustration of the Monte Carlo tree search algorithm." class="figure-img img-fluid rounded mx-auto d-block rounded mx-auto d-block" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    An illustration of the Monte Carlo tree search algorithm searching for the state of best utility for the current player. Available at <a href="https://en.wikipedia.org/wiki/Monte_Carlo_tree_search" target="_blank">wikipedia</a>.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>These systems are easy to explain precisely because of the way they were built: they are iterative, rational and direct by nature. If the environment and the actions can be drawn or represented in some form, then we can simply draw the sequence of decisions that comprise the reasioning of the model. In the path-finding example above, we can see exactly which sections of the map are being scanned, until the shortest-path is found between the source the the green dot. As for the MCTS, we can guarantee the solution otimality (with respect to the local search space expanded) by simple inspection.</p>
+
+<h2 id="explaining-decision-based-models">Explaining Decision-based Models</h2>
+<p>Classifiers and regression models are agents whose sole action sets consist on giving answers. When explaining such agents, we tend to focus on <strong>why</strong> some answer was given. So the problem of explaining an answering agent reduces to explaining the answer itself.
+Consider the toy example problem below:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ds</span> <span class="o">=</span> <span class="n">datasets</span><span class="p">.</span><span class="n">load_breast_cancer</span><span class="p">()</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ds</span><span class="p">.</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">ds</span><span class="p">.</span><span class="n">feature_names</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">ds</span><span class="p">.</span><span class="n">target_names</span><span class="p">[</span><span class="n">ds</span><span class="p">.</span><span class="n">target</span><span class="p">]</span>
+
+<span class="n">x</span><span class="p">.</span><span class="n">head</span><span class="p">().</span><span class="nb">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="table-responsive">
+<table class="dataframe table table-hover">
+  <thead>
+    <tr>
+      <th></th>
+      <th>mean radius</th>
+      <th>mean texture</th>
+      <th>mean perimeter</th>
+      <th>mean area</th>
+      <th>mean smoothness</th>
+      <th>mean compactness</th>
+      <th>mean concavity</th>
+      <th>mean concave points</th>
+      <th>mean symmetry</th>
+      <th>mean fractal dimension</th>
+      <th>radius error</th>
+      <th>texture error</th>
+      <th>perimeter error</th>
+      <th>area error</th>
+      <th>smoothness error</th>
+      <th>compactness error</th>
+      <th>concavity error</th>
+      <th>concave points error</th>
+      <th>symmetry error</th>
+      <th>fractal dimension error</th>
+      <th>worst radius</th>
+      <th>worst texture</th>
+      <th>worst perimeter</th>
+      <th>worst area</th>
+      <th>worst smoothness</th>
+      <th>worst compactness</th>
+      <th>worst concavity</th>
+      <th>worst concave points</th>
+      <th>worst symmetry</th>
+      <th>worst fractal dimension</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>17.99</td>
+      <td>10.38</td>
+      <td>122.80</td>
+      <td>1001.0</td>
+      <td>0.12</td>
+      <td>0.28</td>
+      <td>0.30</td>
+      <td>0.15</td>
+      <td>0.24</td>
+      <td>0.08</td>
+      <td>1.10</td>
+      <td>0.91</td>
+      <td>8.59</td>
+      <td>153.40</td>
+      <td>0.01</td>
+      <td>0.05</td>
+      <td>0.05</td>
+      <td>0.02</td>
+      <td>0.03</td>
+      <td>0.01</td>
+      <td>25.38</td>
+      <td>17.33</td>
+      <td>184.60</td>
+      <td>2019.0</td>
+      <td>0.16</td>
+      <td>0.67</td>
+      <td>0.71</td>
+      <td>0.27</td>
+      <td>0.46</td>
+      <td>0.12</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>20.57</td>
+      <td>17.77</td>
+      <td>132.90</td>
+      <td>1326.0</td>
+      <td>0.08</td>
+      <td>0.08</td>
+      <td>0.09</td>
+      <td>0.07</td>
+      <td>0.18</td>
+      <td>0.06</td>
+      <td>0.54</td>
+      <td>0.73</td>
+      <td>3.40</td>
+      <td>74.08</td>
+      <td>0.01</td>
+      <td>0.01</td>
+      <td>0.02</td>
+      <td>0.01</td>
+      <td>0.01</td>
+      <td>0.00</td>
+      <td>24.99</td>
+      <td>23.41</td>
+      <td>158.80</td>
+      <td>1956.0</td>
+      <td>0.12</td>
+      <td>0.19</td>
+      <td>0.24</td>
+      <td>0.19</td>
+      <td>0.28</td>
+      <td>0.09</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>19.69</td>
+      <td>21.25</td>
+      <td>130.00</td>
+      <td>1203.0</td>
+      <td>0.11</td>
+      <td>0.16</td>
+      <td>0.20</td>
+      <td>0.13</td>
+      <td>0.21</td>
+      <td>0.06</td>
+      <td>0.75</td>
+      <td>0.79</td>
+      <td>4.58</td>
+      <td>94.03</td>
+      <td>0.01</td>
+      <td>0.04</td>
+      <td>0.04</td>
+      <td>0.02</td>
+      <td>0.02</td>
+      <td>0.00</td>
+      <td>23.57</td>
+      <td>25.53</td>
+      <td>152.50</td>
+      <td>1709.0</td>
+      <td>0.14</td>
+      <td>0.42</td>
+      <td>0.45</td>
+      <td>0.24</td>
+      <td>0.36</td>
+      <td>0.09</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>11.42</td>
+      <td>20.38</td>
+      <td>77.58</td>
+      <td>386.1</td>
+      <td>0.14</td>
+      <td>0.28</td>
+      <td>0.24</td>
+      <td>0.11</td>
+      <td>0.26</td>
+      <td>0.10</td>
+      <td>0.50</td>
+      <td>1.16</td>
+      <td>3.44</td>
+      <td>27.23</td>
+      <td>0.01</td>
+      <td>0.07</td>
+      <td>0.06</td>
+      <td>0.02</td>
+      <td>0.06</td>
+      <td>0.01</td>
+      <td>14.91</td>
+      <td>26.50</td>
+      <td>98.87</td>
+      <td>567.7</td>
+      <td>0.21</td>
+      <td>0.87</td>
+      <td>0.69</td>
+      <td>0.26</td>
+      <td>0.66</td>
+      <td>0.17</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>20.29</td>
+      <td>14.34</td>
+      <td>135.10</td>
+      <td>1297.0</td>
+      <td>0.10</td>
+      <td>0.13</td>
+      <td>0.20</td>
+      <td>0.10</td>
+      <td>0.18</td>
+      <td>0.06</td>
+      <td>0.76</td>
+      <td>0.78</td>
+      <td>5.44</td>
+      <td>94.44</td>
+      <td>0.01</td>
+      <td>0.02</td>
+      <td>0.06</td>
+      <td>0.02</td>
+      <td>0.02</td>
+      <td>0.01</td>
+      <td>22.54</td>
+      <td>16.67</td>
+      <td>152.20</td>
+      <td>1575.0</td>
+      <td>0.14</td>
+      <td>0.20</td>
+      <td>0.40</td>
+      <td>0.16</td>
+      <td>0.24</td>
+      <td>0.08</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Decision trees are classic answering models that are trivially explained.
+One can simply draw its decision paths in order to check for irregularities or inconsistencies:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">plot_tree</span>
+
+<span class="n">decision_tree</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">().</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv1" aria-controls="cv1" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv1"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">plot_tree_fullscreen</span><span class="p">(</span><span class="n">decision_tree</span><span class="p">):</span>
+  <span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+  <span class="n">annotations</span> <span class="o">=</span> <span class="n">plot_tree</span><span class="p">(</span>
+    <span class="n">decision_tree</span><span class="p">,</span>
+    <span class="n">feature_names</span><span class="o">=</span><span class="n">ds</span><span class="p">.</span><span class="n">feature_names</span><span class="p">,</span>
+    <span class="n">class_names</span><span class="o">=</span><span class="n">ds</span><span class="p">.</span><span class="n">target_names</span><span class="p">,</span>
+    <span class="n">filled</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">precision</span><span class="o">=</span><span class="mi">1</span>
+  <span class="p">)</span>
+
+  <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">o</span><span class="p">.</span><span class="n">arrow_patch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+      <span class="n">o</span><span class="p">.</span><span class="n">arrow_patch</span><span class="p">.</span><span class="n">set_edgecolor</span><span class="p">(</span><span class="s">'black'</span><span class="p">)</span>
+      <span class="n">o</span><span class="p">.</span><span class="n">arrow_patch</span><span class="p">.</span><span class="n">set_linewidth</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">plot_tree_fullscreen</span><span class="p">(</span><span class="n">decision_tree</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/explaining/explaining_scikit_learn_11_0.webp" alt="" class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    The decision tree model trained over the Breast Cancer Dataset.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>And so are Random Forests, which although much larger and difficult to draw, can be just as easily summarized.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">().</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/7/76/Random_forest_diagram_complete.webp" alt="Diagram of a random forest model, combining its trees with the majority-voting strategy." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Diagram of a random forest model, combining its trees with the majority-voting strategy. Available at <a href="whttps://en.wikipedia.org/wiki/Random_forest" target="_blank">wikipedia</a>.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>One could check the rate in which each feature appears in the forest’s trees. If a feature’s occurrence is high, then that
+feature was frequently determinant for the forest’s overall decision process.
+On the other hand, a feature that rarely appears has less impact in the answer.</p>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv2" aria-controls="cv2" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv2"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">plot_feature_importances</span><span class="p">(</span><span class="n">feature_importances</span><span class="p">):</span>
+  <span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+  <span class="n">sns</span><span class="p">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">ds</span><span class="p">.</span><span class="n">feature_names</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">feature_importances</span><span class="p">)</span>
+
+  <span class="n">plt</span><span class="p">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+  <span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+<span class="n">plot_feature_importances</span><span class="p">(</span><span class="n">rf</span><span class="p">.</span><span class="n">feature_importances_</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/explaining/explaining_scikit_learn_14_0.webp" alt="" class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Importance per feature for a Random Forest model trained over the Breast Cancer Dataset.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h2 id="explaining-linear-geometric-models">Explaining Linear Geometric Models</h2>
+
+<p>Linear geometric models, such as Linear Regression, Logistic Regression, Linear Support Vector Machines and <a href="https://scikit-learn.org/stable/modules/linear_model.html" target="_blank">many others</a>,
+estimate a variable of interest as a linear combination of the features:</p>
+
+\[p = w\cdot x + b = w_0x_0+w_1x_1+\ldots+w_fx_f + b\]
+
+<p>Interpretation is straight forward for this model:
+s $w_i \to 0$, the variations in feature $i$ becomes less relevant to the overall combination $p$;
+When $w_i$ assumes a strongly positive value, then feature $i$ positively contributes to the estimation of $p$.
+Conversely, $w_i$ assuming a negative value implies that feature $i$ negatively contributes to $p$.</p>
+
+<p>As the parameters $w$ are also use to scale the individual features $x$, they are in different scales and
+cannot be directly compared. This can be remedied by normalizing features into a single scale:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">make_pipeline</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span>
+  <span class="n">StandardScaler</span><span class="p">(),</span>
+  <span class="n">LogisticRegression</span><span class="p">()</span>
+<span class="p">).</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">lm</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s">'logisticregression'</span><span class="p">]</span>
+
+<span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">lm</span><span class="p">.</span><span class="n">coef_</span><span class="p">,</span> <span class="n">lm</span><span class="p">.</span><span class="n">intercept_</span>
+<span class="n">plot_feature_importances</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">ravel</span><span class="p">())</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/explaining/explaining_scikit_learn_15_0.webp" alt="" class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Importance per feature for a Logistic Regression model trained over the Breast Cancer Dataset.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>This can also be acomplished when reducing the set with Principal Component Analysis, considering the whole pipeline can be
+seen as a sequence of matrix multiplications, which is an associative operation:</p>
+
+\[y = (XR)W +b \iff y = X(RW) + b\]
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+
+<span class="n">lm</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span>
+  <span class="n">StandardScaler</span><span class="p">(),</span>
+  <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mf">0.99</span><span class="p">),</span>
+  <span class="n">LogisticRegression</span><span class="p">()</span>
+<span class="p">).</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">w</span> <span class="o">=</span> <span class="p">(</span><span class="n">lm</span><span class="p">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s">'pca'</span><span class="p">].</span><span class="n">components_</span><span class="p">.</span><span class="n">T</span>
+     <span class="o">@</span> <span class="n">lm</span><span class="p">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s">'logisticregression'</span><span class="p">].</span><span class="n">coef_</span><span class="p">.</span><span class="n">T</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv3" aria-controls="cv3" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv3"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span>
+  <span class="sa">f</span><span class="s">'Original dimensions: </span><span class="si">{</span><span class="n">x</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span>
+  <span class="sa">f</span><span class="s">'Reduced dimensions:  </span><span class="si">{</span><span class="n">lm</span><span class="p">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s">"pca"</span><span class="p">].</span><span class="n">explained_variance_ratio_</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span>
+  <span class="sa">f</span><span class="s">'Energy retained:     </span><span class="si">{</span><span class="n">lm</span><span class="p">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s">"pca"</span><span class="p">].</span><span class="n">explained_variance_ratio_</span><span class="p">.</span><span class="nb">sum</span><span class="p">():.</span><span class="mi">2</span><span class="o">%</span><span class="si">}</span><span class="s">'</span><span class="p">,</span>
+  <span class="n">sep</span><span class="o">=</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span>
+<span class="p">)</span>
+
+<span class="n">plot_feature_importances</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">ravel</span><span class="p">())</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Original</span> <span class="n">dimensions</span><span class="p">:</span> <span class="mi">30</span>
+<span class="n">Reduced</span> <span class="n">dimensions</span><span class="p">:</span>  <span class="mi">17</span>
+<span class="n">Energy</span> <span class="n">retained</span><span class="p">:</span>     <span class="mf">99.11</span><span class="o">%</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/explaining/explaining_scikit_learn_19_0.webp" alt="" class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Importance per feature for a Logistic Regression model trained over the Breast Cancer Dataset.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h2 id="explaining-deep-convolutional-networks">Explaining Deep Convolutional Networks</h2>
+
+<p>Networks are a very specific sub-set of machine learning.
+They derive from what’s called the “<a href="https://www.sciencedirect.com/topics/computer-science/connectionist-approach">Connectionist Approach</a>”
+to artificial intelligence — the idea that intelligence can be achieved by connecting massive amounts of basic processing units through quantitative signals. So their behavior is directly influenced by a complex combination of factors. For modern networks, this is even more convoluted by the successive application of non-linearities across the whole system.</p>
+
+<p>Differently from search algorithms, connectionist models are complicated in nature, which poses higher difficulties in understanding them. Suppose you have a conventional image classification network:</p>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/deep/inception.webp" alt="Inception Architecture. A well-established network architecture for convolutional models." class="figure-img img-fluid rounded mx-auto d-block rounded mx-auto d-block" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Inception Architecture. A well-established network architecture for convolutional models.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Each blue box represents a set of convolutions between an 3D input signal and multiple kernels and the application of a non-linear function (relu, most likely).
+Given an input image and the feed-forward signal of that image through the network (the answer), how can one make sense of the answer?</p>
+
+<p>Many solutions were studied over the last years. Some of them involved patching-out parts of the image and observing how it affected the answer (see this <a href="https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf">article</a>). If a given region was occluded and the answer changed drastically, then that would mean that the region in question was <em>important</em> for the model’s decision process. One could then reapply this procedure over and over, across the entire input sample, and finally draw a heatmap of importance:</p>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/explaining/zeilerECCV2014-fig6.webp" alt="Effect of image occlusion in the classifier's answer (columns (a) and (d))." class="figure-img img-fluid rounded mx-auto d-block rounded mx-auto d-block" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Effect of image occlusion in the classifier's answer (columns <i>a</i> and <i>d</i>). Available at: <a href="https://arxiv.org/pdf/1908.04351.pdf">arxiv.org/1908.04351</a>.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Finally, the networks could be verified by checking the heatmaps. If a model were to make right predictions, but focusing on unrelated regions, then we would know that some artificial information was being injected into training, overfitting the model.</p>
+
+<h3 id="gradient-based-explaining-methods">Gradient-based Explaining Methods</h3>
+
+<p>One of the first references I found about the subject was <a href="https://arxiv.org/pdf/1312.6034v2.pdf">Deep Inside Convolutional Networks: Visualising Image Classification Models and Saliency Maps</a>. This article’s main idea revolves around the fact that models (and any inner unit thereof) can be approximated by the first-order Taylor expansion:</p>
+
+\[S_c(I) \approx w^T I + b\]
+
+<h4 id="visualizing-networks-inner-units-by-maximizing-throughput">Visualizing Networks’ Inner Units by Maximizing Throughput</h4>
+
+<p>Starting from an empty or randomly generated image $I_0$, we are able to compute the gradients of the score $S$ of any given class $c$ (output) with respect to $I$. By adding the gradients to the image, we will increase the slope of the linear system, increasing the score for class $c$.
+Repeating the process over and over will refine $I$ until the output is maximum and we achieve an image that the model understands as an instance of $c$, with 100% of confidence:</p>
+
+\[w = \frac{\partial S_c}{\partial I}|I_0\]
+
+<p>This process is called Gradient Ascent, which is a form of greedy (local) search in a continuous domain. It’s nothing really new, really. We’ve being using Stochastic Gradient Descent to train networks this whole time.</p>
+
+<p>Let’s try and recreate these ideas using code.
+Consider the following input images – some extracted from the <a href="https://github.com/keisen/tf-keras-vis">tf-keras-vis</a> —, we will use
+them later and input for our methods.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">INPUT_SHAPE</span> <span class="o">=</span> <span class="p">[</span><span class="mi">299</span><span class="p">,</span> <span class="mi">299</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="n">DATA_DIR</span> <span class="o">=</span> <span class="s">'images/'</span>
+<span class="n">IMAGES</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="s">'https://raw.githubusercontent.com/keisen/tf-keras-vis/master/examples/images/goldfish.webp'</span><span class="p">,</span>
+  <span class="s">'https://raw.githubusercontent.com/keisen/tf-keras-vis/master/examples/images/bear.webp'</span><span class="p">,</span>
+  <span class="s">'https://raw.githubusercontent.com/keisen/tf-keras-vis/master/examples/images/soldiers.webp'</span><span class="p">,</span>
+  <span class="s">'https://3.bp.blogspot.com/-W__wiaHUjwI/Vt3Grd8df0I/AAAAAAAAA78/7xqUNj8ujtY/s400/image02.webp'</span><span class="p">,</span>
+  <span class="s">'https://www.petcare.com.au/wp-content/uploads/2017/09/Dalmatian-2.webp'</span><span class="p">,</span>
+  <span class="s">'http://www.aviationexplorer.com/Diecast_Airplanes_Aircraft/delta_Airbus_diecast_airplane.webp'</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre></div></div>
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv4" aria-controls="cv4" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv3"><div class="highlight"><pre class="highlight"><code><span class="n">os</span><span class="p">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="s">'test'</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">IMAGES</span><span class="p">:</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">download_image</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="s">'test'</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
+
+<span class="n">images_set</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">preprocessing</span><span class="p">.</span><span class="n">image_dataset_from_directory</span><span class="p">(</span>
+  <span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">image_size</span><span class="o">=</span><span class="n">INPUT_SHAPE</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">images_set</span><span class="p">.</span><span class="n">take</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/explaining/inputs.webp" alt="Input images for our model. Common instances of classes present in the imagenet dataset (dogs, bears, airplanes)." class="figure-img img-fluid rounded mx-auto d-block rounded mx-auto d-block" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Input images for our model. Common instances of classes present in the imagenet dataset (dogs, bears, airplanes).
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>In a real case, you would have your own trained network. However, considering all of these images belong to a class in the imagenet dataset, I’ll just go ahead and
+load the imagenet pre-trained Xception network from tensorflow. This will
+skip the training portion of the problem, which isn’t what we are focusing right now:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+<span class="kn">import</span> <span class="nn">tensorflow_addons</span> <span class="k">as</span> <span class="n">tfa</span>
+
+<span class="kn">from</span> <span class="nn">tensorflow.keras</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.layers</span> <span class="kn">import</span> <span class="n">Lambda</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.applications.xception</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Xception</span><span class="p">,</span>
+                                                    <span class="n">preprocess_input</span><span class="p">,</span>
+                                                    <span class="n">decode_predictions</span><span class="p">)</span>
+
+<span class="c1"># Download and load weights.
+</span><span class="n">base_model</span> <span class="o">=</span> <span class="n">Xception</span><span class="p">(</span><span class="n">classifier_activation</span><span class="o">=</span><span class="s">'linear'</span><span class="p">,</span>
+                      <span class="n">weights</span><span class="o">=</span><span class="s">'imagenet'</span><span class="p">,</span>
+                      <span class="n">include_top</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">([</span>
+    <span class="n">Lambda</span><span class="p">(</span><span class="n">preprocess_input</span><span class="p">),</span>
+    <span class="n">base_model</span>
+<span class="p">])</span>
+
+<span class="n">print_predictions</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Sample 0:
+  dalmatian: 93.90%
+  kuvasz: 0.14%
+  Bernese_mountain_dog: 0.08%
+
+Sample 1:
+  brown_bear: 88.70%
+  American_black_bear: 0.79%
+  wombat: 0.52%
+
+Sample 2:
+  airliner: 93.20%
+  wing: 1.11%
+  warplane: 0.30%
+
+Sample 3:
+  goldfish: 73.91%
+  tench: 0.54%
+  gar: 0.19%
+
+Sample 4:
+  golden_retriever: 60.64%
+  Great_Pyrenees: 8.80%
+  kuvasz: 2.00%
+
+Sample 5:
+  assault_rifle: 65.17%
+  bulletproof_vest: 11.51%
+  rifle: 10.45%
+</code></pre></div></div>
+
+<p>So, as you can see, all samples have their classes correctly identified by the model with a large margin, compared with the second and third choices. Now we define a few utilitary functions to help us to run our algorithms:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">UNIT_NAMES</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="s">'dumbbell'</span><span class="p">,</span>
+  <span class="s">'cup'</span><span class="p">,</span>
+  <span class="s">'dalmatian'</span><span class="p">,</span>
+  <span class="s">'bell_pepper'</span><span class="p">,</span>
+  <span class="s">'lemon'</span><span class="p">,</span>
+  <span class="s">'Siberian_husky'</span><span class="p">,</span>
+  <span class="s">'computer_keyboard'</span><span class="p">,</span>
+  <span class="s">'kit_fox'</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">LR</span> <span class="o">=</span> <span class="mf">10.</span>
+<span class="n">L2</span> <span class="o">=</span> <span class="p">.</span><span class="mi">1</span>
+<span class="n">TV</span> <span class="o">=</span> <span class="p">.</span><span class="mi">1</span>
+<span class="n">STEPS</span> <span class="o">=</span> <span class="mi">200</span>
+
+
+<span class="k">def</span> <span class="nf">index_from</span><span class="p">(</span><span class="n">label</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="nb">next</span><span class="p">((</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">imagenet_utils</span><span class="p">.</span><span class="n">CLASS_INDEX</span><span class="p">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">label</span><span class="p">)))</span>
+</code></pre></div></div>
+
+<p>And finally define our “vanilla” optimization process, using tensorflow’s <code class="language-plaintext highlighter-rouge">GradientTape</code> class:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">activation_gain</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">unit</span><span class="p">):</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">y</span><span class="p">[:,</span> <span class="n">unit</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">l2_regularization</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">square</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">keepdims</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">total_var_regularization</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">image</span><span class="p">.</span><span class="n">total_variation</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="o">/</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">reduce_prod</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">)))</span>
+
+<span class="o">@</span><span class="n">tf</span><span class="p">.</span><span class="n">function</span>
+<span class="k">def</span> <span class="nf">gradient_ascent_step</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">unit</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">tf</span><span class="p">.</span><span class="n">GradientTape</span><span class="p">()</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
+        <span class="n">tape</span><span class="p">.</span><span class="n">watch</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+
+        <span class="n">loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">activation_gain</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span>
+                <span class="o">-</span> <span class="n">L2</span> <span class="o">*</span> <span class="n">l2_regularization</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+                <span class="o">-</span> <span class="n">TV</span> <span class="o">*</span> <span class="n">total_var_regularization</span><span class="p">(</span><span class="n">inputs</span><span class="p">))</span>
+
+    <span class="n">grads</span> <span class="o">=</span> <span class="n">tape</span><span class="p">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+    <span class="n">grads</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">math</span><span class="p">.</span><span class="n">l2_normalize</span><span class="p">(</span><span class="n">grads</span><span class="p">)</span>
+    <span class="n">inputs</span> <span class="o">+=</span> <span class="n">LR</span> <span class="o">*</span> <span class="n">grads</span>
+    <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">inputs</span>
+
+<span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="n">unit</span><span class="p">):</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">uniform</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">INPUT_SHAPE</span><span class="p">))</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.25</span>
+
+    <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">STEPS</span><span class="p">):</span>
+        <span class="n">loss</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="n">gradient_ascent_step</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">step</span> <span class="o">&lt;</span> <span class="n">STEPS</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">clip_by_value</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">i</span>
+</code></pre></div></div>
+
+<p>We can check if this process truly found maximizing images:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>indices = [index_from(u) for u in UNIT_NAMES]
+
+o = tf.concat([visualize(u) for u in indices], axis=0)
+print_predictions(model, o, top=2)
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Sample 0:
+  dumbbell: 100.00%
+  barbell: 0.00%
+
+Sample 1:
+  cup: 100.00%
+  coffee_mug: 0.00%
+
+Sample 2:
+  dalmatian: 100.00%
+  English_setter: 0.00%
+
+Sample 3:
+  bell_pepper: 100.00%
+  cucumber: 0.00%
+
+Sample 4:
+  lemon: 100.00%
+  orange: 0.00%
+
+Sample 5:
+  Siberian_husky: 100.00%
+  Eskimo_dog: 0.00%
+
+Sample 6:
+  computer_keyboard: 100.00%
+  mouse: 0.00%
+
+Sample 7:
+  kit_fox: 100.00%
+  red_fox: 0.00%
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv5" aria-controls="cv5" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-py collapse highlighter-rouge" id="cv5"><div class="highlight"><pre class="highlight"><code><span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">as_image_vector</span><span class="p">(</span><span class="n">o</span><span class="p">),</span> <span class="n">UNIT_NAMES</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/explaining/vanilla-grads.webp" alt="Input images optimized to maximize each unit described in UNIT_NAMES." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Input images optimized to maximize each unit described in <code>UNIT_NAMES</code>.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>I <strong>think</strong> I can see dumbells in the first image and dots in the dalmatian image, but
+I’m not sure if this is just my brain trying to look for evidence of correctness.
+Overall, I’d say it’s pretty hard to see the shapes in here and it doesn’t look like the results
+found in the paper (next image).</p>
+
+<blockquote>
+  <p>Differently from the original paper, I added a second regularization term <code class="language-plaintext highlighter-rouge">total variation</code>, in order
+  to decrease the amount of concentrated color regions in the generated images.</p>
+</blockquote>
+
+<p>Lastly, I redefined <code class="language-plaintext highlighter-rouge">visualize</code> and added an “augmentation step” in each iteration,
+where the optimizing image would be randomly rotated by 5% and translated by 3 pixels (at most).
+This prevents the optimization procedure of focusting on single pixels and usually generate better images.</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="n">unit</span><span class="p">):</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">uniform</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">INPUT_SHAPE</span><span class="p">))</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.25</span>
+
+    <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">STEPS</span><span class="p">):</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">tfa</span><span class="p">.</span><span class="n">image</span><span class="p">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.05</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">roll</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">15</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="n">loss</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="n">gradient_ascent_step</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">step</span> <span class="o">&lt;</span> <span class="n">STEPS</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">clip_by_value</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">i</span>
+</code></pre></div></div>
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/explaining/vanilla-grads-aug.webp" alt="Input images optimized to maximize each unit described in UNIT_NAMES using augmentation." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Input images optimized to maximize each unit described in <code>UNIT_NAMES</code> using augmentation (rotation and translation).
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>It looks a lot better, I’d say. We see circles in <em>dumbell</em>, clear dark spots in <em>dalmatian</em> green in the <em>bell pepper</em> and <em>lemon</em> and squares in <em>computer keyboard</em>.</p>
+
+<h4 id="contributions-for-the-classification-of-a-given-image">Contributions for The Classification of a Given Image</h4>
+<p>Another interesting idea in <a href="https://arxiv.org/pdf/1312.6034v2.pdf">Deep Inside Convolutional Networks</a> is the extraction of saliency maps using gradients. It works like this:
+let’s say $I$ is a real input image, $f$ a trained convolutional model and $S_c$ the activation value for the image true class $c$.</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pr</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_max</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Once again, assuming that this model can be sufficiently approximated by a first-order Taylor expansion. That is,</p>
+
+\[\begin{eqnarray}
+S_c &amp;=&amp; f(I)_c \\
+    &amp;\approx&amp; \sum_i \sum_j \frac{\partial S_c(I)}{\partial I_{i,j}} I_{i,j}
+\end{eqnarray}\]
+
+<p>$\frac{\partial S_c(I)}{\partial I}$ is an approximation of how each pixel in the
+input image $I$ contributes to the output of the model. Three possibilities here:</p>
+
+<ol>
+  <li>If the contribution is close to $0$, then that pixel contributes little and any variations.</li>
+  <li>If the number is strongly positive, then high values for that pixel contribute to its correct classification.</li>
+  <li>If the number is strongly negative, then low values for that pixel contribute to its correct classification.</li>
+</ol>
+
+<p>So we first must find $\frac{\partial S_c(I)}{\partial I}$. That’s pretty simple. I just copied the important part from what we did above (and changed the <code class="language-plaintext highlighter-rouge">activation_gain</code> function a bit so it could process multiple samples at the same time):</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">activation_gain</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">units</span><span class="p">):</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">gather</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_dims</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="o">@</span><span class="n">tf</span><span class="p">.</span><span class="n">function</span>
+<span class="k">def</span> <span class="nf">gradients</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">units</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">tf</span><span class="p">.</span><span class="n">GradientTape</span><span class="p">()</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
+        <span class="n">tape</span><span class="p">.</span><span class="n">watch</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">activation_gain</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+
+    <span class="n">grads</span> <span class="o">=</span> <span class="n">tape</span><span class="p">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">grads</span>
+</code></pre></div></div>
+
+<p>Finally, we observe which pixels are most important when classifying the image label
+by considering their absolute value (added across its RGB channels):</p>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv6" aria-controls="cv6" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-py collapse highlighter-rouge" id="cv6"><div class="highlight"><pre class="highlight"><code><span class="n">_</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">gradients</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">/=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_max</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">keepdims</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">plot_images_and_salency_maps</span><span class="p">(</span><span class="n">as_image_vector</span><span class="p">(</span><span class="n">images</span><span class="p">),</span> <span class="n">s</span><span class="p">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">y</span><span class="p">.</span><span class="n">numpy</span><span class="p">())</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/explaining/vanilla-saliency.webp" alt="Input images and saliency activation maps, considering their most activating units." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Input images and saliency activation maps, considering their most activating units.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>So the network clearly points out for the right regions in the dalmatian, bear and the golden retriever. The other ones seem a little blurred.</p>
+
+<h4 id="smooth-gradients">Smooth Gradients</h4>
+
+<p>An improvement for this strategy is described in <a href="https://arxiv.org/pdf/1706.03825.pdf">SmoothGrad: removing noise by adding noise</a>.
+In the article, the authors comment that gradients may vary sharply at small scales due to meaningless variations in small portions of the input space, generating a misrepresentation of pixels’ importances.
+They propose to overcome this issue by generating $N$ repetitions of the input image $I$ and add some gaussian noise to each one of them. The gradients are then computed with respect to each repetition, and the maps found are averaged into a single representation.</p>
+
+<p>With that, enough fluctuation will be generated in the input image. Hence local artificial variations will not ocurr in many of the gradients found and will be phased out from the final averaging map.</p>
+
+<p>Code is pretty straight forward. We use the arguments which produced good results, as described in the article (50 repetitions, 20% noise).
+Notice that we have divided the input noise by $2.0$ (sample inner variation $x_{\text{max}} - x_{\text{min}}$), in order to match the definition given in the paper.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">tf</span><span class="p">.</span><span class="n">function</span>
+<span class="k">def</span> <span class="nf">smooth_gradients</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="p">.</span><span class="mi">2</span><span class="p">):</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">+=</span> <span class="n">tf</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stddev</span><span class="o">=</span><span class="n">noise</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+  <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">units</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">)</span>
+  <span class="n">loss</span><span class="p">,</span> <span class="n">grads</span> <span class="o">=</span> <span class="n">gradients</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+  <span class="n">grads</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="o">*</span><span class="n">grads</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+
+  <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv7" aria-controls="cv7" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-py collapse highlighter-rouge" id="cv7"><div class="highlight"><pre class="highlight"><code><span class="n">_</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">smooth_gradients</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">/=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_max</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">keepdims</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">plot_images_and_salency_maps</span><span class="p">(</span><span class="n">as_image_vector</span><span class="p">(</span><span class="n">images</span><span class="p">),</span> <span class="n">s</span><span class="p">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">y</span><span class="p">.</span><span class="n">numpy</span><span class="p">())</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/explaining/smoothgrad-saliency.webp" alt="Input images and saliency activation maps, considering their most activating units." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Input images and saliency activation maps, considering their most activating units. Obtained using the SmoothGrad method.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Much better, isn’t it?</p>
+
+<h4 id="full-gradients">Full Gradients</h4>
+
+<p>Another interesting idea can be found in the article
+<a href="https://arxiv.org/pdf/1905.00780.pdf">Full-gradient representation for neural network visualization</a>.
+This approach’s main idea is to combine the saliency information previously found with the individual contributions
+of each bias factor in the network, forming a “full gradient map”:</p>
+
+\[f(x) = ψ(∇_xf(x)\odot x) +∑_{l\in L}∑_{c\in c_l} ψ(f^b(x)_c)\]
+
+<p>We can extract the bias tensor from most layers in a TensorFlow model by accessing tehir <code class="language-plaintext highlighter-rouge">layer.bias</code> attribute.
+The Batch-Norm layer, however, has what we call an implict bias.</p>
+
+<blockquote>
+  <p>Let the Batch-Norm (BN) of a input signal $x$ be $\text{bn}(x) = \frac{x - \mu}{\sigma}w + b$,
+  then its rectified bias is $b^r = -\frac{\mu}{\sigma}w + b$.</p>
+</blockquote>
+
+<p>All of this is expressed in the following python code:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">activation_gain</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">units</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">gather</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_dims</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">extract_bias</span><span class="p">(</span><span class="n">layer</span><span class="p">):</span>
+  <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="o">-</span><span class="n">layer</span><span class="p">.</span><span class="n">moving_mean</span> <span class="o">*</span> <span class="n">layer</span><span class="p">.</span><span class="n">gamma</span>
+        <span class="o">/</span> <span class="n">tf</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">layer</span><span class="p">.</span><span class="n">moving_variance</span> <span class="o">+</span> <span class="mf">1e-07</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">layer</span><span class="p">.</span><span class="n">beta</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="s">'bias'</span><span class="p">)</span> <span class="ow">and</span> <span class="n">layer</span><span class="p">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">layer</span><span class="p">.</span><span class="n">bias</span>
+
+<span class="k">def</span> <span class="nf">psi</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">standardize</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">x</span>
+
+<span class="n">layers</span> <span class="o">=</span> <span class="p">[(</span><span class="n">l</span><span class="p">,</span> <span class="n">extract_bias</span><span class="p">(</span><span class="n">l</span><span class="p">))</span> <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])]</span>
+<span class="n">layers</span> <span class="o">=</span> <span class="p">[(</span><span class="n">l</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">layers</span> <span class="k">if</span> <span class="n">b</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">]</span>
+
+<span class="n">intermediates</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="p">.</span><span class="n">output</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">]</span>
+<span class="n">biases</span> <span class="o">=</span> <span class="p">[</span><span class="n">b</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">]</span>
+
+<span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">biases</span><span class="p">),</span> <span class="s">'layers with bias were found.'</span><span class="p">)</span>
+
+<span class="n">nn_s</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">Model</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">inputs</span><span class="p">,</span> <span class="p">[</span><span class="n">nn</span><span class="p">.</span><span class="n">output</span><span class="p">,</span> <span class="o">*</span><span class="n">intermediates</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s">'spacial_model'</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">tf</span><span class="p">.</span><span class="n">function</span>
+<span class="k">def</span> <span class="nf">fullgrads</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">units</span><span class="p">):</span>
+  <span class="k">with</span> <span class="n">tf</span><span class="p">.</span><span class="n">GradientTape</span><span class="p">()</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
+    <span class="n">tape</span><span class="p">.</span><span class="n">watch</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="n">y</span><span class="p">,</span> <span class="o">*</span><span class="n">ia</span> <span class="o">=</span> <span class="n">nn_s</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">activation_gain</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+
+  <span class="n">dydx</span><span class="p">,</span> <span class="o">*</span><span class="n">dydas</span> <span class="o">=</span> <span class="n">tape</span><span class="p">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="p">[</span><span class="n">inputs</span><span class="p">,</span> <span class="o">*</span><span class="n">ia</span><span class="p">])</span>
+
+  <span class="n">maps</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">psi</span><span class="p">(</span><span class="n">dydx</span> <span class="o">*</span> <span class="n">inputs</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+  <span class="n">Gb</span> <span class="o">=</span> <span class="p">[</span><span class="n">ig</span> <span class="o">*</span> <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="k">for</span> <span class="n">ig</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">dydas</span><span class="p">,</span> <span class="n">biases</span><span class="p">)]</span>
+  <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">Gb</span><span class="p">:</span>
+      <span class="n">b</span> <span class="o">=</span> <span class="n">psi</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+      <span class="n">maps</span> <span class="o">+=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">image</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">config</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">image_size</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">dydx</span><span class="p">,</span> <span class="n">maps</span>
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv8" aria-controls="cv8" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv8"><div class="highlight"><pre class="highlight"><code><span class="n">r</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">fullgrads</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">ix</span><span class="p">:</span><span class="n">ix</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">preds</span><span class="p">[</span><span class="n">ix</span><span class="p">:</span><span class="n">ix</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">ix</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">))])</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">maps</span> <span class="o">=</span> <span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">concat</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">r</span><span class="p">)</span>
+
+<span class="n">maps</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">maps</span><span class="p">)</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">plot_heatmaps</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">maps</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">i0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">full</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">full</span><span class="p">:</span> <span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">rows</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">maps</span><span class="p">)):</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">),</span> <span class="n">i0</span><span class="o">+</span><span class="n">ix</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">plot_heatmap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">full</span><span class="p">:</span> <span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">plot_heatmap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s">'jet'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="s">'off'</span><span class="p">)</span>
+
+<span class="n">plot_heatmaps</span><span class="p">(</span><span class="n">to_image</span><span class="p">(</span><span class="n">images</span><span class="p">),</span> <span class="n">maps</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div id="carouselBorders" class="carousel slide carousel-dark overflow-hidden" data-bs-ride="carousel" alt="Results from multiple border extraction methods over images containing simple geometric shapes." style="height: 120px">
+  <div class="carousel-inner">
+    <div class="carousel-item active"><img src="/assets/images/posts/ml/explaining/fullgrads-1.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/fullgrads-2.webp" class="d-block w-100" /></div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselBorders" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselBorders" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<h2 id="final-considerations">Final Considerations</h2>
+<p>AI explaining is a very long subject, containing many different strategies.
+In this post, I illustrated a  illustrates a few examples of it and briefly explains how classification gradient
+can be used to explain predictions in Computer Vision.</p>
+
+<p>This is pretty much an open research field, with many methods coming to light in the past years.
+Some filter the back-propagated signal, in order to only capture what positively affects the output
+(Guided backpropagation).
+Others will focus on general localization instead of fine-gain details (CAM), resulting in
+maps that better separates classes coexisting in a single sample.
+I’ll talk a little bit more about these in the <a href="/blog/machine-learning/cam/">next post</a>.</p>
+
+<h2 id="references">References</h2>
+
+<ul>
+  <li>Simonyan, Karen, Andrea Vedaldi, and Andrew Zisserman. “Deep inside convolutional networks: Visualising image classification models and saliency maps.” arXiv preprint arXiv:1312.6034 (2013). <a href="https://arxiv.org/abs/1312.6034">1312.6034</a></li>
+  <li>Smilkov, Daniel, Nikhil Thorat, Been Kim, Fernanda Viégas, and Martin Wattenberg. “Smoothgrad: removing noise by adding noise.” arXiv preprint arXiv:1706.03825 (2017). <a href="https://arxiv.org/abs/1706.03825">1706.03825</a></li>
+  <li>Srinivas, Suraj, and François Fleuret. “Full-gradient representation for neural network visualization.” arXiv preprint arXiv:1905.00780 (2019).
+<a href="https://arxiv.org/pdf/1905.00780.pdf">1905.00780</a></li>
+</ul>
+
+        </div>
+      </article>
+
+      
+      <div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://lucasdavid-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      
+    </div>
+  </div>
+</div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+  integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"
+  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
+  integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '\\[', right: '\\]', display: true}, {left: '$', right: '$', display: false},{left: '\\(', right: '\\)', display: false}]});"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+<script>
+  anchors.options = { icon: '#' };
+  anchors.add();
+</script>
+
+
+  <!-- <svg id="visual" viewBox="0 0 1980 300"  class="curve-container__curve curve-three" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <path
+    d="M0 69L55 90.2C110 111.3 220 153.7 330 169.8C440 186 550 176 660 165.5C770 155 880 144 990 139.2C1100 134.3 1210 135.7 1320 137.7C1430 139.7 1540 142.3 1650 155.5C1760 168.7 1870 192.3 1925 204.2L1980 216L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#d3d3d3"></path>
+  <path
+    d="M0 89L55 107.8C110 126.7 220 164.3 330 191.3C440 218.3 550 234.7 660 243.8C770 253 880 255 990 252.3C1100 249.7 1210 242.3 1320 228.8C1430 215.3 1540 195.7 1650 174.5C1760 153.3 1870 130.7 1925 119.3L1980 108L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#6a6a6a"></path>
+  <path
+    d="M0 229L55 232.3C110 235.7 220 242.3 330 244.3C440 246.3 550 243.7 660 247.3C770 251 880 261 990 254.8C1100 248.7 1210 226.3 1320 223.5C1430 220.7 1540 237.3 1650 233.8C1760 230.3 1870 206.7 1925 194.8L1980 183L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#121212"></path>
+</svg> -->
+<footer class="page-footer text-bg-dark bg-black-subtle d-print-none">
+  <div class="container">
+    <div class="mt-4 mb-5">
+      
+        <div class="row g-1 mb-4">
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Keras Explainable</h6>
+                <p class="card-text text-light">
+                  Clean implementations for AI explaining methods in Keras.
+<a href="https://github.com/lucasdavid/keras-explainable" target="_new">Code</a> and
+<a href="https://lucasdavid.github.io/keras-explainable" target="_new">docs</a> are available.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Supporting Study Material</h6>
+                <p class="card-text text-light">
+                  If you are an undergrad student and are looking for additional study material,
+check out our collaborative project <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Algorithms in TensorFlow</h6>
+                <p class="card-text text-light">
+                  I'm implementing all algorithms I find interesting using TensorFlow.
+You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">github.com/lucasdavid/algorithms-in-tensorflow</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">TF-Experiment</h6>
+                <p class="card-text text-light">
+                  And environment to run Machine Learning experiments based on components and mixins. Available at <a href="https://github.com/lucasdavid/tf-experiment">github.com/lucasdavid/tf-experiment</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Mineração de Dados Complexos</h6>
+                <p class="card-text text-light">
+                  Information around the extension program "Mineração de Dados Complexos (in Portuguese)" is available at
+<a href="https://www.ic.unicamp.br/~mdc/" target="_blank">ic.unicamp.br/~mdc/</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+    </div>
+
+    <div class="text-end mt-4">
+      
+
+
+<div class="fs-2">
+  
+    <a href="https://github.com/lucasdavid"
+      target="_blank"
+      ><i
+      aria-label="GitHub"
+      class="bi bi-github link-light"></i></a>
+  
+  
+    <a href="https://www.linkedin.com/in/ld7"
+      target="_blank"
+      title="LinkedIn"><i class="bi bi-linkedin text-primary sr-none"></i></a>
+  
+  <span itemscope itemtype="https://schema.org/Person">
+    <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+       target="orcid.widget"
+       rel="me noopener noreferrer"
+       title="ORCID"
+      ><img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 7px; width: 32px;"></a>
+  </span>
+  
+  <a href="http://stackoverflow.com/users/2429640/lucasdavid"
+     target="_blank"
+     title="Stackoverflow"><i class="bi bi-code-slash link-light sr-none"></i></a>
+  
+    <a href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q"
+      target="_blank"
+      title="Youtube"><i class="bi bi-youtube text-danger sr-none"></i></a>
+  
+    <a href="mailto:mb37410l3@mozmail.com"
+      target="_blank"
+      title="Mail"><i class="bi bi-envelope-fill link-light sr-none"></i></a>
+  
+  <a href="assets/docs/lucas-david-resume.pdf"
+     target="_blank"
+     title="Resume"><i class="bi bi-person-lines-fill link-light sr-none"></i></a>
+</div>
+
+    </div>
+    <div class="text-end">
+      <p>
+        ® Lucas David. Todos os direitos reservados.
+      </p>
+    </div>
+</div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous" defer></script>
+
+</body>
+</html>

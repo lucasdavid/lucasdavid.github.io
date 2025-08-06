@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>The 2D Fourier Transform – Lucas David</title>
+  <meta charset="utf-8" />
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="image_src" type="image/png" href="img_path" />
+
+
+<meta name="description" content="Applying the Fourier Transform over images using TensorFlow." />
+<meta property="og:description" content="Applying the Fourier Transform over images using TensorFlow." />
+<meta property="og:image" content="" />
+
+<meta name="author" content="Lucas David" />
+
+
+<meta property="og:title" content="The 2D Fourier Transform" />
+<meta property="twitter:title" content="The 2D Fourier Transform" />
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<link rel="alternate" type="application/rss+xml" title="Lucas David - my personal website/blog"
+      href="/feed.xml" />
+
+  
+  
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LG7FZ8VCHM"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-LG7FZ8VCHM');
+	</script>
+
+
+  
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+  <nav id="mainNav" class="navbar navbar-light bg-white navbar-expand-lg d-print-none border-bottom border-light ">
+  <div class="container-xl">
+    <button class="navbar-toggler rounded-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand fw-bold text-decoration-none p-1" href="/">Lucas David</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <span class="navbar-text navbar-excerpt">
+        The 2D Fourier Transform
+      </span>
+      <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+      <ul class="navbar-nav mb-2 mb-lg-0 font-small">
+        <li class="nav-item"><a href="/" class="nav-link fw-bold link-dark fs-6">Home</a></li>
+        <li class="nav-item"><a href="/blog" class="nav-link fw-bold link-dark fs-6">Blog</a></li>
+        <li class="nav-item"><a href="/publications" class="nav-link fw-bold link-dark fs-6">Publications</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold link-dark fs-6" href="#" id="nbd-links-social" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Social
+          </a>
+          <ul class="dropdown-menu font-small dropdown-menu-end" aria-labelledby="nbd-links-social">
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://github.com/lucasdavid">
+                <i aria-label="GitHub" class="bi bi-github link-dark sr-none"></i>
+                Github</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://www.linkedin.com/in/ld7">
+                <i class="bi bi-linkedin text-primary sr-none"></i>
+                Linkedin</a></li>
+
+            <li itemscope itemtype="https://schema.org/Person">
+              <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+                  target="orcid.widget"
+                  rel="me noopener noreferrer"
+                  class="dropdown-item text-decoration-none"
+                >
+                <img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 5px; width: 16px;">
+                ORCID</a>
+            </li>
+
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="http://stackoverflow.com/users/2429640/lucasdavid">
+                <i class="bi bi-code-slash link-dark sr-none"></i>
+                Stackoverflow</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q">
+                <i class="bi bi-youtube text-danger sr-none"></i>
+                Youtube</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+</div>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12 col-xl-3 col-xxl-2 offset-xxl-1">
+      <div id="sidebar" class="">
+  <div class="text-center">
+    <a href="/" title="Home">
+      <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
+        class="img-fluid rounded-circle" style="width:100px" />
+    </a>
+    <p class="pt-2 font-small">
+      
+        <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
+      
+    </p>
+  </div>
+
+  
+</div>
+
+    </div>
+    <div id="table-of-contents-container-r" class="col-12 col-xl-3 col-xxl-2 order-xl-2">
+      
+      <div style="z-index: 0; font-size:0.8rem;">
+        <div id="table-of-contents" class="font-small">
+  <p class="border-bottom"><strong>Summary</strong></p>
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#tf-flowers-image-dataset">TF-Flowers (Image Dataset)</a></li>
+<li class="toc-entry toc-h2"><a href="#discrete-fourier-transform">Discrete Fourier Transform</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#identity">Identity</a></li>
+<li class="toc-entry toc-h3"><a href="#circular-low-pass-filter">Circular Low-pass Filter</a></li>
+<li class="toc-entry toc-h3"><a href="#butterworth-low-pass-filter">Butterworth Low-pass Filter</a></li>
+<li class="toc-entry toc-h3"><a href="#high-pass-filter">High-pass Filter</a></li>
+<li class="toc-entry toc-h3"><a href="#band-pass-filter">Band-pass Filter</a></li>
+<li class="toc-entry toc-h3"><a href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+      </div>
+      
+    </div>
+    <div class="col-12 col-xl-6">
+      <article class="post mb-4">
+        <header class="">
+          <h1 id="postTitle" class="fw-bold">The 2D Fourier Transform</h1>
+          <p class="right-align mb-2 text-muted fs-5">
+            Applying the Fourier Transform over images using TensorFlow. <em>— June  9, 2021</em>
+          </p>
+          <div class="mb-4">
+            <span class="badges-container">
+  
+    <a href="/blog/tag/computer-vision"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Computer Vision</a>
+  
+    <a href="/blog/tag/fourier"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Fourier</a>
+  
+    <a href="/blog/tag/tensorflow"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >TensorFlow</a>
+  
+</span>
+
+          </div>
+        </header>
+        <div class="article-content" style="margin-top: 4rem;">
+          <p><span>Similarly</span> to my previous <a href="/blog/computer-vision/vectorization/">post</a>,
+I decided to publish here an assignment that was submitted to a Computer Vision class. Its goal is
+to apply the Discrete Fourier Transform over images using Python programming language and assess its results.
+Firstly, I implement low, high and band-pass circular filters in the frequency domain for 2D signals.
+Secondly, I present two examples: (a) a visualization of the frequency spectrum the when the original signal is rotated;
+and (b) an image compression strategy based on Fourier Transform.</p>
+
+<h2 id="tf-flowers-image-dataset">TF-Flowers (Image Dataset)</h2>
+
+<p>We utilize 10 random images from the <a href="https://www.tensorflow.org/datasets/catalog/tf_flowers">TF-Flowers</a> dataset, which can be downloaded in the tf-records format using the <code class="language-plaintext highlighter-rouge">tensorflow-datasets</code> library.</p>
+
+<p>This dataset represents a multi-class (mono-label) image classification problem, and comprises 3,670 photographs of flowers associated with one of the following labels: <em>dandelion</em>, <em>daisy</em>, <em>tulips</em>, <em>sunflowers</em> or <em>roses</em>.</p>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#collapseSetup" aria-controls="collapseSetup" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show setup code</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="collapseSetup"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+<span class="kn">import</span> <span class="nn">tensorflow_datasets</span> <span class="k">as</span> <span class="n">tfds</span>
+
+
+<span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+    <span class="n">image_sizes</span> <span class="o">=</span> <span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+    <span class="n">images_used</span> <span class="o">=</span> <span class="mi">10</span>
+    
+    <span class="n">buffer_size</span> <span class="o">=</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">images_used</span>
+    <span class="n">seed</span> <span class="o">=</span> <span class="mi">68215</span>
+
+<span class="k">def</span> <span class="nf">preprocessing_fn</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+  <span class="c1"># Adjust the image to be at least of size `Config.image_sizes`, which
+</span>  <span class="c1"># garantees the random_crop operation below will work.
+</span>  <span class="n">current</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">shape</span><span class="p">(</span><span class="n">image</span><span class="p">)[:</span><span class="mi">2</span><span class="p">],</span> <span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+  <span class="n">target</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">Config</span><span class="p">.</span><span class="n">image_sizes</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+  <span class="n">ratio</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_max</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">math</span><span class="p">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">target</span> <span class="o">/</span> <span class="n">current</span><span class="p">))</span>
+  <span class="n">new_sizes</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">current</span><span class="o">*</span><span class="n">ratio</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">int32</span><span class="p">)</span>
+
+  <span class="n">image</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">image</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">new_sizes</span><span class="p">,</span> <span class="n">preserve_aspect_ratio</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+  <span class="n">image</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">image</span><span class="p">.</span><span class="n">resize_with_crop_or_pad</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="o">*</span><span class="n">Config</span><span class="p">.</span><span class="n">image_sizes</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">image</span><span class="p">,</span> <span class="n">label</span>
+
+<span class="p">(</span><span class="n">train_ds</span><span class="p">,),</span> <span class="n">info</span> <span class="o">=</span> <span class="n">tfds</span><span class="p">.</span><span class="n">load</span><span class="p">(</span>
+  <span class="s">'tf_flowers'</span><span class="p">,</span>
+  <span class="n">split</span><span class="o">=</span><span class="p">[</span><span class="s">'train[:1%]'</span><span class="p">],</span>
+  <span class="n">with_info</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+  <span class="n">as_supervised</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">int2str</span> <span class="o">=</span> <span class="n">info</span><span class="p">.</span><span class="n">features</span><span class="p">[</span><span class="s">'label'</span><span class="p">].</span><span class="n">int2str</span>
+
+<span class="n">images_set</span> <span class="o">=</span> <span class="p">(</span><span class="n">train_ds</span>
+              <span class="p">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">Config</span><span class="p">.</span><span class="n">buffer_size</span><span class="p">,</span> <span class="n">Config</span><span class="p">.</span><span class="n">seed</span><span class="p">)</span>
+              <span class="p">.</span><span class="nb">map</span><span class="p">(</span><span class="n">preprocessing_fn</span><span class="p">,</span> <span class="n">num_parallel_calls</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">AUTOTUNE</span><span class="p">)</span>
+              <span class="p">.</span><span class="n">batch</span><span class="p">(</span><span class="n">Config</span><span class="p">.</span><span class="n">images_used</span><span class="p">)</span>
+              <span class="p">.</span><span class="n">take</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="n">images</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">images_set</span><span class="p">))</span>
+<span class="n">images</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">int2str</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">target</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/cv/fourier/exploration_8_0.webp" alt="Samples in the TF-Flowers dataset." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Samples in the TF-Flowers dataset.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h2 id="discrete-fourier-transform">Discrete Fourier Transform</h2>
+
+<h3 id="identity">Identity</h3>
+
+<p>Proposed activity: apply the Fast Fourier Transform to an image and its inverse, detailing each step.</p>
+
+<p>The application of the Fourier Transformation over images is straight forward: the function <code class="language-plaintext highlighter-rouge">tf.signal.fft2d</code> can be used to represent a tensor of shape $(b_0, b_1, \ldots b_n, h, w)$ in the frequency domain, where the two inner-most axes (namely, $h$ and $w$) are assumed to contain the information to be transformed and the remaining are assumed to be batch dimensions. The code below describes all steps involved in transforming a signal and reconstructing it its original domain.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">image</span><span class="p">.</span><span class="n">rgb_to_grayscale</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">complex64</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">fft2d</span><span class="p">(</span><span class="n">y</span><span class="p">[...,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">ifft2d</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+</code></pre></div></div>
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/cv/fourier/exploration_12_0.webp" alt="Illustration of the Fourier and Inverse Fourier Transformations over 2D signals (images). From top to bottom: (a) the original images; (b) the (log of) spectrum of the Fourier transform; (c) the spectrum shifted; (d) the un-shifted spectrum; and (e) the (real) result of the Inverse Fourier Transform." class="figure-img img-fluid rounded mx-auto d-block w-xl-130" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Illustration of the Fourier and Inverse Fourier Transformations over 2D signals (images). From top to bottom: (a) the original images; (b) the (log of) spectrum of the Fourier transform; (c) the spectrum shifted; (d) the un-shifted spectrum; and (e) the (real) result of the Inverse Fourier Transform.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h3 id="circular-low-pass-filter">Circular Low-pass Filter</h3>
+
+<p>Low-pass filters can be implemented as binary masks that retain low frequencies of a signal while suppressing high frequencies. A vectorized ideal circular filter can be implemented as described below. Two vectors are used in this implementation ($h$ and $w$). They represent the distance between each pixel and the signal center. The $h$ vector is reshaped into a column vector and the <code class="language-plaintext highlighter-rouge">radius</code> input vector is reshaped into $(r, 1, 1)$, where $r$ is the number of radii passed.
+Finally, the operation $h^2 + w^2 &lt; \text{radius}^2$ will return a tensor of shape $(r, h, w)$, containing all filters built.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">as_absolute_length</span><span class="p">(</span><span class="n">measures</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
+  <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">measures</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+    <span class="n">measures</span> <span class="o">=</span> <span class="p">[</span><span class="n">measures</span><span class="p">]</span>
+  
+  <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">convert_to_tensor</span><span class="p">([</span>
+    <span class="p">(</span><span class="n">m</span>
+     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+     <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">*</span><span class="nb">min</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">measures</span>
+  <span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">circ_filter2d</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">):</span>
+  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+    <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+  <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+
+  <span class="n">ih</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="nb">range</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">-</span><span class="n">h</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># [... 2 1 0 1 2 ...]
+</span>  <span class="n">ih</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+  <span class="n">iw</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="nb">range</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">-</span><span class="n">w</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+
+  <span class="n">radius</span> <span class="o">=</span> <span class="n">as_absolute_length</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+  <span class="n">radius</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+  <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">ih</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">iw</span><span class="o">**</span><span class="mi">2</span> <span class="o">&lt;</span> <span class="n">radius</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>  <span class="c1"># circle eq.
+</span>
+<span class="n">circ_filter2d_like</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">radius</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="n">circ_filter2d</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">dtype</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Figure 4 illustrates the steps in the low-pass filtering procedure of a signal in the frequency domain, while Figure 5 and Figure 6 illustrate the difference of the application of the ideal low-pass and Butterworth low-pass filters. A quality difference of the blur effect is clearly perceptible, where the Butterworth filter generates much better results for small radius arguments.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">m</span> <span class="o">=</span> <span class="n">circ_filter2d_like</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="n">s</span><span class="p">[...,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">m</span> <span class="o">*</span> <span class="n">s</span><span class="p">[...,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">ifft2d</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+</code></pre></div></div>
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/cv/fourier/exploration_17_0.webp" alt="Illustration of steps involved in applying a low-pass filter in the frequency domain using the Fast Fourier Fourier Transformation over 2D signals (images). From top to bottom: (a) the original images; (b) the (log of) spectrum of the Fourier transform; (c) the spectrum shifted; (d) the (log of) spectrum multiplied by the ideal circular low-pass filter; (e) the un-shifted spectrum; and (f) the (real) result of the Inverse Fourier Transform." class="figure-img img-fluid rounded mx-auto d-block w-xl-130" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Illustration of steps involved in applying a low-pass filter in the frequency domain using the Fast Fourier Fourier Transformation over 2D signals (images). From top to bottom: (a) the original images; (b) the (log of) spectrum of the Fourier transform; (c) the spectrum shifted; (d) the (log of) spectrum multiplied by the ideal circular low-pass filter; (e) the un-shifted spectrum; and (f) the (real) result of the Inverse Fourier Transform.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h4 id="experimenting-with-multiple-radius-values">Experimenting with Multiple Radius Values</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">EXPERIMENTED_RADII</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span>
+
+<span class="n">masks</span> <span class="o">=</span> <span class="n">circ_filter2d_like</span><span class="p">(</span><span class="n">EXPERIMENTED_RADII</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">masks</span><span class="p">[:,</span> <span class="n">tf</span><span class="p">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">...]</span> <span class="o">*</span> <span class="n">s</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">ifft2d</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+</code></pre></div></div>
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/cv/fourier/exploration_21_0.webp" alt="Result of the circular ideal filter in the frequency domain, varying its radius. The following radii values were adopted (top to bottom): 5, 10, 20, 40, 70 and 150." class="figure-img img-fluid rounded mx-auto d-block w-xl-130" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Result of the circular ideal filter in the frequency domain, varying its radius. The following radii values were adopted (top to bottom): 5, 10, 20, 40, 70 and 150.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h3 id="butterworth-low-pass-filter">Butterworth Low-pass Filter</h3>
+<p>A Butterworth low-pass filter can be built similarly to the circular low-pass filter,
+by replacing the circle equation:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">butterworth_filter2d</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">):</span>
+  <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+
+  <span class="n">ih</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="nb">range</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">-</span><span class="n">h</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+  <span class="n">ih</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+  <span class="n">iw</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="nb">range</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">-</span><span class="n">w</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+
+  <span class="n">radius</span> <span class="o">=</span> <span class="n">as_absolute_length</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+  <span class="n">radius</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+  <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span>
+    <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">ih</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">iw</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">radius</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">)),</span>
+    <span class="n">dtype</span>
+  <span class="p">)</span>
+
+<span class="n">butterworth_filter2d_like</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">radius</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">:</span> <span class="n">butterworth_filter2d</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">dtype</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">EXPERIMENTED_RADII</span> <span class="o">=</span> <span class="p">(.</span><span class="mi">01</span><span class="p">,</span> <span class="p">.</span><span class="mi">02</span><span class="p">,</span> <span class="p">.</span><span class="mi">03</span><span class="p">,</span> <span class="p">.</span><span class="mi">05</span><span class="p">,</span> <span class="p">.</span><span class="mi">1</span><span class="p">,</span> <span class="p">.</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">masks</span> <span class="o">=</span> <span class="n">butterworth_filter2d_like</span><span class="p">(</span><span class="n">EXPERIMENTED_RADII</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">masks</span><span class="p">[:,</span> <span class="n">tf</span><span class="p">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">...]</span> <span class="o">*</span> <span class="n">s</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">ifft2d</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+</code></pre></div></div>
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/cv/fourier/exploration_25_0.webp" alt="Result of the Butterworth low-pass filter in the frequency domain, varying its radius. The following radii values were adopted (top to bottom): 1, 2%, 3%, 5%, 10% 50%." class="figure-img img-fluid rounded mx-auto d-block w-xl-130" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Result of the Butterworth low-pass filter in the frequency domain, varying its radius. The following radii values were adopted (top to bottom): 1, 2%, 3%, 5%, 10% 50%.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h3 id="high-pass-filter">High-pass Filter</h3>
+<p>A ideal high-pass filter can be trivially obtained from the <code class="language-plaintext highlighter-rouge">circ_filter2d</code> function described above, by simply subtracting its result from 1. This will effectively switch every zero in the mask by one and vice versa. Figure 7 illustrates the application of multiple ideal high-pass filters over images. We notice textural information is removed and we are left with edge and boundary information of the original images.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">EXPERIMENTED_RADII</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span>
+
+<span class="n">masks</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span><span class="n">circ_filter2d_like</span><span class="p">(</span><span class="n">EXPERIMENTED_RADII</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">masks</span><span class="p">[:,</span> <span class="n">tf</span><span class="p">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">...]</span> <span class="o">*</span> <span class="n">s</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">ifft2d</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+</code></pre></div></div>
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/cv/fourier/exploration_28_0.webp" alt="Result of the ideal high-pass filter in the frequency domain, varying its radius. The following radii values were adopted (top to bottom): 1, 2, 3, 10, 40 and 70." class="figure-img img-fluid rounded mx-auto d-block w-xl-130" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Result of the ideal high-pass filter in the frequency domain, varying its radius. The following radii values were adopted (top to bottom): 1, 2, 3, 10, 40 and 70.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h3 id="band-pass-filter">Band-pass Filter</h3>
+<p>I once again leverage the <code class="language-plaintext highlighter-rouge">circ_filter2d</code> function to create the ideal band-pass filter, consisting of the subtraction of two low-pass filters with different radii. Figure 8 illustrate the application of multiple ideal band-pass filters over images. Results are considerably harder to interpret, compared with the previous ones: filters with small inner radii and small width seem to capture very specific textural patterns; while filters with larger inner radii and large width seem to behave like high-pass filters.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">RADII_L</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">RADII_H</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">140</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span>
+
+<span class="n">masks</span> <span class="o">=</span> <span class="n">circ_filter2d_like</span><span class="p">(</span><span class="n">RADII_H</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="o">-</span><span class="n">circ_filter2d_like</span><span class="p">(</span><span class="n">RADII_L</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">masks</span><span class="p">[:,</span> <span class="n">tf</span><span class="p">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">...]</span> <span class="o">*</span> <span class="n">s</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">ifft2d</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+</code></pre></div></div>
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/cv/fourier/exploration_31_0.webp" alt="Result of the ideal band-pass filter in the frequency domain, varying its radius. The following (inner, outer) radii values were adopted (top to bottom): (1, 3), (5, 10), (10, 15), (10, 50), (30, 90), (40, 140), (70, 140), (30, 150) and (5, 150)." class="figure-img img-fluid rounded mx-auto d-block w-xl-130" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Result of the ideal band-pass filter in the frequency domain, varying its radius. The following (inner, outer) radii values were adopted (top to bottom): (1, 3), (5, 10), (10, 15), (10, 50), (30, 90), (40, 140), (70, 140), (30, 150) and (5, 150).
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h3 id="examples">Examples</h3>
+<h4 id="spectrum-rotation">Spectrum Rotation</h4>
+<p>Figure 10 illustrates the effect observed in the spectrum of the signal generated by the DFT of a rotated input image.
+The spectrum is also rotated in the same angle as the input image.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow_addons</span> <span class="k">as</span> <span class="n">tfa</span>
+
+<span class="n">rotations</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span><span class="n">images</span><span class="p">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">tfa</span><span class="p">.</span><span class="n">image</span><span class="p">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">rotations</span><span class="p">)</span>
+
+<span class="n">zx</span><span class="p">,</span> <span class="n">zr</span> <span class="o">=</span> <span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">fft3d</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">complex64</span><span class="p">)),</span>
+                             <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+          <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">r</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/cv/fourier/exploration_38_0.webp" alt="Effect of rotation in the spectrum of the Fourier Transformation of a signal." class="figure-img img-fluid rounded mx-auto d-block w-xl-130" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Effect of rotation in the spectrum of the Fourier Transformation of a signal.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h4 id="compressing-images-using-the-dft">Compressing Images Using The DFT</h4>
+<p>Compression can be performed by nullifying coefficients, the magnitude of which does not reach a certain threshold. The code below describes a compression filter based on a percentile value for the magnitude. As TensorFlow does not provide statistical functions, we are forced to recur to the <code class="language-plaintext highlighter-rouge">tensorflow_probability</code> (<code class="language-plaintext highlighter-rouge">tfp</code>) library.</p>
+
+<p>Figure 9 illustrates the compression of the images using multiple rates. I found the quality of images compressed with a rate below 95% to be very similar of the original copy, with visible quality deterioration being most noticeable at 99.9%.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="n">tfp</span>
+
+<span class="n">THRESHOLDS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mf">99.9</span><span class="p">]</span>
+
+<span class="n">masks</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">th</span> <span class="o">=</span> <span class="n">tfp</span><span class="p">.</span><span class="n">stats</span><span class="p">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">masks</span><span class="p">,</span> <span class="n">THRESHOLDS</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">th</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">th</span><span class="p">)</span>
+<span class="n">th</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">th</span><span class="p">,</span> <span class="p">(</span><span class="o">*</span><span class="n">th</span><span class="p">.</span><span class="n">shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">masks</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">masks</span><span class="p">[:,</span> <span class="n">tf</span><span class="p">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">...]</span> <span class="o">&gt;</span> <span class="n">th</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">complex64</span><span class="p">)</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">masks</span> <span class="o">*</span> <span class="n">s</span><span class="p">[:,</span> <span class="n">tf</span><span class="p">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">...]</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">ifft2d</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+</code></pre></div></div>
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/cv/fourier/exploration_34_0.webp" alt="Result of the compression filter in the frequency domain, varying its rate. The following rate values were adopted (top to bottom): 10%, 50%, 90%, 95%, 99%, and 99.9%." class="figure-img img-fluid rounded mx-auto d-block w-xl-130" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Result of the compression filter in the frequency domain, varying its rate. The following rate values were adopted (top to bottom): 10%, 50%, 90%, 95%, 99%, and 99.9%.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+
+        </div>
+      </article>
+
+      
+      <div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://lucasdavid-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      
+    </div>
+  </div>
+</div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+  integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"
+  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
+  integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '\\[', right: '\\]', display: true}, {left: '$', right: '$', display: false},{left: '\\(', right: '\\)', display: false}]});"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+<script>
+  anchors.options = { icon: '#' };
+  anchors.add();
+</script>
+
+
+  <!-- <svg id="visual" viewBox="0 0 1980 300"  class="curve-container__curve curve-three" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <path
+    d="M0 69L55 90.2C110 111.3 220 153.7 330 169.8C440 186 550 176 660 165.5C770 155 880 144 990 139.2C1100 134.3 1210 135.7 1320 137.7C1430 139.7 1540 142.3 1650 155.5C1760 168.7 1870 192.3 1925 204.2L1980 216L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#d3d3d3"></path>
+  <path
+    d="M0 89L55 107.8C110 126.7 220 164.3 330 191.3C440 218.3 550 234.7 660 243.8C770 253 880 255 990 252.3C1100 249.7 1210 242.3 1320 228.8C1430 215.3 1540 195.7 1650 174.5C1760 153.3 1870 130.7 1925 119.3L1980 108L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#6a6a6a"></path>
+  <path
+    d="M0 229L55 232.3C110 235.7 220 242.3 330 244.3C440 246.3 550 243.7 660 247.3C770 251 880 261 990 254.8C1100 248.7 1210 226.3 1320 223.5C1430 220.7 1540 237.3 1650 233.8C1760 230.3 1870 206.7 1925 194.8L1980 183L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#121212"></path>
+</svg> -->
+<footer class="page-footer text-bg-dark bg-black-subtle d-print-none">
+  <div class="container">
+    <div class="mt-4 mb-5">
+      
+        <div class="row g-1 mb-4">
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Keras Explainable</h6>
+                <p class="card-text text-light">
+                  Clean implementations for AI explaining methods in Keras.
+<a href="https://github.com/lucasdavid/keras-explainable" target="_new">Code</a> and
+<a href="https://lucasdavid.github.io/keras-explainable" target="_new">docs</a> are available.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Supporting Study Material</h6>
+                <p class="card-text text-light">
+                  If you are an undergrad student and are looking for additional study material,
+check out our collaborative project <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Algorithms in TensorFlow</h6>
+                <p class="card-text text-light">
+                  I'm implementing all algorithms I find interesting using TensorFlow.
+You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">github.com/lucasdavid/algorithms-in-tensorflow</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">TF-Experiment</h6>
+                <p class="card-text text-light">
+                  And environment to run Machine Learning experiments based on components and mixins. Available at <a href="https://github.com/lucasdavid/tf-experiment">github.com/lucasdavid/tf-experiment</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Mineração de Dados Complexos</h6>
+                <p class="card-text text-light">
+                  Information around the extension program "Mineração de Dados Complexos (in Portuguese)" is available at
+<a href="https://www.ic.unicamp.br/~mdc/" target="_blank">ic.unicamp.br/~mdc/</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+    </div>
+
+    <div class="text-end mt-4">
+      
+
+
+<div class="fs-2">
+  
+    <a href="https://github.com/lucasdavid"
+      target="_blank"
+      ><i
+      aria-label="GitHub"
+      class="bi bi-github link-light"></i></a>
+  
+  
+    <a href="https://www.linkedin.com/in/ld7"
+      target="_blank"
+      title="LinkedIn"><i class="bi bi-linkedin text-primary sr-none"></i></a>
+  
+  <span itemscope itemtype="https://schema.org/Person">
+    <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+       target="orcid.widget"
+       rel="me noopener noreferrer"
+       title="ORCID"
+      ><img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 7px; width: 32px;"></a>
+  </span>
+  
+  <a href="http://stackoverflow.com/users/2429640/lucasdavid"
+     target="_blank"
+     title="Stackoverflow"><i class="bi bi-code-slash link-light sr-none"></i></a>
+  
+    <a href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q"
+      target="_blank"
+      title="Youtube"><i class="bi bi-youtube text-danger sr-none"></i></a>
+  
+    <a href="mailto:mb37410l3@mozmail.com"
+      target="_blank"
+      title="Mail"><i class="bi bi-envelope-fill link-light sr-none"></i></a>
+  
+  <a href="assets/docs/lucas-david-resume.pdf"
+     target="_blank"
+     title="Resume"><i class="bi bi-person-lines-fill link-light sr-none"></i></a>
+</div>
+
+    </div>
+    <div class="text-end">
+      <p>
+        ® Lucas David. Todos os direitos reservados.
+      </p>
+    </div>
+</div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous" defer></script>
+
+</body>
+</html>

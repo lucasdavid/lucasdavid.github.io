@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Introdução ao aprendizado de máquina, pt. 4 – Lucas David</title>
+  <meta charset="utf-8" />
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="image_src" type="image/png" href="img_path" />
+
+
+<meta name="description" content="Convoluções, o início de deep-learning" />
+<meta property="og:description" content="Convoluções, o início de deep-learning" />
+<meta property="og:image" content="" />
+
+<meta name="author" content="Lucas David" />
+
+
+<meta property="og:title" content="Introdução ao aprendizado de máquina, pt. 4" />
+<meta property="twitter:title" content="Introdução ao aprendizado de máquina, pt. 4" />
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<link rel="alternate" type="application/rss+xml" title="Lucas David - my personal website/blog"
+      href="/feed.xml" />
+
+  
+  
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LG7FZ8VCHM"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-LG7FZ8VCHM');
+	</script>
+
+
+  
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+  <nav id="mainNav" class="navbar navbar-light bg-white navbar-expand-lg d-print-none border-bottom border-light ">
+  <div class="container-xl">
+    <button class="navbar-toggler rounded-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand fw-bold text-decoration-none p-1" href="/">Lucas David</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <span class="navbar-text navbar-excerpt">
+        Introdução ao aprendizado de máquina, pt. 4
+      </span>
+      <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+      <ul class="navbar-nav mb-2 mb-lg-0 font-small">
+        <li class="nav-item"><a href="/" class="nav-link fw-bold link-dark fs-6">Home</a></li>
+        <li class="nav-item"><a href="/blog" class="nav-link fw-bold link-dark fs-6">Blog</a></li>
+        <li class="nav-item"><a href="/publications" class="nav-link fw-bold link-dark fs-6">Publications</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold link-dark fs-6" href="#" id="nbd-links-social" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Social
+          </a>
+          <ul class="dropdown-menu font-small dropdown-menu-end" aria-labelledby="nbd-links-social">
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://github.com/lucasdavid">
+                <i aria-label="GitHub" class="bi bi-github link-dark sr-none"></i>
+                Github</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://www.linkedin.com/in/ld7">
+                <i class="bi bi-linkedin text-primary sr-none"></i>
+                Linkedin</a></li>
+
+            <li itemscope itemtype="https://schema.org/Person">
+              <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+                  target="orcid.widget"
+                  rel="me noopener noreferrer"
+                  class="dropdown-item text-decoration-none"
+                >
+                <img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 5px; width: 16px;">
+                ORCID</a>
+            </li>
+
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="http://stackoverflow.com/users/2429640/lucasdavid">
+                <i class="bi bi-code-slash link-dark sr-none"></i>
+                Stackoverflow</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q">
+                <i class="bi bi-youtube text-danger sr-none"></i>
+                Youtube</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+</div>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12 col-xl-3 col-xxl-2 offset-xxl-1">
+      <div id="sidebar" class="">
+  <div class="text-center">
+    <a href="/" title="Home">
+      <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
+        class="img-fluid rounded-circle" style="width:100px" />
+    </a>
+    <p class="pt-2 font-small">
+      
+        <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
+      
+    </p>
+  </div>
+
+  
+</div>
+
+    </div>
+    <div id="table-of-contents-container-r" class="col-12 col-xl-3 col-xxl-2 order-xl-2">
+      
+      <div style="z-index: 0; font-size:0.8rem;">
+        <div id="table-of-contents" class="font-small">
+  <p class="border-bottom"><strong>Summary</strong></p>
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#descrição-das-camadas-convolucionais">Descrição das camadas convolucionais</a></li>
+<li class="toc-entry toc-h2"><a href="#descrição-das-camadas-de-pooling">Descrição das camadas de pooling</a></li>
+<li class="toc-entry toc-h2"><a href="#exemplo-de-classificação-com-redes-convolucionais">Exemplo de classificação com redes convolucionais</a></li>
+<li class="toc-entry toc-h2"><a href="#utilizando-redes-prontas">Utilizando redes prontas</a></li>
+<li class="toc-entry toc-h2"><a href="#visualizando-kernels">Visualizando kernels</a></li>
+<li class="toc-entry toc-h2"><a href="#considerações-finais">Considerações finais</a></li>
+</ul>
+</div>
+
+      </div>
+      
+    </div>
+    <div class="col-12 col-xl-6">
+      <article class="post mb-4">
+        <header class="">
+          <h1 id="postTitle" class="fw-bold">Introdução ao aprendizado de máquina, pt. 4</h1>
+          <p class="right-align mb-2 text-muted fs-5">
+            Convoluções, o início de deep-learning <em>— December 24, 2017</em>
+          </p>
+          <div class="mb-4">
+            <span class="badges-container">
+  
+    <a href="/blog/tag/ml"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >ML</a>
+  
+    <a href="/blog/tag/computer-vision"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Computer Vision</a>
+  
+    <a href="/blog/tag/portuguese"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Portuguese</a>
+  
+</span>
+
+          </div>
+        </header>
+        <div class="article-content" style="margin-top: 4rem;">
+          <p><span>Na</span>
+<a href="/ml-nonlinear">parte 3</a>, eu mostrei alguns modelos não lineares
+e como eles lidam com a tarefa de classificação. No geral, redes densas
+possuem duas ou três camadas.
+Isso acontece pois observa-se empiricamente que o ganho em <em>validation loss</em>
+não segue linearmente com a adição de mais camadas. Além disso, este pequeno
+ganho também pode ser alcançado ao simplesmente aumentar o número de unidades
+nas camadas já presentes na rede densa.</p>
+
+<p>Por quê precisamos da ideia de <em>deep-learning</em> e <em>deep-models</em>, então?
+Vamos voltar à imagem da introdução:</p>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/intro/ml-computing.webp" alt="Aprendizado de máquina" class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Aprendizado de máquina clássico.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>O aprendizado de máquina clássico se focou em preencher a lacuna do centro
+do fluxo. O “como” resolver um problema. Os modelos clássicos, portanto,
+funcionam bem para problemas que são difíceis de resolver, mas facilmente
+descritos de forma numérica.</p>
+
+<p>Entretanto, como resolver problemas que são difíceis de serem descritos
+computacionalmente? Abaixo estão alguns exemplos de problemas assim:</p>
+
+<ul>
+  <li><strong>Direção de carros</strong> - isso pode ser decomposto em algumas sub-atividades,
+como regredir a curvatura da pista, localizar os carros adjacentes e
+regredir a velocidade ótima.</li>
+  <li><strong>Classificação de cancer de pele</strong> - isso exige uma coleta confiável
+de informações das regiões de interesse.</li>
+  <li><strong>Sintetização de texto</strong> - a construção de significado sobre tuplas
+ordenadas de códigos que representem letras, palavras ou sentenças.</li>
+</ul>
+
+<p>Todos os exemplos acima não são fácilmente representados em uma estruturada
+de dados. Por exemplo, não há forma consistente de se extraír automaticamente
+informações como diâmetro e forma de pedaços de tecido. Eles podem, entretanto,
+ser capturados por ferramentas comuns à nós humanos e representados por trechos
+de dados não estruturados (ou <em>raw data</em>), como fotos, vídeos e trechos de
+texto e audio.</p>
+
+<p>Um subconjunto de algoritmos – as redes convolucionais, em especial – os quais são comumente referidos como
+<em>“deep-learning methods”</em> foram criados na tentativa de inferir informações
+semânticas de dados não estruturados.
+Eles são integrados ao início do <em>pipeline</em> de processamento e podem, portanto,
+ser vistos como uma extensão do aprendizado de máquina ‘clássico’:</p>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/deep/dml-computing.webp" alt="Aprendizado de máquina 'profundo'" class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Aprendizado de máquina profundo.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h2 id="descrição-das-camadas-convolucionais">Descrição das camadas convolucionais</h2>
+
+<p>Vamos entender como as redes convolucionais funcionam na prática.
+Considere a imagem do urso koala abaixo:</p>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/deep/koala.webp" alt="A imagem de um koala sobre uma árvore." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    A fotografia de um koala sobre uma árvore.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Primeiramente, confirme que você tem a biblioteca keras instalada com
+<code class="language-plaintext highlighter-rouge">pip install --upgrade keras</code>. Com o código abaixo, podemos carregar o koala
+em memória, criar um <code class="language-plaintext highlighter-rouge">batch</code> de imagens (que nesse caso contém só uma mesmo)
+e preprocesá-lo:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">from</span> <span class="nn">keras.preprocessing.image</span> <span class="kn">import</span> <span class="n">load_img</span><span class="p">,</span> <span class="n">img_to_array</span>
+
+<span class="n">channels</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">input_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">299</span><span class="p">,</span> <span class="mi">299</span><span class="p">,</span> <span class="n">channels</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">preprocess_input</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="c1"># transform pixel' values in [0, 255] to [-1.0, 1.0] interval.
+</span>  <span class="k">return</span> <span class="n">x</span> <span class="o">/</span> <span class="mf">127.5</span> <span class="o">-</span> <span class="mf">1.</span>
+
+<span class="n">koala</span> <span class="o">=</span> <span class="n">img_to_array</span><span class="p">(</span><span class="n">load_img</span><span class="p">(</span><span class="s">'./koala.webp'</span><span class="p">,</span> <span class="n">target_size</span><span class="o">=</span><span class="n">input_shape</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">koala</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">preprocess_input</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">(</span>1, 299, 299, 3<span class="o">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Preprocessar os dados de entrada reduz a ordem dos números que
+representam o problema, trazendo mais estabilidade para o processo seguinte,
+que envolve dezenas/centanas multiplicações de matrizes.</p>
+</blockquote>
+
+<p>As redes convolucionais são subconjuntos das redes densas (vistas na <a href="/ml-nonlinear">parte 3</a>)
+e lembram vagamente o cortex visual humano, o conceito originalmente utilizado
+em seu desenvolvimento.</p>
+
+<p>Em uma camada convolucional, uma unidade não se conecta “densamente” em relação
+à camada de entrada,
+mas apenas à uma pequena porção local do seu campo de recepção visual.
+Os parâmetros da unidade promovem uma ativação de alta intensidade na detecção
+de um determinado padrão:</p>
+
+<center>
+  <figure>
+    <img src="/assets/images/posts/ml/deep/conv.webp" alt="Exemplo de Hadamard entre uma região local de um sinal de entrada e um kernel, seguido de uma soma redutiva." class="img-fluid" />
+    
+     <figcaption>
+        Exemplo de Hadamard entre uma região local de um sinal de entrada e um kernel, seguido de uma soma redutiva.
+        Disponível em: <a href="https://stats.stackexchange.com/questions/114385/what-is-the-difference-between-convolutional-neural-networks-restricted-boltzma">stackexchange.com</a>
+     </figcaption>
+  </figure>
+</center>
+
+<p>Podemos escrever o processamento de uma única região do receptor visual
+usando python:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">local_field</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+<span class="n">k0_window</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">k0_w</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="o">*</span><span class="n">k0_window</span><span class="p">,</span> <span class="n">channels</span><span class="p">)</span>
+
+<span class="n">local_x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="n">local_field</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">local_field</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">k0_window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+               <span class="n">local_field</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span><span class="n">local_field</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">k0_window</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">local_x</span> <span class="o">*</span> <span class="n">k0_w</span><span class="p">).</span><span class="nb">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'activation:'</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>activation: <span class="o">[</span> 0.14476406]
+</code></pre></div></div>
+
+<p>Criar mais unidades com parâmetros similares – mas conexos à outras regiões do
+campo de recepção visual – promove um comportamento similar distribuido
+por todas as porções de sua visão. É claro, você pode interpretar essas
+“múltiplas unidades” como uma “única unidade deslisante” sobre todo o campo
+de recepção visual. Por outro lado, a construção de unidades de estados físicos
+distíntos promove uma alta ativação durante a aparição de padrões visuais diferentes:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">kernels</span> <span class="o">=</span> <span class="mi">32</span>
+<span class="n">k0_window</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">k0</span> <span class="o">=</span> <span class="p">{</span><span class="s">'w'</span><span class="p">:</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="n">kernels</span><span class="p">,</span> <span class="o">*</span><span class="n">k0_window</span><span class="p">,</span> <span class="n">channels</span><span class="p">),</span> <span class="s">'b'</span><span class="p">:</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">kernels</span><span class="p">)}</span>
+
+<span class="k">def</span> <span class="nf">conv2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+  <span class="n">batch_size</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">kernels</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">shape</span>
+  <span class="n">kernels</span><span class="p">,</span> <span class="n">k_height</span><span class="p">,</span> <span class="n">k_width</span><span class="p">,</span> <span class="n">k_depth</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="s">'w'</span><span class="p">].</span><span class="n">shape</span>
+
+  <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">empty</span><span class="p">((</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">height</span> <span class="o">//</span> <span class="n">stride</span><span class="p">,</span> <span class="n">width</span> <span class="o">//</span> <span class="n">stride</span><span class="p">,</span> <span class="n">kernels</span><span class="p">))</span>
+
+  <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">kernels</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">stride</span><span class="p">):</span>
+      <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">stride</span><span class="p">):</span>
+        <span class="c1"># shift i and j so they are in the center of the local receptor field.
+</span>        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">k_height</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">k_height</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">_x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">k_height</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span><span class="n">j</span> <span class="o">+</span> <span class="n">k_width</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">k</span><span class="p">[</span><span class="s">'w'</span><span class="p">][</span><span class="n">l</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">_x</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+
+  <span class="k">return</span> <span class="n">y</span>
+
+<span class="k">def</span> <span class="nf">add_bias</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="s">'b'</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">relu</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">np</span><span class="p">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">conv2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k0</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">add_bias</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">k0</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">relu</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">y</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">(</span>1, 299, 299, 32<span class="o">)</span>
+</code></pre></div></div>
+
+<p>O sinal de entrada, com formato <code class="language-plaintext highlighter-rouge">(batch_size, height, width, 3)</code> passa pelas
+funções e é transformado em um sinal com formato <code class="language-plaintext highlighter-rouge">(batch, height, width, kernels)</code>,
+onde cada uma das <code class="language-plaintext highlighter-rouge">kernels</code> matrizes representa a <strong>indensidade</strong> em que um
+determinado padrão apareceu no sinal de entrada.</p>
+
+<p>O empilhamento das camadas convolucionais promove a composição das ativações,
+formando padrões estruturados. Porém, aumentar o número de <code class="language-plaintext highlighter-rouge">kernels</code> iria
+requerer grandes quantidades de memória e processamento. A fim de aliviar esse
+problema, usualmente combinamos as duas abordagens abaixo:</p>
+
+<ul>
+  <li>Aumentamos o parâmetro <code class="language-plaintext highlighter-rouge">stride</code> em <code class="language-plaintext highlighter-rouge">conv2d</code>, o que resulta em uma convolução
+espaçada por saltos mais largos:
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">y</span> <span class="o">=</span> <span class="n">conv2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k0</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">add_bias</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">k0</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">relu</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">y</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+</code></pre></div>    </div>
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">(</span>1, 149, 149, 32<span class="o">)</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Executamos intercaladamente uma função denominada <em>pooling</em>, que tem como
+objetivo trocar precisão (em relação ao local do campo receptor visual ativado)
+pela redução do requisito de memória para se armazenar aquele sinal.<br />
+Duas formas de <em>poolings</em> são extremamente utilizados:</p>
+
+    <ul>
+      <li><strong>max</strong>-pooling 2D: somente a maior ativação em uma janela definida é retida.
+                    O resto do sinal é descartado.</li>
+      <li><strong>avg</strong>-pooling 2D: a média de ativações em uma janela definida é retida.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="descrição-das-camadas-de-pooling">Descrição das camadas de <em>pooling</em></h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">_pooling2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)):</span>
+  <span class="n">batch_size</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">kernels</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">shape</span>
+  <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">empty</span><span class="p">((</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">height</span> <span class="o">//</span> <span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">width</span> <span class="o">//</span> <span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">kernels</span><span class="p">))</span>
+
+  <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
+      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+          <span class="n">y</span><span class="p">[</span><span class="n">b</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">b</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">j</span><span class="p">:</span><span class="n">j</span> <span class="o">+</span> <span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+  <span class="k">return</span> <span class="n">y</span>
+
+<span class="k">def</span> <span class="nf">max_pooling2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)):</span>
+  <span class="k">return</span> <span class="n">_pooling2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="nb">max</span><span class="p">,</span> <span class="n">window</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">avg_pooling2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)):</span>
+  <span class="k">return</span> <span class="n">_pooling2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">window</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">'input shape:'</span><span class="p">,</span> <span class="n">y</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">max_pooling2d</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'output shape:'</span><span class="p">,</span> <span class="n">y</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>input shape:  <span class="o">(</span>299, 299, 32<span class="o">)</span>
+output shape: <span class="o">(</span>149, 149, 32<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Após uma certa quantidade de camadas, observamos unidades repondendo à padrões
+de alto valor semântico, como faces, objetos ou animais:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">layers</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span><span class="s">'w'</span><span class="p">:</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="o">*</span><span class="n">k0_window</span><span class="p">,</span> <span class="n">channels</span><span class="p">),</span> <span class="s">'b'</span><span class="p">:</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">32</span><span class="p">)},</span>
+  <span class="p">{</span><span class="s">'w'</span><span class="p">:</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="o">*</span><span class="n">k0_window</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="s">'b'</span><span class="p">:</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">32</span><span class="p">)},</span>
+  <span class="p">{</span><span class="s">'w'</span><span class="p">:</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="o">*</span><span class="n">k0_window</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="s">'b'</span><span class="p">:</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">64</span><span class="p">)},</span>
+  <span class="p">{</span><span class="s">'w'</span><span class="p">:</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="o">*</span><span class="n">k0_window</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span> <span class="s">'b'</span><span class="p">:</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">64</span><span class="p">)},</span>
+<span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">conv2d_b_relu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">conv2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="n">stride</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">add_bias</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">x</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">'input shape:'</span><span class="p">,</span> <span class="n">y</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">conv2d_b_relu</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">conv2d_b_relu</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">max_pooling2d</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">conv2d_b_relu</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">layers</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">max_pooling2d</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">conv2d_b_relu</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">layers</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">max_pooling2d</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'output shape:'</span><span class="p">,</span> <span class="n">y</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>input shape:  <span class="o">(</span>1, 299, 299, 32<span class="o">)</span>
+output shape: <span class="o">(</span>1, 37, 37, 128<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Por fim, alimentamos um modelo clássico (uma rede densa, como exemplo) com a
+saída desta rede convolucional, criando assim um <em>pipeline</em> completo – porém eficiente – de classificação:</p>
+
+<center>
+<figure>
+  <img src="/assets/images/posts/ml/deep/convnet.webp" class="figure-img img-fluid rounded" />
+  <figcaption>
+    Exemplo de rede convolucional aplicada ao processamento de imagens.
+    Disponível em: <a href="https://adeshpande3.github.io/A-Beginner%27s-Guide-To-Understanding-Convolutional-Neural-Networks/">adeshpande3.github.io</a>
+  </figcaption>
+</figure>
+</center>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">num_classes</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="n">batch_size</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">kernels</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">shape</span>
+  <span class="k">return</span> <span class="n">x</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">layers</span> <span class="o">+=</span> <span class="p">[</span>
+  <span class="p">{</span><span class="s">'w'</span><span class="p">:</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span> <span class="s">'b'</span><span class="p">:</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">256</span><span class="p">)},</span>
+  <span class="p">{</span><span class="s">'w'</span><span class="p">:</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span> <span class="s">'b'</span><span class="p">:</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_classes</span><span class="p">)}</span>
+<span class="p">]</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">flatten</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">dense</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">layers</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">relu</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">dense</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">layers</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="exemplo-de-classificação-com-redes-convolucionais">Exemplo de classificação com redes convolucionais</h2>
+
+<p><a href="https://www.cs.toronto.edu/~kriz/cifar.html">cifar10</a> é um conjunto composto
+por imagens RGB <code class="language-plaintext highlighter-rouge">(32, 32, 3)</code> pertencentes à 10 classes distintas (avião,
+automóvel, pássaro etc).</p>
+
+<center>
+<figure>
+  <img src="/assets/images/posts/ml/deep/cifar10.webp" width="400" class="figure-img img-fluid rounded" />
+  <figcaption>
+    Exemplo de amostras em cifar10.
+    Disponível em: <a href="https://www.cs.toronto.edu/~kriz/cifar.html">cs.toronto.edu/~kriz/cifar.html</a>
+  </figcaption>
+</figure>
+</center>
+
+<p>Usando o que foi descrito até agora, podemos criar uma rede que classifica as amostras:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">keras</span>
+<span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">Input</span><span class="p">,</span> <span class="n">callbacks</span>
+<span class="kn">from</span> <span class="nn">keras.datasets</span> <span class="kn">import</span> <span class="n">cifar10</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Conv2D</span><span class="p">,</span> <span class="n">MaxPooling2D</span><span class="p">,</span> <span class="n">Flatten</span><span class="p">,</span> <span class="n">Dense</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="kn">from</span> <span class="nn">sacred</span> <span class="kn">import</span> <span class="n">Experiment</span>
+
+<span class="n">ex</span> <span class="o">=</span> <span class="n">Experiment</span><span class="p">(</span><span class="s">'training-conv-network'</span><span class="p">)</span>
+
+
+<span class="o">@</span><span class="n">ex</span><span class="p">.</span><span class="n">config</span>
+<span class="k">def</span> <span class="nf">my_config</span><span class="p">():</span>
+    <span class="n">epochs</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">128</span>
+    <span class="n">num_classes</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">valid_size</span> <span class="o">=</span> <span class="p">.</span><span class="mi">25</span>
+    <span class="n">early_stopping_patience</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="s">'adam'</span>
+    <span class="n">ckpt</span> <span class="o">=</span> <span class="s">'./weights.hdf5'</span>
+
+
+<span class="o">@</span><span class="n">ex</span><span class="p">.</span><span class="n">automain</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span> <span class="n">valid_size</span><span class="p">,</span> <span class="n">ckpt</span><span class="p">,</span>
+         <span class="n">early_stopping_patience</span><span class="p">):</span>
+    <span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span> <span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span> <span class="o">=</span> <span class="n">cifar10</span><span class="p">.</span><span class="n">load_data</span><span class="p">()</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">'image shapes:'</span><span class="p">,</span> <span class="n">x_train</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+    <span class="n">x_train</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_train</span> <span class="o">-</span> <span class="n">x_train</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="n">x_train</span><span class="p">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">x_test</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_test</span> <span class="o">-</span> <span class="n">x_test</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="n">x_test</span><span class="p">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">x_train</span><span class="p">,</span> <span class="n">x_valid</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+        <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">valid_size</span><span class="p">)</span>
+
+    <span class="c1"># one-hot encode train and test
+</span>    <span class="n">y_train</span> <span class="o">=</span> <span class="n">keras</span><span class="p">.</span><span class="n">utils</span><span class="p">.</span><span class="n">to_categorical</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)</span>
+    <span class="n">y_valid</span> <span class="o">=</span> <span class="n">keras</span><span class="p">.</span><span class="n">utils</span><span class="p">.</span><span class="n">to_categorical</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)</span>
+    <span class="n">y_test</span> <span class="o">=</span> <span class="n">keras</span><span class="p">.</span><span class="n">utils</span><span class="p">.</span><span class="n">to_categorical</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">x_train</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'conv2d_1'</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'conv2d_2'</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">MaxPooling2D</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'maxpool_2'</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'conv2d_3'</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'conv2d_4'</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">Flatten</span><span class="p">()(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'fc1'</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'fc2'</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'softmax'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'predictions'</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+                  <span class="n">loss</span><span class="o">=</span><span class="s">'categorical_crossentropy'</span><span class="p">,</span>
+                  <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">])</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span>
+                  <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                  <span class="n">epochs</span><span class="o">=</span><span class="n">epochs</span><span class="p">,</span>
+                  <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                  <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">x_valid</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">),</span>
+                  <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span>
+                      <span class="n">callbacks</span><span class="p">.</span><span class="n">EarlyStopping</span><span class="p">(</span><span class="n">patience</span><span class="o">=</span><span class="n">early_stopping_patience</span><span class="p">),</span>
+                      <span class="n">callbacks</span><span class="p">.</span><span class="n">ModelCheckpoint</span><span class="p">(</span><span class="n">ckpt</span><span class="p">,</span> <span class="n">save_best_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                  <span class="p">])</span>
+    <span class="k">except</span> <span class="nb">KeyboardInterrupt</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'interrupted'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'done'</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">'reloading optimal weights...'</span><span class="p">)</span>
+    <span class="n">model</span><span class="p">.</span><span class="n">load_weights</span><span class="p">(</span><span class="n">ckpt</span><span class="p">)</span>
+
+    <span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'test loss:'</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'test accuracy:'</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python training_conv_network.py with <span class="nv">seed</span><span class="o">=</span>42
+
+Epoch 00001: val_loss improved from inf to 1.20643, saving model to ./weights.hdf5
+ - 169s - loss: 1.5395 - acc: 0.4352 - val_loss: 1.2064 - val_acc: 0.5673
+Epoch 2/20
+Epoch 00002: val_loss improved from 1.20643 to 1.05511, saving model to ./weights.hdf5
+ - 149s - loss: 1.1084 - acc: 0.6027 - val_loss: 1.0551 - val_acc: 0.6270
+Epoch 3/20
+Epoch 00003: val_loss improved from 1.05511 to 0.90021, saving model to ./weights.hdf5
+ - 151s - loss: 0.8959 - acc: 0.6817 - val_loss: 0.9002 - val_acc: 0.6859
+Epoch 4/20
+Epoch 00004: val_loss improved from 0.90021 to 0.85776, saving model to ./weights.hdf5
+ - 148s - loss: 0.7592 - acc: 0.7307 - val_loss: 0.8578 - val_acc: 0.7046
+Epoch 5/20
+Epoch 00005: val_loss did not improve
+ - 149s - loss: 0.6478 - acc: 0.7695 - val_loss: 0.8755 - val_acc: 0.6972
+Epoch 6/20
+Epoch 00006: val_loss did not improve
+ - 171s - loss: 0.5393 - acc: 0.8092 - val_loss: 0.8609 - val_acc: 0.7235
+Epoch 7/20
+Epoch 00007: val_loss did not improve
+ - 169s - loss: 0.4159 - acc: 0.8494 - val_loss: 0.9289 - val_acc: 0.7171
+Epoch 8/20
+interrupted
+reloading optimal weights...
+<span class="nb">test </span>loss: 0.8785748579978943
+<span class="nb">test </span>accuracy: 0.7031
+INFO - training-conv-network - Completed after 0:19:55
+</code></pre></div></div>
+
+<p>Perceba que, por não ter acesso a uma placa de vídeo, levou quase 20 minutos
+para executar um pouco mais que 7 epochs. Neste momento, eu fiquei com preguiça
+e decidi interromper o treinamento.</p>
+
+<h2 id="utilizando-redes-prontas">Utilizando redes prontas</h2>
+
+<p>Muitas plataformas utilizadas em Machine Learning contém modelos, redes e
+ferramentas prontas. Esse é o caso do Keras. Você pode encontrar diversas
+arquiteturas já treinadas no módulo <code class="language-plaintext highlighter-rouge">keras.applications</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">from</span> <span class="nn">keras.applications.inception_resnet_v2</span> <span class="kn">import</span> <span class="p">(</span><span class="n">InceptionResNetV2</span><span class="p">,</span>
+                                                    <span class="n">preprocess_input</span><span class="p">,</span>
+                                                    <span class="n">decode_predictions</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">keras.preprocessing.image</span> <span class="kn">import</span> <span class="n">load_img</span><span class="p">,</span> <span class="n">img_to_array</span>
+
+<span class="n">target_shape</span> <span class="o">=</span> <span class="p">[</span><span class="mi">299</span><span class="p">,</span> <span class="mi">299</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="n">koala</span> <span class="o">=</span> <span class="n">img_to_array</span><span class="p">(</span><span class="n">load_img</span><span class="p">(</span><span class="s">'koala.webp'</span><span class="p">,</span> <span class="n">target_size</span><span class="o">=</span><span class="n">target_shape</span><span class="p">))</span>
+<span class="c1"># faz um conjunto contendo 1 imagem.
+</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="n">koala</span><span class="p">])</span>
+<span class="c1"># processa x para as mesmas condições
+# em que InceptionResNetV2 foi treinada.
+</span><span class="n">x</span> <span class="o">=</span> <span class="n">preprocess_input</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">InceptionResNetV2</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="s">'imagenet'</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">decode_predictions</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>koala:  97.42%
+wombat:  0.20%
+maypole: 0.02%
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">InceptionResNetV2</code>, treinada sobre o imagenet, sabe com bastante certa o que
+é um koala. :-)</p>
+
+<p>Podemos utilizar os pesos treinados sobre o imagenet para iniciar um novo
+treinamento, em um processo conhecido como <em>fine-tuning</em>. No geral, isso
+nos leva à uma mais rápida convergencia. Neste caso, para acelerar as coisas
+aqui, eu congelei a atualização dos pesos de todo o pipeline conv, atualizando
+somente os pesos da última camada de decisão. Os resultados são comparáveis:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">keras</span>
+<span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">Input</span><span class="p">,</span> <span class="n">callbacks</span>
+<span class="kn">from</span> <span class="nn">keras.applications</span> <span class="kn">import</span> <span class="n">InceptionResNetV2</span>
+<span class="kn">from</span> <span class="nn">keras.datasets</span> <span class="kn">import</span> <span class="n">cifar10</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Conv2D</span><span class="p">,</span> <span class="n">MaxPooling2D</span><span class="p">,</span> <span class="n">Flatten</span><span class="p">,</span> <span class="n">Dense</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="kn">from</span> <span class="nn">sacred</span> <span class="kn">import</span> <span class="n">Experiment</span>
+
+<span class="n">ex</span> <span class="o">=</span> <span class="n">Experiment</span><span class="p">(</span><span class="s">'fine-tuning-inception-resnet-v2'</span><span class="p">)</span>
+
+
+<span class="o">@</span><span class="n">ex</span><span class="p">.</span><span class="n">config</span>
+<span class="k">def</span> <span class="nf">my_config</span><span class="p">():</span>
+    <span class="n">epochs</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">256</span>
+    <span class="n">num_classes</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">valid_size</span> <span class="o">=</span> <span class="p">.</span><span class="mi">25</span>
+    <span class="n">early_stopping_patience</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="s">'adam'</span>
+    <span class="n">ckpt</span> <span class="o">=</span> <span class="s">'./weights.hdf5'</span>
+
+
+<span class="o">@</span><span class="n">ex</span><span class="p">.</span><span class="n">automain</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span> <span class="n">valid_size</span><span class="p">,</span> <span class="n">ckpt</span><span class="p">,</span>
+         <span class="n">early_stopping_patience</span><span class="p">):</span>
+    <span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span> <span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span> <span class="o">=</span> <span class="n">cifar10</span><span class="p">.</span><span class="n">load_data</span><span class="p">()</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">'image shapes:'</span><span class="p">,</span> <span class="n">x_train</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+    <span class="n">x_train</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_train</span> <span class="o">-</span> <span class="n">x_train</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="n">x_train</span><span class="p">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">x_test</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_test</span> <span class="o">-</span> <span class="n">x_test</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="n">x_test</span><span class="p">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">x_train</span><span class="p">,</span> <span class="n">x_valid</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+        <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">valid_size</span><span class="p">)</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">x_train</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">name</span><span class="o">=</span><span class="s">'inputs'</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">InceptionResNetV2</span><span class="p">(</span><span class="n">input_tensor</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                              <span class="n">weights</span><span class="o">=</span><span class="s">'imagenet'</span><span class="p">,</span>
+                              <span class="n">include_top</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                              <span class="n">pooling</span><span class="o">=</span><span class="s">'avg'</span><span class="p">)</span>
+    <span class="n">model</span><span class="p">.</span><span class="n">trainable</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">output</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'softmax'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'predictions'</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+                  <span class="n">loss</span><span class="o">=</span><span class="s">'sparse_categorical_crossentropy'</span><span class="p">,</span>
+                  <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">])</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span>
+                  <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                  <span class="n">epochs</span><span class="o">=</span><span class="n">epochs</span><span class="p">,</span>
+                  <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                  <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">x_valid</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">),</span>
+                  <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span>
+                      <span class="n">callbacks</span><span class="p">.</span><span class="n">EarlyStopping</span><span class="p">(</span><span class="n">patience</span><span class="o">=</span><span class="n">early_stopping_patience</span><span class="p">),</span>
+                      <span class="n">callbacks</span><span class="p">.</span><span class="n">ModelCheckpoint</span><span class="p">(</span><span class="n">ckpt</span><span class="p">,</span> <span class="n">save_best_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                  <span class="p">])</span>
+    <span class="k">except</span> <span class="nb">KeyboardInterrupt</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'interrupted'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'done'</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">'reloading optimal weights...'</span><span class="p">)</span>
+    <span class="n">model</span><span class="p">.</span><span class="n">load_weights</span><span class="p">(</span><span class="n">ckpt</span><span class="p">)</span>
+
+    <span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'test loss:'</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'test accuracy:'</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>WARNING - training-conv-network - No observers have been added to this run
+INFO - training-conv-network - Running <span class="nb">command</span> <span class="s1">'main'</span>
+INFO - training-conv-network - Started
+image shapes: <span class="o">(</span>32, 32, 3<span class="o">)</span>
+Train on 37500 samples, validate on 12500 samples
+Epoch 1/20
+ - 122s - loss: 1.5673 - acc: 0.4115 - val_loss: 1.2524 - val_acc: 0.5470
+
+Epoch 00001: val_loss improved from inf to 1.25245, saving model to ./weights.hdf5
+Epoch 2/20
+ - 116s - loss: 1.1259 - acc: 0.5957 - val_loss: 1.0814 - val_acc: 0.6135
+
+Epoch 00002: val_loss improved from 1.25245 to 1.08137, saving model to ./weights.hdf5
+Epoch 3/20
+ - 117s - loss: 0.9420 - acc: 0.6645 - val_loss: 0.9103 - val_acc: 0.6778
+
+Epoch 00003: val_loss improved from 1.08137 to 0.91025, saving model to ./weights.hdf5
+Epoch 4/20
+ - 122s - loss: 0.8101 - acc: 0.7122 - val_loss: 0.9491 - val_acc: 0.6679
+
+Epoch 00004: val_loss did not improve
+Epoch 5/20
+ - 116s - loss: 0.6981 - acc: 0.7517 - val_loss: 0.8526 - val_acc: 0.7110
+
+Epoch 00005: val_loss improved from 0.91025 to 0.85264, saving model to ./weights.hdf5
+Epoch 6/20
+ - 119s - loss: 0.6082 - acc: 0.7819 - val_loss: 0.8270 - val_acc: 0.7182
+
+Epoch 00006: val_loss improved from 0.85264 to 0.82705, saving model to ./weights.hdf5
+Epoch 7/20
+ - 122s - loss: 0.5217 - acc: 0.8141 - val_loss: 0.8760 - val_acc: 0.7164
+
+Epoch 00007: val_loss did not improve
+Epoch 8/20
+ - 121s - loss: 0.4371 - acc: 0.8441 - val_loss: 0.9056 - val_acc: 0.7227
+
+Epoch 00008: val_loss did not improve
+Epoch 9/20
+ - 120s - loss: 0.3513 - acc: 0.8749 - val_loss: 1.0230 - val_acc: 0.7070
+
+Epoch 00009: val_loss did not improve
+Epoch 10/20
+ - 119s - loss: 0.2744 - acc: 0.8998 - val_loss: 1.0952 - val_acc: 0.7116
+
+Epoch 00010: val_loss did not improve
+Epoch 11/20
+ - 117s - loss: 0.2261 - acc: 0.9193 - val_loss: 1.1889 - val_acc: 0.7182
+
+Epoch 00011: val_loss did not improve
+<span class="k">done
+</span>reloading optimal weights...
+<span class="nb">test </span>loss: 0.8398134949684143
+<span class="nb">test </span>accuracy: 0.7196
+INFO - training-conv-network - Completed after 0:22:10
+</code></pre></div></div>
+
+<h2 id="visualizando-kernels">Visualizando <em>kernels</em></h2>
+
+<p>Pelas operações envolvidas em uma camada convolucional (<code class="language-plaintext highlighter-rouge">hadamard</code>, <code class="language-plaintext highlighter-rouge">sum</code>,
+<code class="language-plaintext highlighter-rouge">add_bias</code> e <code class="language-plaintext highlighter-rouge">relu</code>), uma “alta similaridade” entre o sinal de entrada e o
+padrão representado pelo <em>kernel</em> produzem altos valores de ativação.
+Em contrapartida, uma baixa similaridade produz uma ativação mais próxima
+ao 0.</p>
+
+<p>Na primeira camada, o <em>kernel</em> efetivamente representa um padrão que será
+selecionado. Visualizar o que ativa nas camadas seguintes, entretanto, é
+um tanto problemático. Como um primeiro passo, podemos tentar olhar para a
+saída da convolução, que tente à remover os padrões que não se encaixam
+no definido pelo <em>kernel</em>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="n">matplotlib</span><span class="p">.</span><span class="n">use</span><span class="p">(</span><span class="s">'agg'</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.gridspec</span> <span class="k">as</span> <span class="n">gridspec</span>
+<span class="kn">from</span> <span class="nn">keras.engine</span> <span class="kn">import</span> <span class="n">Model</span>
+
+<span class="n">observed_layer_names</span> <span class="o">=</span> <span class="p">(</span><span class="s">'activation_1'</span><span class="p">,</span> <span class="s">'activation_2'</span><span class="p">,</span>
+                        <span class="s">'activation_4'</span><span class="p">,</span> <span class="s">'mixed_5b'</span><span class="p">,</span>
+                        <span class="s">'mixed_6a'</span><span class="p">,</span> <span class="s">'conv_7b'</span><span class="p">)</span>
+<span class="n">observed_layer_outputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">model</span><span class="p">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">name</span><span class="p">).</span><span class="n">output</span>    
+                          <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">observed_layer_names</span><span class="p">]</span>
+<span class="n">observer</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">model</span><span class="p">.</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">observed_layer_outputs</span><span class="p">)</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="n">observer</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">plot_kernels</span> <span class="o">=</span> <span class="mi">8</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">gs1</span> <span class="o">=</span> <span class="n">gridspec</span><span class="p">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="n">plot_kernels</span><span class="p">)</span>
+<span class="n">gs1</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">wspace</span><span class="o">=</span><span class="mf">0.025</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+
+<span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">_z</span> <span class="ow">in</span> <span class="n">z</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">_z</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">kernels</span> <span class="o">=</span> <span class="n">_z</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">plot_kernels</span><span class="p">):</span>
+        <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs1</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+        <span class="n">ax1</span><span class="p">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s">'equal'</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="s">'off'</span><span class="p">)</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">_z</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">k</span><span class="p">])</span>
+        <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">'conv_outputs.webp'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">clf</span><span class="p">()</span>
+</code></pre></div></div>
+
+<center>
+<figure>
+<img src="/assets/images/posts/ml/deep/conv_outputs.webp" class="figure-img img-fluid rounded" />
+  <figcaption>
+  Visualização das saídas produzidas pelas camadas observadas, quando a rede é alimentada com o koala.
+  </figcaption>
+</figure>
+</center>
+
+<p>Apesar da <code class="language-plaintext highlighter-rouge">InceptionResNetV2</code> ser bem maior que simplesmente 8 kernels de 6
+camadas, podemos fazer algumas resalvas em relação às saídas:</p>
+
+<ul>
+  <li>Alguns <em>kernels</em> na primeira camada observada respondem com altas
+intensidades quando aplicados sobre o <em>background</em> claro.</li>
+  <li>Outros <em>kernels</em>, na terceira e quarta camadas, respondem ao koala em
+destaque.</li>
+  <li>O aprofundamento de uma rede — e sucessivas aplicações de <em>poolling</em> —
+reduz drasticamente a qualidade do sinal e dificulta a visualização.
+Entender uma rede profunda é definitivamente um desafio.</li>
+</ul>
+
+<p>Melhores técnicas de visualização existem. Elas envolvem a otimização da imagens
+de entrada para uma unidade específica, retro-propagação de gradientes e oclusão.</p>
+
+<h2 id="considerações-finais">Considerações finais</h2>
+
+<p>Neste post, eu descrevi alguns conceitos que compõem uma rede convolucional
+e apresentei alguns exemplos práticos em como utilizá-la. Em uma próxima
+oportunidade, eu vou mostrar como as convoluções podem ser utilizadas para
+processar padrões temporais e alguns novos modelos mais interessantes, como
+as redes recorrentes.</p>
+
+        </div>
+      </article>
+
+      
+      <div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://lucasdavid-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      
+    </div>
+  </div>
+</div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+  integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"
+  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
+  integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '\\[', right: '\\]', display: true}, {left: '$', right: '$', display: false},{left: '\\(', right: '\\)', display: false}]});"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+<script>
+  anchors.options = { icon: '#' };
+  anchors.add();
+</script>
+
+
+  <!-- <svg id="visual" viewBox="0 0 1980 300"  class="curve-container__curve curve-three" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <path
+    d="M0 69L55 90.2C110 111.3 220 153.7 330 169.8C440 186 550 176 660 165.5C770 155 880 144 990 139.2C1100 134.3 1210 135.7 1320 137.7C1430 139.7 1540 142.3 1650 155.5C1760 168.7 1870 192.3 1925 204.2L1980 216L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#d3d3d3"></path>
+  <path
+    d="M0 89L55 107.8C110 126.7 220 164.3 330 191.3C440 218.3 550 234.7 660 243.8C770 253 880 255 990 252.3C1100 249.7 1210 242.3 1320 228.8C1430 215.3 1540 195.7 1650 174.5C1760 153.3 1870 130.7 1925 119.3L1980 108L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#6a6a6a"></path>
+  <path
+    d="M0 229L55 232.3C110 235.7 220 242.3 330 244.3C440 246.3 550 243.7 660 247.3C770 251 880 261 990 254.8C1100 248.7 1210 226.3 1320 223.5C1430 220.7 1540 237.3 1650 233.8C1760 230.3 1870 206.7 1925 194.8L1980 183L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#121212"></path>
+</svg> -->
+<footer class="page-footer text-bg-dark bg-black-subtle d-print-none">
+  <div class="container">
+    <div class="mt-4 mb-5">
+      
+        <div class="row g-1 mb-4">
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Keras Explainable</h6>
+                <p class="card-text text-light">
+                  Clean implementations for AI explaining methods in Keras.
+<a href="https://github.com/lucasdavid/keras-explainable" target="_new">Code</a> and
+<a href="https://lucasdavid.github.io/keras-explainable" target="_new">docs</a> are available.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Supporting Study Material</h6>
+                <p class="card-text text-light">
+                  If you are an undergrad student and are looking for additional study material,
+check out our collaborative project <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Algorithms in TensorFlow</h6>
+                <p class="card-text text-light">
+                  I'm implementing all algorithms I find interesting using TensorFlow.
+You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">github.com/lucasdavid/algorithms-in-tensorflow</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">TF-Experiment</h6>
+                <p class="card-text text-light">
+                  And environment to run Machine Learning experiments based on components and mixins. Available at <a href="https://github.com/lucasdavid/tf-experiment">github.com/lucasdavid/tf-experiment</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Mineração de Dados Complexos</h6>
+                <p class="card-text text-light">
+                  Information around the extension program "Mineração de Dados Complexos (in Portuguese)" is available at
+<a href="https://www.ic.unicamp.br/~mdc/" target="_blank">ic.unicamp.br/~mdc/</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+    </div>
+
+    <div class="text-end mt-4">
+      
+
+
+<div class="fs-2">
+  
+    <a href="https://github.com/lucasdavid"
+      target="_blank"
+      ><i
+      aria-label="GitHub"
+      class="bi bi-github link-light"></i></a>
+  
+  
+    <a href="https://www.linkedin.com/in/ld7"
+      target="_blank"
+      title="LinkedIn"><i class="bi bi-linkedin text-primary sr-none"></i></a>
+  
+  <span itemscope itemtype="https://schema.org/Person">
+    <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+       target="orcid.widget"
+       rel="me noopener noreferrer"
+       title="ORCID"
+      ><img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 7px; width: 32px;"></a>
+  </span>
+  
+  <a href="http://stackoverflow.com/users/2429640/lucasdavid"
+     target="_blank"
+     title="Stackoverflow"><i class="bi bi-code-slash link-light sr-none"></i></a>
+  
+    <a href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q"
+      target="_blank"
+      title="Youtube"><i class="bi bi-youtube text-danger sr-none"></i></a>
+  
+    <a href="mailto:mb37410l3@mozmail.com"
+      target="_blank"
+      title="Mail"><i class="bi bi-envelope-fill link-light sr-none"></i></a>
+  
+  <a href="assets/docs/lucas-david-resume.pdf"
+     target="_blank"
+     title="Resume"><i class="bi bi-person-lines-fill link-light sr-none"></i></a>
+</div>
+
+    </div>
+    <div class="text-end">
+      <p>
+        ® Lucas David. Todos os direitos reservados.
+      </p>
+    </div>
+</div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous" defer></script>
+
+</body>
+</html>

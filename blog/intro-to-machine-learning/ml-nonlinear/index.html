@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Introdução ao aprendizado de máquina, pt. 3 – Lucas David</title>
+  <meta charset="utf-8" />
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="image_src" type="image/png" href="img_path" />
+
+
+<meta name="description" content="Regressão logística, modelos não-lineares e redes artificias." />
+<meta property="og:description" content="Regressão logística, modelos não-lineares e redes artificias." />
+<meta property="og:image" content="" />
+
+<meta name="author" content="Lucas David" />
+
+
+<meta property="og:title" content="Introdução ao aprendizado de máquina, pt. 3" />
+<meta property="twitter:title" content="Introdução ao aprendizado de máquina, pt. 3" />
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<link rel="alternate" type="application/rss+xml" title="Lucas David - my personal website/blog"
+      href="/feed.xml" />
+
+  
+  
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LG7FZ8VCHM"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-LG7FZ8VCHM');
+	</script>
+
+
+  
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+  <nav id="mainNav" class="navbar navbar-light bg-white navbar-expand-lg d-print-none border-bottom border-light ">
+  <div class="container-xl">
+    <button class="navbar-toggler rounded-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand fw-bold text-decoration-none p-1" href="/">Lucas David</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <span class="navbar-text navbar-excerpt">
+        Introdução ao aprendizado de máquina, pt. 3
+      </span>
+      <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+      <ul class="navbar-nav mb-2 mb-lg-0 font-small">
+        <li class="nav-item"><a href="/" class="nav-link fw-bold link-dark fs-6">Home</a></li>
+        <li class="nav-item"><a href="/blog" class="nav-link fw-bold link-dark fs-6">Blog</a></li>
+        <li class="nav-item"><a href="/publications" class="nav-link fw-bold link-dark fs-6">Publications</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold link-dark fs-6" href="#" id="nbd-links-social" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Social
+          </a>
+          <ul class="dropdown-menu font-small dropdown-menu-end" aria-labelledby="nbd-links-social">
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://github.com/lucasdavid">
+                <i aria-label="GitHub" class="bi bi-github link-dark sr-none"></i>
+                Github</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://www.linkedin.com/in/ld7">
+                <i class="bi bi-linkedin text-primary sr-none"></i>
+                Linkedin</a></li>
+
+            <li itemscope itemtype="https://schema.org/Person">
+              <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+                  target="orcid.widget"
+                  rel="me noopener noreferrer"
+                  class="dropdown-item text-decoration-none"
+                >
+                <img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 5px; width: 16px;">
+                ORCID</a>
+            </li>
+
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="http://stackoverflow.com/users/2429640/lucasdavid">
+                <i class="bi bi-code-slash link-dark sr-none"></i>
+                Stackoverflow</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q">
+                <i class="bi bi-youtube text-danger sr-none"></i>
+                Youtube</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+</div>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12 col-xl-3 col-xxl-2 offset-xxl-1">
+      <div id="sidebar" class="">
+  <div class="text-center">
+    <a href="/" title="Home">
+      <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
+        class="img-fluid rounded-circle" style="width:100px" />
+    </a>
+    <p class="pt-2 font-small">
+      
+        <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
+      
+    </p>
+  </div>
+
+  
+</div>
+
+    </div>
+    <div id="table-of-contents-container-r" class="col-12 col-xl-3 col-xxl-2 order-xl-2">
+      
+      <div style="z-index: 0; font-size:0.8rem;">
+        <div id="table-of-contents" class="font-small">
+  <p class="border-bottom"><strong>Summary</strong></p>
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#classificação-por-regressão-logística">Classificação por regressão logística</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#um-exemplo-prático-breast-cancer-wisconsin-diagnostic-database">Um exemplo prático: Breast Cancer Wisconsin (Diagnostic) Database</a></li>
+<li class="toc-entry toc-h3"><a href="#considerações-finais-em-regressão-logística">Considerações finais em regressão logística</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#sistemas-não-lineares">Sistemas não-lineares</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#problemas-multi-classes">Problemas multi-classes</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#redes-artificiais">Redes Artificiais</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#projeção-para-espaços-de-maior-dimensionalidade">Projeção para espaços de maior dimensionalidade</a></li>
+<li class="toc-entry toc-h3"><a href="#treinando-redes-de-múltiplas-camadas">Treinando redes de múltiplas camadas</a></li>
+<li class="toc-entry toc-h3"><a href="#últimas-dicas-softmax-e-cross-entropy">Últimas dicas (softmax e cross-entropy)</a></li>
+<li class="toc-entry toc-h3"><a href="#exemplo-prático-mnist">Exemplo prático: MNIST</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+      </div>
+      
+    </div>
+    <div class="col-12 col-xl-6">
+      <article class="post mb-4">
+        <header class="">
+          <h1 id="postTitle" class="fw-bold">Introdução ao aprendizado de máquina, pt. 3</h1>
+          <p class="right-align mb-2 text-muted fs-5">
+            Regressão logística, modelos não-lineares e redes artificias. <em>— October 26, 2017</em>
+          </p>
+          <div class="mb-4">
+            <span class="badges-container">
+  
+    <a href="/blog/tag/ml"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >ML</a>
+  
+    <a href="/blog/tag/classification"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Classification</a>
+  
+    <a href="/blog/tag/portuguese"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Portuguese</a>
+  
+    <a href="/blog/tag/scikit-learn"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Scikit-Learn</a>
+  
+</span>
+
+          </div>
+        </header>
+        <div class="article-content" style="margin-top: 4rem;">
+          <p><span>Felizmente,</span>
+as coisas nem sempre podem ser resolvidas com retas e linearidade.
+Para resolver esses problemas, vamos falar um pouco sobre não linearidade.</p>
+
+<h2 id="classificação-por-regressão-logística">Classificação por regressão logística</h2>
+
+<p>Apesar do nome “regressão logíca”, este método remete à uma atividade de
+classificação. Diferente da regressão, a nossa preocupação do agente inteligente
+aqui não é estimar um valor, mas sim dar uma resposta: sim ou não.</p>
+
+<p>Como fazer isso sem perdermos o que nós aprendemos acima? Podemos
+utilizar uma <strong>função de ativação</strong>. Uma função aplicada sobre a saída
+de um modelo linear que restringe a resposta à um certo intervalo.</p>
+
+<p>Abaixo estão alguns exemplos de funções de ativação.</p>
+
+<ul>
+  <li>
+    <p><strong>sigmoid</strong> (sig), restringindo a saída ao intervalo $[0, 1]$:</p>
+
+\[\sigma(x) = \frac{1}{1 + e^{-x}}\]
+  </li>
+  <li>
+    <p><strong>tangente hiperbólica</strong> (tanh), restringindo a saída ao intervalo $[-1, 1]$:</p>
+
+\[\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}\]
+  </li>
+  <li>
+    <p><strong>rectifier linear unit</strong> (relu), restringindo a saída ao intervalo $[0, \infty)$:</p>
+
+\[\text{relu}(x) = \max(x, 0)\]
+  </li>
+</ul>
+
+<p>Veja mais exemplos na página de <a href="https://en.wikipedia.org/wiki/Activation_function">funções de ativação</a>
+no Wikipedia.</p>
+
+<p>Usando $\sigma$ (ou função logística), por exemplo, podemos restringir
+a saída de um modelo de regressão linear à um número entre 0.0 e 1.0, que pode
+ser interpretado como uma medida de proximidade entre as respostas <code class="language-plaintext highlighter-rouge">não</code> e <code class="language-plaintext highlighter-rouge">sim</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+
+<span class="n">cancer</span> <span class="o">=</span> <span class="n">datasets</span><span class="p">.</span><span class="n">load_breast_cancer</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">sigma</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">a</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+
+<span class="n">s</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="n">cancer</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">shape</span>
+<span class="n">w0</span><span class="p">,</span> <span class="n">b0</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">f</span><span class="p">),</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">cancer</span><span class="p">.</span><span class="n">data</span><span class="p">,</span> <span class="n">w0</span><span class="p">,</span> <span class="n">b0</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">'true labels:'</span><span class="p">,</span> <span class="n">cancer</span><span class="p">.</span><span class="n">target</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'predictions:'</span><span class="p">,</span> <span class="n">p</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p>A função $\sigma$ não é linear. Porém, essa só é aplicada ao sinal
+após este ser dilatado e deslocado pela operação $x\cdot w + b$.
+As variáveis de peso $w$ e $b$ se relacionam linearmente com o sinal
+de entrada $x$. O processo de otimização do sistema é portanto linear
+com respeito as variáveis treináveis.</p>
+
+<h3 id="um-exemplo-prático-breast-cancer-wisconsin-diagnostic-database">Um exemplo prático: Breast Cancer Wisconsin (Diagnostic) Database</h3>
+
+<blockquote>
+  <p>Features are computed from a digitized image of a fine needle aspirate (FNA) of a breast mass.</p>
+</blockquote>
+
+<p>Este conjunto de dados possui 569 amostras descrevendo áreas extraída de
+tecido de mama através de 30 características, como raio, textura, perímetro e área.
+As amostras foram então classificadas em <code class="language-plaintext highlighter-rouge">0: malignas</code> e <code class="language-plaintext highlighter-rouge">1: benignas</code>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sacred</span> <span class="kn">import</span> <span class="n">Experiment</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_breast_cancer</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">accuracy_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">ex</span> <span class="o">=</span> <span class="n">Experiment</span><span class="p">(</span><span class="s">'training-a-logistic-regression-model'</span><span class="p">)</span>
+
+<span class="o">@</span><span class="n">ex</span><span class="p">.</span><span class="n">config</span>
+<span class="k">def</span> <span class="nf">my_config</span><span class="p">():</span>
+  <span class="n">workers</span> <span class="o">=</span> <span class="mi">1</span>
+  <span class="n">test_size</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span>
+  <span class="n">split_random_state</span> <span class="o">=</span> <span class="mi">42</span>
+
+<span class="o">@</span><span class="n">ex</span><span class="p">.</span><span class="n">automain</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">test_size</span><span class="p">,</span> <span class="n">workers</span><span class="p">,</span> <span class="n">split_random_state</span><span class="p">):</span>
+  <span class="n">dataset</span> <span class="o">=</span> <span class="n">load_breast_cancer</span><span class="p">()</span>
+  <span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">.</span><span class="n">data</span><span class="p">,</span> <span class="n">dataset</span><span class="p">.</span><span class="n">target</span><span class="p">,</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="n">test_size</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="n">split_random_state</span><span class="p">)</span>
+
+  <span class="n">model</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">workers</span><span class="p">)</span>
+  <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+  <span class="k">print</span><span class="p">(</span><span class="s">'train accuracy:'</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_train</span><span class="p">)))</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">'test accuracy:'</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)))</span>
+
+  <span class="k">print</span><span class="p">(</span><span class="s">'y:'</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">'p:'</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">))</span>
+
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python training_logistic_regressor with <span class="nv">seed</span><span class="o">=</span>42
+train accuracy: 0.955145118734
+<span class="nb">test </span>accuracy: 0.957894736842
+y: <span class="o">[</span>1 0 0 1 1 0 0 0 1 1 1 0 1 0 1 0 1 1 1 0 ...]
+p: <span class="o">[</span>1 0 0 1 1 0 0 0 1 1 1 0 1 0 1 0 1 1 1 0 ...]
+</code></pre></div></div>
+
+<h3 id="considerações-finais-em-regressão-logística">Considerações finais em regressão logística</h3>
+
+<p>Mesmo com a não-linearidade aplicada sobre o sinal na regressão logística,
+ela (assim como a regressão linear) ainda é extremamente limitada. Ambas só
+admitem uma liberdade linear, sempre aproximando uma reposta por uma reta.
+Para alguns problemas, como <strong>Boston</strong> ou <strong>Breast Cancer</strong>, tal liberdade
+já é suficiente para uma resposta satisfatória. Entretanto, problemas reais
+muitas vezes são mais difíceis e não-lineares.</p>
+
+<h2 id="sistemas-não-lineares">Sistemas não-lineares</h2>
+
+<p>Uma função de erro $E$, definida sobre
+um modelo $\sigma(w\cdot x + b)$, não é quadrática e múltiplos pontos de mínimo podems existir:</p>
+
+<center>
+  <figure class="equation">
+    <img src="/assets/images/posts/ml/nonlinear/nonlinear-f.webp" alt="Gráfico de uma função não linear, de ordem superior à quadrática." style="width:100%; max-width:500px" />
+  </figure>
+</center>
+
+<p>Computar a solução ótima pode ser, portanto, infactível. O ponto positivo é que a
+função se mantém contínua! Esse é o único requisito para podermos treinar com o
+método <code class="language-plaintext highlighter-rouge">mini-batch stochastic gradient descent</code>. O vetor oposto ao gradiente,
+computado sobre um ponto-referencial inicial aleatório, ainda aponta para a
+direção de maior decremento <strong>local</strong> da função de erro.</p>
+
+<center>
+  <figure class="equation">
+    <img src="/assets/images/posts/ml/nonlinear/nonlinear-iterative-loss-improvement.webp" alt="Melhoramento iterativo de erro pelo método 'Gradient Descent'." style="width:100%; max-width:500px" />
+  </figure>
+</center>
+
+<p>Como o espaço de otimização possui vários pontos de mínimo, a solução não é
+mais garantidamente ótima. Entretanto, a sensação que temos ao observar os
+experimentos empíricos conduzidos até hoje é que as soluções encontradas são
+suficientemente boas, próximas à ótima. É claro que vários melhoramentos ainda
+podem ser feitos:</p>
+
+<ul>
+  <li><strong>random restart</strong>: o treinamento é feito múltiplas vezes, considerando-se múltiplos pontos
+de início. Os melhores pesos são mantidos.</li>
+  <li><strong>simulated annealing</strong>: os passos feitos na modificação dos parâmetros do modelo
+são bruscos e vão graduamente diminuindo. Isso pode ajudar o modelo à superar vales e atingir
+melhores pontos de mínimo. Este nome remete à ideia de metal sendo modelado nas fornaças,
+onde ele começa “quente e maleável” e termina “frio e rígido”.</li>
+</ul>
+
+<h3 id="problemas-multi-classes">Problemas multi-classes</h3>
+
+<p>Nem sempre a resposta é 0 ou 1. Muitas vezes, as amostras no problema em mãos
+se distribuem por multiplas classes. O conjunto de dados <a href="http://image-net.org">ImageNet</a>,
+por exemplo, contém imagens de 1000 classes diferentes.</p>
+
+<p>Ainda assim, estes são facilmente traduzidos para o que já sabemos: cada classe pode
+ser codificada em um número:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="p">[...]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">classes</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">([</span><span class="s">'car'</span><span class="p">,</span> <span class="s">'boat'</span><span class="p">,</span> <span class="s">'motorcycle'</span><span class="p">,</span> <span class="s">'airplane'</span><span class="p">,</span> <span class="s">'spaceshuttle'</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'decoded labels:'</span><span class="p">,</span> <span class="n">classes</span><span class="p">[</span><span class="n">y</span><span class="p">])</span>
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>decoded labels: <span class="o">[</span><span class="s1">'car'</span>, <span class="s1">'car'</span>, <span class="s1">'spaceshuttle'</span>, <span class="s1">'boat'</span>, <span class="s1">'motorcycle'</span>, <span class="s1">'airplane'</span>, ...]
+</code></pre></div></div>
+
+<p>E em seguida em um vetor binário, o que comumente chamamos de “<em>one-hot encoding</em>”:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">onehot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">classes</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">classes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+  <span class="n">encoded</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">classes</span><span class="p">)</span>
+  <span class="n">encoded</span><span class="p">[:,</span> <span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+  <span class="k">return</span> <span class="n">encoded</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">onehot</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[[</span>1, 0, 0, 0, 0],
+ <span class="o">[</span>1, 0, 0, 0, 0],
+ <span class="o">[</span>0, 0, 0, 0, 1],
+ ...]
+</code></pre></div></div>
+
+<p>Treinamos agora <code class="language-plaintext highlighter-rouge">len(classes)</code> regressores logísticos (faça <code class="language-plaintext highlighter-rouge">w</code> ser uma matriz,
+onde cada linha é um regressor diferente). Cada um retornará um valor <code class="language-plaintext highlighter-rouge">p_i</code>,
+contido no intervalo <code class="language-plaintext highlighter-rouge">[0, 1]</code>, que pode ser interpretado como a probabilidade de
+uma determinada amostra pertencer à classe <code class="language-plaintext highlighter-rouge">i</code>. A classe com maior valor <code class="language-plaintext highlighter-rouge">p_i</code> é
+a mais provável predição da amostra <code class="language-plaintext highlighter-rouge">x</code>, e pode ser decodificada pela função
+<code class="language-plaintext highlighter-rouge">argmax</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">w0</span><span class="p">,</span> <span class="n">b0</span> <span class="o">=</span> <span class="n">r</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">classes</span><span class="p">),</span> <span class="n">features</span><span class="p">),</span> <span class="n">r</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span>
+<span class="n">onehot_p</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w0</span><span class="p">,</span> <span class="n">b0</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+<span class="n">decoded_p</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'decoded predictions:'</span><span class="p">,</span> <span class="n">classes</span><span class="p">[</span><span class="n">decoded_p</span><span class="p">][:</span><span class="mi">3</span><span class="p">])</span>
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>decoded predictions: <span class="o">[</span><span class="s1">'car'</span>, <span class="s1">'boat'</span>, <span class="s1">'spaceshuttle'</span><span class="o">]</span>
+</code></pre></div></div>
+
+<h2 id="redes-artificiais">Redes Artificiais</h2>
+
+<p>As redes artificiais são modelos de aprendizado de máquina que generalizam regressores lineares,
+logísticos e SVMs. Na verdade, redes são genéricas o suficiente para aproximar todo
+e qualquer função (e portanto todo e qualquer modelo).</p>
+
+<p>Muitos autores abordam redes artificiais fazendo um paralelo à redes neurais
+cerebrais nos seres-humanos, já que a inspiração original era essa. Eu,
+particularmente, não sou o maior fã dessa visão, pois (a) o conceito de redes
+neurais não ajuda muito no entendimento da composição formal (o porquê elas
+funcionam) das redes artificiais e (b) as redes artificias não chegam nem perto
+de descrever a complexidade do cérebro humano, sendo simplesmente uma
+aproximação muito distante do modelo teórico que temos atualmente.</p>
+
+<p>Considere o conjunto de dados exemplo abaixo:</p>
+
+<center>
+<figure class="equation">
+  <img src="/assets/images/posts/ml/nonlinear/nonlinear-dataset-a.webp" alt="Um conjunto de dados não linearmente separável em duas dimensões." style="width:100%; max-width:500px" />
+</figure>
+</center>
+
+<p>Não existe reta que separa as classes vermelho e azul. Dizemos que este conjunto
+é <strong>não linearmente separável</strong>. Uma consequência disso é que não existe modelo
+linear que aprende esse conjunto satisfatóriamente.</p>
+
+<p>Nós precisamos inserir não-linearidade no nosso modelo. Um jeito simples é
+usar uma função de ativação radial (sim, ela existe). Com essa função,
+o modelo classificaria todas as amostras que estão dentro de um raio <code class="language-plaintext highlighter-rouge">r</code>,
+transladados por um ponto <code class="language-plaintext highlighter-rouge">p</code> (o epicentro do radial), em um grupo e os demais
+em outro. Isso funciona pra esse caso, mas e se o conjunto fosse um 1-torus
+(uma rosquinha), 2-torus?</p>
+
+<center>
+<figure class="equation">
+  <img src="/assets/images/posts/ml/nonlinear/orientable_surfaces.webp" alt="A esfera, o 1-torus e o 2-torus." style="width:100%; max-width:500px" />
+  <figcaption>
+    A esfera, o 1-torus e o 2-torus.
+    Disponível em: <a href="http://laerne.github.io/">laerne.github.io</a>
+  </figcaption>
+</figure>
+</center>
+
+<p>Existem infinitos casos onde a radial não funcionaria, exatamente como existem
+infintos casos para a linear ou qualquer outra função.</p>
+
+<p>Seria bem da hora se:</p>
+
+<ul>
+  <li>conseguissemos inserir não-linearidade no modelo</li>
+  <li>fosse genérico o suficiente para funcionar pra qualquer conjunto, em qualquer forma</li>
+  <li>construir isso só com o que nós aprendemos até aqui (<code class="language-plaintext highlighter-rouge">w*x + b</code>, <code class="language-plaintext highlighter-rouge">sigma(x)</code> etc)</li>
+</ul>
+
+<blockquote>
+  <p>Sim. Isso é possível e é bem simples. Tente pensar um pouco antes de continuar
+lendo.</p>
+</blockquote>
+
+<h3 id="projeção-para-espaços-de-maior-dimensionalidade">Projeção para espaços de maior dimensionalidade</h3>
+
+<p>Com duas dimensões, o conjunto é não-linearmente separável; porém ele o seria
+facilmente com três dimensões:</p>
+
+<center>
+<figure class="equation">
+  <img src="/assets/images/posts/ml/nonlinear/nonlinear-dataset-b.webp" alt="Um conjunto de dados linearmente separável em três dimensões." style="width:100%; max-width:500px" />
+</figure>
+</center>
+
+<p>Perceba que é o mesmo conjunto, mas ele foi “projetado” para três dimensões
+de tal forma que, agora, um hiperplano de decisão é fácilmente desenhável.</p>
+
+<p>Da mesma forma que o nosso regressor logístico aprendeu como discriminar
+amostras corretamente, podemos treinar um modelo <code class="language-plaintext highlighter-rouge">(w, b)</code> (uma camada, na
+verdade) que aprenda uma projeção não-linear para um espaço de maior
+dimensionalidade que separe corretamente os dados:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+
+<span class="k">def</span> <span class="nf">dense</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+  <span class="c1"># Apply a 'Dense' layer.
+</span>  <span class="k">return</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span>
+<span class="n">cancer</span> <span class="o">=</span> <span class="n">datasets</span><span class="p">.</span><span class="n">load_breast_cancer</span><span class="p">()</span>
+<span class="n">samples</span><span class="p">,</span> <span class="n">features</span> <span class="o">=</span> <span class="n">cancer</span><span class="p">.</span><span class="n">shape</span>
+
+<span class="n">units</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">weights</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">(</span><span class="n">r</span><span class="p">(</span><span class="n">units</span><span class="p">,</span> <span class="n">features</span><span class="p">),</span> <span class="n">r</span><span class="p">(</span><span class="n">units</span><span class="p">)),</span>
+  <span class="p">(</span><span class="n">r</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="p">),</span> <span class="n">r</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="p">]</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">cancer</span><span class="p">.</span><span class="n">data</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">dense</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">weights</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">weights</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="s">'fc1'</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">dense</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">weights</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">weights</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="s">'predictions'</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>O que aconteceu acima:</p>
+
+<ol>
+  <li>os dados, no espaço de entrada <code class="language-plaintext highlighter-rouge">R^2</code> foram projetados para um um espaço de
+<code class="language-plaintext highlighter-rouge">units</code> (três) dimensões</li>
+  <li>as amostras foram classificadas com base em suas projeções</li>
+</ol>
+
+<blockquote>
+  <p>O termo “units” vem da ideia de que existem “unidades de ativação” em uma
+certa camada. Antigamente, esse conceito era constantemente denominado de “neurônios”.</p>
+</blockquote>
+
+<h3 id="treinando-redes-de-múltiplas-camadas">Treinando redes de múltiplas camadas</h3>
+
+<p>Considere a rede de múltiplas camadas abaixo.</p>
+
+<center>
+  <figure class="equation">
+    <img src="/assets/images/posts/ml/nonlinear/network.webp" alt="Uma rede de 2 camadas" />
+  </figure>
+</center>
+
+<p>Toda rede pode ser expressa como uma função de uma entrada e de todos os
+seus parâmetros. A rede acima não é exceção:</p>
+
+<center>
+  <figure class="equation">
+    <img src="/assets/images/posts/ml/nonlinear/network_equation.webp" alt="Equação da rede acima: y(x, \theta) = \sigma(w_{2\_} \cdot \sigma(w_{1\_} \cdot x + b_1) + b_2)" style="width:100%; max-width:600px" />
+  </figure>
+</center>
+
+<p>Já sabemos calcular o treinamento dos pesos da camada <code class="language-plaintext highlighter-rouge">y</code> (<code class="language-plaintext highlighter-rouge">w^2</code> e <code class="language-plaintext highlighter-rouge">b^2</code>),
+usando o método  <code class="language-plaintext highlighter-rouge">Mini-batch Stochastic Gradient Descent</code>. Falta treinar os
+pesos das camadas internas. O algoritmo que faz isso é chamado de
+<strong>backward error propagation</strong> ou backprop.</p>
+
+<p>A ideia aqui geral do backprop é iterativamente propagar o erro para as
+camadas anteriores (neste caso, <code class="language-plaintext highlighter-rouge">a</code>) e utilizar o SGD para reduzir os
+parâmetros daquela camada em específico; repetindo o processo até que todas as
+camadas tenham sido atualizadas.</p>
+
+<center>
+  <figure class="equation">
+    <img src="/assets/images/posts/ml/backprop-equations.webp" alt="Equações do backward error propagation." />
+  </figure>
+</center>
+
+<p>Aplicada ao problema do conjunto não linearmente separável, é bem possível que
+a camada interna aprenda a simular a função radial, já que ela é uma resposta
+válida para o problema.
+Se isso te faz questionar “por que não usar a radial logo de cara?”, a
+diferença é que nós aprendemos a função que separa os dados. Se os dados
+fossem outros, com outra função separadora, teríamos a aprendido
+sem problemas! :-)</p>
+
+<blockquote>
+  <p>Uma rede com duas camadas é comumente denominada <strong>aproximador universal</strong>,
+devido a sua teorica capacidade de aproximar toda e qualquer função. Embora
+esta afirmação seja apoiada de um teorema, nada podemos afirmar em relação
+à complexidade necessária para treiná-la.</p>
+</blockquote>
+
+<h3 id="últimas-dicas-softmax-e-cross-entropy">Últimas dicas (softmax e cross-entropy)</h3>
+
+<p>Se o sinal de saída <code class="language-plaintext highlighter-rouge">y</code> é <em>one-hot encoded</em> e as amostras se distribuem
+mutualmente disjuntas umas das outras (uma amostra pertence à uma única
+classe), podemos substituir a função <code class="language-plaintext highlighter-rouge">sigma</code> por uma melhor, o <code class="language-plaintext highlighter-rouge">softmax</code>.</p>
+
+<center>
+  <figure class="equation">
+    <img src="/assets/images/posts/ml/eq-softmax.webp" alt="A equação softmax: 's(x) = e^x/sum(e^x)'" style="width:100%; max-width:250px" />
+  </figure>
+</center>
+
+<p><code class="language-plaintext highlighter-rouge">softmax</code> exponencializa todos os sinais de entrada, o que os torna
+extritamente positivos sem desordená-los (pela propriedade da exponencial,
+“estritamente crescente”, <code class="language-plaintext highlighter-rouge">x &gt; y =&gt; e^x &gt; e^y</code>). Isso é importante pois mantém
+unidades com alto nível de ativação como “importantes”, enquanto unidades
+de baixo nível de ativação se mantém como “não importantes”.
+Finalmente, ela normaliza cada saída pelo valor total, o que resulta em uma
+distribuição probabilistica. Isto é, uma imagem de um cachorro entra numa rede
+que separa entre cachorros, gatos e cavalos. Com sorte, um vetor próximo à
+<code class="language-plaintext highlighter-rouge">(.95, .02, .03)</code> vai ser a resposta.</p>
+
+<p>Além disso, usualmente empregamos a (<em>binary</em> ou <em>categorical</em>)
+<strong>cross-entropy loss</strong> em tarefas de classificação:</p>
+
+<center>
+  <figure class="equation">
+    <img src="/assets/images/posts/ml/eq-crossentropy.webp" alt="A equação da 'binary cross-entropy loss': 'E(y, p) = - \sum_i y_i \log p_i'" style="width:100%; max-width:500px" />
+  </figure>
+</center>
+
+<p>Existem alguns motivos para isso:</p>
+
+<ul>
+  <li>diferente do <code class="language-plaintext highlighter-rouge">mse</code>, <code class="language-plaintext highlighter-rouge">cross-entropy</code> é uma função limitada superiormente</li>
+  <li>a perda é 0 para todas as saídas <code class="language-plaintext highlighter-rouge">i</code> onde <code class="language-plaintext highlighter-rouge">y_i</code> é 0. Em outras palavras, <code class="language-plaintext highlighter-rouge">cross-entropy</code>
+só se importa em ajustar os pesos da unidade que corresponde à classificação
+correta da amostra sendo vista, deixando que as outras unidades sejam ajustadas
+quando amostras correspondentes à elas forem passadas</li>
+  <li><code class="language-plaintext highlighter-rouge">mse</code> se constrói em cima da ideia de distância, o que provoca a gradual
+decrescimento do efeito de atualização dos pesos (ou <em>learning slowdown</em>)
+durante o treino, quando as saídas reais se aproximam numericamente das
+saídas esperadas; <code class="language-plaintext highlighter-rouge">cross-entropy</code> resolve isso por sua equação não
+envolver distâncias, explicitamente</li>
+</ul>
+
+<h3 id="exemplo-prático-mnist">Exemplo prático: MNIST</h3>
+
+<p>Várias amostras de dígitos escritos a mão. O objetivo aqui é classificar uma
+amostra entre os 10 diferentes dígitos.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">keras</span>
+<span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">callbacks</span>
+<span class="kn">from</span> <span class="nn">keras.datasets</span> <span class="kn">import</span> <span class="n">mnist</span>
+<span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">InputLayer</span><span class="p">,</span> <span class="n">Dense</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="kn">from</span> <span class="nn">sacred</span> <span class="kn">import</span> <span class="n">Experiment</span>
+
+<span class="n">ex</span> <span class="o">=</span> <span class="n">Experiment</span><span class="p">(</span><span class="s">'training-dense-network'</span><span class="p">)</span>
+
+
+<span class="o">@</span><span class="n">ex</span><span class="p">.</span><span class="n">config</span>
+<span class="k">def</span> <span class="nf">my_config</span><span class="p">():</span>
+    <span class="n">epochs</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">128</span>
+    <span class="n">num_classes</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">valid_size</span> <span class="o">=</span> <span class="p">.</span><span class="mi">25</span>
+    <span class="n">early_stopping_patience</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="s">'SGD'</span>
+    <span class="n">ckpt</span> <span class="o">=</span> <span class="s">'./optimal_weights.hdf5'</span>
+
+
+<span class="o">@</span><span class="n">ex</span><span class="p">.</span><span class="n">automain</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span> <span class="n">valid_size</span><span class="p">,</span> <span class="n">ckpt</span><span class="p">,</span>
+         <span class="n">early_stopping_patience</span><span class="p">):</span>
+    <span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span> <span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span> <span class="o">=</span> <span class="n">mnist</span><span class="p">.</span><span class="n">load_data</span><span class="p">()</span>
+
+    <span class="n">x_train</span> <span class="o">=</span> <span class="n">x_train</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">60000</span><span class="p">,</span> <span class="mi">784</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span> <span class="o">/</span> <span class="mi">255</span>
+    <span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">784</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span> <span class="o">/</span> <span class="mi">255</span>
+
+    <span class="n">x_train</span><span class="p">,</span> <span class="n">x_valid</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+        <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">valid_size</span><span class="p">)</span>
+
+    <span class="c1"># one-hot encode train and test
+</span>    <span class="n">y_train</span> <span class="o">=</span> <span class="n">keras</span><span class="p">.</span><span class="n">utils</span><span class="p">.</span><span class="n">to_categorical</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)</span>
+    <span class="n">y_valid</span> <span class="o">=</span> <span class="n">keras</span><span class="p">.</span><span class="n">utils</span><span class="p">.</span><span class="n">to_categorical</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)</span>
+    <span class="n">y_test</span> <span class="o">=</span> <span class="n">keras</span><span class="p">.</span><span class="n">utils</span><span class="p">.</span><span class="n">to_categorical</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">([</span>
+      <span class="n">InputLayer</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">768</span><span class="p">]),</span>
+      <span class="n">Dense</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'fc1'</span><span class="p">),</span>
+      <span class="n">Dense</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'fc2'</span><span class="p">),</span>
+      <span class="n">Dense</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'softmax'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'predictions'</span><span class="p">)</span>
+    <span class="p">])</span>
+    <span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+                  <span class="n">loss</span><span class="o">=</span><span class="s">'categorical_crossentropy'</span><span class="p">,</span>
+                  <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">])</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span>
+                  <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                  <span class="n">epochs</span><span class="o">=</span><span class="n">epochs</span><span class="p">,</span>
+                  <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                  <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">x_valid</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">),</span>
+                  <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span>
+                      <span class="n">callbacks</span><span class="p">.</span><span class="n">EarlyStopping</span><span class="p">(</span><span class="n">patience</span><span class="o">=</span><span class="n">early_stopping_patience</span><span class="p">),</span>
+                      <span class="n">callbacks</span><span class="p">.</span><span class="n">ModelCheckpoint</span><span class="p">(</span><span class="n">ckpt</span><span class="p">,</span> <span class="n">save_best_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                  <span class="p">])</span>
+    <span class="k">except</span> <span class="nb">KeyboardInterrupt</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'interrupted'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'done'</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">'reloading optimal weights...'</span><span class="p">)</span>
+    <span class="n">model</span><span class="p">.</span><span class="n">load_weights</span><span class="p">(</span><span class="n">ckpt</span><span class="p">)</span>
+
+    <span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'test loss:'</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'test accuracy:'</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python training_dense_network.py with <span class="nv">seed</span><span class="o">=</span>42
+Train on 45000 samples, validate on 15000 samples
+Epoch 1/20
+44928/45000 <span class="o">[==&gt;</span>.] - ETA: 0s - loss: 1.2223 - acc: 0.7549Epoch 00001: val_loss improved from inf to 0.62518, saving model to ./optimal_weights.hdf5
+45000/45000 <span class="o">[====]</span> - 13s 288us/step - loss: 1.2214 - acc: 0.7551 - val_loss: 0.6252 - val_acc: 0.8597
+...
+Epoch 20/20
+44928/45000 <span class="o">[==&gt;</span>.] - ETA: 0s - loss: 0.1678 - acc: 0.9533Epoch 00020: val_loss improved from 0.19170 to 0.18757, saving model to ./optimal_weights.hdf5
+45000/45000 <span class="o">[====]</span> - 13s 284us/step - loss: 0.1680 - acc: 0.9532 - val_loss: 0.1876 - val_acc: 0.9470
+reloading optimal weights...
+<span class="nb">test </span>loss: 0.171604911404
+<span class="nb">test </span>accuracy: 0.9512
+INFO - training-a-keras-model - Completed after 0:04:27
+</code></pre></div></div>
+
+<p>Pra ilustrar, podemos exibir alguns dígitos e pedir para o modelo predizer quais são estes.
+Também pode ser útil visualizar as amostras que estamos errando.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="k">def</span> <span class="nf">plot_digits_and_predictions</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">24</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">,</span> <span class="n">_p</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">)):</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">_x</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">))</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="s">'off'</span><span class="p">)</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Digit %i'</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="n">_y</span><span class="p">))</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">_p</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">'crimson'</span><span class="p">)</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)))</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">yticks</span><span class="p">([</span><span class="n">i</span> <span class="o">/</span> <span class="mi">100</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">25</span><span class="p">)],</span>
+                   <span class="p">[</span><span class="s">'%i%%'</span> <span class="o">%</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">25</span><span class="p">)])</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Label Probability'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+<span class="n">p_test</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+
+<span class="n">plot_digits_and_predictions</span><span class="p">(</span><span class="n">x_test</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span>
+                            <span class="n">y_test</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span>
+                            <span class="n">p_test</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span>
+                            <span class="s">'digit-predictions.webp'</span><span class="p">)</span>
+
+<span class="n">misses</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">p_test</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="n">y_test</span>
+<span class="c1"># retain only the first 10 incorrect predictions
+</span><span class="n">plot_digits_and_predictions</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="n">misses</span><span class="p">][:</span><span class="mi">10</span><span class="p">],</span>
+                            <span class="n">y_test</span><span class="p">[</span><span class="n">misses</span><span class="p">][:</span><span class="mi">10</span><span class="p">],</span>
+                            <span class="n">p_test</span><span class="p">[</span><span class="n">misses</span><span class="p">][:</span><span class="mi">10</span><span class="p">],</span>
+                            <span class="s">'digit-wrong-predictions.webp'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Pelas imagens na coluna à esquerda abaixo, o modelo parece classificar com
+bastante certeza as primeiras 10 amostras do conjunto de teste.
+Quanto à amostras classificadas incorretamente (coluna à direita),
+observamos que <strong>algumas</strong> amostras apresentam forte variação no estilo de
+escrita (o primeiro dígito, por exemplo, não se parece um perfeitamente claro 5).</p>
+
+<center>
+<div class="row">
+  <div class="col-6 m0">
+     <figure class="equation">
+      <img src="/assets/images/posts/ml/nonlinear/digit-predictions.webp" alt="Alguns dígitos e as predições da rede referentes à eles." class="img-fluid" />
+    </figure>
+  </div>
+  <div class="col-6 m0">
+     <figure class="equation">
+      <img src="/assets/images/posts/ml/nonlinear/digit-wrong-predictions.webp" alt="Alguns dígitos preditos como incorreto pela rede." class="img-fluid" />
+    </figure>
+  </div>
+</div>
+</center>
+
+<p>Dica I: tente mudar o otimizador de <code class="language-plaintext highlighter-rouge">SGD</code> para <code class="language-plaintext highlighter-rouge">adam</code> e veja o grande aumento
+em performance:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python training_dense_network.py with <span class="nv">optimizer</span><span class="o">=</span><span class="s2">"adam"</span> <span class="nv">seed</span><span class="o">=</span>42
+Train on 45000 samples, validate on 15000 samples
+Epoch 1/20
+44800/45000 <span class="o">[==&gt;</span>.] - ETA: 0s - loss: 0.2195 - acc: 0.9344Epoch 00000: val_loss improved from inf to 0.10569, saving model to ./optimal_weights.hdf5
+45000/45000 <span class="o">[====]</span> - 18s - loss: 0.2190 - acc: 0.9345 - val_loss: 0.1057 - val_acc: 0.9691
+...
+Epoch 5/20
+44800/45000 <span class="o">[==&gt;</span>.] - ETA: 0s - loss: 0.0277 - acc: 0.9909Epoch 00004: val_loss improved from 0.09160 to 0.07897, saving model to ./optimal_weights.hdf5
+45000/45000 <span class="o">[====]</span> - 19s - loss: 0.0279 - acc: 0.9909 - val_loss: 0.0790 - val_acc: 0.9787
+Epoch 6/20
+44800/45000 <span class="o">[==&gt;</span>.] - ETA: 0s - loss: 0.0200 - acc: 0.9932Epoch 00005: val_loss did not improve
+45000/45000 <span class="o">[====]</span> - 16s - loss: 0.0201 - acc: 0.9932 - val_loss: 0.0941 - val_acc: 0.9769
+...
+Epoch 11/20
+44800/45000 <span class="o">[==&gt;</span>.] - ETA: 0s - loss: 0.0138 - acc: 0.9956Epoch 00010: val_loss did not improve
+45000/45000 <span class="o">[====]</span> - 16s - loss: 0.0137 - acc: 0.9956 - val_loss: 0.1139 - val_acc: 0.9745
+reloading optimal weights...
+<span class="nb">test </span>loss: 0.107181316118
+<span class="nb">test </span>accuracy: 0.9765
+INFO - training-a-keras-model - Completed after 0:03:12
+</code></pre></div></div>
+
+<blockquote>
+  <p>Acurácia em teste aumentou em metade do número de épocas. Se você está começando
+e não tem nenhuma informação sobre o problema, vá com <code class="language-plaintext highlighter-rouge">adam</code>.
+Se as coisas não funcionarem como deveriam, tente reduzir o <code class="language-plaintext highlighter-rouge">lr</code> ou usar
+métodos mais simples como o <code class="language-plaintext highlighter-rouge">SGD</code> ou <code class="language-plaintext highlighter-rouge">Momentum</code>.</p>
+</blockquote>
+
+<p>Uma rede densa sofre de vários problemas que a torna pouco indicada para
+para processamento de <em>raw data</em> (imagens, vídeos, audio). Ainda sim,
+tivemos um bom resultado sobre <strong>digits</strong>. A verdade é que esse conjunto
+é um brinquedo. Ele foi pre-processado ao ponto de remover quase todos
+os problemas comumente encontrados em problemas reais, o que o simplificou
+à um ponto extremo.</p>
+
+<p>No próximo <a href="/blog/intro-to-machine-learning/ml-convolution/">post</a>, nós vamos ver
+alguns problemas mais complicados e como redes neurais (profundas) podem ser utilizadas para resolvê-los.</p>
+
+        </div>
+      </article>
+
+      
+      <div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://lucasdavid-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      
+    </div>
+  </div>
+</div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+  integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"
+  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
+  integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '\\[', right: '\\]', display: true}, {left: '$', right: '$', display: false},{left: '\\(', right: '\\)', display: false}]});"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+<script>
+  anchors.options = { icon: '#' };
+  anchors.add();
+</script>
+
+
+  <!-- <svg id="visual" viewBox="0 0 1980 300"  class="curve-container__curve curve-three" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <path
+    d="M0 69L55 90.2C110 111.3 220 153.7 330 169.8C440 186 550 176 660 165.5C770 155 880 144 990 139.2C1100 134.3 1210 135.7 1320 137.7C1430 139.7 1540 142.3 1650 155.5C1760 168.7 1870 192.3 1925 204.2L1980 216L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#d3d3d3"></path>
+  <path
+    d="M0 89L55 107.8C110 126.7 220 164.3 330 191.3C440 218.3 550 234.7 660 243.8C770 253 880 255 990 252.3C1100 249.7 1210 242.3 1320 228.8C1430 215.3 1540 195.7 1650 174.5C1760 153.3 1870 130.7 1925 119.3L1980 108L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#6a6a6a"></path>
+  <path
+    d="M0 229L55 232.3C110 235.7 220 242.3 330 244.3C440 246.3 550 243.7 660 247.3C770 251 880 261 990 254.8C1100 248.7 1210 226.3 1320 223.5C1430 220.7 1540 237.3 1650 233.8C1760 230.3 1870 206.7 1925 194.8L1980 183L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#121212"></path>
+</svg> -->
+<footer class="page-footer text-bg-dark bg-black-subtle d-print-none">
+  <div class="container">
+    <div class="mt-4 mb-5">
+      
+        <div class="row g-1 mb-4">
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Keras Explainable</h6>
+                <p class="card-text text-light">
+                  Clean implementations for AI explaining methods in Keras.
+<a href="https://github.com/lucasdavid/keras-explainable" target="_new">Code</a> and
+<a href="https://lucasdavid.github.io/keras-explainable" target="_new">docs</a> are available.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Supporting Study Material</h6>
+                <p class="card-text text-light">
+                  If you are an undergrad student and are looking for additional study material,
+check out our collaborative project <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Algorithms in TensorFlow</h6>
+                <p class="card-text text-light">
+                  I'm implementing all algorithms I find interesting using TensorFlow.
+You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">github.com/lucasdavid/algorithms-in-tensorflow</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">TF-Experiment</h6>
+                <p class="card-text text-light">
+                  And environment to run Machine Learning experiments based on components and mixins. Available at <a href="https://github.com/lucasdavid/tf-experiment">github.com/lucasdavid/tf-experiment</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Mineração de Dados Complexos</h6>
+                <p class="card-text text-light">
+                  Information around the extension program "Mineração de Dados Complexos (in Portuguese)" is available at
+<a href="https://www.ic.unicamp.br/~mdc/" target="_blank">ic.unicamp.br/~mdc/</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+    </div>
+
+    <div class="text-end mt-4">
+      
+
+
+<div class="fs-2">
+  
+    <a href="https://github.com/lucasdavid"
+      target="_blank"
+      ><i
+      aria-label="GitHub"
+      class="bi bi-github link-light"></i></a>
+  
+  
+    <a href="https://www.linkedin.com/in/ld7"
+      target="_blank"
+      title="LinkedIn"><i class="bi bi-linkedin text-primary sr-none"></i></a>
+  
+  <span itemscope itemtype="https://schema.org/Person">
+    <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+       target="orcid.widget"
+       rel="me noopener noreferrer"
+       title="ORCID"
+      ><img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 7px; width: 32px;"></a>
+  </span>
+  
+  <a href="http://stackoverflow.com/users/2429640/lucasdavid"
+     target="_blank"
+     title="Stackoverflow"><i class="bi bi-code-slash link-light sr-none"></i></a>
+  
+    <a href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q"
+      target="_blank"
+      title="Youtube"><i class="bi bi-youtube text-danger sr-none"></i></a>
+  
+    <a href="mailto:mb37410l3@mozmail.com"
+      target="_blank"
+      title="Mail"><i class="bi bi-envelope-fill link-light sr-none"></i></a>
+  
+  <a href="assets/docs/lucas-david-resume.pdf"
+     target="_blank"
+     title="Resume"><i class="bi bi-person-lines-fill link-light sr-none"></i></a>
+</div>
+
+    </div>
+    <div class="text-end">
+      <p>
+        ® Lucas David. Todos os direitos reservados.
+      </p>
+    </div>
+</div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous" defer></script>
+
+</body>
+</html>

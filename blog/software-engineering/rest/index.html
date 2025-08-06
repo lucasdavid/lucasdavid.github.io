@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Web APIs and REST – Lucas David</title>
+  <meta charset="utf-8" />
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="image_src" type="image/png" href="img_path" />
+
+
+<meta name="description" content="Some Needed Insight on the Whys of Application Interfaces" />
+<meta property="og:description" content="Some Needed Insight on the Whys of Application Interfaces" />
+<meta property="og:image" content="" />
+
+<meta name="author" content="Lucas David" />
+
+
+<meta property="og:title" content="Web APIs and REST" />
+<meta property="twitter:title" content="Web APIs and REST" />
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<link rel="alternate" type="application/rss+xml" title="Lucas David - my personal website/blog"
+      href="/feed.xml" />
+
+  
+  
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LG7FZ8VCHM"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-LG7FZ8VCHM');
+	</script>
+
+
+  
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+  <nav id="mainNav" class="navbar navbar-light bg-white navbar-expand-lg d-print-none border-bottom border-light ">
+  <div class="container-xl">
+    <button class="navbar-toggler rounded-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand fw-bold text-decoration-none p-1" href="/">Lucas David</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <span class="navbar-text navbar-excerpt">
+        Web APIs and REST
+      </span>
+      <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+      <ul class="navbar-nav mb-2 mb-lg-0 font-small">
+        <li class="nav-item"><a href="/" class="nav-link fw-bold link-dark fs-6">Home</a></li>
+        <li class="nav-item"><a href="/blog" class="nav-link fw-bold link-dark fs-6">Blog</a></li>
+        <li class="nav-item"><a href="/publications" class="nav-link fw-bold link-dark fs-6">Publications</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold link-dark fs-6" href="#" id="nbd-links-social" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Social
+          </a>
+          <ul class="dropdown-menu font-small dropdown-menu-end" aria-labelledby="nbd-links-social">
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://github.com/lucasdavid">
+                <i aria-label="GitHub" class="bi bi-github link-dark sr-none"></i>
+                Github</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://www.linkedin.com/in/ld7">
+                <i class="bi bi-linkedin text-primary sr-none"></i>
+                Linkedin</a></li>
+
+            <li itemscope itemtype="https://schema.org/Person">
+              <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+                  target="orcid.widget"
+                  rel="me noopener noreferrer"
+                  class="dropdown-item text-decoration-none"
+                >
+                <img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 5px; width: 16px;">
+                ORCID</a>
+            </li>
+
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="http://stackoverflow.com/users/2429640/lucasdavid">
+                <i class="bi bi-code-slash link-dark sr-none"></i>
+                Stackoverflow</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q">
+                <i class="bi bi-youtube text-danger sr-none"></i>
+                Youtube</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+</div>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12 col-xl-3 col-xxl-2 offset-xxl-1">
+      <div id="sidebar" class="">
+  <div class="text-center">
+    <a href="/" title="Home">
+      <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
+        class="img-fluid rounded-circle" style="width:100px" />
+    </a>
+    <p class="pt-2 font-small">
+      
+        <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
+      
+    </p>
+  </div>
+
+  
+</div>
+
+    </div>
+    <div id="table-of-contents-container-r" class="col-12 col-xl-3 col-xxl-2 order-xl-2">
+      
+      <div style="z-index: 0; font-size:0.8rem;">
+        <div id="table-of-contents" class="font-small">
+  <p class="border-bottom"><strong>Summary</strong></p>
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#a-regular-web-app">A “Regular” Web App</a></li>
+<li class="toc-entry toc-h2"><a href="#apis">APIs</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#a-toy-example---the-future-hopefully">A toy example - the future, hopefully</a></li>
+<li class="toc-entry toc-h3"><a href="#a-real---and-much-smaller---example">A real - and much smaller - example</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#rest">REST</a></li>
+<li class="toc-entry toc-h2"><a href="#rests-practical-concepts-in-web-services">REST’s practical concepts in web services</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#resources-and-end-points">Resources and end-points</a></li>
+<li class="toc-entry toc-h3"><a href="#methods">Methods</a></li>
+<li class="toc-entry toc-h3"><a href="#responses">Responses</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#who-implement-web-and-rest-apis">Who implement Web and REST APIs?</a></li>
+<li class="toc-entry toc-h2"><a href="#how-do-i-start-coding-my-own">How do I start coding my own?</a></li>
+<li class="toc-entry toc-h2"><a href="#conclusion">Conclusion</a></li>
+</ul>
+</div>
+
+      </div>
+      
+    </div>
+    <div class="col-12 col-xl-6">
+      <article class="post mb-4">
+        <header class="">
+          <h1 id="postTitle" class="fw-bold">Web APIs and REST</h1>
+          <p class="right-align mb-2 text-muted fs-5">
+            Some Needed Insight on the Whys of Application Interfaces <em>— October  2, 2017</em>
+          </p>
+          <div class="mb-4">
+            <span class="badges-container">
+  
+    <a href="/blog/tag/patterns"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Patterns</a>
+  
+</span>
+
+          </div>
+        </header>
+        <div class="article-content" style="margin-top: 4rem;">
+          <p><span>This</span> post will show you a different way to build web services, applications and pages. Well, at least I hope. The concept of APIs has been around for years but, statistically speaking, it’s still not so diffused as we’d like it to be. But first, I want to make it clear why I’ve opted for writing this post, which is mainly theoretical.</p>
+
+<p>Most of my posts are practical, as they focus on <strong>how</strong> to do things or <strong>how</strong> to use tools. I’ve decided, however, to slow down and write the <strong>why</strong> of web APIs. The reason for this is that I understand it sucks when someone is trying to teach us a different way of doing things and we don’t even know why we should you change. Web APIs are amazing and I want to try to convince you <strong>why</strong>. Thus, this post will cover exclusively the theory behind web APIs and REST.</p>
+
+<p>Since its start, the internet has come a long way. More and more, we’ve noticed a increasing pattern of migration from client native applications to web applications running on browsers (and the beginning of a new kind, <a href="http://www.sitepoint.com/top-7-hybrid-mobile-app-frameworks/">hybrids apps</a>). Easy distribution, multi-platform compatibility and contiguous connectivity are, of course, some of the features that made this transition so attractive.</p>
+
+<p>We were still trying to figure it out where were we going from there, but what we did know is that although we managed to create successful web applications and services, they were self-centered machines when it came to the services and information that they offered. In other words, they’d hardly “talk” or “provide” to anything else than a human. Of course, we started questioning this limitation: as a huge share of the world’s digital content is converging to web, how do we integrate machines (in the web context) to absorb and process their own contents without human-beings constant supervision?</p>
+
+<h2 id="a-regular-web-app">A “Regular” Web App</h2>
+
+<p>Imagine that you’re crating a service (like a e-commerce web page) and you will make it available to a set of costumers from your city. A common approach is to develop a <a href="https://ycoding.wordpress.com/2015/05/10/mvc/">MVC web application</a>, with your views rendering HTML code. When you finish your app, your costumers are finally able to access your service and start exchanging data (buying or selling).</p>
+
+<p>This data exchange will happen in two stages:</p>
+
+<ul>
+  <li>Clients will make HTTP requests to the server through browsers. This server will handle the request to your MVC application, which has a component router designed to interpret the request and trigger the proper action of the proper controller. The user’s requests are often simple queries, but sometimes they involve a lot more, such as a body containing data on it.</li>
+  <li>Your application will pre-process HTML code (to all requests, to all users) and give the result to the web server, which will send it to the browser which made the request. The browser will collect the page and analyze its content. Further requests might be made, in order to retrieve adjacent artifacts (images, style sheets, js code files, videos, audios etc).</li>
+</ul>
+
+<p>We can easily verify two holdbacks about this approach:</p>
+
+<ul>
+  <li><strong>Presents a confused data representation:</strong> all data retrieving from the server is polluted by HTML tags and plain text. How can a machine understand this? Well, it must have a deep understanding over which requests are valid on your service and with what data. It then needs to be able to extract the data from the polluted HTML response. This is often achieved with data mining techniques, and considering it’s a non-deterministic process, might produce wrong answers.</li>
+  <li><strong>Performance</strong>: the clients’ browsers are expecting a file with HTML code, your app must inevitably build this file, which entails that all requests will inevitably pass by your app. Performance bottlenecks are usually on database queries, but we can improve performance if the server doesn’t have to assemble every goddamn HTML page on the way. Every nanosecond counts. In overall, let the server takes care only of a couple of basic tasks, such as domain logic, data and security.</li>
+</ul>
+
+<p>That’s a lot of work if we want to create many clients (e.g.: Android or iOS apps) that absorb this service. Requiring well defined requests rules and implementing data mining algorithms… Is there a easier way?</p>
+
+<h2 id="apis">APIs</h2>
+
+<p>The term API stands for <a href="https://en.wikipedia.org/wiki/Application_programming_interface">Application Programming Interface</a>. The idea of web APIs is quite similar: two machines can “talk” and understand each other if they share a common, formal language. So before thinking about creating websites, buttons and input fields, developers should implement an API layer from a well known protocol. Following applications (including a web page, if desired) should then be able to fully communicate with that layer and produce meaningful results.</p>
+
+<figure>
+  <img src="https://lh6.googleusercontent.com/-u9hFxEK0OS8/T6a9yHaniHI/AAAAAAAAF_Y/prEsvdWrNtI/s550/rest.webp" alt="Different applications and platforms absorbing a single REST API (9lessions.com)" class="figure-img img-fluid rounded" />
+    <figcaption>Different applications and platforms absorbing a single REST API (9lessions.com). Available at:
+      <a href="http://www.9lessons.info/2012/05/create-restful-services-api-in-php.html">9lessons.info</a></figcaption>
+</figure>
+
+<p>Following this idea, we soon notice some advantages:</p>
+
+<ul>
+  <li>If the architecture that we use to program the APIs is sufficiently well known, we can integrate (with minimum or no effort what so ever) all machines in the world!</li>
+  <li>Performance is likely to increase compared to regular web apps, as APIs usually have a reduced set of responsibilities.</li>
+  <li>We can re-use a single back-end and only implement front-end applications for the many platforms currently existing (iOS, Android, Web browsers, native programs etc), therefore reducing work.</li>
+  <li>We encourage people all around the globe to contribute and create stuff over our APIs. Of course, we build things over other people’ APIs.</li>
+</ul>
+
+<h3 id="a-toy-example---the-future-hopefully">A toy example - the future, hopefully</h3>
+
+<p>Imagine a world where meteorological institutes (MI), traffic control systems (TCS), cars and even traffic regulation agents (TRA) have open APIs implemented.</p>
+
+<p>[caption id=”attachment_435” align=”aligncenter” width=”660”]<a href="https://ycoding.files.wordpress.com/2015/10/apis.webp"><img src="https://ycoding.files.wordpress.com/2015/10/apis.webp?w=660" alt="An example of multiple APIs integrated." width="660" height="512" class="size-large wp-image-435" /></a> An example of multiple APIs integrated on a graph organization, creating a meaningful anti-traffic-accident environment.[/caption]</p>
+
+<p>Such connectivity creates many possibilities:</p>
+
+<ul>
+  <li>The TCS could collect information from the cars, such as average speed, or count them. Finally, it could make this information available to all drivers.</li>
+  <li>The TCS could also collect data from the MI and automatically adjust streets’ limit speed based on if it’s raining or foggy.</li>
+  <li>Cars could retrieve data about these streets, such as the speed limit, length, accident rates etc, and alert the drivers if they are about to commit an infraction or suggest cautiousness in the following patches of the road.</li>
+  <li>TRA could ticket drivers who broke the law based on the data from their cars without actually stopping them.</li>
+  <li>TRA would be able to identify stolen cars and locate them based all data from the car and the TCS.</li>
+</ul>
+
+<h3 id="a-real---and-much-smaller---example">A real - and much smaller - example</h3>
+
+<p><a href="http://uheer.me">uheer.me</a> is a service that some friends and I developed a while ago. It’s a web app that stores channels, songs and some information about when these songs started playing. Peripheral applications can then extract those channels, songs and info and play it synchronously with the server. The idea is to throw silent disco parties or to use people’ cellphones as speakers, therefore reducing costs in buying/renting audio equipment.</p>
+
+<p><a href="https://ycoding.files.wordpress.com/2015/10/uheer1.webp"><img src="https://ycoding.files.wordpress.com/2015/10/uheer1.webp" alt="uheer.me" width="633" height="393" class="aligncenter size-full wp-image-428" /></a></p>
+
+<p>Applications can make a GET request to <a href="http://uheer.me/api/channels">uheer.me/api/Channels</a>, which produces the following response:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://uheer.me/api/Channels
+
+<span class="o">[</span>
+    <span class="o">{</span>
+        <span class="s2">"Id"</span>: 1,
+        <span class="s2">"Name"</span>: <span class="s2">"Blue"</span>,
+        <span class="s2">"Author"</span>: <span class="o">{</span>...<span class="o">}</span>,
+        ...,
+        <span class="s2">"Loops"</span>: <span class="nb">true</span>,
+        <span class="s2">"CurrentId"</span>: 1,
+        <span class="s2">"CurrentStartTime"</span>: <span class="s2">"2015-08-24T12:33:02.81"</span>,
+        <span class="s2">"DateCreated"</span>: <span class="s2">"2015-07-15T19:56:30.57"</span>,
+        <span class="s2">"DateUpdated"</span>: <span class="s2">"2015-08-24T12:34:49.34"</span>,
+        <span class="s2">"DateDeactivated"</span>: <span class="s2">"2015-08-24T12:34:49.34"</span>
+    <span class="o">}</span>,
+    ...
+<span class="o">]</span>
+</code></pre></div></div>
+
+<p>This is, in fact, all the data about the music channels registered in <a href="http://uheer.me">uheer</a>. With <code class="language-plaintext highlighter-rouge">CurrentStartTime</code>, <code class="language-plaintext highlighter-rouge">CurrentId</code> and the current time at the server (retrieved from the route <a href="http://uheer.me/api/status/now">uheer.me/api/Status/Now</a>, applications can infer in which position the song currently is and play it synchronously with the rest of the party. In our tests, we achieved multiple devices synchronized by 20ms!</p>
+
+<h2 id="rest">REST</h2>
+
+<blockquote>
+  <p><strong>#1</strong> In computing, Representational State Transfer (REST) is a software architecture style for building scalable web services. REST gives a coordinated set of constraints to the design of components in a distributed hypermedia system that can lead to a higher performing and more maintainable architecture. - <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">wikipedia</a></p>
+</blockquote>
+
+<p>Offering a completely different approach from SOAP, Representational State Transfer (REST) quickly became the most popular architecture used for building web APIs. Betting on simplicity, it allows the creation of beautiful APIs, generic enough to be understood by a large share (if not all) of systems.</p>
+
+<p>REST involves a <a href="http://www.restapitutorial.com/lessons/whatisrest.html">couple of core concepts</a>:</p>
+
+<ul>
+  <li><strong>Client-Server</strong>: shortly, a separation of concerns. The server is responsible for data storage, security, domain logic etc. Overall, it will focus on handling data instead of concerning about user interfaces or presentation, which will be tackled by the many clients that absorb the REST API. This clearly improves features such as scalability, simplicity, portability and maintainability.</li>
+  <li><strong>Stateless</strong>: the server doesn’t hold different, complex states. The communication with its peers is given through self-contained, self-explanatory requests and responses. Security should stop being offered by sessions (slow) and be implemented using tokens and protocols such as <a href="http://oauth.net/">oauth</a> (faster). The state, if any, will be stored by the clients, which have much less processing to do than the server.</li>
+  <li><strong>Cacheable</strong>: the server must implement partial or complete cache in order to increase performance when trading messages with its clients.</li>
+  <li><strong>Uniform interface</strong>: the server must implement a uniform interface with which the clients may interact. The server and the clients can then be implemented independently. This represents a considerable reduction of effort when building applications, as a single server may be re-used by different platforms. E.g.: a social network behind a REST API which can be easily absorbed by different platforms (web browsers, Android apps, iOS apps, native apps).</li>
+  <li><strong>Layered System</strong>: the API is composed by hierarchical layers, which are all seamless to client apps. This is ideal for component reuse, load balancing or encapsulating legacy code.</li>
+  <li><strong>Code on demand (optional)</strong>: the server may transfer code to a client, temporarily extending its functionality.</li>
+</ul>
+
+<h2 id="rests-practical-concepts-in-web-services">REST’s practical concepts in web services</h2>
+
+<h3 id="resources-and-end-points">Resources and end-points</h3>
+<p>REST scaffolds over the concept of <a href="http://restful-api-design.readthedocs.org/en/latest/resources.html">resources</a>: a entity or collection of entities that can be retrieved, manipulated and then stored again. A resource will have an end-point (an URI) associated with it.</p>
+
+<h4 id="examples">Examples</h4>
+
+<ul>
+  <li>Channels, <a href="https://uheer.me/api/Channels">uheer.me/api/Channels</a> *</li>
+  <li>Me, <a href="https://graph.facebook.com/me">graph.facebook.com/me</a></li>
+</ul>
+
+<p>Endpoints may contain parameters related to the resource:</p>
+
+<ul>
+  <li>Album, <a href="http://graph.facebook.com/v2.4/0/photos">graph.facebook.com/v2.4/{album-id}</a></li>
+  <li>AlbumPhotos, <a href="http://graph.facebook.com/v2.4/0/photos">graph.facebook.com/v2.4/{album-id}/photos</a></li>
+</ul>
+
+<blockquote>
+  <p><strong>#2</strong> uheer is NOT a REST API, as it violates many of the concepts presented above. It still a good example, though, as it’s also divided into resources.</p>
+</blockquote>
+
+<h3 id="methods">Methods</h3>
+<p>Clients can manipulate resources by making HTTP requests to their respective end-point, specifying a method. This methods are the same as defined by the HTTP protocol:</p>
+
+<ul>
+  <li>GET: retrieve the resource.</li>
+  <li>OPTIONS: will retrieve the valid options available for the given end-point.</li>
+  <li>HEAD: returns the same response as GET, but without a body.</li>
+  <li>POST: create a resource.</li>
+  <li>PATCH: update a resource patching it with the data passed in the request.</li>
+  <li>PUT: updates a resource replacing it with the data passed in the request.</li>
+  <li>DELETE: deletes a resource. Pretty obvious.</li>
+</ul>
+
+<h4 id="examples-1">Examples</h4>
+<p>Making the following raw HTTP request will create a new product with the specified data.</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-POST</span> http://.../Products <span class="se">\</span>
+     <span class="nt">--data</span> <span class="s1">'{"name":"A Nice Product", "price":1.42}'</span>
+</code></pre></div></div>
+
+<p>Or the equivalent in Python:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="s">'http://.../Products'</span><span class="p">,</span>
+              <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s">'name'</span><span class="p">:</span> <span class="s">'A Nice Product'</span><span class="p">,</span> <span class="s">'price'</span><span class="p">:</span> <span class="mf">1.42</span><span class="p">})</span>
+</code></pre></div></div>
+
+<p>Or in Angular.js (perfect for web sites, <a href="http://odetocode.com/blogs/scott/archive/2013/02/28/mapping-an-angular-resource-service-to-a-web-api.aspx">check out more here</a>!):</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">Product</span> <span class="o">=</span> <span class="nx">$resource</span><span class="p">(</span><span class="dl">'</span><span class="s1">http://.../Products</span><span class="dl">'</span><span class="p">);</span>
+<span class="k">new</span> <span class="nx">Product</span><span class="p">({</span><span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">A Nice Product</span><span class="dl">'</span><span class="p">,</span> <span class="na">price</span><span class="p">:</span> <span class="mf">1.42</span><span class="p">}).</span><span class="nx">$save</span><span class="p">();</span>
+</code></pre></div></div>
+
+<h3 id="responses">Responses</h3>
+
+<p>Each interaction with the server will generate a response. For instance, making the following request to <a href="https://api.github.com/users/lucasdavid">api.github.com/users/lucasdavid</a>:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET /users/lucasdavid HTTP/1.1
+User-Agent: curl/7.35.0
+Host: api.github.com
+Accept: <span class="k">*</span>/<span class="k">*</span>
+</code></pre></div></div>
+
+<p>Will result in:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+Server: GitHub.com
+Date: Wed, 07 Oct 2015 02:33:46 GMT
+Content-Type: application/json<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+Content-Length: 1309
+Status: 200 OK
+...
+
+<span class="o">{</span>
+  <span class="s2">"login"</span>: <span class="s2">"lucasdavid"</span>,
+  <span class="s2">"id"</span>: <span class="o">{</span>ID_NUMBER<span class="o">}</span>,
+  <span class="s2">"avatar_url"</span>: <span class="s2">"https://avatars.githubusercontent.com/u/{ID_NUMBER}?v=3"</span>,
+  <span class="s2">"gravatar_id"</span>: <span class="s2">""</span>,
+  <span class="s2">"url"</span>: <span class="s2">"https://api.github.com/users/lucasdavid"</span>,
+  <span class="s2">"html_url"</span>: <span class="s2">"https://github.com/lucasdavid"</span>,
+  <span class="s2">"followers_url"</span>: <span class="s2">"https://api.github.com/users/lucasdavid/followers"</span>,
+  <span class="s2">"following_url"</span>: <span class="s2">"https://api.github.com/users/lucasdavid/following{/other_user}"</span>,
+  <span class="s2">"gists_url"</span>: <span class="s2">"https://api.github.com/users/lucasdavid/gists{/gist_id}"</span>,
+  <span class="s2">"starred_url"</span>: <span class="s2">"https://api.github.com/users/lucasdavid/starred{/owner}{/repo}"</span>,
+  <span class="s2">"subscriptions_url"</span>: <span class="s2">"https://api.github.com/users/lucasdavid/subscriptions"</span>,
+  <span class="s2">"organizations_url"</span>: <span class="s2">"https://api.github.com/users/lucasdavid/orgs"</span>,
+  <span class="s2">"repos_url"</span>: <span class="s2">"https://api.github.com/users/lucasdavid/repos"</span>,
+  <span class="s2">"events_url"</span>: <span class="s2">"https://api.github.com/users/lucasdavid/events{/privacy}"</span>,
+  <span class="s2">"received_events_url"</span>: <span class="s2">"https://api.github.com/users/lucasdavid/received_events"</span>,
+  <span class="s2">"type"</span>: <span class="s2">"User"</span>,
+  <span class="s2">"site_admin"</span>: <span class="nb">false</span>,
+  <span class="s2">"name"</span>: <span class="s2">"Lucas Oliveira David"</span>,
+  <span class="s2">"company"</span>: null,
+  <span class="s2">"blog"</span>: null,
+  <span class="s2">"location"</span>: <span class="s2">"City Name, State Name, Brazil"</span>,
+  <span class="s2">"email"</span>: <span class="s2">"email@company.com"</span>,
+  <span class="s2">"hireable"</span>: <span class="nb">true</span>,
+  <span class="s2">"bio"</span>: null,
+  <span class="s2">"public_repos"</span>: 21,
+  <span class="s2">"public_gists"</span>: 0,
+  <span class="s2">"followers"</span>: 15,
+  <span class="s2">"following"</span>: 10,
+  <span class="s2">"created_at"</span>: <span class="s2">"2018-04-01T08:24:40Z"</span>,
+  <span class="s2">"updated_at"</span>: <span class="s2">"2018-10-01T18:36:59Z"</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>A HTTP response contains a <strong>header</strong> and the <strong>body</strong>. In the header, we can find metadata related to the server’s response itself, such as the timestamp in which it was processed, or the status-code. REST re-uses these <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">default codes</a> to indicate the status of the request. Clients must, of course, be able to understand them. Bellow is a list with some:</p>
+
+<ul>
+  <li>2xx
+    <ul>
+      <li>200 Ok: the request was successful.</li>
+      <li>201 Created: the resource was created.</li>
+      <li>204 No Content: The request was successful and the response is empty.</li>
+    </ul>
+  </li>
+  <li>4xx
+    <ul>
+      <li>400 Bad Request: request couldn’t be understood.</li>
+      <li>401 Unauthorized: authentication is required but it wasn’t provided.</li>
+      <li>403 Forbidden: the server refuses to fulfill the request. May happen because of
+lack of privileges.</li>
+      <li>404 Not Found: the requested resource was not found.</li>
+    </ul>
+  </li>
+  <li>500 Internal Server Error: the server cannot fulfill the request because of an internal error.</li>
+</ul>
+
+<p>The body, on the other hand, may be empty or contain any data, usually represented in <a href="http://www.json.org/">JSON</a>. For instance, in the request above, it contains information about my GitHub account.</p>
+
+<h2 id="who-implement-web-and-rest-apis">Who implement Web and REST APIs?</h2>
+
+<p>Many people! Bellow there’s a list of the most popular ones:</p>
+
+<ul>
+  <li><a href="https://developers.google.com/apis-explorer/">Google APIs</a></li>
+  <li><a href="https://developers.facebook.com/docs/graph-api">Facebook Graph API</a></li>
+  <li><a href="https://dev.twitter.com/rest/public">Twitter</a></li>
+  <li><a href="https://developer.github.com/v3/">GitHub API</a></li>
+  <li><a href="https://developer.linkedin.com/">Linkedin API</a></li>
+  <li><a href="https://developer.amazon.com/">Amazon</a></li>
+</ul>
+
+<h2 id="how-do-i-start-coding-my-own">How do I start coding my own?</h2>
+
+<p>The ideal is to always reuse already existing implementations. Some famous frameworks that help you in the creation of REST and web APIs:</p>
+
+<ul>
+  <li><a href="https://flask-restful.readthedocs.org/en/0.3.4/">Flask-restful</a></li>
+  <li><a href="http://www.django-rest-framework.org/">Django-rest-framework</a></li>
+  <li><a href="http://www.asp.net/web-api">ASP.NET Web API</a></li>
+  <li><a href="https://jhipster.github.io/">JHipster</a></li>
+</ul>
+
+<p>To consume an existing API, any device, programming language or technology able to communicate HTTP will do just fine. If you need a classic web browser application, check out <a href="https://angularjs.org/">AngularJS</a>, which was built to absorb REST APIs and create single-page web apps with JavaScript.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>REST is becoming more popular each year, as people realize how this architecture benefits applications by improving performance, standardizing data representation and allowing ease integration between an great number of applications.</p>
+
+<p>I hope this introductory post has pointed out and convinced you about the advantages of programming web and REST APIs beneath your web pages.</p>
+
+<p>Finally, if you made it this far and is still not bored, check out this <a href="http://github.com/lucasdavid/grapher">REST framework</a> which I have recently started. <a href="http://github.com/lucasdavid/grapher">grapher</a> was made over Flask and it might help you to start projects stupidly fast!</p>
+
+        </div>
+      </article>
+
+      
+      <div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://lucasdavid-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      
+    </div>
+  </div>
+</div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+  integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"
+  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
+  integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '\\[', right: '\\]', display: true}, {left: '$', right: '$', display: false},{left: '\\(', right: '\\)', display: false}]});"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+<script>
+  anchors.options = { icon: '#' };
+  anchors.add();
+</script>
+
+
+  <!-- <svg id="visual" viewBox="0 0 1980 300"  class="curve-container__curve curve-three" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <path
+    d="M0 69L55 90.2C110 111.3 220 153.7 330 169.8C440 186 550 176 660 165.5C770 155 880 144 990 139.2C1100 134.3 1210 135.7 1320 137.7C1430 139.7 1540 142.3 1650 155.5C1760 168.7 1870 192.3 1925 204.2L1980 216L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#d3d3d3"></path>
+  <path
+    d="M0 89L55 107.8C110 126.7 220 164.3 330 191.3C440 218.3 550 234.7 660 243.8C770 253 880 255 990 252.3C1100 249.7 1210 242.3 1320 228.8C1430 215.3 1540 195.7 1650 174.5C1760 153.3 1870 130.7 1925 119.3L1980 108L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#6a6a6a"></path>
+  <path
+    d="M0 229L55 232.3C110 235.7 220 242.3 330 244.3C440 246.3 550 243.7 660 247.3C770 251 880 261 990 254.8C1100 248.7 1210 226.3 1320 223.5C1430 220.7 1540 237.3 1650 233.8C1760 230.3 1870 206.7 1925 194.8L1980 183L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#121212"></path>
+</svg> -->
+<footer class="page-footer text-bg-dark bg-black-subtle d-print-none">
+  <div class="container">
+    <div class="mt-4 mb-5">
+      
+        <div class="row g-1 mb-4">
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Keras Explainable</h6>
+                <p class="card-text text-light">
+                  Clean implementations for AI explaining methods in Keras.
+<a href="https://github.com/lucasdavid/keras-explainable" target="_new">Code</a> and
+<a href="https://lucasdavid.github.io/keras-explainable" target="_new">docs</a> are available.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Supporting Study Material</h6>
+                <p class="card-text text-light">
+                  If you are an undergrad student and are looking for additional study material,
+check out our collaborative project <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Algorithms in TensorFlow</h6>
+                <p class="card-text text-light">
+                  I'm implementing all algorithms I find interesting using TensorFlow.
+You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">github.com/lucasdavid/algorithms-in-tensorflow</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">TF-Experiment</h6>
+                <p class="card-text text-light">
+                  And environment to run Machine Learning experiments based on components and mixins. Available at <a href="https://github.com/lucasdavid/tf-experiment">github.com/lucasdavid/tf-experiment</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Mineração de Dados Complexos</h6>
+                <p class="card-text text-light">
+                  Information around the extension program "Mineração de Dados Complexos (in Portuguese)" is available at
+<a href="https://www.ic.unicamp.br/~mdc/" target="_blank">ic.unicamp.br/~mdc/</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+    </div>
+
+    <div class="text-end mt-4">
+      
+
+
+<div class="fs-2">
+  
+    <a href="https://github.com/lucasdavid"
+      target="_blank"
+      ><i
+      aria-label="GitHub"
+      class="bi bi-github link-light"></i></a>
+  
+  
+    <a href="https://www.linkedin.com/in/ld7"
+      target="_blank"
+      title="LinkedIn"><i class="bi bi-linkedin text-primary sr-none"></i></a>
+  
+  <span itemscope itemtype="https://schema.org/Person">
+    <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+       target="orcid.widget"
+       rel="me noopener noreferrer"
+       title="ORCID"
+      ><img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 7px; width: 32px;"></a>
+  </span>
+  
+  <a href="http://stackoverflow.com/users/2429640/lucasdavid"
+     target="_blank"
+     title="Stackoverflow"><i class="bi bi-code-slash link-light sr-none"></i></a>
+  
+    <a href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q"
+      target="_blank"
+      title="Youtube"><i class="bi bi-youtube text-danger sr-none"></i></a>
+  
+    <a href="mailto:mb37410l3@mozmail.com"
+      target="_blank"
+      title="Mail"><i class="bi bi-envelope-fill link-light sr-none"></i></a>
+  
+  <a href="assets/docs/lucas-david-resume.pdf"
+     target="_blank"
+     title="Resume"><i class="bi bi-person-lines-fill link-light sr-none"></i></a>
+</div>
+
+    </div>
+    <div class="text-end">
+      <p>
+        ® Lucas David. Todos os direitos reservados.
+      </p>
+    </div>
+</div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous" defer></script>
+
+</body>
+</html>

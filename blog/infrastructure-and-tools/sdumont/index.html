@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Santos Dumont Super Computer – Lucas David</title>
+  <meta charset="utf-8" />
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="image_src" type="image/png" href="img_path" />
+
+
+<meta name="description" content="Accessing and using the SDumont infrastructure for Deep Learning research." />
+<meta property="og:description" content="Accessing and using the SDumont infrastructure for Deep Learning research." />
+<meta property="og:image" content="" />
+
+<meta name="author" content="Lucas David" />
+
+
+<meta property="og:title" content="Santos Dumont Super Computer" />
+<meta property="twitter:title" content="Santos Dumont Super Computer" />
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<link rel="alternate" type="application/rss+xml" title="Lucas David - my personal website/blog"
+      href="/feed.xml" />
+
+  
+  
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LG7FZ8VCHM"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-LG7FZ8VCHM');
+	</script>
+
+
+  
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+  <nav id="mainNav" class="navbar navbar-light bg-white navbar-expand-lg d-print-none border-bottom border-light ">
+  <div class="container-xl">
+    <button class="navbar-toggler rounded-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand fw-bold text-decoration-none p-1" href="/">Lucas David</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <span class="navbar-text navbar-excerpt">
+        Santos Dumont Super Computer
+      </span>
+      <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+      <ul class="navbar-nav mb-2 mb-lg-0 font-small">
+        <li class="nav-item"><a href="/" class="nav-link fw-bold link-dark fs-6">Home</a></li>
+        <li class="nav-item"><a href="/blog" class="nav-link fw-bold link-dark fs-6">Blog</a></li>
+        <li class="nav-item"><a href="/publications" class="nav-link fw-bold link-dark fs-6">Publications</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold link-dark fs-6" href="#" id="nbd-links-social" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Social
+          </a>
+          <ul class="dropdown-menu font-small dropdown-menu-end" aria-labelledby="nbd-links-social">
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://github.com/lucasdavid">
+                <i aria-label="GitHub" class="bi bi-github link-dark sr-none"></i>
+                Github</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://www.linkedin.com/in/ld7">
+                <i class="bi bi-linkedin text-primary sr-none"></i>
+                Linkedin</a></li>
+
+            <li itemscope itemtype="https://schema.org/Person">
+              <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+                  target="orcid.widget"
+                  rel="me noopener noreferrer"
+                  class="dropdown-item text-decoration-none"
+                >
+                <img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 5px; width: 16px;">
+                ORCID</a>
+            </li>
+
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="http://stackoverflow.com/users/2429640/lucasdavid">
+                <i class="bi bi-code-slash link-dark sr-none"></i>
+                Stackoverflow</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q">
+                <i class="bi bi-youtube text-danger sr-none"></i>
+                Youtube</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+</div>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12 col-xl-3 col-xxl-2 offset-xxl-1">
+      <div id="sidebar" class="">
+  <div class="text-center">
+    <a href="/" title="Home">
+      <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
+        class="img-fluid rounded-circle" style="width:100px" />
+    </a>
+    <p class="pt-2 font-small">
+      
+        <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
+      
+    </p>
+  </div>
+
+  
+</div>
+
+    </div>
+    <div id="table-of-contents-container-r" class="col-12 col-xl-3 col-xxl-2 order-xl-2">
+      
+      <div style="z-index: 0; font-size:0.8rem;">
+        <div id="table-of-contents" class="font-small">
+  <p class="border-bottom"><strong>Summary</strong></p>
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#sdumont">SDumont</a></li>
+<li class="toc-entry toc-h2"><a href="#project-proposal">Project Proposal</a></li>
+<li class="toc-entry toc-h2"><a href="#first-access-and-setup">First Access and Setup</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#user-and-project-registration">User and Project Registration</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#resources">Resources</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#storage">Storage</a></li>
+<li class="toc-entry toc-h3"><a href="#gpus">GPUs</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#submitting-jobs">Submitting Jobs</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#nvidia-queues">NVIDIA Queues</a></li>
+<li class="toc-entry toc-h3"><a href="#gdl-queue">gdl Queue</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#reports">Reports</a></li>
+<li class="toc-entry toc-h2"><a href="#writing-distributed-tensorflow-code">Writing Distributed TensorFlow Code</a></li>
+</ul>
+</div>
+
+      </div>
+      
+    </div>
+    <div class="col-12 col-xl-6">
+      <article class="post mb-4">
+        <header class="">
+          <h1 id="postTitle" class="fw-bold">Santos Dumont Super Computer</h1>
+          <p class="right-align mb-2 text-muted fs-5">
+            Accessing and using the SDumont infrastructure for Deep Learning research. <em>— August 30, 2021</em>
+          </p>
+          <div class="mb-4">
+            <span class="badges-container">
+  
+    <a href="/blog/tag/devops"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >DevOps</a>
+  
+    <a href="/blog/tag/ml"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >ML</a>
+  
+</span>
+
+          </div>
+        </header>
+        <div class="article-content" style="margin-top: 4rem;">
+          <p><span class="fs-1" style="line-height:0">T</span>his post introduces and details the access and usage process of the <a href="https://sdumont.lncc.br/machine.php?pg=machine">Santos Dumont Super Computer</a>,
+managed by <a href="https://www.gov.br/mcti/pt-br/rede-mcti/lncc">LNCC</a>.
+This document is profoundly based on the official <a href="https://sdumont.lncc.br/support_manual.php">support manual</a> provided by LNCC,
+as well as my personal experience in the program (hence, it may not perfectly represent all cases).
+Its goal is to present information in a more directed manner for users that share my own profile
+(Deep Learning researchers that prefer the <a href="https://www.tensorflow.org/">TensorFlow</a> framework and who are familiar with <a href="https://www.docker.com/">Docker</a>).</p>
+
+<h2 id="sdumont">SDumont</h2>
+<p>Santos Dumont is a Brazilian super computer located in the city of Petrópolis, Rio de Janeiro State, Brazil.
+A general description of its specs and processing power can be found at <a href="https://sdumont.lncc.br/machine.php?pg=machine">sdumont.lncc.br/machine</a>.</p>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/devops/sdumont/sdumont.webp" alt="External view of Santos Dumont Supercomputer Installations." class="figure-img img-fluid rounded mx-auto d-block w-xl-150" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title">External view of Santos Dumont Supercomputer Installations.</strong>
+
+    Available at <a href="https://www.gov.br/mcti/pt-br/rede-mcti/lncc/assuntos/noticias/ultimas-noticias-1/novas-informacoes-para-submissao-de-propostas-para-uso-dos-supercomputadores-santos-dumont-lncc-e-lobo-carneiro-coppe-ufrj">gov.br/mcti</a>.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Brazilian scientist and research groups are encouraged to apply for a research project proposal, which will grant
+them usage of the infrastructure available.
+Furthermore, its processing power can also be used for educational purposes. For this end, educators must first present
+a course plan and specify usage details.</p>
+
+<h2 id="project-proposal">Project Proposal</h2>
+<p>Engagement process starts at this <a href="https://sdumont.lncc.br/call.php?pg=call#">website</a>.
+It states proposals will be evaluated up to November 27th, 2021.
+To be considered, you must fill in <a href="https://sdumont.lncc.br/formularios/SDumont_Formulario_de_Proposta.pdf">this application</a>
+and submit it through the <a href="https://jems.sbc.org.br/home.cgi?c=3557">JEMS system</a>.</p>
+
+<h2 id="first-access-and-setup">First Access and Setup</h2>
+<p>Once a proposal is accepted, a welcoming e-mail is sent from <a href="mailto:jems@sbc.org.br">jems@sbc.org.br</a> to all authors.
+The e-mail contains details and comments from reviewers regarding the project proposal, as well as grading score per evaluation category.</p>
+
+<h3 id="user-and-project-registration">User and Project Registration</h3>
+<p>The welcoming e-email will ask the project members to fill in two two forms:</p>
+
+<ul>
+  <li>Project Coordinator Form: should be filled in by the project coordinator,
+which formalizes the project scope (by repeating what was written in the proposal or by updating it with justifiable notice)
+and lists all members involved in the project. <a href="http://sdumont.lncc.br/formularios/formulario_sdumont_coordenador.docx">link</a></li>
+  <li>Project User Form: should be filled by each member that was listed in the Project Coordinator Form (one form per member).
+<a href="http://sdumont.lncc.br/formularios/formulario_sdumont_usuario.docx">link</a></li>
+</ul>
+
+<p>Identification information (such as “Registro Geral”, or R.G.) must be provided in both forms, which must be printed and signed
+(or digitally signed).
+The forms, as well as the scans of ID documents for each project member and coordinator, must be e-mailed to
+helpdesk-sdumont@lncc.br and sdumont@lncc.br. There is a timeframe of 30 days to complete this stage of registration.</p>
+
+<p>Once it is done, you will receive the following confirmation e-mail:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM: helpdesk-sdumont@lncc.br
+SUBJECT: Re: Formulários de cadastro SDumont - ID {ID_NUMBER}
+
+Prezado {NAME},
+
+Registramos os chamados abaixo para criação do projeto e contas de usuários:
+
+Chamado - Abertura de conta de projeto SDumont - {PROJECT_CODE} - ID {PROJECT_ID}
+Chamado - Abertura de conta de usuário SDumont - {NAME} - ID {USER_ID}
+Chamado - Abertura de conta de usuário SDumont - {NAME} - ID {USER_ID}
+...
+</code></pre></div></div>
+
+<p>Wait for a day. Each member listed by the Coordinator will receive their own registration confirmation e-mail.
+You will find your name and ID detailed in the confirmation e-mail’s subject.
+Your temporary password, however, is not stored in the e-mail (or anywhere else).
+You must call LNCC on their provided phone number and tell them you have just received the confirmation e-mail.
+Inform your name and ID number and they will verbally inform you of your password.</p>
+
+<p>Configure and open the VPN tunnel (using the instructions in the e-mail and the credentials provided on the call).
+I use linux and opted for the graphic VPN interface, so the following packages are necessary:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get <span class="nb">install </span>vpnc network-manager-vpnc network-manager-vpnc-gnome
+</code></pre></div></div>
+
+<p>Once it is opened, you can ssh into the buttler host:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh USERNAME@login.sdumont.lncc.br
+password: <span class="k">******</span>
+</code></pre></div></div>
+
+<p>Use your temporary password. Once you are logged, you will be asked to change it.
+Once this is done, you will be disconnected from the VPN.
+Update its settings to reflect the new pass, if necessary, and open the tunnel once again.
+SSH into the butler once more and you will now be connected to SDumont!</p>
+
+<h2 id="resources">Resources</h2>
+<p>Santos Dumont uses <a href="https://slurm.schedmd.com/">Slurm Workload Manager</a> to orchestrate its nodes.
+Two important aspects to understand about this manager is the distributed storage system employed
+and its job scheduling mechanism.</p>
+
+<h3 id="storage">Storage</h3>
+
+<p>Two storage partitions are available <a href="https://sdumont.lncc.br/alloc.php?pg=alloc#">[ref]</a>:</p>
+
+<table class="dataframe table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Capacity</th>
+      <th>Location</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Scratch</td>
+      <td>25 TB</td>
+      <td><code class="language-plaintext highlighter-rouge">/scratch/{PROJECT}/{USER}</code></td>
+      <td>input, transient and output data</td>
+    </tr>
+    <tr>
+      <td>Home</td>
+      <td>5 TB</td>
+      <td><code class="language-plaintext highlighter-rouge">/prj/{PROJECT}/{USER}</code></td>
+      <td>source-code, libraries</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>* Scratch is 50 TB in Premium tier projects.</p>
+
+<p>Files in scratch are erased after 60 days without being updated, and should be backed up in Home.
+Nodes cannot access files in Home, so every source code, dataset and associated archive must be copied
+to the scratch partition before usage. For example, say you have the file <code class="language-plaintext highlighter-rouge">job.py</code> inside the <code class="language-plaintext highlighter-rouge">experiments</code>
+folder.
+The entire <code class="language-plaintext highlighter-rouge">experiments</code> folder can be synchronized with its counterpart in scratch partition using the following command:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rsync <span class="nt">-rUv</span> <span class="nt">--delete</span> experiments/ <span class="nv">$SCRATCH</span>/experiments/
+</code></pre></div></div>
+
+<p>Once the experiments are run, and their logs are produced, we can copy them to the home partition once again by:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rsync <span class="nt">-rUv</span> <span class="nv">$SCRATCH</span>/logs logs
+</code></pre></div></div>
+
+<h3 id="gpus">GPUs</h3>
+
+<p>I listed below the most interesting GPU queues for Machine Learning, as well as their specs.</p>
+
+<table class="dataframe table table-hover">
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>Wall time (hours)</th>
+      <th>CPU</th>
+      <th>Cores</th>
+      <th>Memory</th>
+      <th>GPU</th>
+      <th>Cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>nvidia_dev</td>
+      <td>0.33</td>
+      <td>2</td>
+      <td>24</td>
+      <td>64</td>
+      <td>2  K40</td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>nvidia_small</td>
+      <td>1</td>
+      <td>2</td>
+      <td>24</td>
+      <td>64</td>
+      <td>2  K40</td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>nvidia_long</td>
+      <td>744 (31 days)</td>
+      <td>2</td>
+      <td>24</td>
+      <td>64</td>
+      <td>2  K40</td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>nvidia_scal</td>
+      <td>18</td>
+      <td>102</td>
+      <td>1224</td>
+      <td>6528</td>
+      <td>102  K40</td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>nvidia</td>
+      <td>48</td>
+      <td>42</td>
+      <td>504</td>
+      <td>2688</td>
+      <td>42  K40</td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>sequana_gpu</td>
+      <td>96</td>
+      <td>2</td>
+      <td>48</td>
+      <td>384</td>
+      <td>4 V100</td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>sequana_gpu_dev</td>
+      <td>0.33</td>
+      <td>2</td>
+      <td>48</td>
+      <td>384</td>
+      <td>4 V100</td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>sequana_gpu_long</td>
+      <td>744 (31 days)</td>
+      <td>2</td>
+      <td>48</td>
+      <td>384</td>
+      <td>4 V100</td>
+      <td>1.5</td>
+    </tr>
+    <tr>
+      <td>gdl</td>
+      <td>48</td>
+      <td>2</td>
+      <td>40</td>
+      <td>384</td>
+      <td>8 V100</td>
+      <td>2.0</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="submitting-jobs">Submitting Jobs</h2>
+<p>Jobs can be submitted in two forms: interactively and queued for execution. During submission, you must inform the <code class="language-plaintext highlighter-rouge">queue</code>
+in which the job will be placed.
+For the examples below, assume you have a python script named <code class="language-plaintext highlighter-rouge">experiment.py</code> that can run and evaluate your experiment.</p>
+
+<h3 id="nvidia-queues">NVIDIA Queues</h3>
+<p>Should be used for the regular experiments (two GPUs with 12 GB are available).</p>
+
+<h4 id="interactive-access">Interactive Access</h4>
+<p>This nodes can be interactively accessed through the following code:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>salloc <span class="nt">--nodes</span><span class="o">=</span>1 <span class="nt">-p</span> <span class="o">{</span>queue<span class="o">}</span> <span class="nt">-J</span> <span class="o">{</span>name<span class="o">}</span> <span class="nt">--exclusive</span>
+
+salloc: Pending job allocation <span class="o">{</span>job_id<span class="o">}</span>
+salloc: job <span class="o">{</span>job_id<span class="o">}</span> queued and waiting <span class="k">for </span>resources
+salloc: job <span class="o">{</span>job_id<span class="o">}</span> has been allocated resources
+salloc: Granted job allocation <span class="o">{</span>job_id<span class="o">}</span>
+
+<span class="nv">$ </span>squeue <span class="nt">-j</span> <span class="o">{</span>job_id<span class="o">}</span>
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST<span class="o">(</span>REASON<span class="o">)</span>
+          <span class="o">{</span>job_id<span class="o">}</span>   <span class="o">{</span>queue<span class="o">}</span>   <span class="o">{</span>name<span class="o">}</span>   <span class="o">{</span>user<span class="o">}</span>  R       0:21      1 <span class="o">{</span>node_id<span class="o">}</span>
+
+<span class="nv">$ </span>ssh <span class="o">{</span>node_id<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Now go to this <a href="https://www.tensorflow.org/install/source#gpu">tensorflow.org/install</a> and check which
+CUDA and python should you be using for your specific tensorflow version.
+For example, I’m using <code class="language-plaintext highlighter-rouge">tensorflow==2.6.0</code>, so I would use python&gt;3.7 and CUDA&gt;11.2:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Load appropriate libraries</span>
+<span class="nv">$ </span>module load gcc/7.4 python/3.9.1 cudnn/8.2_cuda-11.1
+<span class="nv">$ </span>pip <span class="nb">install </span><span class="nv">tensorflow</span><span class="o">==</span>2.6.0 tensorflow-datasets tensorflow-addons
+
+<span class="c"># Experiment run</span>
+<span class="nv">$ </span>python experiment.py
+
+<span class="nv">$ </span><span class="nb">exit</span>  <span class="c"># Exit {NODE_ID}</span>
+<span class="nv">$ </span><span class="nb">exit</span>  <span class="c"># Dispose {job_id}</span>
+<span class="nv">$ </span><span class="nb">exit</span>  <span class="c"># Exit SSH</span>
+</code></pre></div></div>
+
+<div class="alert border-0 border-start border-4 alert-info border-info rounded-0 d-flex align-items-center mt-4" role="alert">
+  <i class="bi bi-info-lg me-3 text-info" aria-label="Info:" role="img"></i>
+  <div>
+  The installed packages are stored in your user scratch partition.
+  Hence, you are not required to run <code>pip install</code> in the next experiments.
+  </div>
+</div>
+
+<h4 id="enqueueing-experiments">Enqueueing Experiments</h4>
+
+<p>To enqueue jobs in the cluster, you must create a <a href="https://slurm.schedmd.com/sbatch.html" target="_blank">sbatch</a>
+run file, indicating the execution parameters for the experiment.</p>
+
+<p>For instance, supose you have writen the <code class="language-plaintext highlighter-rouge">runners/cityscapes.sh</code> file, with the following content:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c">#SBATCH --nodes=1</span>
+<span class="c">#SBATCH --ntasks-per-node=1</span>
+<span class="c">#SBATCH --ntasks=1</span>
+<span class="c">#SBATCH -p nvidia_long</span>
+<span class="c">#SBATCH -J ml_train_multi_gpu</span>
+<span class="c">#SBATCH --exclusive</span>
+
+nodeset <span class="nt">-e</span> <span class="nv">$SLURM_JOB_NODELIST</span>
+
+module load gcc/7.4 python/3.9.1 cudnn/8.2_cuda-11.1
+
+<span class="nb">cd</span> ./experiments/
+
+python3.9 cityscapes/train.py with <span class="nv">dataset</span><span class="o">=</span>cityscapes <span class="nv">extra</span><span class="o">=</span><span class="nb">true
+</span>python3.9 cityscapes/evaluate.py with <span class="nv">dataset</span><span class="o">=</span>cityscapes <span class="nv">extra</span><span class="o">=</span><span class="nb">true</span>
+</code></pre></div></div>
+
+<p>Both <code class="language-plaintext highlighter-rouge">cityscapes/train.py</code> and <code class="language-plaintext highlighter-rouge">cityscapes/evaluate.py</code> jobs can be enqueued to run in the <code class="language-plaintext highlighter-rouge">nvidia_long</code>
+queue with the following command:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>sbatch runners/cityscapes.sh
+</code></pre></div></div>
+
+<h3 id="gdl-queue"><code class="language-plaintext highlighter-rouge">gdl</code> Queue</h3>
+<p>Sequana queue, for very deep models (and usage cost of 2.0 UAs).</p>
+
+<h4 id="interactive-access-1">Interactive Access</h4>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>salloc <span class="nt">--nodes</span><span class="o">=</span>1 <span class="nt">-p</span> gdl <span class="nt">-J</span> GDL-teste <span class="nt">--exclusive</span>
+
+salloc: Granted job allocation 123456
+
+<span class="c">#verificar quais nós foram alocados para o job</span>
+squeue <span class="nt">-j</span> 123456
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST<span class="o">(</span>REASON<span class="o">)</span>
+            123456       gdl     bash usuario1  R       5:28      1 sdumont4000
+
+<span class="c">#acessa o nó</span>
+ssh sdumont4000
+
+<span class="c">#carrega o módulo e executa a aplicação</span>
+<span class="o">[</span>usuario1@sdumont4000 ~]<span class="nv">$ </span><span class="nb">cd</span> /scratch/projeto/usuario1/teste-gdl
+<span class="o">[</span>usuario1@sdumont4000 teste-gdl]<span class="nv">$ </span>module load deepl/deeplearn-py3.7
+<span class="o">[</span>usuario1@sdumont4000 teste-gdl]<span class="nv">$ </span>python script.py
+
+<span class="c">#encerra a conexão com o nó</span>
+<span class="o">[</span>usuario1@sdumont4000 teste-gdl]<span class="nv">$ </span><span class="nb">exit</span>
+
+<span class="c">#encerra a sessão interativa e termina o job</span>
+<span class="nb">exit
+</span>salloc: Relinquishing job allocation 123456
+</code></pre></div></div>
+
+<h4 id="enqueueing-experiments-1">Enqueueing Experiments</h4>
+
+<p>Create a job file <code class="language-plaintext highlighter-rouge">experiment.srm</code>:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c">#SBATCH --nodes=1</span>
+<span class="c">#SBATCH --ntasks-per-node=1</span>
+<span class="c">#SBATCH --ntasks=1</span>
+<span class="c">#SBATCH -p gdl</span>
+<span class="c">#SBATCH -J GDL-teste-script</span>
+<span class="c">#SBATCH --exclusive</span>
+
+<span class="c">#Exibe os nos alocados para o Job</span>
+<span class="nb">echo</span> <span class="nv">$SLURM_JOB_NODELIST</span>
+nodeset <span class="nt">-e</span> <span class="nv">$SLURM_JOB_NODELIST</span>
+
+<span class="nb">cd</span> <span class="nv">$SLURM_SUBMIT_DIR</span>
+
+<span class="c">#Configura o módulo de Deep Learning</span>
+module load deepl/deeplearn-py3.7
+
+<span class="c">#acessa o diretório onde o script está localizado</span>
+<span class="nb">cd</span> <span class="nv">$SCRATCH</span>/teste-gdl
+
+<span class="c">#executa o script</span>
+python experiment.py
+</code></pre></div></div>
+
+<p>and then run it:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sbatch experiment.srm
+</code></pre></div></div>
+
+<h2 id="reports">Reports</h2>
+
+<p>You can check a usage report for your project using the <code class="language-plaintext highlighter-rouge">sreport</code> command.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ PROJECT</span><span class="o">=</span>project-id
+<span class="nv">$ START</span><span class="o">=</span>2021-06-01
+<span class="nv">$ END</span><span class="o">=</span>2021-10-13
+<span class="nv">$ </span>sreport <span class="nt">-t</span> hours cluster AccountUtilizationByUser <span class="nv">start</span><span class="o">=</span><span class="nv">$START</span> <span class="nv">end</span><span class="o">=</span><span class="nv">$END</span> <span class="nv">Accounts</span><span class="o">=</span><span class="nv">$PROJECT</span>
+
+<span class="nt">--------------------------------------------------------------------------------</span>
+Cluster/Account/User Utilization 2021-06-01T00:00:00 - 2021-10-12T23:59:59 <span class="o">(</span>11577600 secs<span class="o">)</span>
+Use reported <span class="k">in </span>TRES Hours
+<span class="nt">--------------------------------------------------------------------------------</span>
+  Cluster         Account       Login     Proper Name     Used   Energy
+<span class="nt">---------</span> <span class="nt">---------------</span> <span class="nt">-----------</span> <span class="nt">---------------</span> <span class="nt">--------</span> <span class="nt">--------</span>
+  sdumont    <span class="o">{</span>project_id<span class="o">}</span>                                 2340        0
+  sdumont    <span class="o">{</span>project_id<span class="o">}</span> <span class="o">{</span>user_id_1<span class="o">}</span>   <span class="o">{</span>user_name_1<span class="o">}</span>     2140        0
+  sdumont    <span class="o">{</span>project_id<span class="o">}</span> <span class="o">{</span>user_id_2<span class="o">}</span>   <span class="o">{</span>user_name_2<span class="o">}</span>      200        0
+  sdumont    <span class="o">{</span>project_id<span class="o">}</span> <span class="o">{</span>user_id_3<span class="o">}</span>   <span class="o">{</span>user_name_3<span class="o">}</span>        0        0
+</code></pre></div></div>
+
+<p>You can also get a list of all jobs executed so far:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>sacct <span class="nt">-S</span> <span class="nv">$START</span> <span class="nt">-E</span> <span class="nv">$END</span> <span class="nt">-X</span> <span class="nt">-A</span> <span class="nv">$PROJECT</span>
+
+       JobID           JobName  Partition      Account  AllocCPUS      State ExitCode
+<span class="nt">------------</span> <span class="nt">-----------------</span> <span class="nt">----------</span> <span class="nt">------------</span> <span class="nt">----------</span> <span class="nt">----------</span> <span class="nt">--------</span>
+1321448               <span class="nb">hostname </span>nvidia_dev <span class="o">{</span>project_id<span class="o">}</span>          1  COMPLETED      0:0
+1336974      <span class="o">{</span>project_id<span class="o">}</span><span class="nt">-tes</span>+ nvidia_lo+ <span class="o">{</span>project_id<span class="o">}</span>         24  COMPLETED      0:0
+1337014      <span class="o">{</span>project_id<span class="o">}</span><span class="nt">-tes</span>+ nvidia_lo+ <span class="o">{</span>project_id<span class="o">}</span>         24     FAILED      1:0
+1337043      <span class="o">{</span>project_id<span class="o">}</span><span class="nt">-tes</span>+ nvidia_lo+ <span class="o">{</span>project_id<span class="o">}</span>         24     FAILED      1:0
+1337044      <span class="o">{</span>project_id<span class="o">}</span><span class="nt">-tes</span>+ nvidia_lo+ <span class="o">{</span>project_id<span class="o">}</span>          1 CANCELLED+      0:0
+1339157      <span class="o">{</span>project_id<span class="o">}</span><span class="nt">-tes</span>+ nvidia_dev <span class="o">{</span>project_id<span class="o">}</span>         24  COMPLETED      0:0
+1339590      <span class="o">{</span>project_id<span class="o">}</span><span class="nt">-tes</span>+ nvidia_dev <span class="o">{</span>project_id<span class="o">}</span>         24    TIMEOUT      0:0
+1339616      <span class="o">{</span>project_id<span class="o">}</span><span class="nt">-tes</span>+ nvidia_dev <span class="o">{</span>project_id<span class="o">}</span>         24    TIMEOUT      0:0
+1339647      <span class="o">{</span>project_id<span class="o">}</span><span class="nt">-tes</span>+ nvidia_dev <span class="o">{</span>project_id<span class="o">}</span>          1 CANCELLED+      0:0
+</code></pre></div></div>
+
+<h2 id="writing-distributed-tensorflow-code">Writing Distributed TensorFlow Code</h2>
+
+<p>The nodes in the <code class="language-plaintext highlighter-rouge">nvidia</code> queues are always associated with 2 or more video cards.
+Once allocated, each node will be charged in your project’s budget regardless if the two or more cards are being used.
+Being as such, it’s paramount to maximize the usage of all hardware available, avoiding unnecessary spending and
+freeing idle resources for the other projects.</p>
+
+<p>TensorFlow follows a greedy policy, in which all available GDRAM is allocated beforehand.
+This can be turned off with the following statement:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+
+<span class="c1"># Ref.: https://www.tensorflow.org/api_docs/python/tf/config/experimental/set_memory_growth
+</span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">tf</span><span class="p">.</span><span class="n">config</span><span class="p">.</span><span class="n">list_physical_devices</span><span class="p">(</span><span class="s">'GPU'</span><span class="p">):</span>
+  <span class="n">tf</span><span class="p">.</span><span class="n">config</span><span class="p">.</span><span class="n">experimental</span><span class="p">.</span><span class="n">set_memory_growth</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Only the first GPU (<code class="language-plaintext highlighter-rouge">/gpu:0</code>) is used by default. In order to leverage all devices available,
+one must declare the model using one of the
+<a href="https://www.tensorflow.org/guide/distributed_training" target="_blank">distributed strategies</a>
+implemented. The following snippet describes the general structure in which the <code class="language-plaintext highlighter-rouge">MirrorStrategy</code>
+can be employed to perform a Model’s fit leveraging all GPUs in a machine.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+
+<span class="k">def</span> <span class="nf">appropriate_distributed_strategy</span><span class="p">():</span>
+  <span class="c1"># Ref.: https://www.tensorflow.org/api_docs/python/tf/distribute/Strategy
+</span>  <span class="k">return</span> <span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">distribute</span><span class="p">.</span><span class="n">MirroredStrategy</span><span class="p">()</span>
+          <span class="k">if</span> <span class="n">tf</span><span class="p">.</span><span class="n">config</span><span class="p">.</span><span class="n">list_physical_devices</span><span class="p">(</span><span class="s">'GPU'</span><span class="p">)</span>
+          <span class="k">else</span> <span class="n">tf</span><span class="p">.</span><span class="n">distribute</span><span class="p">.</span><span class="n">get_strategy</span><span class="p">())</span>
+
+<span class="k">def</span> <span class="nf">build_model</span><span class="p">():</span>
+  <span class="p">...</span>
+
+<span class="k">def</span> <span class="nf">build_dataset</span><span class="p">():</span>
+  <span class="p">...</span>
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span>
+  <span class="p">):</span>
+  <span class="n">gpus_with_memory_growth</span><span class="p">()</span>
+
+  <span class="n">dst</span> <span class="o">=</span> <span class="n">appropriate_distributed_strategy</span><span class="p">()</span>
+
+  <span class="c1"># Build network under the distributed scope.
+</span>  <span class="c1"># Ref.: https://www.tensorflow.org/tutorials/distribute/custom_training
+</span>  <span class="k">with</span> <span class="n">dst</span><span class="p">.</span><span class="n">scope</span><span class="p">():</span>
+    <span class="n">network</span> <span class="o">=</span> <span class="n">build_model</span><span class="p">()</span>
+
+    <span class="n">network</span><span class="p">.</span><span class="nb">compile</span><span class="p">(...)</span>
+
+  <span class="c1"># Build dataset to output data "per-replica".
+</span>  <span class="c1"># https://www.tensorflow.org/api_docs/python/tf/distribute/Strategy
+</span>  <span class="n">ds</span> <span class="o">=</span> <span class="n">build_dataset</span><span class="p">()</span>
+
+  <span class="n">samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+  <span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span> <span class="o">*</span> <span class="n">dst</span><span class="p">.</span><span class="n">num_replicas_in_sync</span>
+
+  <span class="n">ds</span> <span class="o">=</span> <span class="n">dst</span><span class="p">.</span><span class="n">experimental_distribute_dataset</span><span class="p">(</span>
+    <span class="n">ds</span><span class="p">.</span><span class="n">prefetch</span><span class="p">(</span><span class="mi">32</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">)</span>
+      <span class="p">.</span><span class="n">batch</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+      <span class="p">.</span><span class="n">repeat</span><span class="p">()</span>  <span class="c1"># repeat is necessary, as far as I can tell.
+</span>  <span class="p">)</span>
+
+  <span class="c1"># Training.
+</span>  <span class="c1"># Ref.: https://www.tensorflow.org/tutorials/distribute/keras
+</span>  <span class="n">network</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">steps_per_epoch</span><span class="o">=</span><span class="n">samples</span> <span class="o">//</span> <span class="n">batch_size</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+  <span class="n">run</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>More information around distributed training can be found at TensorFlow’s distributed <a href="https://www.tensorflow.org/guide/distributed_training">docs</a>.</p>
+
+        </div>
+      </article>
+
+      
+      <div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://lucasdavid-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      
+    </div>
+  </div>
+</div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+  integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"
+  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
+  integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '\\[', right: '\\]', display: true}, {left: '$', right: '$', display: false},{left: '\\(', right: '\\)', display: false}]});"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+<script>
+  anchors.options = { icon: '#' };
+  anchors.add();
+</script>
+
+
+  <!-- <svg id="visual" viewBox="0 0 1980 300"  class="curve-container__curve curve-three" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <path
+    d="M0 69L55 90.2C110 111.3 220 153.7 330 169.8C440 186 550 176 660 165.5C770 155 880 144 990 139.2C1100 134.3 1210 135.7 1320 137.7C1430 139.7 1540 142.3 1650 155.5C1760 168.7 1870 192.3 1925 204.2L1980 216L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#d3d3d3"></path>
+  <path
+    d="M0 89L55 107.8C110 126.7 220 164.3 330 191.3C440 218.3 550 234.7 660 243.8C770 253 880 255 990 252.3C1100 249.7 1210 242.3 1320 228.8C1430 215.3 1540 195.7 1650 174.5C1760 153.3 1870 130.7 1925 119.3L1980 108L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#6a6a6a"></path>
+  <path
+    d="M0 229L55 232.3C110 235.7 220 242.3 330 244.3C440 246.3 550 243.7 660 247.3C770 251 880 261 990 254.8C1100 248.7 1210 226.3 1320 223.5C1430 220.7 1540 237.3 1650 233.8C1760 230.3 1870 206.7 1925 194.8L1980 183L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#121212"></path>
+</svg> -->
+<footer class="page-footer text-bg-dark bg-black-subtle d-print-none">
+  <div class="container">
+    <div class="mt-4 mb-5">
+      
+        <div class="row g-1 mb-4">
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Keras Explainable</h6>
+                <p class="card-text text-light">
+                  Clean implementations for AI explaining methods in Keras.
+<a href="https://github.com/lucasdavid/keras-explainable" target="_new">Code</a> and
+<a href="https://lucasdavid.github.io/keras-explainable" target="_new">docs</a> are available.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Supporting Study Material</h6>
+                <p class="card-text text-light">
+                  If you are an undergrad student and are looking for additional study material,
+check out our collaborative project <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Algorithms in TensorFlow</h6>
+                <p class="card-text text-light">
+                  I'm implementing all algorithms I find interesting using TensorFlow.
+You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">github.com/lucasdavid/algorithms-in-tensorflow</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">TF-Experiment</h6>
+                <p class="card-text text-light">
+                  And environment to run Machine Learning experiments based on components and mixins. Available at <a href="https://github.com/lucasdavid/tf-experiment">github.com/lucasdavid/tf-experiment</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Mineração de Dados Complexos</h6>
+                <p class="card-text text-light">
+                  Information around the extension program "Mineração de Dados Complexos (in Portuguese)" is available at
+<a href="https://www.ic.unicamp.br/~mdc/" target="_blank">ic.unicamp.br/~mdc/</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+    </div>
+
+    <div class="text-end mt-4">
+      
+
+
+<div class="fs-2">
+  
+    <a href="https://github.com/lucasdavid"
+      target="_blank"
+      ><i
+      aria-label="GitHub"
+      class="bi bi-github link-light"></i></a>
+  
+  
+    <a href="https://www.linkedin.com/in/ld7"
+      target="_blank"
+      title="LinkedIn"><i class="bi bi-linkedin text-primary sr-none"></i></a>
+  
+  <span itemscope itemtype="https://schema.org/Person">
+    <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+       target="orcid.widget"
+       rel="me noopener noreferrer"
+       title="ORCID"
+      ><img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 7px; width: 32px;"></a>
+  </span>
+  
+  <a href="http://stackoverflow.com/users/2429640/lucasdavid"
+     target="_blank"
+     title="Stackoverflow"><i class="bi bi-code-slash link-light sr-none"></i></a>
+  
+    <a href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q"
+      target="_blank"
+      title="Youtube"><i class="bi bi-youtube text-danger sr-none"></i></a>
+  
+    <a href="mailto:mb37410l3@mozmail.com"
+      target="_blank"
+      title="Mail"><i class="bi bi-envelope-fill link-light sr-none"></i></a>
+  
+  <a href="assets/docs/lucas-david-resume.pdf"
+     target="_blank"
+     title="Resume"><i class="bi bi-person-lines-fill link-light sr-none"></i></a>
+</div>
+
+    </div>
+    <div class="text-end">
+      <p>
+        ® Lucas David. Todos os direitos reservados.
+      </p>
+    </div>
+</div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous" defer></script>
+
+</body>
+</html>

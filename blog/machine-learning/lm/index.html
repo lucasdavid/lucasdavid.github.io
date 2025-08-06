@@ -1,0 +1,2222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Caso de estudo sobre regressão linear (in Portuguese) – Lucas David</title>
+  <meta charset="utf-8" />
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="image_src" type="image/png" href="img_path" />
+
+
+<meta name="description" content="Uma descrição detalhadas dos princípios da regressão linear, a partir de um caso prático." />
+<meta property="og:description" content="Uma descrição detalhadas dos princípios da regressão linear, a partir de um caso prático." />
+<meta property="og:image" content="" />
+
+<meta name="author" content="Lucas David" />
+
+
+<meta property="og:title" content="Caso de estudo sobre regressão linear (in Portuguese)" />
+<meta property="twitter:title" content="Caso de estudo sobre regressão linear (in Portuguese)" />
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<link rel="alternate" type="application/rss+xml" title="Lucas David - my personal website/blog"
+      href="/feed.xml" />
+
+  
+  
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LG7FZ8VCHM"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-LG7FZ8VCHM');
+	</script>
+
+
+  
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+  <nav id="mainNav" class="navbar navbar-light bg-white navbar-expand-lg d-print-none border-bottom border-light ">
+  <div class="container-xl">
+    <button class="navbar-toggler rounded-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand fw-bold text-decoration-none p-1" href="/">Lucas David</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <span class="navbar-text navbar-excerpt">
+        Caso de estudo sobre regressão linear (in Portuguese)
+      </span>
+      <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+      <ul class="navbar-nav mb-2 mb-lg-0 font-small">
+        <li class="nav-item"><a href="/" class="nav-link fw-bold link-dark fs-6">Home</a></li>
+        <li class="nav-item"><a href="/blog" class="nav-link fw-bold link-dark fs-6">Blog</a></li>
+        <li class="nav-item"><a href="/publications" class="nav-link fw-bold link-dark fs-6">Publications</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold link-dark fs-6" href="#" id="nbd-links-social" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Social
+          </a>
+          <ul class="dropdown-menu font-small dropdown-menu-end" aria-labelledby="nbd-links-social">
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://github.com/lucasdavid">
+                <i aria-label="GitHub" class="bi bi-github link-dark sr-none"></i>
+                Github</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://www.linkedin.com/in/ld7">
+                <i class="bi bi-linkedin text-primary sr-none"></i>
+                Linkedin</a></li>
+
+            <li itemscope itemtype="https://schema.org/Person">
+              <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+                  target="orcid.widget"
+                  rel="me noopener noreferrer"
+                  class="dropdown-item text-decoration-none"
+                >
+                <img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 5px; width: 16px;">
+                ORCID</a>
+            </li>
+
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="http://stackoverflow.com/users/2429640/lucasdavid">
+                <i class="bi bi-code-slash link-dark sr-none"></i>
+                Stackoverflow</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q">
+                <i class="bi bi-youtube text-danger sr-none"></i>
+                Youtube</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+</div>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12 col-xl-3 col-xxl-2 offset-xxl-1">
+      <div id="sidebar" class="">
+  <div class="text-center">
+    <a href="/" title="Home">
+      <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
+        class="img-fluid rounded-circle" style="width:100px" />
+    </a>
+    <p class="pt-2 font-small">
+      
+        <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
+      
+    </p>
+  </div>
+
+  
+</div>
+
+    </div>
+    <div id="table-of-contents-container-r" class="col-12 col-xl-3 col-xxl-2 order-xl-2">
+      
+      <div style="z-index: 0; font-size:0.8rem;">
+        <div id="table-of-contents" class="font-small">
+  <p class="border-bottom"><strong>Summary</strong></p>
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#coletando-as-informações">Coletando as informações</a></li>
+<li class="toc-entry toc-h2"><a href="#data-engineering--análise">Data Engineering &amp; Análise</a></li>
+<li class="toc-entry toc-h2"><a href="#estimando-o-tamanho-do-calçado-a-partir-da-altura">Estimando o tamanho do calçado a partir da altura</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#aprendendo-parâmetros">Aprendendo parâmetros</a></li>
+<li class="toc-entry toc-h3"><a href="#regressões-lineares-eficientes-utilizando-o-scikit-learn">Regressões lineares eficientes utilizando o Scikit-learn</a></li>
+<li class="toc-entry toc-h3"><a href="#regressões-lineares-utilizando-o-tensorflow">Regressões lineares utilizando o Tensorflow</a></li>
+<li class="toc-entry toc-h3"><a href="#próximos-passos-features-não-lineares-redes-não-lineares">Próximos passos: features não lineares, redes não-lineares</a></li>
+<li class="toc-entry toc-h3"><a href="#generalização-e-teste">Generalização e teste</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+      </div>
+      
+    </div>
+    <div class="col-12 col-xl-6">
+      <article class="post mb-4">
+        <header class="">
+          <h1 id="postTitle" class="fw-bold">Caso de estudo sobre regressão linear (in Portuguese)</h1>
+          <p class="right-align mb-2 text-muted fs-5">
+            Uma descrição detalhadas dos princípios da regressão linear, a partir de um caso prático. <em>— September 30, 2020</em>
+          </p>
+          <div class="mb-4">
+            <span class="badges-container">
+  
+    <a href="/blog/tag/ml"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >ML</a>
+  
+    <a href="/blog/tag/regression"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Regression</a>
+  
+    <a href="/blog/tag/linear-optimization"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Linear Optimization</a>
+  
+    <a href="/blog/tag/portuguese"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Portuguese</a>
+  
+</span>
+
+          </div>
+        </header>
+        <div class="article-content" style="margin-top: 4rem;">
+          <p><span class="fs-1" style="line-height:0">ML</span> não é uma coisa incompreensível. Não funciona pra todos os casos e não vai necessariamente te oferecer uma solução melhor do que uma implementação bem pensada e deterministica num passe de mágica. Tem as suas utilidades. Podemos resolver problemas de uma forma relativamente simples em ambientes dinâmicos e confusos, ou onde não podemos fazer grandes suposições em relação ao seu funcionamento.</p>
+
+<p>Esse notebook explica um pouco sobre modelos lineares: como eles funcionam e como utilizá-los de forma eficiente. Espero que seja instrutivo e clareie um pouco do tópico pra todo mundo.</p>
+
+<p>Suponha que você é um dev em uma empresa de e-commerce de roupas e calçados.
+Ao longo dos meses de operação, a equipe coletou amostras para construir uma tabela que mapeia os tamanhos das peças para a altura média das pessoas que as compram, além de informações sobre sexo e tamanho dos sapatos dos compradores.</p>
+
+<p>A fim de fomentar o espirito consumista de seus clientes e impulsionar o ecosistema de blogueirinhas, você deseja recomendar belos calçados após cada compra de roupa. Naturalmente, você deseja recomendar somente os calçados que <strong>provavelmente servirão</strong> ao cliente específico.</p>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#collapseSetup" aria-controls="collapseSetup" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show setup code</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="collapseSetup"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
+
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display_html</span>
+
+<span class="k">def</span> <span class="nf">display_side_by_side</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">html_str</span><span class="o">=</span><span class="s">''</span>
+    <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+        <span class="n">html_str</span><span class="o">+=</span><span class="n">df</span><span class="p">.</span><span class="n">to_html</span><span class="p">()</span>
+    <span class="n">display_html</span><span class="p">(</span><span class="n">html_str</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'table'</span><span class="p">,</span><span class="s">'table style="display:inline"'</span><span class="p">),</span><span class="n">raw</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="p">.</span><span class="nb">set</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h2 id="coletando-as-informações">Coletando as informações</h2>
+
+<p>Seus colegas disponibilizaram todos os dados necessários em um arquivo <code class="language-plaintext highlighter-rouge">wo_men.csv</code> (o <a href="https://osf.io/66fvm/">conjunto de dados wo-man</a>, na verdade), para leitura imediata:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">DATA_FILE</span> <span class="o">=</span> <span class="s">'/content/drive/Shareddrives/datasets/shoes.csv'</span>
+<span class="n">TRUSTED_FILE</span> <span class="o">=</span> <span class="s">'/content/drive/Shareddrives/datasets/shoes.trusted.csv'</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_FILE</span><span class="p">)</span>
+     <span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">'time'</span><span class="p">])</span>
+     <span class="p">.</span><span class="n">dropna</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>Não precisamos da coluna de tempo, então podemos ler o arquivo e imediatamente removê-la. Apagamos também as linhas que contém valores faltantes. Procedemos então à exibir:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span><span class="p">.</span><span class="n">head</span><span class="p">().</span><span class="nb">round</span><span class="p">()</span>  <span class="c1"># as cinco primeiras linhas do conjunto
+</span></code></pre></div></div>
+
+<div class="table-responsive"><table class="dataframe table table-hover">
+  <thead>
+    <tr>
+      <th></th>
+      <th>sex</th>
+      <th>height</th>
+      <th>shoe_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>woman</td>
+      <td>160.0</td>
+      <td>40.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>woman</td>
+      <td>171.0</td>
+      <td>39.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>woman</td>
+      <td>174.0</td>
+      <td>39.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>woman</td>
+      <td>176.0</td>
+      <td>40.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>man</td>
+      <td>195.0</td>
+      <td>46.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span><span class="p">.</span><span class="n">describe</span><span class="p">().</span><span class="nb">round</span><span class="p">().</span><span class="n">T</span>  <span class="c1"># estatísticas gerais sobre as colunas numéricas do conjunto
+</span></code></pre></div></div>
+<div class="table-responsive"><table class="dataframe table table-hover">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+      <th>mean</th>
+      <th>std</th>
+      <th>min</th>
+      <th>25%</th>
+      <th>50%</th>
+      <th>75%</th>
+      <th>max</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>height</th>
+      <td>100.0</td>
+      <td>165.0</td>
+      <td>40.0</td>
+      <td>2.0</td>
+      <td>163.0</td>
+      <td>168.0</td>
+      <td>174.0</td>
+      <td>364.0</td>
+    </tr>
+    <tr>
+      <th>shoe_size</th>
+      <td>100.0</td>
+      <td>40.0</td>
+      <td>6.0</td>
+      <td>35.0</td>
+      <td>38.0</td>
+      <td>39.0</td>
+      <td>40.0</td>
+      <td>88.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span><span class="p">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">'sex'</span><span class="p">).</span><span class="n">count</span><span class="p">()</span>  <span class="c1"># a contagem de amostras para cada grupo da variável `sex`.
+</span></code></pre></div></div>
+
+<div class="table-responsive"><table class="dataframe table table-hover">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>height</th>
+      <th>shoe_size</th>
+    </tr>
+    <tr>
+      <th>sex</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>man</th>
+      <td>18</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>woman</th>
+      <td>82</td>
+      <td>82</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Observe que há muito mais amostras “woman” que “man”.
+Isso pode criar um problema depois dependendo da tarefa a ser resolvida e o quão dependente ela é de <em>data-balancing</em> para performar corretamente.</p>
+
+<p>De qualquer forma, vamos primeiro nos preocupar em pre-processar esses dados.</p>
+
+<h2 id="data-engineering--análise"><em>Data Engineering</em> &amp; Análise</h2>
+
+<p>Pra tomarmos (ou para a máquina tomar) decisões precisas, precisamos garantir que estes dados estejam o mais limpo possível. Como as colunas são estruturadas, podemos plotar alguns gráficos para explorá-las:</p>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv1" aria-controls="cv1" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv1"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="n">sns</span><span class="p">.</span><span class="n">axes_style</span><span class="p">(</span><span class="s">'darkgrid'</span><span class="p">):</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+    <span class="n">sns</span><span class="p">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">height</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+    <span class="n">sns</span><span class="p">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="bp">True</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_11_0.png" alt="Distribuição das características no conjunto wo_men: (a) histograma da variável altura; (b) histograma da variável shoe size." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Distribuição das características no conjunto wo_men: (a) histograma da variável altura; (b) histograma da variável <i>shoe size</i>.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Algo esquisito está acontecendo:</p>
+<ul>
+  <li>0.5% dos usuários tem a altura igual à $0$</li>
+  <li>alguns usuários possuem uma altura maior que $350cm$</li>
+  <li>alguns usuários calçam sapatos de tamanho próximo à 90</li>
+</ul>
+
+<p>Só pode ser um erro de entrada. Vamos visualizá-los separadamente:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span><span class="p">[</span><span class="n">x</span><span class="p">.</span><span class="n">height</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">]</span>
+</code></pre></div></div>
+<div class="table-responsive"><table class="dataframe table table-hover">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>sex</th>
+      <th>height</th>
+      <th>shoe_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>47</th>
+      <td>woman</td>
+      <td>1.84</td>
+      <td>41.0</td>
+    </tr>
+    <tr>
+      <th>61</th>
+      <td>woman</td>
+      <td>1.63</td>
+      <td>38.0</td>
+    </tr>
+    <tr>
+      <th>77</th>
+      <td>woman</td>
+      <td>1.68</td>
+      <td>38.0</td>
+    </tr>
+    <tr>
+      <th>80</th>
+      <td>woman</td>
+      <td>1.73</td>
+      <td>38.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Claramente, a altura foi escrita em <em>metros</em> em vez de <em>centímetros</em>.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span><span class="p">[</span><span class="n">x</span><span class="p">.</span><span class="n">height</span> <span class="o">&gt;</span> <span class="mi">300</span><span class="p">]</span>
+</code></pre></div></div>
+<div class="table-responsive"><table class="dataframe table table-hover">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>sex</th>
+      <th>height</th>
+      <th>shoe_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>67</th>
+      <td>woman</td>
+      <td>364.0</td>
+      <td>88.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Isso parece um erro irrecuperável. É melhor removermos essa linha completamente.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">preprocessing</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">handle_heights_in_cm</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">drop_illegal_heights</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">drop_illegal_shoe_sizes</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">y</span>
+
+<span class="k">def</span> <span class="nf">drop_illegal_heights</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="c1"># Numbers based on the world-records
+</span>    <span class="c1"># for shortest and tallest person.
+</span>    <span class="k">return</span> <span class="n">df</span><span class="p">[(</span><span class="mf">62.8</span> <span class="o">&lt;=</span> <span class="n">df</span><span class="p">.</span><span class="n">height</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">.</span><span class="n">height</span> <span class="o">&lt;=</span> <span class="mi">288</span><span class="p">)]</span>
+
+<span class="k">def</span> <span class="nf">handle_heights_in_cm</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">.</span><span class="n">height</span> <span class="o">&lt;=</span> <span class="mf">2.88</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">100</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+<span class="k">def</span> <span class="nf">drop_illegal_shoe_sizes</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">.</span><span class="n">shoe_size</span> <span class="o">&lt;=</span> <span class="mi">75</span><span class="p">]</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv2" aria-controls="cv2" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv2"><div class="highlight"><pre class="highlight"><code><span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">height</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">();</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">'sex'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'height'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">'sex'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'shoe_size'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">();</span>
+
+<span class="c1"># Pair Plot between all Features in Shoes
+</span><span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">'sex'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div id="crsl-women-cleaned" class="carousel slide carousel-dark" data-bs-ride="carousel" alt="Distribuição das características no conjunto wo_men após a remoção dos dados inválidos.">
+  <div class="carousel-inner" style="height: 360px">
+    <div class="carousel-item active"><center><img src="/assets/images/posts/ml/lm/lm_18_0.png" class="d-block" /></center></div>
+    <div class="carousel-item"><center><img src="/assets/images/posts/ml/lm/lm_19_0.png" class="d-block" /></center></div>
+    <div class="carousel-item"><center><img src="/assets/images/posts/ml/lm/lm_20_0.png" class="d-block" /></center></div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#crsl-women-cleaned" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#crsl-women-cleaned" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<p>Isso significa que há uma clara distinção entre as alturas/tam. dos calçados de homens e mulheres, e eles podem ser variáveis importantes na hora de inferir a qual categoria uma amostra pertence.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span><span class="p">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">TRUSTED_FILE</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="estimando-o-tamanho-do-calçado-a-partir-da-altura">Estimando o tamanho do calçado a partir da altura</h2>
+
+<p>S: existe uma função $f^\star$ que descreve perfeitamente o relacionamento entre <em>tam. calçado</em> à outros atributos físicos, comportamentais e culturais de uma pessoa. Essa função com certeza depende de mais variáveis do que simplesmente a altura.</p>
+
+<p>Q: Podemos aproximar $f^\star$ tal que o erro mínimo associado $E$ é aceitável?</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">S</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">.</span><span class="nb">min</span><span class="p">(),</span> <span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">.</span><span class="nb">max</span><span class="p">()</span>
+<span class="n">S</span>
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="mf">35.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Podemos definir um estimador (determinístico) que diz diretamente qual é o valor para cada pessoa:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">h</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">36</span>
+
+<span class="n">_</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+<span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">s</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span>
+<span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">E</span>
+</code></pre></div></div>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="mf">40.0</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Considerando uma das amostras do conjunto (a primeira), é possível medir (baseado em alguma função de erro) o <em>quão distante estamos</em> da saída desejada (o tam. do calçado verdadeiro). Erros grandes significam maiores distancias para o valor desejado, enquanto erros baixos implicam em estimadores mais acurados. Vamos chamar a função que usamos acima <em>absolute error function</em>:</p>
+
+\[E(h, s) = |s - f(h)|\]
+
+<p>Mas considerar somente a primeira amostra é representativo o suficiente? Construir modelos genéricos baseados em uma única observação é muito selvagem.
+É melhor olharamos pra todo o conjunto de dados:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">x</span><span class="p">[</span><span class="s">'predicted'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">fn</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">x</span><span class="p">.</span><span class="n">height</span><span class="p">]</span>
+    <span class="n">x</span><span class="p">[</span><span class="s">'error'</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">predicted</span> <span class="o">-</span> <span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+<span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">).</span><span class="n">head</span><span class="p">().</span><span class="nb">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="table-responsive"><table class="dataframe table table-hover">
+  <thead>
+    <tr>
+      <th></th>
+      <th>sex</th>
+      <th>height</th>
+      <th>shoe_size</th>
+      <th>predicted</th>
+      <th>error</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>woman</td>
+      <td>160.0</td>
+      <td>40.0</td>
+      <td>36</td>
+      <td>4.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>woman</td>
+      <td>171.0</td>
+      <td>39.0</td>
+      <td>36</td>
+      <td>3.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>woman</td>
+      <td>174.0</td>
+      <td>39.0</td>
+      <td>36</td>
+      <td>3.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>woman</td>
+      <td>176.0</td>
+      <td>40.0</td>
+      <td>36</td>
+      <td>4.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>man</td>
+      <td>195.0</td>
+      <td>46.0</td>
+      <td>36</td>
+      <td>10.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Se calcularmos a <em>média</em> entre todos os <em>absolute errors</em> (alcançando a função MAE), se torna claro que nossas “predições” estão fora do esperado por mais ou menos $3.33$:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">).</span><span class="n">describe</span><span class="p">().</span><span class="nb">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="table-responsive"><table class="dataframe table table-hover">
+  <thead>
+    <tr>
+      <th></th>
+      <th>height</th>
+      <th>shoe_size</th>
+      <th>predicted</th>
+      <th>error</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>95.00</td>
+      <td>95.00</td>
+      <td>95.0</td>
+      <td>95.00</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>170.03</td>
+      <td>39.31</td>
+      <td>36.0</td>
+      <td>3.33</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>9.41</td>
+      <td>2.73</td>
+      <td>0.0</td>
+      <td>2.70</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>155.00</td>
+      <td>35.00</td>
+      <td>36.0</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>163.00</td>
+      <td>38.00</td>
+      <td>36.0</td>
+      <td>2.00</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>169.00</td>
+      <td>39.00</td>
+      <td>36.0</td>
+      <td>3.00</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>174.50</td>
+      <td>40.00</td>
+      <td>36.0</td>
+      <td>4.00</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>206.00</td>
+      <td>50.00</td>
+      <td>36.0</td>
+      <td>14.00</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Observando a tabela acima, a função pode ser trivialmente ajustada para reduzir o erro para $2$. Consegue imaginar como?
+Pensa um pouquinho antes de exibir o código abaixo.</p>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv5" aria-controls="cv5" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv5"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">h</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mf">39.31</span>  <span class="c1"># populational mean
+</span>
+<span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">).</span><span class="n">describe</span><span class="p">().</span><span class="nb">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="table-responsive"><table class="dataframe table table-hover">
+  <thead>
+    <tr>
+      <th></th>
+      <th>height</th>
+      <th>shoe_size</th>
+      <th>predicted</th>
+      <th>error</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>95.00</td>
+      <td>95.00</td>
+      <td>95.00</td>
+      <td>95.00</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>170.03</td>
+      <td>39.31</td>
+      <td>39.31</td>
+      <td>2.00</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>9.41</td>
+      <td>2.73</td>
+      <td>0.00</td>
+      <td>1.84</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>155.00</td>
+      <td>35.00</td>
+      <td>39.31</td>
+      <td>0.31</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>163.00</td>
+      <td>38.00</td>
+      <td>39.31</td>
+      <td>0.69</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>169.00</td>
+      <td>39.00</td>
+      <td>39.31</td>
+      <td>1.31</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>174.50</td>
+      <td>40.00</td>
+      <td>39.31</td>
+      <td>2.69</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>206.00</td>
+      <td>50.00</td>
+      <td>39.31</td>
+      <td>10.69</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>A média populacional é o valor que produz o menor MAE, pela definição de esperança e como a MAE é definida, mas a média dos erros é suficiente pra descrever como está o nosso modelo?</p>
+
+<p>As distribuições de <em>tam. de calçados</em> verdadeira (normalmente chamada de <em>ground truth</em>) e das nossas predições podem oferecer um pouco mais de contexto:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
+
+<span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'MSE ='</span><span class="p">,</span> <span class="n">metrics</span><span class="p">.</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">).</span><span class="nb">round</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'MAE ='</span><span class="p">,</span> <span class="n">metrics</span><span class="p">.</span><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">).</span><span class="nb">round</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'R²  ='</span><span class="p">,</span> <span class="n">metrics</span><span class="p">.</span><span class="n">r2_score</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">).</span><span class="nb">round</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+
+    <span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Observations and Predictions Distribution'</span><span class="p">)</span>
+    <span class="n">sns</span><span class="p">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">'ground truth'</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">'green'</span><span class="p">)</span>
+    <span class="n">sns</span><span class="p">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">'predicted'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">'crimson'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">legend</span><span class="p">()</span>
+
+    <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Error Distribution'</span><span class="p">)</span>
+    <span class="n">sns</span><span class="p">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">p</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s">'error'</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">p</span> <span class="o">=</span> <span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+<span class="n">evaluate</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">predicted</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MSE = 7.359
+MAE = 2.001
+R²  = -0.0
+</code></pre></div></div>
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_36_1.png" alt="Distribuição de amostras, predições e erros para o conjunto wo_men." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Distribuição de amostras, predições e erros para o conjunto wo_men.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Note que nunca iremos predizer bem para pessoas que possuem o tam. do calçado diferente da média (todo mundo, de acordo com o gráfico abaixo).
+O segundo gráfico ilustra a partir de uma sequência de diferenças entre valores preditos e variáveis alvo. A maioria dos erros de concentram abaixo de 2 ou 3 números.</p>
+
+<p>O que aconteceria se colocassemos um pouco de variação no nosso modelo? O erro iria aumentar ou diminuir?</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">h</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mf">39.31</span> <span class="o">+</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1.84</span>
+
+<span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">).</span><span class="n">describe</span><span class="p">().</span><span class="nb">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="table-responsive"><table class="dataframe table table-hover">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>height</th>
+      <th>shoe_size</th>
+      <th>predicted</th>
+      <th>error</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>95.00</td>
+      <td>95.00</td>
+      <td>95.00</td>
+      <td>95.00</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>170.03</td>
+      <td>39.31</td>
+      <td>39.00</td>
+      <td>2.37</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>9.41</td>
+      <td>2.73</td>
+      <td>1.81</td>
+      <td>2.21</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>155.00</td>
+      <td>35.00</td>
+      <td>35.61</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>163.00</td>
+      <td>38.00</td>
+      <td>37.68</td>
+      <td>0.72</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>169.00</td>
+      <td>39.00</td>
+      <td>39.16</td>
+      <td>1.83</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>174.50</td>
+      <td>40.00</td>
+      <td>40.20</td>
+      <td>3.49</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>206.00</td>
+      <td>50.00</td>
+      <td>44.08</td>
+      <td>14.33</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>O erro médio subiu um pouco, mas não tenho certeza se isso é significativo. As distribuições, entretanto, estão muito mais parecidas:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">p</span> <span class="o">=</span> <span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+<span class="n">evaluate</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">predicted</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MSE = 9.372
+MAE = 2.431
+R²  = -0.274
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_40_1.png" alt="Distribuição de amostras, predições e erros para o conjunto wo_men, quando ruído é acrescido das predições." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Distribuição de amostras, predições e erros para o conjunto wo_men, quando ruído é acrescido das predições
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Nós ainda estamos muito ruins (pior do que antes) em predizer a variável de interesse para pessoas com pés anormais, mas agora podemos fingir que o nosso modelo é inteligente (ou ao menos <strong>não determinístico</strong>).
+O segundo gráfico nos diz que ainda estamos fazendo mais erros pequenos do que grandes, mas que no geral mais erros grandes acontecem agora que adicionamos o fator aleatório <code class="language-plaintext highlighter-rouge">np.random.randn</code>.</p>
+
+<p>Os modelos acima utilizam informações estatísticas para criar uma resposta. Isso seria argumentavelmente uma decisão “racional”, mas isso seria considerado “machine learning”?</p>
+
+<h3 id="aprendendo-parâmetros">Aprendendo parâmetros</h3>
+
+<p>Como podemos melhorar ainda mais nossas estimativas?
+Até agora, nós temos uma função estimadora <em>constante</em> e uma função de cálculo de erro. A próxima função mais simples é a função linear:</p>
+
+\[f(x) = ax + b\]
+
+<h4 id="estudo-sobre-variáveis">Estudo sobre variáveis</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span><span class="o">*</span><span class="n">h</span> <span class="o">+</span> <span class="n">b</span>
+</code></pre></div></div>
+
+<p>Essa função assume vários comportamentos dependendo dos parâmetros $a$ e $b$:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="n">sns</span><span class="p">.</span><span class="n">axes_style</span><span class="p">(</span><span class="s">'darkgrid'</span><span class="p">):</span>
+    <span class="n">sns</span><span class="p">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">'height'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'shoe_size'</span><span class="p">,</span>
+                    <span class="n">hue</span><span class="o">=</span><span class="s">'sex'</span><span class="p">,</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s">'real data'</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="p">((.</span><span class="mi">08</span><span class="p">,</span> <span class="mi">17</span><span class="p">),</span>
+                <span class="p">(.</span><span class="mi">25</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="p">(.</span><span class="mi">07</span><span class="p">,</span> <span class="mi">20</span><span class="p">)):</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="mi">150</span> <span class="o">+</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+        <span class="n">sns</span><span class="p">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">h</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s">'f=</span><span class="si">{</span><span class="n">a</span><span class="p">:.</span><span class="mi">2</span><span class="n">f</span><span class="si">}</span><span class="s">x + </span><span class="si">{</span><span class="n">b</span><span class="p">:.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+</code></pre></div></div>
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_47_0.png" alt="Distribuição das amostras do conjunto de dados (pontos) e três modelos possíveis (segmento de retas)." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Distribuição das amostras do conjunto de dados (pontos) e três modelos possíveis (segmento de retas).
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Existe uma linha $(a, b)$ que estima perfeitamente a variável alvo em cima da característica de entrada? Pela figura, com certeza não: as amostras não são colineares. Qual é a melhor linha então?</p>
+
+<p>Se todas as $n$ amostras têm a mesma <strong>importância</strong>, então nós queremos estimar todas elas o melhor possível. Com <code class="language-plaintext highlighter-rouge">MAE</code> como função de erro, podemos <strong>escolher</strong> parâmetros $a, b$ tais que essa métrica atinja um valor mínimo.
+Em outras outras palavras:</p>
+
+\[argmin_{a, b} \frac{1}{n} \sum_i^{n} |y_i - f_i|\]
+
+<p>Onde $f_i = ah_i + b$.</p>
+
+<p>Só que existe um problema aqui: a função norma não é suave e imediatamente diferenciável:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mae_loss</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">p</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv6" aria-controls="cv6" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv6"><div class="highlight"><pre class="highlight"><code><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span> <span class="o">-</span><span class="mi">50</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="p">));</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_50_0.png" alt="Função Mean Absolute Error (MAE), para x contido no intervao -50 e 50." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Função <i>Mean Absolute Error</i> (MAE), para $x\in [-50, 50]$.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Isso não é exatamente um problema nesse caso onde uma única variável está sendo otimizada, mas causa a criação de muitos pontos não-diferenciaveis em problemas que dependem de múltiplas características, o que torna o processo de otimização instável.</p>
+
+<p>Proposta: porque não substituímos pela função de otimização quadrática? Isso irá curvar a linha próximo ao 0.
+O modelo então se torna:</p>
+
+\[argmin_{a, b} \frac{1}{n}\sum_i^{n} (y_i - p_i)^2\]
+
+<p>Essa função é diferenciável.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mse_loss</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv7" aria-controls="cv7" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv7"><div class="highlight"><pre class="highlight"><code><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span> <span class="o">-</span><span class="mi">50</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">p</span> <span class="o">**</span> <span class="mi">2</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_53_0.png" alt="Função Mean Squared Error (MSE), para x contido no intervao -50 e 50." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Função <i>Mean Squared Error</i> (MSE), para $x\in [-50, 50]$.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Mas é claro, nós temos dois parâmetros, então o nosso espaço de busca se parece muito mais com isso:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">As</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+<span class="n">Bs</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Generate many combinations of (a, b)
+</span><span class="n">aa</span><span class="p">,</span> <span class="n">bb</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">As</span><span class="p">,</span> <span class="n">Bs</span><span class="p">)</span>
+<span class="n">ab</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">aa</span><span class="p">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">bb</span><span class="p">.</span><span class="n">ravel</span><span class="p">()]).</span><span class="n">T</span>
+
+<span class="c1"># Compute the loss for each combination
+</span><span class="n">mse</span> <span class="o">=</span> <span class="p">[</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">height</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+       <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">ab</span><span class="p">]</span>
+
+<span class="n">space</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">ab</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mse</span><span class="p">).</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv8" aria-controls="cv8" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv8"><div class="highlight"><pre class="highlight"><code><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">gca</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s">'3d'</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">.</span><span class="n">plot_trisurf</span><span class="p">(</span><span class="n">space</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">space</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">space</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">.</span><span class="mi">1</span><span class="p">),</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">'orange'</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">'a'</span><span class="p">),</span> <span class="n">ax</span><span class="p">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">'b'</span><span class="p">),</span> <span class="n">ax</span><span class="p">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s">'MSE'</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_56_0.png" alt="Manifold de otimização descrita pela função MSE, contida no espaço euclidiano Reais elevado à 3." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Manifold de otimização descrita pela função MSE, contida no espaço euclidiano $\mathbb{R}^3$.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>De qualquer forma, para propósito de ilustração, vamos voltar ao nosso cenário com uma única variável (suponha $b = 0$) a ser refinada. Podemos começar em um ponto aleatório no espaço:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a0</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">.</span><span class="mi">25</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">()</span>
+<span class="n">b0</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">f0</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">height</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">a0</span><span class="p">,</span> <span class="n">b0</span><span class="p">)</span>
+<span class="n">mse0</span> <span class="o">=</span> <span class="n">mse_loss</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">height</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">b0</span><span class="p">))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">a0</span><span class="p">:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s">, </span><span class="si">{</span><span class="n">b0</span><span class="p">:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s">, </span><span class="si">{</span><span class="n">f0</span><span class="p">:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s">, </span><span class="si">{</span><span class="n">mse0</span><span class="p">:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0.488, 0.000, 78.148, 1919.643
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv9" aria-controls="cv9" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv9"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">point_on_curve</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">([</span><span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">e</span><span class="p">],</span> <span class="s">'o'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s">'mse($</span><span class="si">{</span><span class="n">a</span><span class="p">:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s">h + </span><span class="si">{</span><span class="n">b</span><span class="p">:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s">)$'</span><span class="p">,</span>
+                 <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">),</span>
+                 <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="p">.</span><span class="mi">1</span><span class="p">,</span> <span class="n">e</span><span class="p">));</span>
+
+<span class="n">As</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">mses</span> <span class="o">=</span> <span class="p">[</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">height</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">b0</span><span class="p">))</span> <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">As</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">As</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">mses</span><span class="p">)</span>
+<span class="n">point_on_curve</span><span class="p">(</span><span class="n">mse0</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">b0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_59_0.png" alt="Início aleatório no conjunto de soluções para o problema." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Início aleatório no conjunto de soluções para o problema.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h4 id="solução-exata-da-equação">Solução exata da equação</h4>
+
+<p>Se $a$ crescer, o <code class="language-plaintext highlighter-rouge">mse</code> aumenta quadraticamente.
+O ponto ótimo $a\star$ é no intervalo $(0, 1)$, tal que o <code class="language-plaintext highlighter-rouge">mse</code> é mínimo. Um modelo ótimo é então definido por:</p>
+
+\[argmin_{a}\frac{1}{n} \sum_i (y_i - p_i)^2 = argmin_{a} \frac{1}{n}\sum_i y_i - (ah_i + b)^2\]
+
+<p>Essa equação só tem um ponto crítico, então tem solução imediata $\frac{\partial mse}{\partial a} = 0$.
+Expandindo essa derivada:</p>
+
+\[\begin{align*}
+\frac{\partial}{\partial a} \frac{1}{n}\sum_i (y_i -ah_i -b)^2 &amp;= \frac{1}{n}\sum_i \frac{\partial mse}{\partial a} (y_i - ah_i -b)^2   \\
+&amp;= \frac{2}{n}\sum_i (y_i - ah_i -b)\frac{\partial}{\partial a} (y_i - ah_i -b)   \\
+&amp;= \frac{2}{n}\sum_i (y_i - ah_i -b)h_i   \\
+&amp;= \frac{2}{n}\sum_i y_ih_i - ah_i^2 -bh_i = 0   \\
+&amp;\implies   \\
+\frac{2}{n}\sum_i y_ih_i -bh_i &amp;= \frac{2}{n}\sum_i ah_i^2   \\
+&amp;\implies   \\
+a\star &amp;= \frac{2}{n}\sum_i \frac{y_ih_i bh_i}{h_i^2} = \frac{2}{n}\sum_i \frac{y_i -b}{h_i} \\
+\end{align*}\]
+
+<p><strong>Observação 1:</strong> se tivéssemos o segundo parâmetro $b$ livre, poderíamos buscá-lo da mesma forma:</p>
+
+\[b\star = \frac{1}{2n}\sum_i y_i - ah_i\]
+
+<p><strong>Observação 2:</strong> já que o <code class="language-plaintext highlighter-rouge">mse</code> não tem uma interpretação humana direta de qualquer jeito (igual ao <code class="language-plaintext highlighter-rouge">mae</code>), uma conveniência matemática é normalmente adotada onde ela é definida dividida por $2$:</p>
+
+\[mse(y, p) = \frac{1}{2n}\sum_i^n (...)^2\]
+
+<p>Isso simplifica as derivadas:</p>
+
+\[\begin{align*}
+a\star &amp;= \frac{1}{n}\sum_i \frac{y_i -b}{h_i} \\
+b\star &amp;= \frac{1}{n}\sum_i y_i - ah_i
+\end{align*}\]
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a1</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span> <span class="o">-</span> <span class="n">b0</span><span class="p">)</span> <span class="o">/</span> <span class="n">x</span><span class="p">.</span><span class="n">height</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">mse1</span> <span class="o">=</span> <span class="n">mse_loss</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">height</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">b0</span><span class="p">))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'MSE = </span><span class="si">{</span><span class="n">mse1</span><span class="p">:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">As</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">mses</span><span class="p">)</span>
+<span class="n">point_on_curve</span><span class="p">(</span><span class="n">mse1</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">b0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MSE = 1.930
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_63_1.png" alt="Candidata a solução ótima encontrada de forma analítica para o problema." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Candidata a solução ótima encontrada de forma analítica para o problema.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>A reta $(a_1, 0)$ pode agora ser utilizada para estimar novas amostras com tamanho de sapato desconhecido, contando que a informação de altura esteja disponível:</p>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv10" aria-controls="cv10" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv10"><div class="highlight"><pre class="highlight"><code><span class="n">sns</span><span class="p">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">'height'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'shoe_size'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">'sex'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">'real data'</span><span class="p">)</span>
+
+<span class="n">h</span> <span class="o">=</span> <span class="mi">150</span> <span class="o">+</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">b0</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="p">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">h</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s">'f=</span><span class="si">{</span><span class="n">a1</span><span class="p">:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s">x + </span><span class="si">{</span><span class="n">b0</span><span class="p">:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_65_0.png" alt="Distribuição de dados e solução ótima encontrada de forma analítica para o problema." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Distribuição de dados e candidata a solução ótima encontrada de forma analítica para o problema.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>O que acontece quando otimizamos os dois parâmetros atualizados? Podemos atingir um resultado melhor?</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">b1</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span> <span class="o">-</span> <span class="n">a1</span><span class="o">*</span><span class="n">x</span><span class="p">.</span><span class="n">height</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">mse2</span> <span class="o">=</span> <span class="n">mse_loss</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">height</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">b1</span><span class="p">))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'MSE updated from </span><span class="si">{</span><span class="n">mse1</span><span class="p">:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s"> to </span><span class="si">{</span><span class="n">mse2</span><span class="p">:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s"> by optimizing parameter b.'</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">As</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">mses</span><span class="p">)</span>
+<span class="n">point_on_curve</span><span class="p">(</span><span class="n">mse2</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">b1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MSE updated from 1.930 to 1.930 by optimizing parameter b.
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_67_1.png" alt="Segunda candidata a solução ótima encontrada de forma analítica para o problema." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Segunda candidata a solução ótima encontrada de forma analítica para o problema.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Esse processo de treinamento é interessante por ser eficiente, mas exige que os as variáveis de entrada sejam diferentes de $0$. Quando múltiplas características são apresentadas, essa exigência se generaliza em esperar que a matriz seja inversível.</p>
+
+<h4 id="solução-iterativa-da-equação">Solução iterativa da equação</h4>
+
+<p>Uma outra forma de definir o treinamento é como um processo de <strong>otimização iterativo</strong>, onde todos os parâmetros são sujeitos a uma regra de atualização amortecida por um coeficiente (<em>learning rate</em>) por um número limitado de passos (<em>epochs</em>).</p>
+
+<h3 id="regressões-lineares-eficientes-utilizando-o-scikit-learn">Regressões lineares eficientes utilizando o Scikit-learn</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+
+<span class="n">FEATURES</span> <span class="o">=</span> <span class="p">[</span><span class="s">'height'</span><span class="p">]</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">().</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">],</span> <span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">predicted</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">])</span>
+
+<span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">,</span> <span class="n">predicted</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MSE = 1.901
+MAE = 1.074
+R²  = 0.742
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_72_1.png" alt="Distribuição de amostras, predições e erros para o conjunto wo_men." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Distribuição de amostras, predições e erros para o conjunto wo_men.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Após otimizar os parâmetros $a$ e $b$, nosso erro caiu <strong>muito</strong>. Eles estão agora majoritariamente concentrados no intervalo $(0, 1.5)$.
+Os parâmetros do modelo treinado no scikit-learn tb podem ser diretamente acessados:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model</span><span class="p">.</span><span class="n">coef_</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">intercept_</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(array([0.24963078]), -3.133275090526716)
+</code></pre></div></div>
+
+<p>Os coeficientes angulares são representados como um vetor pois o scikit considera múltiplas características estão sendo entregues (embora no nosso caso tenha sido uma lista com uma única).</p>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv11" aria-controls="cv11" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv11"><div class="highlight"><pre class="highlight"><code><span class="n">sns</span><span class="p">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">'height'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'shoe_size'</span><span class="p">,</span>
+                <span class="n">hue</span><span class="o">=</span><span class="s">'sex'</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s">'real data'</span><span class="p">)</span>
+
+<span class="n">h</span> <span class="o">=</span> <span class="mi">150</span> <span class="o">+</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">coef_</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">intercept_</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">h</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s">'f=</span><span class="si">{</span><span class="n">a</span><span class="p">:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s">h + </span><span class="si">{</span><span class="n">b</span><span class="p">:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s">'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_77_0.png" alt="Distribuição de amostras do conjunto wo_men (pontos) e modelo obtido pela biblioteca scikit-learn." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Distribuição de amostras do conjunto wo_men (pontos) e modelo obtido pela biblioteca scikit-learn.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h4 id="enriquecendo-a-informação-do-dataset">Enriquecendo a informação do <em>dataset</em></h4>
+
+<p>Podemos enriquecer o estimador ao adicionar mais características.
+Isso aumenta o número de coeficientes utilizados, a granularidade da decisão e, possívelmente, o torna mais acurado:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">traceback</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">().</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">[[</span><span class="s">'height'</span><span class="p">,</span> <span class="s">'sex'</span><span class="p">]],</span> <span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">)</span>
+<span class="k">except</span> <span class="nb">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="n">traceback</span><span class="p">.</span><span class="n">print_exc</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ValueError: could not convert string to float: 'woman'
+</code></pre></div></div>
+
+<p>Por ser um modelo geométrico, ele espera que as features pertençam ao conjunto real.
+Uma forma de lidar com isso é codificando os rótulos em inteiros:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span><span class="p">[</span><span class="s">'sex_encoded'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">sex</span> <span class="o">==</span> <span class="s">'woman'</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">x</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+<div class="table-responsive"><table class="dataframe table table-hover">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>sex</th>
+      <th>height</th>
+      <th>shoe_size</th>
+      <th>sex_encoded</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>woman</td>
+      <td>160.0</td>
+      <td>40.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>woman</td>
+      <td>171.0</td>
+      <td>39.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>woman</td>
+      <td>174.0</td>
+      <td>39.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>woman</td>
+      <td>176.0</td>
+      <td>40.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>man</td>
+      <td>195.0</td>
+      <td>46.0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Porque a variável sexo é binária neste conjunto (<code class="language-plaintext highlighter-rouge">woman</code> e <code class="language-plaintext highlighter-rouge">man</code>), ela codifica nos valores 0 e 1. Isso é preprocessamento suficiente para o nosso modelo. Nós estamos usando aqui o que os estatísticos chamam de suposição de <code class="language-plaintext highlighter-rouge">efeito fixo</code>: a variável categória exerce uma influencia fixa (constante) sobre a variável observada.
+Em outras palavras, estamos criando um modelo que estima o tamanho de sapatos de homens e então adiciona um fator (aprendido) fixo sobre a resposta para estimar o sapatos das mulheres.</p>
+
+<p>Um jeito mais fácil de codificar <em>labels</em> e mantê-las consistentes ao longo de múltiplas execuções é utilizando um <a href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.LabelEncoder.html">label encoder</a>. Neste caso, ele performa exatamente como o nosso código acima:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">LabelEncoder</span>
+
+<span class="n">le</span> <span class="o">=</span> <span class="n">LabelEncoder</span><span class="p">()</span>
+<span class="n">x</span><span class="p">[</span><span class="s">'sex_encoded'</span><span class="p">]</span> <span class="o">=</span> <span class="n">le</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">sex</span><span class="p">)</span>
+
+<span class="c1"># joblib.dump(e, '/path/le.p')
+# e.transform(...)  # then during test, production inference...
+</span>
+<span class="n">x</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+<div class="table-responsive"><table class="dataframe table table-hover">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>sex</th>
+      <th>height</th>
+      <th>shoe_size</th>
+      <th>sex_encoded</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>woman</td>
+      <td>160.0</td>
+      <td>40.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>woman</td>
+      <td>171.0</td>
+      <td>39.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>woman</td>
+      <td>174.0</td>
+      <td>39.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>woman</td>
+      <td>176.0</td>
+      <td>40.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>man</td>
+      <td>195.0</td>
+      <td>46.0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Retreinando e avaliando:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">FEATURES</span> <span class="o">=</span> <span class="p">[</span><span class="s">'height'</span><span class="p">,</span> <span class="s">'sex_encoded'</span><span class="p">]</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">().</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">].</span><span class="n">values</span><span class="p">,</span> <span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">predicted</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">].</span><span class="n">values</span><span class="p">)</span>
+
+<span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">,</span> <span class="n">predicted</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MSE = 1.16
+MAE = 0.846
+R²  = 0.842
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_87_1.png" alt="Distribuição de valores reais, estimados e erros para a variável shoe_size no conjunto wo_men." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Distribuição de valores reais, estimados e erros para a variável shoe_size no conjunto wo_men.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Então não só reduzimos o erro absoluto médio de $1.07$ para $0.85$ (melhora de $21\%$), como também estamos produzindo ainda menos erros grandes (nenhuma amostra teve um erro maior que $3$).</p>
+
+<p>Como ficaram os coeficientes?</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model</span><span class="p">.</span><span class="n">coef_</span><span class="p">.</span><span class="nb">round</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">model</span><span class="p">.</span><span class="n">intercept_</span><span class="p">.</span><span class="nb">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(array([ 0.165, -2.981]), 13.627)
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv12" aria-controls="cv12" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv12"><div class="highlight"><pre class="highlight"><code><span class="n">sns</span><span class="p">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">'height'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'shoe_size'</span><span class="p">,</span>
+                <span class="n">hue</span><span class="o">=</span><span class="s">'sex'</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s">'real data'</span><span class="p">)</span>
+
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">coef_</span><span class="p">.</span><span class="nb">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">intercept_</span><span class="p">.</span><span class="nb">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">h</span> <span class="o">=</span> <span class="mi">150</span> <span class="o">+</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">80</span><span class="p">).</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">80</span><span class="p">).</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">p_w</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">)))</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">h</span><span class="p">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">y</span><span class="o">=</span><span class="n">p_w</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s">'f=</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s">h +</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s">*1 +</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s"> (wo)'</span><span class="p">)</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">80</span><span class="p">).</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">p_m</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">)))</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">h</span><span class="p">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">y</span><span class="o">=</span><span class="n">p_m</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s">'f=</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s">h +</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s">*0 +</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s"> (men)'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_90_0.png" alt="Distribuição de amostras do conjunto wo_men e o modelo (contendo o atributo sex)." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Distribuição de amostras do conjunto wo_men e o modelo (contendo o atributo sex).
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">([[</span><span class="mi">155</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+               <span class="p">[</span><span class="mi">166</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([36.26244771, 41.06102429])
+</code></pre></div></div>
+
+<p>Pela nossa análise no começo, os homens possuiam naturalmente tamanhos de sapato maiores que mulheres. Com o efeito fixo em ação, conseguimos construir “duas” linhas, onde cada linha otimiza o MSE de seu próprio grupo.
+Efeitos fixos não resolvem todos os problemas. Não vai dar certo quando os diferentes grupos tem âng. de crescimento diferentes, já que esse modelo sempre gera retas paralelas. Nós podemos resolver esses casos com não-lineridade.</p>
+
+<h4 id="codificando-características-categóricas-não-binárias">Codificando características categóricas não-binárias</h4>
+
+<p>Caso mais classes estivessem disponíveis (<code class="language-plaintext highlighter-rouge">woman</code>, <code class="language-plaintext highlighter-rouge">man</code>, <code class="language-plaintext highlighter-rouge">non_binary</code>, <code class="language-plaintext highlighter-rouge">unknown</code>, <code class="language-plaintext highlighter-rouge">do_not_wish_to_disclosure</code>), elas seriam codificadas nos números inteiros <code class="language-plaintext highlighter-rouge">1</code>, <code class="language-plaintext highlighter-rouge">2</code>, <code class="language-plaintext highlighter-rouge">3</code>, <code class="language-plaintext highlighter-rouge">4</code>e <code class="language-plaintext highlighter-rouge">5</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">LabelEncoder</span><span class="p">().</span><span class="n">fit_transform</span><span class="p">([</span><span class="s">'woman'</span><span class="p">,</span> <span class="s">'man'</span><span class="p">,</span> <span class="s">'unknown'</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([2, 0, 1])
+</code></pre></div></div>
+
+<p>Isso pode provocar um efeito indesejado, já que as classes agora não possuem efeitos fixos distintos, mas compartilharão um único coeficiente que é escalado pelo inteiro codificado.</p>
+
+<p>A forma mais comum de codificar variáveis não binárias é através do <em>one-hot encoding</em>.
+Neste formato, uma característica categorica com $C$ valores distintos é convertida em $C$ características binárias:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span>
+
+<span class="p">(</span><span class="n">OneHotEncoder</span><span class="p">()</span>
+ <span class="p">.</span><span class="n">fit_transform</span><span class="p">([[</span><span class="s">'woman'</span><span class="p">],</span>
+                 <span class="p">[</span><span class="s">'man'</span><span class="p">],</span>
+                 <span class="p">[</span><span class="s">'man'</span><span class="p">],</span>
+                 <span class="p">[</span><span class="s">'do_not_wish_to_disclosure'</span><span class="p">],</span>
+                 <span class="p">[</span><span class="s">'woman'</span><span class="p">]])</span>
+ <span class="p">.</span><span class="n">todense</span><span class="p">()</span>
+ <span class="p">.</span><span class="n">tolist</span><span class="p">())</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[[0.0, 0.0, 1.0],
+ [0.0, 1.0, 0.0],
+ [0.0, 1.0, 0.0],
+ [1.0, 0.0, 0.0],
+ [0.0, 0.0, 1.0]]
+</code></pre></div></div>
+
+<p>A nova <em>feature</em> $c_i$ assume o valor $1$ quando a amostra pertence à categoria
+$i$ e $0$ caso contrário. O modelo agora terá liberdade para aprender três
+parâmetros diferentes e aplica-los sobre a predição dependendo da categoria a
+qual a amostra pertence.</p>
+
+<h3 id="regressões-lineares-utilizando-o-tensorflow">Regressões lineares utilizando o Tensorflow</h3>
+
+<p>A regressão linear pode ser vista como um caso específico de rede neural,
+composta de uma única camada interna e ativação linear.
+Atualmente, um framework comum utilizado na implementação de redes é o
+Tensorflow. Ele permite a criação de regressões da seguinte maneira:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+
+<span class="kn">from</span> <span class="nn">tensorflow.keras</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.layers</span> <span class="kn">import</span> <span class="n">InputLayer</span><span class="p">,</span> <span class="n">Dense</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">([</span>
+    <span class="n">InputLayer</span><span class="p">([</span><span class="mi">2</span><span class="p">]),</span>
+    <span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'linear'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'predictions'</span><span class="p">)</span>
+<span class="p">])</span>
+
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">optimizers</span><span class="p">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="p">.</span><span class="mi">01</span><span class="p">),</span>
+    <span class="n">loss</span><span class="o">=</span><span class="s">'mse'</span><span class="p">,</span>
+    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'mse'</span><span class="p">,</span> <span class="s">'mae'</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model</span><span class="p">.</span><span class="n">summary</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #
+=================================================================
+ predictions (Dense)         (None, 1)                 3
+
+=================================================================
+Total params: 3
+Trainable params: 3
+Non-trainable params: 0
+_________________________________________________________________
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">utils</span><span class="p">.</span><span class="n">plot_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">show_shapes</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_101_0.png" alt="Diagrama da arquitetura, contendo uma única camada com uma única unidade e ativação linear." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Diagrama da arquitetura, contendo uma única camada com uma única unidade e ativação linear.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">],</span> <span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">4</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Epoch 1/4
+3/3 [==============================] - 0s 5ms/step - loss: 397999888924672.0000 - mse: 397999888924672.0000 - mae: 11395146.0000
+Epoch 2/4
+3/3 [==============================] - 0s 5ms/step - loss: 15560207534693492799819011325952.0000 - mse: 15560207534693492799819011325952.0000 - mae: 2253529074892800.0000
+Epoch 3/4
+3/3 [==============================] - 0s 5ms/step - loss: inf - mse: inf - mae: 437032550431764638597120.0000
+Epoch 4/4
+3/3 [==============================] - 0s 3ms/step - loss: inf - mse: inf - mae: 83941367757272943147354026934272.0000
+</code></pre></div></div>
+
+<p>Vixe. Infinito definitivamente não parece bom.
+Redes são modelos paramétricos. Os pesos $w$ são iniciados com valores amostrados de uma distribuição normal, enquanto <em>b</em> com $0$.
+Ao receber características (ou predizer resultados) muito distantes da normal $(0, 1)$, o modelo precisa percorrer um grande caminho até que seu sinal de saída finalmente escale e translade para a distribuição de saída emparelhado.</p>
+
+<p>O scikit possui a classe <a href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html">StandardScaler</a>, que “aprende” a média e desvio-padrão de um conjunto e consegue “normaliza-lo” removendo a média de cada característica e dividindo pelo desvio padrão.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">([</span>
+    <span class="n">InputLayer</span><span class="p">([</span><span class="mi">2</span><span class="p">]),</span>
+    <span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'linear'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'predictions'</span><span class="p">)</span>
+<span class="p">])</span>
+
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">optimizers</span><span class="p">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="p">.</span><span class="mi">005</span><span class="p">),</span>
+    <span class="n">loss</span><span class="o">=</span><span class="s">'mse'</span><span class="p">,</span>
+    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'mse'</span><span class="p">,</span> <span class="s">'mae'</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+
+<span class="n">x_scaler</span><span class="p">,</span> <span class="n">y_scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">(),</span> <span class="n">StandardScaler</span><span class="p">()</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="n">x_scaler</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">].</span><span class="n">values</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">y_scaler</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">.</span><span class="n">values</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span>
+    <span class="n">z</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">callbacks</span><span class="p">.</span><span class="n">EarlyStopping</span><span class="p">(</span><span class="s">'mae'</span><span class="p">,</span>
+                                         <span class="n">patience</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                         <span class="n">restore_best_weights</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="p">]);</span>
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv13" aria-controls="cv13" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv13"><div class="highlight"><pre class="highlight"><code><span class="n">h</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">)</span>
+<span class="n">h</span><span class="p">[</span><span class="s">'epoch'</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">.</span><span class="n">index</span>
+
+<span class="n">sns</span><span class="p">.</span><span class="n">lineplot</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="s">'epoch'</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s">'value'</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s">'variable'</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">h</span><span class="p">.</span><span class="n">melt</span><span class="p">([</span><span class="s">'epoch'</span><span class="p">],</span> <span class="p">[</span><span class="s">'mse'</span><span class="p">,</span> <span class="s">'mae'</span><span class="p">])</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_106_0.png" alt="Valores para as funções MSE e MAE ao longo do treinamento." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Valores para as funções MSE e MAE ao longo do treinamento.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">predicted</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="n">predicted</span> <span class="o">=</span> <span class="n">y_scaler</span><span class="p">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">predicted</span><span class="p">).</span><span class="n">flatten</span><span class="p">()</span>
+
+<span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">,</span> <span class="n">predicted</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MSE = 1.175
+MAE = 0.842
+R²  = 0.84
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_107_1.png" alt="Distribuição de valores reais, estimados e erros para a variável shoe_size no conjunto wo_men." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Distribuição de valores reais, estimados e erros para a variável shoe_size no conjunto wo_men.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h3 id="próximos-passos-features-não-lineares-redes-não-lineares">Próximos passos: <em>features</em> não lineares, redes não-lineares</h3>
+
+<p>Não temos mais features para adicionar. Ainda é possível melhorar esse modelo?
+Até agora, estamos considerando a relação linear entre as variáveis e o tamanho do sapato. O que aconteceria se esse relacionamento fosse não-linear?
+Uma forma de modelar isso é utilizando o transformador <a href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.PolynomialFeatures.html">PolynomialFeatures</a>, onde as características são utilizadas para a construção dos multiplos termos de um polinômio de grau <code class="language-plaintext highlighter-rouge">degree</code>.
+Cada termo constitui uma nova característica alimentada ao modelo linear.
+Temos então um modelo polinomial (em relação ao dado de entrada) com treinamento
+linear.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">make_pipeline</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">PolynomialFeatures</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span>
+    <span class="n">StandardScaler</span><span class="p">(),</span>
+    <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">],</span> <span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">)</span>
+<span class="n">predicted</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">FEATURES</span><span class="p">])</span>
+<span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">,</span> <span class="n">predicted</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MSE = 1.092
+MAE = 0.823
+R²  = 0.852
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_109_1.png" alt="Distribuição de valores reais, estimados e erros para a variável shoe_size no conjunto wo_men." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Distribuição de valores reais, estimados e erros para a variável shoe_size no conjunto wo_men.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'x0'</span><span class="p">,</span> <span class="n">FEATURES</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+          <span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'x1'</span><span class="p">,</span> <span class="n">FEATURES</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">model</span><span class="p">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s">'polynomialfeatures'</span><span class="p">].</span><span class="n">get_feature_names_out</span><span class="p">()]</span>
+<span class="n">importance</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s">'linearregression'</span><span class="p">].</span><span class="n">coef_</span><span class="p">)</span>
+<span class="n">importance</span> <span class="o">/=</span> <span class="n">importance</span><span class="p">.</span><span class="nb">sum</span><span class="p">()</span>
+
+<span class="n">sns</span><span class="p">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">names</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">importance</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">);</span>
+</code></pre></div></div>
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_110_0.png" alt="Importância das diferentes características na estimativa da variável shoe_size." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Importância das diferentes características na estimativa da variável shoe_size.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Uma outra forma é não limitar em features polinomiais, mas colocar mais camadas não-lineares na rede, diretamente. Isso dá mais liberdade para o sistema, mas a função de perda (em relação à alguns pesos $\theta$) não é mais uma função linear, o que implica que a equação $\frac{\partial E}{\partial \theta} = 0$ possui múltiplas soluções e nossa busca local nem sempre produz o melhor resultado.</p>
+
+<p>Nós podemos entrar em mais detalhes quando falarmos sobre modelos não-lineares, mas só um exemplo de utilização por enquanto:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">tensorflow.keras.layers</span> <span class="kn">import</span> <span class="n">BatchNormalization</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">([</span>
+    <span class="n">InputLayer</span><span class="p">([</span><span class="mi">2</span><span class="p">]),</span>
+    <span class="n">Dense</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'fc1'</span><span class="p">),</span>
+    <span class="n">Dense</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'fc2'</span><span class="p">),</span>
+    <span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'linear'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'predictions'</span><span class="p">)</span>
+<span class="p">])</span>
+
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="s">'sgd'</span><span class="p">,</span>  <span class="c1"># or tf.optimizers.SGD(learning_rate=.01),
+</span>    <span class="n">loss</span><span class="o">=</span><span class="s">'mse'</span><span class="p">,</span>
+    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'mse'</span><span class="p">,</span> <span class="s">'mae'</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">utils</span><span class="p">.</span><span class="n">plot_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">show_shapes</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_113_0.png" alt="Diagrama da arquitetura, contendo três camadas, onde as duas intermediárias contém 32 unidades e ativação relu, enquanto a última possui uma única unidade e ativação linear." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Diagrama da arquitetura, contendo três camadas, onde as duas intermediárias contém 32 unidades e ativação relu, enquanto a última possui uma única unidade e ativação linear.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span>
+    <span class="n">z</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">callbacks</span><span class="p">.</span><span class="n">EarlyStopping</span><span class="p">(</span><span class="s">'mae'</span><span class="p">,</span>
+                                         <span class="n">patience</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                         <span class="n">restore_best_weights</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="p">]);</span>
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv14" aria-controls="cv14" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv14"><div class="highlight"><pre class="highlight"><code><span class="n">h</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">)</span>
+<span class="n">h</span><span class="p">[</span><span class="s">'epoch'</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">.</span><span class="n">index</span>
+
+<span class="n">sns</span><span class="p">.</span><span class="n">lineplot</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="s">'epoch'</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s">'value'</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s">'variable'</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">h</span><span class="p">.</span><span class="n">melt</span><span class="p">([</span><span class="s">'epoch'</span><span class="p">],</span> <span class="p">[</span><span class="s">'mse'</span><span class="p">,</span> <span class="s">'mae'</span><span class="p">]));</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_115_0.png" alt="Valores para as funções MSE e MAE ao longo do treinamento." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Valores para as funções MSE e MAE ao longo do treinamento.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">predicted</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="n">predicted</span> <span class="o">=</span> <span class="n">y_scaler</span><span class="p">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">predicted</span><span class="p">).</span><span class="n">flatten</span><span class="p">()</span>
+
+<span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shoe_size</span><span class="p">,</span> <span class="n">predicted</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MSE = 1.096
+MAE = 0.82
+R²  = 0.851
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_116_1.png" alt="Distribuição de valores reais, estimados e erros para a variável shoe_size no conjunto wo_men." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Distribuição de valores reais, estimados e erros para a variável shoe_size no conjunto wo_men.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv15" aria-controls="cv15" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="cv15"><div class="highlight"><pre class="highlight"><code><span class="n">sns</span><span class="p">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">'height'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'shoe_size'</span><span class="p">,</span>
+                <span class="n">hue</span><span class="o">=</span><span class="s">'sex'</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s">'real data'</span><span class="p">)</span>
+
+<span class="n">h</span> <span class="o">=</span> <span class="mi">150</span> <span class="o">+</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">80</span><span class="p">).</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">80</span><span class="p">).</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">))</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">x_scaler</span><span class="p">.</span><span class="n">transform</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">y_scaler</span><span class="p">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">h</span><span class="p">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">y</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s">'nn wo'</span><span class="p">)</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">80</span><span class="p">).</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">))</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">x_scaler</span><span class="p">.</span><span class="n">transform</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">y_scaler</span><span class="p">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">h</span><span class="p">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">y</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s">'nn men'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/lm/lm_117_0.png" alt="Distribuição de amostras do conjunto wo_men e o modelo não linear." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Distribuição de amostras do conjunto wo_men e o modelo não linear.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Redes neurais não-lineares com muitas unidades são extremamente flexíveis em seu comportamento, mas são extremamente sensíveis à ruído e irão super-especificar com facilidade. O exemplo acima é só ilustrativo e não deve ser usado pra esse problema.</p>
+
+<h3 id="generalização-e-teste">Generalização e teste</h3>
+
+<p>Todas as análises acima foram construídas e avaliadas sobre um único conjunto de dados. Nós modelamos o treinamento como um processo de otimização local e fechado, considerando toda a informação que tinhamos acesso até o momento.
+Entretando, não é razoável assumir que essas mesmas amostras irão re-indicir durante o estágio de inferência do modelo treinado, já que existem muitos outros compradores utilizando o nosso sistema.</p>
+
+<p>Nós temos uma buraco aqui: nós queremos o modelo que otimiza MAE durante o estágio de inferência, não o que otimiza MAE em treino; mas nós selecionamos os parâmetros de acordo com a segunda métrica. Isso introduz o grande problema de machine learning: <em>overffiting</em>.</p>
+
+        </div>
+      </article>
+
+      
+      <div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://lucasdavid-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      
+    </div>
+  </div>
+</div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+  integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"
+  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
+  integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '\\[', right: '\\]', display: true}, {left: '$', right: '$', display: false},{left: '\\(', right: '\\)', display: false}]});"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+<script>
+  anchors.options = { icon: '#' };
+  anchors.add();
+</script>
+
+
+  <!-- <svg id="visual" viewBox="0 0 1980 300"  class="curve-container__curve curve-three" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <path
+    d="M0 69L55 90.2C110 111.3 220 153.7 330 169.8C440 186 550 176 660 165.5C770 155 880 144 990 139.2C1100 134.3 1210 135.7 1320 137.7C1430 139.7 1540 142.3 1650 155.5C1760 168.7 1870 192.3 1925 204.2L1980 216L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#d3d3d3"></path>
+  <path
+    d="M0 89L55 107.8C110 126.7 220 164.3 330 191.3C440 218.3 550 234.7 660 243.8C770 253 880 255 990 252.3C1100 249.7 1210 242.3 1320 228.8C1430 215.3 1540 195.7 1650 174.5C1760 153.3 1870 130.7 1925 119.3L1980 108L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#6a6a6a"></path>
+  <path
+    d="M0 229L55 232.3C110 235.7 220 242.3 330 244.3C440 246.3 550 243.7 660 247.3C770 251 880 261 990 254.8C1100 248.7 1210 226.3 1320 223.5C1430 220.7 1540 237.3 1650 233.8C1760 230.3 1870 206.7 1925 194.8L1980 183L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#121212"></path>
+</svg> -->
+<footer class="page-footer text-bg-dark bg-black-subtle d-print-none">
+  <div class="container">
+    <div class="mt-4 mb-5">
+      
+        <div class="row g-1 mb-4">
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Keras Explainable</h6>
+                <p class="card-text text-light">
+                  Clean implementations for AI explaining methods in Keras.
+<a href="https://github.com/lucasdavid/keras-explainable" target="_new">Code</a> and
+<a href="https://lucasdavid.github.io/keras-explainable" target="_new">docs</a> are available.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Supporting Study Material</h6>
+                <p class="card-text text-light">
+                  If you are an undergrad student and are looking for additional study material,
+check out our collaborative project <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Algorithms in TensorFlow</h6>
+                <p class="card-text text-light">
+                  I'm implementing all algorithms I find interesting using TensorFlow.
+You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">github.com/lucasdavid/algorithms-in-tensorflow</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">TF-Experiment</h6>
+                <p class="card-text text-light">
+                  And environment to run Machine Learning experiments based on components and mixins. Available at <a href="https://github.com/lucasdavid/tf-experiment">github.com/lucasdavid/tf-experiment</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Mineração de Dados Complexos</h6>
+                <p class="card-text text-light">
+                  Information around the extension program "Mineração de Dados Complexos (in Portuguese)" is available at
+<a href="https://www.ic.unicamp.br/~mdc/" target="_blank">ic.unicamp.br/~mdc/</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+    </div>
+
+    <div class="text-end mt-4">
+      
+
+
+<div class="fs-2">
+  
+    <a href="https://github.com/lucasdavid"
+      target="_blank"
+      ><i
+      aria-label="GitHub"
+      class="bi bi-github link-light"></i></a>
+  
+  
+    <a href="https://www.linkedin.com/in/ld7"
+      target="_blank"
+      title="LinkedIn"><i class="bi bi-linkedin text-primary sr-none"></i></a>
+  
+  <span itemscope itemtype="https://schema.org/Person">
+    <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+       target="orcid.widget"
+       rel="me noopener noreferrer"
+       title="ORCID"
+      ><img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 7px; width: 32px;"></a>
+  </span>
+  
+  <a href="http://stackoverflow.com/users/2429640/lucasdavid"
+     target="_blank"
+     title="Stackoverflow"><i class="bi bi-code-slash link-light sr-none"></i></a>
+  
+    <a href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q"
+      target="_blank"
+      title="Youtube"><i class="bi bi-youtube text-danger sr-none"></i></a>
+  
+    <a href="mailto:mb37410l3@mozmail.com"
+      target="_blank"
+      title="Mail"><i class="bi bi-envelope-fill link-light sr-none"></i></a>
+  
+  <a href="assets/docs/lucas-david-resume.pdf"
+     target="_blank"
+     title="Resume"><i class="bi bi-person-lines-fill link-light sr-none"></i></a>
+</div>
+
+    </div>
+    <div class="text-end">
+      <p>
+        ® Lucas David. Todos os direitos reservados.
+      </p>
+    </div>
+</div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Repository Pattern – Lucas David</title>
+  <meta charset="utf-8" />
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="image_src" type="image/png" href="img_path" />
+
+
+<meta name="description" content="Understanding A Data Abstraction Pattern" />
+<meta property="og:description" content="Understanding A Data Abstraction Pattern" />
+<meta property="og:image" content="" />
+
+<meta name="author" content="Lucas David" />
+
+
+<meta property="og:title" content="Repository Pattern" />
+<meta property="twitter:title" content="Repository Pattern" />
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<link rel="alternate" type="application/rss+xml" title="Lucas David - my personal website/blog"
+      href="/feed.xml" />
+
+  
+  
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LG7FZ8VCHM"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-LG7FZ8VCHM');
+	</script>
+
+
+  
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+  <nav id="mainNav" class="navbar navbar-light bg-white navbar-expand-lg d-print-none border-bottom border-light ">
+  <div class="container-xl">
+    <button class="navbar-toggler rounded-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand fw-bold text-decoration-none p-1" href="/">Lucas David</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <span class="navbar-text navbar-excerpt">
+        Repository Pattern
+      </span>
+      <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+      <ul class="navbar-nav mb-2 mb-lg-0 font-small">
+        <li class="nav-item"><a href="/" class="nav-link fw-bold link-dark fs-6">Home</a></li>
+        <li class="nav-item"><a href="/blog" class="nav-link fw-bold link-dark fs-6">Blog</a></li>
+        <li class="nav-item"><a href="/publications" class="nav-link fw-bold link-dark fs-6">Publications</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold link-dark fs-6" href="#" id="nbd-links-social" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Social
+          </a>
+          <ul class="dropdown-menu font-small dropdown-menu-end" aria-labelledby="nbd-links-social">
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://github.com/lucasdavid">
+                <i aria-label="GitHub" class="bi bi-github link-dark sr-none"></i>
+                Github</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://www.linkedin.com/in/ld7">
+                <i class="bi bi-linkedin text-primary sr-none"></i>
+                Linkedin</a></li>
+
+            <li itemscope itemtype="https://schema.org/Person">
+              <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+                  target="orcid.widget"
+                  rel="me noopener noreferrer"
+                  class="dropdown-item text-decoration-none"
+                >
+                <img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 5px; width: 16px;">
+                ORCID</a>
+            </li>
+
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="http://stackoverflow.com/users/2429640/lucasdavid">
+                <i class="bi bi-code-slash link-dark sr-none"></i>
+                Stackoverflow</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q">
+                <i class="bi bi-youtube text-danger sr-none"></i>
+                Youtube</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+</div>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12 col-xl-3 col-xxl-2 offset-xxl-1">
+      <div id="sidebar" class="">
+  <div class="text-center">
+    <a href="/" title="Home">
+      <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
+        class="img-fluid rounded-circle" style="width:100px" />
+    </a>
+    <p class="pt-2 font-small">
+      
+        <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
+      
+    </p>
+  </div>
+
+  
+</div>
+
+    </div>
+    <div id="table-of-contents-container-r" class="col-12 col-xl-3 col-xxl-2 order-xl-2">
+      
+      <div style="z-index: 0; font-size:0.8rem;">
+        <div id="table-of-contents" class="font-small">
+  <p class="border-bottom"><strong>Summary</strong></p>
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#example-1-invisible-database">Example #1: invisible database</a></li>
+<li class="toc-entry toc-h2"><a href="#example-2-performance-boost">Example 2: Performance boost</a></li>
+<li class="toc-entry toc-h2"><a href="#example-3-multiple-data-sources">Example #3: multiple data sources</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#a-first-attempt">A first attempt</a></li>
+<li class="toc-entry toc-h3"><a href="#now-using-rp">Now using RP</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#conclusion">Conclusion</a></li>
+</ul>
+</div>
+
+      </div>
+      
+    </div>
+    <div class="col-12 col-xl-6">
+      <article class="post mb-4">
+        <header class="">
+          <h1 id="postTitle" class="fw-bold">Repository Pattern</h1>
+          <p class="right-align mb-2 text-muted fs-5">
+            Understanding A Data Abstraction Pattern <em>— October  2, 2017</em>
+          </p>
+          <div class="mb-4">
+            <span class="badges-container">
+  
+    <a href="/blog/tag/patterns"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Patterns</a>
+  
+</span>
+
+          </div>
+        </header>
+        <div class="article-content" style="margin-top: 4rem;">
+          <p><span>Real</span> life applications might have to communicate with more than one data source. Data might be coming from/going to different places and it’s hard to keep it simple, as you have to implement the interaction with all of these places individually. The <a href="http://docs.spring.io/spring-data/data-commons/docs/1.6.1.RELEASE/reference/html/repositories.html">repository pattern</a> abstracts the data layer (how you store and retrieve your resources), making it transparent to the business layer. It’s important to keep in mind that it does not replace an <a href="https://ycoding.wordpress.com/2015/05/03/object-relational-mapping/">ORM</a>, which is specifically defined to map model classes to database entities.</p>
+
+<h2 id="example-1-invisible-database">Example #1: invisible database</h2>
+<p><a href="https://spring.io/">Spring</a> has one of the greatest Repository Pattern implementations, although these are specifically designed to abstract databases. Here, the repositories are interfaces and the queries are built based on the methods signatures.</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ProductRepository</span>
+       <span class="kd">extends</span> <span class="nc">CrudRepository</span><span class="o">&lt;</span><span class="nc">Product</span><span class="o">,</span> <span class="nc">Long</span><span class="o">&gt;,</span>
+               <span class="nc">QueryDslPredicateExecutor</span><span class="o">&lt;</span><span class="nc">Product</span><span class="o">&gt;</span>
+<span class="o">{</span>
+    <span class="c1">// Returns a {@link Page} of {@link Product}s having a</span>
+    <span class="c1">// description which contains the given snippet.</span>
+    <span class="nc">Page</span><span class="o">&lt;</span><span class="nc">Product</span><span class="o">&gt;</span> <span class="nf">findByDescriptionContaining</span><span class="o">(</span>
+        <span class="nc">String</span> <span class="n">description</span><span class="o">,</span>
+        <span class="nc">Pageable</span> <span class="n">pageable</span><span class="o">);</span>
+
+
+    <span class="c1">// Returns all {@link Product}s having the given attribute.</span>
+    <span class="nd">@Query</span><span class="o">(</span><span class="s">"{ ?0 : ?1 }"</span><span class="o">)</span>
+    <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Product</span><span class="o">&gt;</span> <span class="nf">findByAttributes</span><span class="o">(</span>
+        <span class="nc">String</span> <span class="n">key</span><span class="o">,</span>
+        <span class="nc">String</span> <span class="n">value</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p><em>Example taken from <a href="https://github.com/spring-projects/spring-data-book/blob/master/mongodb/src/main/java/com/oreilly/springdata/mongodb/core/ProductRepository.java">spring-data-book</a>.</em></p>
+
+<p>Spring understands what we’re trying to achieve by the methods signature. For instance, when we execute the method <code class="language-plaintext highlighter-rouge">.findByDescriptionContaining()</code>, it’s clear that we want to “retrieve products with descriptions that contain the substring <code class="language-plaintext highlighter-rouge">description</code>”.</p>
+
+<p>Checkout more examples in these repositories: <a href="https://github.com/spring-projects/spring-data-book">spring-data-book</a> and <a href="https://github.com/spring-projects/spring-data-jpa-examples">spring-jpa-examples</a>.</p>
+
+<h2 id="example-2-performance-boost">Example 2: Performance boost</h2>
+<p>Architecturally, the Repository Pattern is higher than an ORM, as it abstracts any data source: databases, APIs, user’s input etc. There’s nothing that prevents repositories from making usage of an ORM, although not always that’s the best way to go. Remember when I said that ORMs are recommended in the great majority of cases? Let’s check out an counter-example. Imagine that we have a collection of products and we want to insert them on the database, costing $1.</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">products</span> <span class="o">=</span> <span class="n">Product</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="nb">all</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">product</span> <span class="ow">in</span> <span class="n">products</span><span class="p">:</span>
+    <span class="n">product</span><span class="p">.</span><span class="n">price</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">product</span><span class="p">.</span><span class="n">save</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Notice that this code will make <strong>N</strong> queries to the database, where <strong>N</strong> is the length of the <code class="language-plaintext highlighter-rouge">products</code> list. That’s not great, considering a single raw SQL query would perform much better (it doesn’t require application processing and it only “round-trips” once).</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">session</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="s">"""
+    insert into products values (...);
+    insert into products values (...);
+    insert into products values (...);
+    ...
+"""</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>In general, aggregating SQL queries and sending them all together performs better than sending each one sequentially. That becomes evident when we have collections, as there are many queries to be sent. We can’t improve this using an ORM because of its nature: it is a mapping between an object and a relation entity. But what about a repository? Many repository implementations give us methods such as <code class="language-plaintext highlighter-rouge">.create_many</code> and <code class="language-plaintext highlighter-rouge">.update_many</code>, allowing us to handle collections efficiently.</p>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">await</span> <span class="n">products</span><span class="p">.</span><span class="nf">ForEachAsync</span><span class="p">(</span><span class="n">product</span> <span class="p">=&gt;</span> <span class="n">product</span><span class="p">.</span><span class="n">Price</span> <span class="p">=</span> <span class="m">1</span><span class="p">);</span>
+
+<span class="n">Db</span><span class="p">.</span><span class="n">Products</span><span class="p">.</span><span class="nf">AddRange</span><span class="p">(</span><span class="n">products</span><span class="p">);</span>
+
+<span class="k">await</span> <span class="n">Db</span><span class="p">.</span><span class="nf">SaveChangesAsync</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>In practical terms, <a href="www.asp.net/entity-framework">Entity Framework</a> already implements the Repository Pattern with the <code class="language-plaintext highlighter-rouge">DbSet</code> class and the <a href="https://msdn.microsoft.com/en-us/magazine/dd882510.aspx">Unit Of Work Pattern</a> with the <code class="language-plaintext highlighter-rouge">DbContext</code> class. When it comes to performance, Entity Framework can do an impressive job! All the inserted products are sent to the database at once, upon <code class="language-plaintext highlighter-rouge">.SaveChangesAsync()</code> call.</p>
+
+<h2 id="example-3-multiple-data-sources">Example #3: multiple data sources</h2>
+<p>A final example. Imagine that we own an e-commerce and we want to create an application that can retrieve products on it and store in a local database. We’ll have to handle two very different data layers: our own application’s API, from which we’ll retrieve the products, and our own database.</p>
+
+<p>For simplicity, assume our application’s API is a <a href="http://en.wikipedia.org/wiki/Representational_state_transfer">REST API</a> and it doesn’t require any form of authentication. Being an REST API implies that we can access products by making an HTTP request to an URL like <strong>http: //api.our-very-e-commerce.com/products/{id}</strong> with the <code class="language-plaintext highlighter-rouge">GET</code> method. We can also create or update products with the methods <code class="language-plaintext highlighter-rouge">POST</code> and <code class="language-plaintext highlighter-rouge">PUT</code>, respectively. Finally, we can delete a product with the method <code class="language-plaintext highlighter-rouge">DELETE</code>.</p>
+
+<h3 id="a-first-attempt">A first attempt</h3>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ad_creation</span><span class="p">(</span><span class="n">product_id</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s">'http://api.our-very-own-e-commerce.com/products/'</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">response</span>
+
+    <span class="n">product_data_list</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">product_data_list</span><span class="p">:</span>
+        <span class="n">Product</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">).</span><span class="n">save</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Without the Repository Pattern, our business logic depends heavily on the implementation of data sources. With these components hardly coupled, changes in the data persistence logic will greatly affect our entire application. Let’s fix it.</p>
+
+<h3 id="now-using-rp">Now using RP</h3>
+<p>First, we’ll abstract all of this by using a base <code class="language-plaintext highlighter-rouge">Repository</code> class:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Repository</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">__class__</span> <span class="o">=</span> <span class="n">abc</span><span class="p">.</span><span class="n">ABCMeta</span>
+
+    <span class="k">def</span> <span class="nf">all</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="nb">NotImplemented</span>
+
+    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="nb">NotImplemented</span>
+
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="nb">NotImplemented</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entiy</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="nb">NotImplemented</span>
+
+    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="nb">NotImplemented</span>
+</code></pre></div></div>
+
+<p>And why did we do this? Simple: we can now inject a object of a class that inherits from <code class="language-plaintext highlighter-rouge">Repository</code> inside our code and simply call these methods that we’ve just defined. That’s called <strong>inclusion polymorphism</strong> and it helps us to write generic code. Please take your time to check this <a href="http://en.wikipedia.org/wiki/Polymorphism_%28computer_science%29">Polymorphism article at wikipedia</a>.</p>
+
+<p>Let’s implement our first inherited class. The one that will communicate with our e-commerce API.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">APIRepository</span><span class="p">(</span><span class="n">Repository</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_api_url</span><span class="p">,</span> <span class="n">resource</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">url</span> <span class="o">=</span> <span class="s">'/'</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_api_url</span><span class="p">,</span> <span class="n">resource</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="p">:</span>
+            <span class="c1"># If the response.status_code indicates an error, displays it.
+</span>            <span class="n">url</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">url</span>
+            <span class="n">status_code</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">json</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">json</span><span class="p">())</span>
+            <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
+                <span class="n">json</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">content</span>
+
+            <span class="k">raise</span> <span class="nb">RuntimeError</span><span class="p">(</span><span class="s">'Error when requesting '</span> <span class="o">+</span> <span class="n">url</span> <span class="o">+</span> <span class="s">':'</span>
+                               <span class="o">+</span> <span class="s">'nStatus-code: '</span> <span class="o">+</span> <span class="n">status_code</span>
+                               <span class="o">+</span> <span class="s">'nDetails: '</span> <span class="o">+</span> <span class="n">json</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="o">@</span><span class="nb">staticmethod</span>
+    <span class="k">def</span> <span class="nf">_unwrap</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">response</span><span class="p">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="n">requests</span><span class="p">.</span><span class="n">codes</span><span class="p">.</span><span class="n">no_content</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+
+        <span class="k">return</span> <span class="n">response</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+            <span class="p">.</span><span class="n">_validate</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">_unwrap</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">url</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">_result</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s">'/'</span><span class="p">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">.</span><span class="n">url</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">_result</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">entity</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">_result</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s">'/'</span><span class="p">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">.</span><span class="n">url</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">)),</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">entity</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">_result</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s">'/'</span><span class="p">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">.</span><span class="n">url</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">_result</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">APIRepository</code> inherits <code class="language-plaintext highlighter-rouge">Repository</code> and overrides its abstract methods. All overriding methods simply make an HTTP request using the <a href="http://docs.python-requests.org/en/latest/">requests</a> lib. For instance, in <code class="language-plaintext highlighter-rouge">.update(self, entity)</code>, we are:</p>
+
+<ul>
+  <li>Merging the URL with the expected product id, yielding <strong>http: //…/products/48</strong>, for example.</li>
+  <li>Making a request to that merged URL, passing into the request’s body all the data that will be used to update the product #48.</li>
+  <li>Checking if the response contains any errors and, finally, unwrapping its response.</li>
+</ul>
+
+<p>We can now use it like this:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">products</span> <span class="o">=</span> <span class="n">APIRepository</span><span class="p">(</span><span class="s">'products'</span><span class="p">)</span>
+<span class="n">product_48</span> <span class="o">=</span> <span class="n">products</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="mi">48</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Simple, right? Notice that we’ve created an interface that works not only with products, but any resource that our API provides. If, in the future, we want to retrieve another resources, such as users, we can do it by simply instantiating <code class="language-plaintext highlighter-rouge">APIRepository('users')</code> and calling the method <code class="language-plaintext highlighter-rouge">.find()</code>.</p>
+
+<blockquote>
+  <p><strong>#1</strong> Always separate responsibilities and make your components <a href="http://en.wikipedia.org/wiki/KISS_principle">simple, stupid</a>. When they are really small, you can easily identify similarities and code replication. That’s when you can generalize and keep the number of lines of code to a minimum. <a href="http://en.wikipedia.org/wiki/Don%27t_repeat_yourself">Don’t repeat yourself</a>.</p>
+</blockquote>
+
+<p>We still have to implement the repository that’ll persist the retrieved products to our local database. Let’s assume that we’re working with <a href="https://www.mongodb.org/">MongoDB</a> with the <a href="http://mongoengine.org/">MongoEngine</a> ORM.</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MongoRepository</span><span class="p">(</span><span class="n">Repository</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+
+    <span class="k">def</span> <span class="nf">all</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">model</span><span class="p">.</span><span class="n">objects</span>
+
+    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">model</span><span class="p">.</span><span class="n">objects</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">).</span><span class="n">first</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">entity</span><span class="p">).</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entiy</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">model</span>
+            <span class="p">.</span><span class="n">objects</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">entity</span><span class="p">.</span><span class="nb">id</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">first</span><span class="p">()</span>
+            <span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">entity</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">model</span>
+            <span class="p">.</span><span class="n">objects</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">first</span><span class="p">()</span>
+            <span class="p">.</span><span class="n">delete</span><span class="p">()</span>
+</code></pre></div></div>
+<p>Notice how our <code class="language-plaintext highlighter-rouge">MongoRepository</code> also overrides the expected methods! However, this time, it will operate over an MongoDB document.</p>
+
+<p>We can finally implement our logic as this:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">copy_products</span><span class="p">(</span><span class="n">in_products</span><span class="p">,</span> <span class="n">out_products</span><span class="p">):</span>
+    <span class="n">products</span> <span class="o">=</span> <span class="n">in_products</span><span class="p">.</span><span class="nb">all</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">product</span> <span class="ow">in</span> <span class="n">products</span><span class="p">:</span>
+        <span class="n">out_products</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">products</span><span class="p">)</span>
+
+<span class="ow">in</span> <span class="o">=</span> <span class="n">APIRepository</span><span class="p">(</span><span class="s">'products'</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">MongoRepository</span><span class="p">(</span><span class="n">Product</span><span class="p">)</span>
+
+<span class="n">copy_products</span><span class="p">(</span><span class="ow">in</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Neat! We stopped worrying on how the data is handled and focused entirely on our problem, which was to copy the products. Additionally, our code is now so flexible! It can handle business logic changes with almost zero difficult! Given the products back to the API would be so simple as:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ow">in</span> <span class="o">=</span> <span class="n">MongoRepository</span><span class="p">(</span><span class="s">'products'</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">APIRepository</span><span class="p">(</span><span class="n">Product</span><span class="p">)</span>
+
+<span class="n">copy_products</span><span class="p">(</span><span class="ow">in</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>I hope the examples above have shown you some advantages of using the Repository Pattern. If I were to summarize, I’d say that with the <em>RP</em>, you can:</p>
+
+<ul>
+  <li>Focus on the business logic, making everything much more clear.</li>
+  <li>Replace highly-coupled components by unit-testable, <a href="https://www.youtube.com/watch?v=XifUlSyQ2CI">nice and soft</a> dependencies.</li>
+  <li>Generalize your code, abbreviating it and preventing you from from repeating yourself and creating huge methods, making everyone - including yourself - very sad.</li>
+</ul>
+
+<p>That’s it! If you want to exercise yourself, why don’t you try to implement the methods <code class="language-plaintext highlighter-rouge">.save_many()</code> and <code class="language-plaintext highlighter-rouge">.update_many()</code> in the <code class="language-plaintext highlighter-rouge">MongoRepository</code>? :-)</p>
+
+<p>P.s.: please be aware that these implementations, although strongly inspired in real-life cases, were simplified and are now merely toy examples. Please research the communities guidelines before making any implementations of your own.</p>
+
+        </div>
+      </article>
+
+      
+      <div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://lucasdavid-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      
+    </div>
+  </div>
+</div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+  integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"
+  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
+  integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '\\[', right: '\\]', display: true}, {left: '$', right: '$', display: false},{left: '\\(', right: '\\)', display: false}]});"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+<script>
+  anchors.options = { icon: '#' };
+  anchors.add();
+</script>
+
+
+  <!-- <svg id="visual" viewBox="0 0 1980 300"  class="curve-container__curve curve-three" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <path
+    d="M0 69L55 90.2C110 111.3 220 153.7 330 169.8C440 186 550 176 660 165.5C770 155 880 144 990 139.2C1100 134.3 1210 135.7 1320 137.7C1430 139.7 1540 142.3 1650 155.5C1760 168.7 1870 192.3 1925 204.2L1980 216L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#d3d3d3"></path>
+  <path
+    d="M0 89L55 107.8C110 126.7 220 164.3 330 191.3C440 218.3 550 234.7 660 243.8C770 253 880 255 990 252.3C1100 249.7 1210 242.3 1320 228.8C1430 215.3 1540 195.7 1650 174.5C1760 153.3 1870 130.7 1925 119.3L1980 108L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#6a6a6a"></path>
+  <path
+    d="M0 229L55 232.3C110 235.7 220 242.3 330 244.3C440 246.3 550 243.7 660 247.3C770 251 880 261 990 254.8C1100 248.7 1210 226.3 1320 223.5C1430 220.7 1540 237.3 1650 233.8C1760 230.3 1870 206.7 1925 194.8L1980 183L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#121212"></path>
+</svg> -->
+<footer class="page-footer text-bg-dark bg-black-subtle d-print-none">
+  <div class="container">
+    <div class="mt-4 mb-5">
+      
+        <div class="row g-1 mb-4">
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Keras Explainable</h6>
+                <p class="card-text text-light">
+                  Clean implementations for AI explaining methods in Keras.
+<a href="https://github.com/lucasdavid/keras-explainable" target="_new">Code</a> and
+<a href="https://lucasdavid.github.io/keras-explainable" target="_new">docs</a> are available.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Supporting Study Material</h6>
+                <p class="card-text text-light">
+                  If you are an undergrad student and are looking for additional study material,
+check out our collaborative project <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Algorithms in TensorFlow</h6>
+                <p class="card-text text-light">
+                  I'm implementing all algorithms I find interesting using TensorFlow.
+You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">github.com/lucasdavid/algorithms-in-tensorflow</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">TF-Experiment</h6>
+                <p class="card-text text-light">
+                  And environment to run Machine Learning experiments based on components and mixins. Available at <a href="https://github.com/lucasdavid/tf-experiment">github.com/lucasdavid/tf-experiment</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Mineração de Dados Complexos</h6>
+                <p class="card-text text-light">
+                  Information around the extension program "Mineração de Dados Complexos (in Portuguese)" is available at
+<a href="https://www.ic.unicamp.br/~mdc/" target="_blank">ic.unicamp.br/~mdc/</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+    </div>
+
+    <div class="text-end mt-4">
+      
+
+
+<div class="fs-2">
+  
+    <a href="https://github.com/lucasdavid"
+      target="_blank"
+      ><i
+      aria-label="GitHub"
+      class="bi bi-github link-light"></i></a>
+  
+  
+    <a href="https://www.linkedin.com/in/ld7"
+      target="_blank"
+      title="LinkedIn"><i class="bi bi-linkedin text-primary sr-none"></i></a>
+  
+  <span itemscope itemtype="https://schema.org/Person">
+    <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+       target="orcid.widget"
+       rel="me noopener noreferrer"
+       title="ORCID"
+      ><img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 7px; width: 32px;"></a>
+  </span>
+  
+  <a href="http://stackoverflow.com/users/2429640/lucasdavid"
+     target="_blank"
+     title="Stackoverflow"><i class="bi bi-code-slash link-light sr-none"></i></a>
+  
+    <a href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q"
+      target="_blank"
+      title="Youtube"><i class="bi bi-youtube text-danger sr-none"></i></a>
+  
+    <a href="mailto:mb37410l3@mozmail.com"
+      target="_blank"
+      title="Mail"><i class="bi bi-envelope-fill link-light sr-none"></i></a>
+  
+  <a href="assets/docs/lucas-david-resume.pdf"
+     target="_blank"
+     title="Resume"><i class="bi bi-person-lines-fill link-light sr-none"></i></a>
+</div>
+
+    </div>
+    <div class="text-end">
+      <p>
+        ® Lucas David. Todos os direitos reservados.
+      </p>
+    </div>
+</div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous" defer></script>
+
+</body>
+</html>
