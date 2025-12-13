@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+	<channel>
+		<title>Lucas David</title>
+		<description>my personal website/blog</description>		
+		<link>https://lucasdavid.github.io/</link>
+		<atom:link href="https://lucasdavid.github.io//feed.xml" rel="self" type="application/rss+xml" />
+		
+			<item>
+				<title>Observing Optimizer Behavior over Search Surfaces</title>
+				        
+				
+					<description>Visualizing the training process over various optimization surfaces.</description>
+				
+				<pubDate>Tue, 12 Nov 2024 18:00:00 +0000</pubDate>
+				<link>https://lucasdavid.github.io//blog/machine-learning/optimizers/</link>
+				<guid isPermaLink="true">https://lucasdavid.github.io//blog/machine-learning/optimizers/</guid>
+			</item>
+		
+			<item>
+				<title>Activation, Cross-Entropy and Logits</title>
+				        
+				
+					<description>Discussion around the activation loss functions commonly used in Machine Learning problems.</description>
+				
+				<pubDate>Mon, 30 Aug 2021 17:29:00 +0000</pubDate>
+				<link>https://lucasdavid.github.io//blog/machine-learning/crossentropy-and-logits/</link>
+				<guid isPermaLink="true">https://lucasdavid.github.io//blog/machine-learning/crossentropy-and-logits/</guid>
+			</item>
+		
+			<item>
+				<title>Santos Dumont Super Computer</title>
+				        
+				
+					<description>Accessing and using the SDumont infrastructure for Deep Learning research.</description>
+				
+				<pubDate>Mon, 30 Aug 2021 10:14:00 +0000</pubDate>
+				<link>https://lucasdavid.github.io//blog/infrastructure-and-tools/sdumont/</link>
+				<guid isPermaLink="true">https://lucasdavid.github.io//blog/infrastructure-and-tools/sdumont/</guid>
+			</item>
+		
+			<item>
+				<title>Segmentation and Detection</title>
+				        
+				
+					<description>A comparison between edge-based segmentation, Felzenszwalb's method and morphological segmentation.</description>
+				
+				<pubDate>Fri, 16 Jul 2021 22:37:00 +0000</pubDate>
+				<link>https://lucasdavid.github.io//blog/computer-vision/segmentation/</link>
+				<guid isPermaLink="true">https://lucasdavid.github.io//blog/computer-vision/segmentation/</guid>
+			</item>
+		
+			<item>
+				<title>K-Means and Hierarchical Clustering</title>
+				        
+				
+					<description>Efficient clustering algorithms implementations in TensorFlow and NumPy.</description>
+				
+				<pubDate>Fri, 11 Jun 2021 15:58:00 +0000</pubDate>
+				<link>https://lucasdavid.github.io//blog/machine-learning/clustering/</link>
+				<guid isPermaLink="true">https://lucasdavid.github.io//blog/machine-learning/clustering/</guid>
+			</item>
+		
+			<item>
+				<title>The 2D Fourier Transform</title>
+				        
+				
+					<description>Applying the Fourier Transform over images using TensorFlow.</description>
+				
+				<pubDate>Wed, 09 Jun 2021 10:40:00 +0000</pubDate>
+				<link>https://lucasdavid.github.io//blog/computer-vision/fourier/</link>
+				<guid isPermaLink="true">https://lucasdavid.github.io//blog/computer-vision/fourier/</guid>
+			</item>
+		
+			<item>
+				<title>A Vectorized Implementation of The Convolution Operation</title>
+				        
+				
+					<description>Implementing a few numeric operations over images using Python programming language.</description>
+				
+				<pubDate>Tue, 08 Jun 2021 12:22:00 +0000</pubDate>
+				<link>https://lucasdavid.github.io//blog/computer-vision/vectorization/</link>
+				<guid isPermaLink="true">https://lucasdavid.github.io//blog/computer-vision/vectorization/</guid>
+			</item>
+		
+			<item>
+				<title>Class Activation Mapping</title>
+				        
+				
+					<description>Explaining AI with Grad-CAM.</description>
+				
+				<pubDate>Tue, 23 Mar 2021 08:34:00 +0000</pubDate>
+				<link>https://lucasdavid.github.io//blog/machine-learning/cam/</link>
+				<guid isPermaLink="true">https://lucasdavid.github.io//blog/machine-learning/cam/</guid>
+			</item>
+		
+			<item>
+				<title>Explaining Machine Learning Models</title>
+				        
+				
+					<description>Explainability using tree decision visualization, weight composition, and gradient-based saliency maps.</description>
+				
+				<pubDate>Fri, 15 Jan 2021 16:12:00 +0000</pubDate>
+				<link>https://lucasdavid.github.io//blog/machine-learning/explaining-ai/</link>
+				<guid isPermaLink="true">https://lucasdavid.github.io//blog/machine-learning/explaining-ai/</guid>
+			</item>
+		
+			<item>
+				<title>Caso de estudo sobre regressão linear (in Portuguese)</title>
+				        
+				
+					<description>Uma descrição detalhadas dos princípios da regressão linear, a partir de um caso prático.</description>
+				
+				<pubDate>Wed, 30 Sep 2020 02:46:00 +0000</pubDate>
+				<link>https://lucasdavid.github.io//blog/machine-learning/lm/</link>
+				<guid isPermaLink="true">https://lucasdavid.github.io//blog/machine-learning/lm/</guid>
+			</item>
+		
+	</channel>
+</rss>

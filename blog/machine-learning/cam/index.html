@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Class Activation Mapping – Lucas David</title>
+  <meta charset="utf-8" />
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="image_src" type="image/png" href="img_path" />
+
+
+<meta name="description" content="Explaining AI with Grad-CAM." />
+<meta property="og:description" content="Explaining AI with Grad-CAM." />
+<meta property="og:image" content="" />
+
+<meta name="author" content="Lucas David" />
+
+
+<meta property="og:title" content="Class Activation Mapping" />
+<meta property="twitter:title" content="Class Activation Mapping" />
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<link rel="alternate" type="application/rss+xml" title="Lucas David - my personal website/blog"
+      href="/feed.xml" />
+
+  
+  
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LG7FZ8VCHM"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-LG7FZ8VCHM');
+	</script>
+
+
+  
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+  <nav id="mainNav" class="navbar navbar-light bg-white navbar-expand-lg d-print-none border-bottom border-light ">
+  <div class="container-xl">
+    <button class="navbar-toggler rounded-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand fw-bold text-decoration-none p-1" href="/">Lucas David</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <span class="navbar-text navbar-excerpt">
+        Class Activation Mapping
+      </span>
+      <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+      <ul class="navbar-nav mb-2 mb-lg-0 font-small">
+        <li class="nav-item"><a href="/" class="nav-link fw-bold link-dark fs-6">Home</a></li>
+        <li class="nav-item"><a href="/blog" class="nav-link fw-bold link-dark fs-6">Blog</a></li>
+        <li class="nav-item"><a href="/publications" class="nav-link fw-bold link-dark fs-6">Publications</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold link-dark fs-6" href="#" id="nbd-links-social" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Social
+          </a>
+          <ul class="dropdown-menu font-small dropdown-menu-end" aria-labelledby="nbd-links-social">
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://github.com/lucasdavid">
+                <i aria-label="GitHub" class="bi bi-github link-dark sr-none"></i>
+                Github</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://www.linkedin.com/in/ld7">
+                <i class="bi bi-linkedin text-primary sr-none"></i>
+                Linkedin</a></li>
+
+            <li itemscope itemtype="https://schema.org/Person">
+              <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+                  target="orcid.widget"
+                  rel="me noopener noreferrer"
+                  class="dropdown-item text-decoration-none"
+                >
+                <img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 5px; width: 16px;">
+                ORCID</a>
+            </li>
+
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="http://stackoverflow.com/users/2429640/lucasdavid">
+                <i class="bi bi-code-slash link-dark sr-none"></i>
+                Stackoverflow</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q">
+                <i class="bi bi-youtube text-danger sr-none"></i>
+                Youtube</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+</div>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12 col-xl-3 col-xxl-2 offset-xxl-1">
+      <div id="sidebar" class="">
+  <div class="text-center">
+    <a href="/" title="Home">
+      <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
+        class="img-fluid rounded-circle" style="width:100px" />
+    </a>
+    <p class="pt-2 font-small">
+      
+        <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
+      
+    </p>
+  </div>
+
+  
+</div>
+
+    </div>
+    <div id="table-of-contents-container-r" class="col-12 col-xl-3 col-xxl-2 order-xl-2">
+      
+      <div style="z-index: 0; font-size:0.8rem;">
+        <div id="table-of-contents" class="font-small">
+  <p class="border-bottom"><strong>Summary</strong></p>
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#class-activation-mapping-cam">Class Activation Mapping (CAM)</a></li>
+<li class="toc-entry toc-h2"><a href="#grad-cam">Grad-CAM</a></li>
+<li class="toc-entry toc-h2"><a href="#references">References</a></li>
+</ul>
+</div>
+
+      </div>
+      
+    </div>
+    <div class="col-12 col-xl-6">
+      <article class="post mb-4">
+        <header class="">
+          <h1 id="postTitle" class="fw-bold">Class Activation Mapping</h1>
+          <p class="right-align mb-2 text-muted fs-5">
+            Explaining AI with Grad-CAM. <em>— March 23, 2021</em>
+          </p>
+          <div class="mb-4">
+            <span class="badges-container">
+  
+    <a href="/blog/tag/ml"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >ML</a>
+  
+    <a href="/blog/tag/ai-explaining"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >AI Explaining</a>
+  
+</span>
+
+          </div>
+        </header>
+        <div class="article-content" style="margin-top: 4rem;">
+          <p><span class="fs-1" style="line-height:0">I</span>n my last <a href="/blog/machine-learning/explaining-ai/">post</a>,
+I talked about AI explaining in the computer vision area, and how to use the gradient
+information to explain predictions for classification networks.
+In short, if we consider our answer to be $a(x) = \max f(x)$, for whatever differentiable
+network $f$ and input image $x$, we should be able to compute $\nabla a$. I.e., the gradient
+with respect to the input $x$, composing a map of linear contributions
+for each <code class="language-plaintext highlighter-rouge">RGB</code> value of each pixel in the image. Furthermore, we can obtain smooth gradients
+by repeating this process $N$ times, adding a little noise each time.
+The images below describe the application of VanillaGrad and SmoothGrad over multiple images.</p>
+
+<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active"><img src="/assets/images/posts/ml/explaining/cam/grad/0.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/grad/1.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/grad/2.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/grad/3.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/grad/4.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/grad/5.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/grad/6.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/grad/8.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/grad/10.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/grad/11.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/grad/12.webp" class="d-block w-100" /></div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<p>This works pretty well for images containing a single entity of the classifying set (e.g. the birds, the fish).
+However, things become a little messy then the image contains multiple elements. For example:</p>
+
+<ul>
+  <li>In the image of the dog, classified as <code class="language-plaintext highlighter-rouge">84.7% white wolf</code>, <code class="language-plaintext highlighter-rouge">3.2% kuvasz</code> and <code class="language-plaintext highlighter-rouge">3.0% timber wolf</code>,
+the gradients highlight the human being as well.</li>
+  <li>In the obelisk image (classified as <code class="language-plaintext highlighter-rouge">obelisk</code>), large portions of the buildings are highlighted by
+both Vanilla and SmoothGrad methods.</li>
+  <li>The image containing multiple cat species was classified as
+<code class="language-plaintext highlighter-rouge">43.8% tabby</code>, <code class="language-plaintext highlighter-rouge">27.2% Egyptian cat</code>, <code class="language-plaintext highlighter-rouge">6.0% tiger cat</code> and <code class="language-plaintext highlighter-rouge">2.7% Persian cat</code>. However,
+the gradients with respect to <code class="language-plaintext highlighter-rouge">tabby</code> extend to all cats, not only the tabby species.</li>
+</ul>
+
+<p>So it’s clear that gradient-based methods are not <strong>class-discriminative</strong>, as not only sections of
+the object represented by the output unit are highlighted, but also sections of related objects and
+other classes belonging to the set.</p>
+
+<h2 id="class-activation-mapping-cam">Class Activation Mapping (CAM)</h2>
+<p>Going in a different direction, a method that focus on class separation was proposed for understanding
+convolutional networks, called CAM <a class="citation" href="#zhou2016learning">[1]</a>.</p>
+
+<p>CAM only apply to convolutional networks with a single densely connected softmax layer at its end,
+without bias value attached. The TF code for such network looks something like this:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras</span> <span class="kn">import</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Model</span><span class="p">,</span> <span class="n">layers</span>
+
+<span class="n">C</span> <span class="o">=</span> <span class="mi">1584</span>
+
+<span class="n">backbone</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">applications</span><span class="p">.</span><span class="n">EfficientNetB7</span><span class="p">(</span><span class="n">include_top</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">Input</span><span class="p">((</span><span class="mi">600</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">'images'</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">backbone</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">use_bias</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'predictions'</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">network</span><span class="p">.</span><span class="nb">compile</span><span class="p">(...,</span> <span class="n">loss</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">losses</span><span class="p">.</span><span class="n">SparseCategoricalCrossentropy</span><span class="p">(</span><span class="n">from_logits</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Let $f$ by a network as proposed above,
+$x$ be an input signal (image), $A_{i,j}^k$ the spatial activation signal from
+the last convolutional layer in $f$ and
+$S_u$ the activation strength of any classifying unit $u$ of the softmax layer:</p>
+
+\[\begin{align}
+S_u(x) &amp;= \sum_k w_{u,k} \frac{1}{N} \sum_{i,j} A_{i,j}^k \\
+       &amp;= \frac{1}{N}\sum_{i,j} \sum_k w_{u,k} A_{i,j}^k
+\end{align}\]
+
+<p>Where the importance of each spatial unit $A_{i,j}^k$ is $w_{u,k}$.
+The definition of importance map follows directly from it:</p>
+
+\[M(f, x, u) = \text{upsample}(\sum_k w_{u,k} A_{i,j}^k)\]
+
+<p>The upsample function refers to the resizing procedure of the map to the input image’s original sizes.
+Because networks tend to reduce their intermediate signal considerably, with respect to the spatial components
+(<code class="language-plaintext highlighter-rouge">EfficientNetB4</code>, for instance, reduces images $300\times 300\times 3$ to $10\times 10\times 1792$),
+a considerable amount of precision is lost in this step.
+Hence, this method can only find coarse regions of interest.</p>
+
+<p>From the equations, we can see this signal does not have an upper bound, and
+might present arbitrarily large numbers. We can build an attention map by
+normalizing it across the spatial components. This normalization also removes the constant $N$ from the eq.</p>
+
+<h2 id="grad-cam">Grad-CAM</h2>
+
+<p>A second article <a class="citation" href="#selvaraju2017grad">[2]</a>, written by researchers at George Institute of Technology, addresses
+the architecture limitations set by CAM. In it, they combine gradient-based saliency
+and CAM to replace the $w_{u,k}$ importance factor described above by the differential
+of the activating unit with respect to the activating signal.</p>
+
+<p>To derive this, consider the equation for CAM’s network’s output once again:</p>
+
+\[\begin{align}
+S_u(x) &amp;= \sum_k w_{u,k} P(A_{i,j})^k \\
+P(A)^k &amp;= \frac{1}{N} \sum_{i,j} A_{i,j}^k
+\end{align}\]
+
+<p>Term $w_{u,k}$ is the contribution of filter $k$ to the classification of label $u$.
+In a non linear case, we can approximate it from the differential of the
+activation unit $u$ with respect to the activation map $A_{i,j}^k$:</p>
+
+\[\begin{align}
+\frac{\partial S_u(x)}{\partial A_{i,j}^k} &amp;= \frac{\partial S_u(x)}{\partial P^k} \frac{\partial P^k}{\partial A_{i,j}^k}\\
+\iff \frac{\partial S_u(x)}{\partial P^k} &amp;= \frac{\frac{\partial S_u(x)}{\partial A_{i,j}^k}}{\frac{\partial P^k}{\partial A_{i,j}^k}} \\
+\end{align}\]
+
+<p>But $\frac{\partial P^k}{\partial A_{i,j}^k} = \frac{1}{N}$ and $\frac{\partial S_u(x)}{\partial P^k} = w_{u,k}$, hence:</p>
+
+\[\begin{align}
+           w_{u,k} &amp;= N \frac{\partial S_u(x)}{\partial A_{i,j}^k} \\
+\implies N w_{u,k} &amp;= N \sum_{i,j} \frac{\partial S_u(x)}{\partial A_{i,j}^k}\\
+\implies w_{u,k} &amp;= \sum_{i,j} \frac{\partial S_u(x)}{\partial A_{i,j}^k}
+\end{align}\]
+
+<p>Lastly, the authors only consider the pixels with positive influence over the classification unit $u$,
+ignoring channels with negative contribution. The entire eq. can be expressed as:</p>
+
+\[M(f, x, u)_{i,j} = \text{upsample}(\sum_k \text{relu}(\sum_{l,m}\frac{\partial S_u}{\partial A_{l,m}^k}) A_{i,j}^k)\]
+
+<p>Because the contributions of each kernel in the last convolution are estimated with the gradient information,
+we can generalize this attention method to any kind of network. The paper exemplifies it with
+a network that combine Conv2D with LSTM layers to generate natural textual descriptors from images.</p>
+
+<p>TensorFlow’s implementation of Grad-CAM is pretty simple.
+We start by defining the network: as a multi-output network, which feeds on images and
+outputs the classification logits and the positional signal from the last spatial layer (our signal $A$).
+Finally, we feed-forward the images through it.</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">LAST_SPATIAL_LAYER</span> <span class="o">=</span> <span class="s">'block14_sepconv2_act'</span>
+
+<span class="n">nn</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">applications</span><span class="p">.</span><span class="n">Xception</span><span class="p">()</span>
+
+<span class="n">ss</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">Model</span><span class="p">(</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="n">nn</span><span class="p">.</span><span class="n">inputs</span><span class="p">,</span>
+    <span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="n">nn</span><span class="p">.</span><span class="n">output</span><span class="p">,</span> <span class="n">nn</span><span class="p">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">LAST_SPATIAL_LAYER</span><span class="p">).</span><span class="n">output</span><span class="p">],</span>
+    <span class="n">name</span><span class="o">=</span><span class="s">'spatial'</span><span class="p">)</span>
+
+<span class="n">images</span> <span class="o">=</span> <span class="n">read_images</span><span class="p">(...)</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">images</span> <span class="o">/</span> <span class="mf">127.5</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># Normalize input-signal to (-1, 1), expected by Xception.
+</span>
+<span class="n">logits</span> <span class="o">=</span> <span class="n">nn</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">probs</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">logits</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>And finally, we define our <code class="language-plaintext highlighter-rouge">gradcam</code> function:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">activation_gain</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">units</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">gather</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_dims</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="o">@</span><span class="n">tf</span><span class="p">.</span><span class="n">function</span>
+<span class="k">def</span> <span class="nf">gradcam</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">units</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">tf</span><span class="p">.</span><span class="n">GradientTape</span><span class="p">(</span><span class="n">watch_accessed_variables</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
+        <span class="n">tape</span><span class="p">.</span><span class="n">watch</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+        <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">ss</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">activation_gain</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+
+    <span class="n">grads</span> <span class="o">=</span> <span class="n">tape</span><span class="p">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">keepdims</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">maps</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">z</span><span class="o">*</span><span class="n">weights</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c1"># We are not concerned with pixels that negatively contribute
+</span>    <span class="c1"># to its classification, only pixels that belong to that class.
+</span>    <span class="n">maps</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">relu</span><span class="p">(</span><span class="n">maps</span><span class="p">)</span>
+    <span class="n">maps</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">maps</span><span class="p">)</span>
+    <span class="n">maps</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">image</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">maps</span><span class="p">,</span> <span class="p">(</span><span class="mi">600</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">maps</span><span class="p">[...,</span> <span class="mi">0</span><span class="p">]</span> <span class="c1"># (H, W, 1) --squeezed--&gt; (H, W)
+</span>
+<span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">-=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_min</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">keepdims</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">/=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_max</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">keepdims</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-07</span>
+    <span class="k">return</span> <span class="n">x</span>
+</code></pre></div></div>
+
+<p>Notice we need the arguments <code class="language-plaintext highlighter-rouge">axis=1, batch_dims=1</code> in <code class="language-plaintext highlighter-rouge">tf.gather</code> because the <code class="language-plaintext highlighter-rouge">tf.argmax</code>
+operation returned a tensor with a different number of ranks from <code class="language-plaintext highlighter-rouge">y</code>. A valid alternative
+is to remove these args and reshape <code class="language-plaintext highlighter-rouge">preds</code> as a column vector.</p>
+
+<p>Lastly, we only need to call <code class="language-plaintext highlighter-rouge">gradcam</code> using our input images and units of interest:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">loss</span><span class="p">,</span> <span class="n">maps</span> <span class="o">=</span> <span class="n">gradcam</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">preds</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#cv1" aria-controls="cv1" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-py collapse highlighter-rouge" id="cv1"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">plot_heatmaps</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">maps</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">i0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">full</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">full</span><span class="p">:</span> <span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">rows</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">maps</span><span class="p">)):</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">),</span> <span class="n">i0</span><span class="o">+</span><span class="n">ix</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">plot_heatmap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">full</span><span class="p">:</span> <span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">plot_heatmap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s">'jet'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="s">'off'</span><span class="p">)</span>
+
+
+<span class="n">plot_heatmaps</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">maps</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div id="carouselCam" class="carousel slide" data-bs-ride="carousel" alt="Grad-CAM method applied to different input images. The lines (from left to right): (a) the original images; (b) the Grad-CAM attention map produced; (c) the interpolation between the original image and JET colorspace spawned by the attention map; and (d) the input image masked by the CAM">
+  <div class="carousel-inner">
+    <div class="carousel-item active"><img src="/assets/images/posts/ml/explaining/cam/cam/0.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/cam/1.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/cam/2.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/cam/3.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/cam/4.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/cam/5.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/cam/6.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/cam/8.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/cam/10.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/cam/11.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/cam/12.webp" class="d-block w-100" /></div>
+    <div class="carousel-item"><img src="/assets/images/posts/ml/explaining/cam/cam/13.webp" class="d-block w-100" /></div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselCam" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselCam" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<p>That’s it! Hopefully you can re-use this in your own networks! (-:</p>
+
+<div class="alert alert-light border border-info d-flex align-items-center mt-4" role="alert">
+  <i class="bi bi-info-lg me-3 text-info" aria-label="Info:" role="img"></i>
+  <div>
+  I have written a AI explaining library that contains many of the visualization
+  techniques (including Grad-CAM) out of the box.
+
+  You can check it out here:
+  <a href="https://lucasdavid.github.io/keras-explainable/" target="_new">lucasdavid.github.io/keras-explainable/</a>
+  </div>
+</div>
+
+<h2 id="references">References</h2>
+
+<ol class="bibliography"><li><span id="zhou2016learning">B. Zhou, A. Khosla, A. Lapedriza, A. Oliva, and A. Torralba, “Learning deep features for discriminative localization,” in <i>IEEE conference on Computer Vision and Pattern Recognition (CVPR)</i>, 2016, pp. 2921–2929.</span></li>
+<li><span id="selvaraju2017grad">R. R. Selvaraju, M. Cogswell, A. Das, R. Vedantam, D. Parikh, and D. Batra, “Grad-CAM: Visual explanations from deep networks via gradient-based localization,” in <i>IEEE conference on Computer Vision and Pattern Recognition (CVPR)</i>, 2017, pp. 618–626.</span></li></ol>
+
+        </div>
+      </article>
+
+      
+      <div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://lucasdavid-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      
+    </div>
+  </div>
+</div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+  integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"
+  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
+  integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '\\[', right: '\\]', display: true}, {left: '$', right: '$', display: false},{left: '\\(', right: '\\)', display: false}]});"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+<script>
+  anchors.options = { icon: '#' };
+  anchors.add();
+</script>
+
+
+  <!-- <svg id="visual" viewBox="0 0 1980 300"  class="curve-container__curve curve-three" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <path
+    d="M0 69L55 90.2C110 111.3 220 153.7 330 169.8C440 186 550 176 660 165.5C770 155 880 144 990 139.2C1100 134.3 1210 135.7 1320 137.7C1430 139.7 1540 142.3 1650 155.5C1760 168.7 1870 192.3 1925 204.2L1980 216L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#d3d3d3"></path>
+  <path
+    d="M0 89L55 107.8C110 126.7 220 164.3 330 191.3C440 218.3 550 234.7 660 243.8C770 253 880 255 990 252.3C1100 249.7 1210 242.3 1320 228.8C1430 215.3 1540 195.7 1650 174.5C1760 153.3 1870 130.7 1925 119.3L1980 108L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#6a6a6a"></path>
+  <path
+    d="M0 229L55 232.3C110 235.7 220 242.3 330 244.3C440 246.3 550 243.7 660 247.3C770 251 880 261 990 254.8C1100 248.7 1210 226.3 1320 223.5C1430 220.7 1540 237.3 1650 233.8C1760 230.3 1870 206.7 1925 194.8L1980 183L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#121212"></path>
+</svg> -->
+<footer class="page-footer text-bg-dark bg-black-subtle d-print-none">
+  <div class="container">
+    <div class="mt-4 mb-5">
+      
+        <div class="row g-1 mb-4">
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Keras Explainable</h6>
+                <p class="card-text text-light">
+                  Clean implementations for AI explaining methods in Keras.
+<a href="https://github.com/lucasdavid/keras-explainable" target="_new">Code</a> and
+<a href="https://lucasdavid.github.io/keras-explainable" target="_new">docs</a> are available.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Supporting Study Material</h6>
+                <p class="card-text text-light">
+                  If you are an undergrad student and are looking for additional study material,
+check out our collaborative project <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Algorithms in TensorFlow</h6>
+                <p class="card-text text-light">
+                  I'm implementing all algorithms I find interesting using TensorFlow.
+You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">github.com/lucasdavid/algorithms-in-tensorflow</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">TF-Experiment</h6>
+                <p class="card-text text-light">
+                  And environment to run Machine Learning experiments based on components and mixins. Available at <a href="https://github.com/lucasdavid/tf-experiment">github.com/lucasdavid/tf-experiment</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Mineração de Dados Complexos</h6>
+                <p class="card-text text-light">
+                  Information around the extension program "Mineração de Dados Complexos (in Portuguese)" is available at
+<a href="https://www.ic.unicamp.br/~mdc/" target="_blank">ic.unicamp.br/~mdc/</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+    </div>
+
+    <div class="text-end mt-4">
+      
+
+
+<div class="fs-2">
+  
+    <a href="https://github.com/lucasdavid"
+      target="_blank"
+      ><i
+      aria-label="GitHub"
+      class="bi bi-github link-light"></i></a>
+  
+  
+    <a href="https://www.linkedin.com/in/ld7"
+      target="_blank"
+      title="LinkedIn"><i class="bi bi-linkedin text-primary sr-none"></i></a>
+  
+  <span itemscope itemtype="https://schema.org/Person">
+    <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+       target="orcid.widget"
+       rel="me noopener noreferrer"
+       title="ORCID"
+      ><img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 7px; width: 32px;"></a>
+  </span>
+  
+  <a href="http://stackoverflow.com/users/2429640/lucasdavid"
+     target="_blank"
+     title="Stackoverflow"><i class="bi bi-code-slash link-light sr-none"></i></a>
+  
+    <a href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q"
+      target="_blank"
+      title="Youtube"><i class="bi bi-youtube text-danger sr-none"></i></a>
+  
+    <a href="mailto:mb37410l3@mozmail.com"
+      target="_blank"
+      title="Mail"><i class="bi bi-envelope-fill link-light sr-none"></i></a>
+  
+  <a href="assets/docs/lucas-david-resume.pdf"
+     target="_blank"
+     title="Resume"><i class="bi bi-person-lines-fill link-light sr-none"></i></a>
+</div>
+
+    </div>
+    <div class="text-end">
+      <p>
+        ® Lucas David. Todos os direitos reservados.
+      </p>
+    </div>
+</div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Effective Code Versioning – Lucas David</title>
+  <meta charset="utf-8" />
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="image_src" type="image/png" href="img_path" />
+
+
+<meta name="description" content="Digging Deep in Code Versioning with GIT" />
+<meta property="og:description" content="Digging Deep in Code Versioning with GIT" />
+<meta property="og:image" content="" />
+
+<meta name="author" content="Lucas David" />
+
+
+<meta property="og:title" content="Effective Code Versioning" />
+<meta property="twitter:title" content="Effective Code Versioning" />
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<link rel="alternate" type="application/rss+xml" title="Lucas David - my personal website/blog"
+      href="/feed.xml" />
+
+  
+  
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LG7FZ8VCHM"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-LG7FZ8VCHM');
+	</script>
+
+
+  
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+  <nav id="mainNav" class="navbar navbar-light bg-white navbar-expand-lg d-print-none border-bottom border-light ">
+  <div class="container-xl">
+    <button class="navbar-toggler rounded-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand fw-bold text-decoration-none p-1" href="/">Lucas David</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <span class="navbar-text navbar-excerpt">
+        Effective Code Versioning
+      </span>
+      <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+      <ul class="navbar-nav mb-2 mb-lg-0 font-small">
+        <li class="nav-item"><a href="/" class="nav-link fw-bold link-dark fs-6">Home</a></li>
+        <li class="nav-item"><a href="/blog" class="nav-link fw-bold link-dark fs-6">Blog</a></li>
+        <li class="nav-item"><a href="/publications" class="nav-link fw-bold link-dark fs-6">Publications</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold link-dark fs-6" href="#" id="nbd-links-social" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Social
+          </a>
+          <ul class="dropdown-menu font-small dropdown-menu-end" aria-labelledby="nbd-links-social">
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://github.com/lucasdavid">
+                <i aria-label="GitHub" class="bi bi-github link-dark sr-none"></i>
+                Github</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://www.linkedin.com/in/ld7">
+                <i class="bi bi-linkedin text-primary sr-none"></i>
+                Linkedin</a></li>
+
+            <li itemscope itemtype="https://schema.org/Person">
+              <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+                  target="orcid.widget"
+                  rel="me noopener noreferrer"
+                  class="dropdown-item text-decoration-none"
+                >
+                <img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 5px; width: 16px;">
+                ORCID</a>
+            </li>
+
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="http://stackoverflow.com/users/2429640/lucasdavid">
+                <i class="bi bi-code-slash link-dark sr-none"></i>
+                Stackoverflow</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q">
+                <i class="bi bi-youtube text-danger sr-none"></i>
+                Youtube</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+</div>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12 col-xl-3 col-xxl-2 offset-xxl-1">
+      <div id="sidebar" class="">
+  <div class="text-center">
+    <a href="/" title="Home">
+      <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
+        class="img-fluid rounded-circle" style="width:100px" />
+    </a>
+    <p class="pt-2 font-small">
+      
+        <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
+      
+    </p>
+  </div>
+
+  
+</div>
+
+    </div>
+    <div id="table-of-contents-container-r" class="col-12 col-xl-3 col-xxl-2 order-xl-2">
+      
+      <div style="z-index: 0; font-size:0.8rem;">
+        <div id="table-of-contents" class="font-small">
+  <p class="border-bottom"><strong>Summary</strong></p>
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#first-some-important-git-concepts">First, some important GIT concepts</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#how-conflicts-magically-appear">How conflicts “magically” appear</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#what-is-our-problem">What is our problem?</a></li>
+<li class="toc-entry toc-h2"><a href="#how-to-solve-it">How to solve it.</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#work-in-short-cycles">Work in short cycles</a></li>
+<li class="toc-entry toc-h3"><a href="#separate-work-that-isnt-related">Separate work that isn’t related</a></li>
+<li class="toc-entry toc-h3"><a href="#continuous-stability">Continuous stability</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#short-version-for-lazy-loaders">Short version for lazy-loaders</a></li>
+</ul>
+</div>
+
+      </div>
+      
+    </div>
+    <div class="col-12 col-xl-6">
+      <article class="post mb-4">
+        <header class="">
+          <h1 id="postTitle" class="fw-bold">Effective Code Versioning</h1>
+          <p class="right-align mb-2 text-muted fs-5">
+            Digging Deep in Code Versioning with GIT <em>— October  2, 2017</em>
+          </p>
+          <div class="mb-4">
+            <span class="badges-container">
+  
+    <a href="/blog/tag/devops"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >DevOps</a>
+  
+</span>
+
+          </div>
+        </header>
+        <div class="article-content" style="margin-top: 4rem;">
+          <p><span>Some</span>
+weeks ago, I’ve started this blog with this <a href="https://ycoding.wordpress.com/2015/05/03/14/">very subject</a>. Today, as requested by a reader, I’ll go back and try to talk a little bit more about versioning (focusing on <a href="http://git-scm.com/">GIT</a>), it’s problems and how to avoid/fix them.</p>
+
+<p>Versioning is great. If you’re coding alone, it provides you cool features, like saving, branching, rolling back, reverting, peeking previous states etc. In the other hand, if you’re working with a team, it becomes even more important:, as it’s a way to automate what can be automated, stop wasting so much time on team management and focus on your domain problem.</p>
+
+<figure>
+  <img src="/assets/images/posts/git-advanced.svg" alt="An advanced flow using Git" class="figure-img img-fluid rounded" />
+    <figcaption>An advanced flow using Git. Available at: <a href="https://www.benmarshall.me/git-rebase/">benmarshall.me</a></figcaption>
+</figure>
+
+<h2 id="first-some-important-git-concepts">First, some important GIT concepts</h2>
+
+<ul>
+  <li><strong>Commit change list</strong>: the list of files to be committed - <code class="language-plaintext highlighter-rouge">git add {file-name}</code> to add files to the list and <code class="language-plaintext highlighter-rouge">git reset HEAD {file-name}</code> to remove them.</li>
+  <li><strong>Commit</strong>: a well defined state of your repository that’s saved and can be peaked or restored - <code class="language-plaintext highlighter-rouge">git commit -m "{your-message}"</code></li>
+  <li><strong>Branch</strong>: a path of commits. It starts as a fork of another branch and can be merged again to any other branch - <code class="language-plaintext highlighter-rouge">git checkout -b {new-branch-name}</code>.</li>
+  <li><strong>Pull</strong>: operation which retrieves all commits made on a specific branch from a remote server to your local GIT repository - <code class="language-plaintext highlighter-rouge">git pull</code>.</li>
+  <li><strong>Push</strong>: operation which uploads all commits made on a specific branch, in your local GIT repository, to a remote server - <code class="language-plaintext highlighter-rouge">git push</code>.</li>
+  <li><strong>Merging</strong>: process in which modifications in two different branches are merged. If there’s not conflicts, the entire process will be automatic - <code class="language-plaintext highlighter-rouge">git merge {branch-to-be-merged-name}</code>.</li>
+  <li><strong>Conflict</strong>: a state in which the repository enters after the merging process, if the former was unable to automatic merge all the changes. You can’t create new commits until the conflicts have been solved.</li>
+</ul>
+
+<h3 id="how-conflicts-magically-appear">How conflicts “magically” appear</h3>
+<p>I hear way to many people complaining how hard it’s to fix GIT conflicts. Before talking about how to reduce them, let’s understand the merging process: GIT will compare both versions and merge them optimally. Some regions of the file, though, cannot be merged. That happens when the same region is <strong>modified by two different commits</strong>, where <strong>one of them is NOT an ancestor of the other</strong> and the <strong>two versions are now different</strong>. In this case, GIT can’t conservatively infer which modification should be preserved and which should be discarded, so it simply informs you that a conflict happened and you must fix it.</p>
+
+<p>The image bellow illustrates how GIT represents a conflict. To solve it, you must manually re-write the entire region/delete one of the versions and erase the lines 1, 4 and 6. Finally, it’ll allow you to commit.</p>
+
+<p><img src="https://help.github.com/assets/images/mac/changes/merge_conflict_sample.webp" alt="A conflict example" /></p>
+
+<blockquote>
+  <p><strong>#1</strong> Please, keep in mind that GIT didn’t create conflicts. They exist whether you’re using a versioning tool or simply grabbing your mates codes and manually merging them. Seriously. IT IS NOT easier to keep swapping a hundred different .zip files through email.</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>#2</strong> For more information on workflow, there is this <a href="http://stackoverflow.com/questions/273695/git-branch-naming-best-practices">nice article</a> from Atlassian.</p>
+</blockquote>
+
+<h2 id="what-is-our-problem">What is our problem?</h2>
+<p>Although GIT helps us a lot, there are many situations that are a real pain in the ass. In my opinion, these are the worse:</p>
+
+<ul>
+  <li>Recurrent conflicts, pissing you off as you have to fix them all pulls/pushes/merges.</li>
+  <li>Constant modifications are being made on regions that you directly depend, constantly breaking up your code.</li>
+  <li>Changes that weren’t made by you, which have broken the entire repository.</li>
+  <li>Modifications that were not there when you left, and you just can’t seem to understand them.</li>
+  <li>All branches are broken, which means there isn’t a single version of your project that’s stable.</li>
+</ul>
+
+<h2 id="how-to-solve-it">How to solve it.</h2>
+<p>We don’t have the whole day to fight GIT and our code mates over this. Plus, we’re here to concentrate on our domain problem: the code that is contained on the repository. Naturally, we want to minimize, or rather eliminate these situations.</p>
+
+<h3 id="work-in-short-cycles">Work in short cycles</h3>
+<p>Be organized. Make small changes and commit these right away. Don’t modify the entire file and just then remember to commit. Yes, <code class="language-plaintext highlighter-rouge">git commit -a</code> is an abomination.</p>
+
+<p>Before starting to code, always <code class="language-plaintext highlighter-rouge">pull</code> from the remote repository. After some commits, <code class="language-plaintext highlighter-rouge">push</code>. Don’t leave commits locally, as these can create conflicts that could so easily be avoided.</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git pull
+git push <span class="nt">--all</span>
+</code></pre></div></div>
+
+<h3 id="separate-work-that-isnt-related">Separate work that isn’t related</h3>
+<p>You should be able to pick up from were you left, not have to understand dozens of new lines that don’t relate to your work at all every time you <code class="language-plaintext highlighter-rouge">pull</code>. If you’re working onto something, create a new branch and do your thing. Commit, experiment and revert without any worry of breaking someone else’s code. After all, they’ll be on their own branches.</p>
+
+<p>For branch naming, I was taught to name it after an issue. I find this particularly useful, as both <a href="github.com">GitHub</a> and <a href="bitbucket.org">Bitbucket</a> maintain an issue tracker and their issues can contain lots of information! Additionally, the branch name becomes quite simple. As an toy example: imagine that you’ve created an issue <code class="language-plaintext highlighter-rouge">Adding Google oauth2 authentication alternative</code> in your Bitbucket’s repository and it was assigned the <strong>id #45</strong> to that issue. Go to your repository, create and move to a new branch <code class="language-plaintext highlighter-rouge">iss45</code>:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout <span class="nt">-b</span> iss45 <span class="c"># create and switch to branch iss45</span>
+</code></pre></div></div>
+
+<p>You can now implement the usage of Google oauth2 service, free from other people bugging your work. When you’re done, you can go back to <code class="language-plaintext highlighter-rouge">master</code>, merge <code class="language-plaintext highlighter-rouge">iss45</code> and delete it:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout master <span class="c"># go back to master</span>
+git merge iss45     <span class="c"># merge iss45 -&gt; master</span>
+git branch <span class="nt">-D</span> iss45 <span class="c"># delete iss45</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>#3</strong> Don’t be an douchebag and break other people’s code. Make sure you’ve tested the code in your branch before merging it to <code class="language-plaintext highlighter-rouge">master</code>. Run the tests again after you’ve merged. Overall, try to keep the project on your main branch working.</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>#4</strong> If you didn’t like this naming style, here is some <a href="http://stackoverflow.com/questions/273695/git-branch-naming-best-practices">reference</a> that might interest you. This one involves given meaningful names to branches, such as <code class="language-plaintext highlighter-rouge">feature/new/google-oauth2</code>.</p>
+</blockquote>
+
+<h3 id="continuous-stability">Continuous stability</h3>
+<p>Make sure your repository has at least on branch that contains stable code. Always be careful when merging to that branch, and be sure that you’ve tested it thoroughly before doing so.</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch <span class="c"># list existing branches</span>
+git branch release <span class="c"># create release</span>
+</code></pre></div></div>
+
+<p>When you’re certain that <code class="language-plaintext highlighter-rouge">master</code> is stable, merge it:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout release <span class="c"># go to release</span>
+git merge master     <span class="c"># merge master</span>
+git checkout master  <span class="c"># go back to master</span>
+</code></pre></div></div>
+
+<p>In opposite of having a branch <code class="language-plaintext highlighter-rouge">release</code>, you can also use <code class="language-plaintext highlighter-rouge">master</code> as the “stable brach” and create a branch called <code class="language-plaintext highlighter-rouge">dev</code>. You should then work mainly at <code class="language-plaintext highlighter-rouge">dev</code>. I prefer the first option, though, as GitHub doesn’t close issues automatically when you commit with the message <strong>fix #{issue id}</strong> in branches that are not the main.</p>
+
+<h2 id="short-version-for-lazy-loaders">Short version for lazy-loaders</h2>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git pull   <span class="c"># retrieve modifications from remote</span>
+git branch <span class="c"># list existing branches</span>
+
+git checkout <span class="nt">-b</span> iss45 <span class="c"># create and switch to branch iss45</span>
+
+... <span class="c"># do your thing and, when you're sure it's working...</span>
+
+git checkout master <span class="c"># go back to master</span>
+git merge iss45     <span class="c"># merge iss45 -&gt; master</span>
+git branch <span class="nt">-D</span> iss45 <span class="c"># delete iss45</span>
+git push <span class="c"># push modifications to remote</span>
+
+git checkout <span class="nt">-b</span> release <span class="c"># create and switch to the release branch</span>
+git merge master        <span class="c"># merge master -&gt; release</span>
+
+git checkout master     <span class="c"># go back to master</span>
+</code></pre></div></div>
+
+        </div>
+      </article>
+
+      
+      <div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://lucasdavid-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      
+    </div>
+  </div>
+</div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+  integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"
+  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
+  integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '\\[', right: '\\]', display: true}, {left: '$', right: '$', display: false},{left: '\\(', right: '\\)', display: false}]});"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+<script>
+  anchors.options = { icon: '#' };
+  anchors.add();
+</script>
+
+
+  <!-- <svg id="visual" viewBox="0 0 1980 300"  class="curve-container__curve curve-three" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <path
+    d="M0 69L55 90.2C110 111.3 220 153.7 330 169.8C440 186 550 176 660 165.5C770 155 880 144 990 139.2C1100 134.3 1210 135.7 1320 137.7C1430 139.7 1540 142.3 1650 155.5C1760 168.7 1870 192.3 1925 204.2L1980 216L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#d3d3d3"></path>
+  <path
+    d="M0 89L55 107.8C110 126.7 220 164.3 330 191.3C440 218.3 550 234.7 660 243.8C770 253 880 255 990 252.3C1100 249.7 1210 242.3 1320 228.8C1430 215.3 1540 195.7 1650 174.5C1760 153.3 1870 130.7 1925 119.3L1980 108L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#6a6a6a"></path>
+  <path
+    d="M0 229L55 232.3C110 235.7 220 242.3 330 244.3C440 246.3 550 243.7 660 247.3C770 251 880 261 990 254.8C1100 248.7 1210 226.3 1320 223.5C1430 220.7 1540 237.3 1650 233.8C1760 230.3 1870 206.7 1925 194.8L1980 183L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#121212"></path>
+</svg> -->
+<footer class="page-footer text-bg-dark bg-black-subtle d-print-none">
+  <div class="container">
+    <div class="mt-4 mb-5">
+      
+        <div class="row g-1 mb-4">
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Keras Explainable</h6>
+                <p class="card-text text-light">
+                  Clean implementations for AI explaining methods in Keras.
+<a href="https://github.com/lucasdavid/keras-explainable" target="_new">Code</a> and
+<a href="https://lucasdavid.github.io/keras-explainable" target="_new">docs</a> are available.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Supporting Study Material</h6>
+                <p class="card-text text-light">
+                  If you are an undergrad student and are looking for additional study material,
+check out our collaborative project <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Algorithms in TensorFlow</h6>
+                <p class="card-text text-light">
+                  I'm implementing all algorithms I find interesting using TensorFlow.
+You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">github.com/lucasdavid/algorithms-in-tensorflow</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">TF-Experiment</h6>
+                <p class="card-text text-light">
+                  And environment to run Machine Learning experiments based on components and mixins. Available at <a href="https://github.com/lucasdavid/tf-experiment">github.com/lucasdavid/tf-experiment</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Mineração de Dados Complexos</h6>
+                <p class="card-text text-light">
+                  Information around the extension program "Mineração de Dados Complexos (in Portuguese)" is available at
+<a href="https://www.ic.unicamp.br/~mdc/" target="_blank">ic.unicamp.br/~mdc/</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+    </div>
+
+    <div class="text-end mt-4">
+      
+
+
+<div class="fs-2">
+  
+    <a href="https://github.com/lucasdavid"
+      target="_blank"
+      ><i
+      aria-label="GitHub"
+      class="bi bi-github link-light"></i></a>
+  
+  
+    <a href="https://www.linkedin.com/in/ld7"
+      target="_blank"
+      title="LinkedIn"><i class="bi bi-linkedin text-primary sr-none"></i></a>
+  
+  <span itemscope itemtype="https://schema.org/Person">
+    <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+       target="orcid.widget"
+       rel="me noopener noreferrer"
+       title="ORCID"
+      ><img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 7px; width: 32px;"></a>
+  </span>
+  
+  <a href="http://stackoverflow.com/users/2429640/lucasdavid"
+     target="_blank"
+     title="Stackoverflow"><i class="bi bi-code-slash link-light sr-none"></i></a>
+  
+    <a href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q"
+      target="_blank"
+      title="Youtube"><i class="bi bi-youtube text-danger sr-none"></i></a>
+  
+    <a href="mailto:mb37410l3@mozmail.com"
+      target="_blank"
+      title="Mail"><i class="bi bi-envelope-fill link-light sr-none"></i></a>
+  
+  <a href="assets/docs/lucas-david-resume.pdf"
+     target="_blank"
+     title="Resume"><i class="bi bi-person-lines-fill link-light sr-none"></i></a>
+</div>
+
+    </div>
+    <div class="text-end">
+      <p>
+        ® Lucas David. Todos os direitos reservados.
+      </p>
+    </div>
+</div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous" defer></script>
+
+</body>
+</html>

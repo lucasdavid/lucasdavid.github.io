@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Code Conventions and Personal Hints – Lucas David</title>
+  <meta charset="utf-8" />
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="image_src" type="image/png" href="img_path" />
+
+
+<meta name="description" content="My Perspective on Multiple Examples of Coding" />
+<meta property="og:description" content="My Perspective on Multiple Examples of Coding" />
+<meta property="og:image" content="" />
+
+<meta name="author" content="Lucas David" />
+
+
+<meta property="og:title" content="Code Conventions and Personal Hints" />
+<meta property="twitter:title" content="Code Conventions and Personal Hints" />
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<link rel="alternate" type="application/rss+xml" title="Lucas David - my personal website/blog"
+      href="/feed.xml" />
+
+  
+  
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LG7FZ8VCHM"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-LG7FZ8VCHM');
+	</script>
+
+
+  
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+  <nav id="mainNav" class="navbar navbar-light bg-white navbar-expand-lg d-print-none border-bottom border-light ">
+  <div class="container-xl">
+    <button class="navbar-toggler rounded-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand fw-bold text-decoration-none p-1" href="/">Lucas David</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <span class="navbar-text navbar-excerpt">
+        Code Conventions and Personal Hints
+      </span>
+      <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+      <ul class="navbar-nav mb-2 mb-lg-0 font-small">
+        <li class="nav-item"><a href="/" class="nav-link fw-bold link-dark fs-6">Home</a></li>
+        <li class="nav-item"><a href="/blog" class="nav-link fw-bold link-dark fs-6">Blog</a></li>
+        <li class="nav-item"><a href="/publications" class="nav-link fw-bold link-dark fs-6">Publications</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold link-dark fs-6" href="#" id="nbd-links-social" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Social
+          </a>
+          <ul class="dropdown-menu font-small dropdown-menu-end" aria-labelledby="nbd-links-social">
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://github.com/lucasdavid">
+                <i aria-label="GitHub" class="bi bi-github link-dark sr-none"></i>
+                Github</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://www.linkedin.com/in/ld7">
+                <i class="bi bi-linkedin text-primary sr-none"></i>
+                Linkedin</a></li>
+
+            <li itemscope itemtype="https://schema.org/Person">
+              <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+                  target="orcid.widget"
+                  rel="me noopener noreferrer"
+                  class="dropdown-item text-decoration-none"
+                >
+                <img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 5px; width: 16px;">
+                ORCID</a>
+            </li>
+
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="http://stackoverflow.com/users/2429640/lucasdavid">
+                <i class="bi bi-code-slash link-dark sr-none"></i>
+                Stackoverflow</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q">
+                <i class="bi bi-youtube text-danger sr-none"></i>
+                Youtube</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+</div>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12 col-xl-3 col-xxl-2 offset-xxl-1">
+      <div id="sidebar" class="">
+  <div class="text-center">
+    <a href="/" title="Home">
+      <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
+        class="img-fluid rounded-circle" style="width:100px" />
+    </a>
+    <p class="pt-2 font-small">
+      
+        <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
+      
+    </p>
+  </div>
+
+  
+</div>
+
+    </div>
+    <div id="table-of-contents-container-r" class="col-12 col-xl-3 col-xxl-2 order-xl-2">
+      
+      <div style="z-index: 0; font-size:0.8rem;">
+        <div id="table-of-contents" class="font-small">
+  <p class="border-bottom"><strong>Summary</strong></p>
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#some-useful-references">Some useful references</a></li>
+<li class="toc-entry toc-h2"><a href="#doing-your-part">Doing your part</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#use-simple-and-pleasant-names">Use simple and pleasant names</a></li>
+<li class="toc-entry toc-h3"><a href="#be-consistent">Be consistent</a></li>
+<li class="toc-entry toc-h3"><a href="#give-similar-names-to-whats-similar-and-distant-names-to-whats-different">Give similar names to what’s similar and distant names to what’s different.</a></li>
+<li class="toc-entry toc-h3"><a href="#optimize-comments">Optimize comments</a></li>
+<li class="toc-entry toc-h3"><a href="#consider-chaining-methods-instead-of-writing-multiple-statements">Consider chaining methods instead of writing multiple statements</a></li>
+<li class="toc-entry toc-h3"><a href="#dont-repeat-words">Don’t repeat words.</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#switch-languages-often-until-you-find-one-that-you-like">Switch languages often, until you find one that you like.</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#java">Java</a></li>
+<li class="toc-entry toc-h3"><a href="#c-slightly-different-approach">C# slightly different approach</a></li>
+<li class="toc-entry toc-h3"><a href="#the-pythonic-way">The Pythonic way.</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#conclusion">Conclusion</a></li>
+</ul>
+</div>
+
+      </div>
+      
+    </div>
+    <div class="col-12 col-xl-6">
+      <article class="post mb-4">
+        <header class="">
+          <h1 id="postTitle" class="fw-bold">Code Conventions and Personal Hints</h1>
+          <p class="right-align mb-2 text-muted fs-5">
+            My Perspective on Multiple Examples of Coding <em>— October  2, 2017</em>
+          </p>
+          <div class="mb-4">
+            <span class="badges-container">
+  
+    <a href="/blog/tag/patterns"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Patterns</a>
+  
+</span>
+
+          </div>
+        </header>
+        <div class="article-content" style="margin-top: 4rem;">
+          <p><span>No</span>, this isn’t a post saying that you shouldn’t create variables called <code class="language-plaintext highlighter-rouge">aux1</code>, <code class="language-plaintext highlighter-rouge">aux2</code> and <code class="language-plaintext highlighter-rouge">aux3</code> (you shouldn’t, though).</p>
+
+<p><a href="https://en.wikipedia.org/wiki/Coding_conventions">Conventions</a> are created by people. They encapsulate, inherently, these same people’s preconceptions and opinions. Bottom line is: they are not necessary logical (although, in many cases, much study is done before adopting a convention). Therefore, it is okay to disagree with conventions and what they state.</p>
+
+<p>That doesn’t mean they were created to be broken. They represent an important feature that allows people that don’t even speak the same language to create, understand, modified and improved by each other’s code.</p>
+
+<figure>
+  <img src="/assets/images/posts/pep8.webp" alt="A fun drawing of PEP8 compliant code." class="figure-img img-fluid rounded" />
+    <figcaption>A fun drawing of PEP8 complaint code. Available at:
+      <a href="https://realpython.com/python-pep8/">realpython/python-pep8</a></figcaption>
+</figure>
+
+<p>So what do we do? I’ve come to the conclusion that it’s very important to follow SOME convention. Ideally, the conventions that most people follow in your current programming language. However, you should never stop looking up for new styles that might interest you and why not.</p>
+
+<h2 id="some-useful-references">Some useful references</h2>
+<p>The most popular conventions are very easily found on the internet. You can get many hints of good programming standards from these files:</p>
+
+<ul>
+  <li><a href="http://www.oracle.com/technetwork/java/codeconventions-150003.pdf">Java Code Conventions, 1997</a></li>
+  <li><a href="https://msdn.microsoft.com/en-us/library/ff926074.aspx">c# Coding Conventions</a></li>
+  <li><a href="https://www.python.org/dev/peps/pep-0008/">Python’s pep 0008, 2011</a></li>
+</ul>
+
+<h2 id="doing-your-part">Doing your part</h2>
+<p>Conventions aren’t everything. It’s possible to write unreadable code that follows conventions. Bellow is a list of a few elements that can improve considerably one’s code (in my opinion, that is; feel free to disagree).</p>
+
+<h3 id="use-simple-and-pleasant-names">Use simple and pleasant names</h3>
+<p>If your scope is a method with 30 lines, there’s no need for huge variable names. Stick with the simple:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Wrong!
+</span><span class="n">active_users_in_admin_role</span> <span class="o">=</span> <span class="n">User</span><span class="p">.</span><span class="n">objects</span><span class="p">(</span><span class="n">roles</span><span class="o">=</span><span class="s">'admin'</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">ids_of_active_users_in_admin_role</span> <span class="o">=</span> <span class="p">[</span><span class="n">user</span><span class="p">.</span><span class="nb">id</span> <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">active_users_in_admin_role</span><span class="p">]</span>
+<span class="n">repositories_of_active_admin_users</span> <span class="o">=</span> <span class="n">Repository</span><span class="p">.</span><span class="n">objects</span><span class="p">(</span><span class="n">author__in</span><span class="o">=</span><span class="n">ids_of_active_users_in_admin_role</span><span class="p">)</span>
+
+<span class="c1"># Right.
+</span><span class="n">users</span> <span class="o">=</span> <span class="n">User</span><span class="p">.</span><span class="n">objects</span><span class="p">(</span><span class="n">roles</span><span class="o">=</span><span class="s">'admin'</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">ids_of_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span><span class="p">.</span><span class="nb">id</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">users</span><span class="p">]</span>
+<span class="n">repositories</span> <span class="o">=</span> <span class="n">Repository</span><span class="p">.</span><span class="n">objects</span><span class="p">(</span><span class="n">author__in</span><span class="o">=</span><span class="n">ids_of_users</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="be-consistent">Be consistent</h3>
+<p>Don’t keep jumping between styles:</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">boolean</span> <span class="n">canDrive</span><span class="o">;</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">16</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">canDrive</span> <span class="o">=</span> <span class="nc">True</span><span class="o">;</span>
+<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+    <span class="n">canDrive</span> <span class="o">=</span> <span class="nc">False</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="kt">boolean</span> <span class="n">canDrink</span> <span class="o">=</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">21</span><span class="o">;</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">canDrive</span> <span class="o">&amp;&amp;</span> <span class="n">canDrink</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="k">else</span>
+<span class="o">{</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Choose one and stick with it:</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">boolean</span> <span class="n">canDrive</span> <span class="o">=</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">16</span><span class="o">;</span>
+<span class="kt">boolean</span> <span class="n">canDrink</span> <span class="o">=</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">21</span><span class="o">;</span>
+
+<span class="k">return</span> <span class="n">canDrive</span> <span class="o">&amp;&amp;</span> <span class="n">canDrink</span><span class="o">;</span>
+</code></pre></div></div>
+
+<h3 id="give-similar-names-to-whats-similar-and-distant-names-to-whats-different">Give similar names to what’s similar and distant names to what’s different.</h3>
+<p>It’s a good practice to aggregate similar components and separate different ones. An interesting instance of this is the <a href="https://www.develop.com/onionarchitecture">Onion Architecture</a>.</p>
+
+<p>If you’re overriding a method multiple times, try to reuse the code that you’ve already created, maintaining a logical order:</p>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="nf">MusicStreamProvider</span><span class="p">(</span><span class="n">Music</span> <span class="n">music</span><span class="p">)</span> <span class="p">:</span> <span class="k">this</span><span class="p">(</span><span class="n">music</span><span class="p">,</span> <span class="n">DEFAULT_BUFFER_SIZE</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+
+<span class="k">public</span> <span class="nf">MusicStreamProvider</span><span class="p">(</span><span class="n">Music</span> <span class="n">music</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bufferSize</span> <span class="p">=</span> <span class="n">DEFAULT_BUFFER_SIZE</span><span class="p">)</span>
+<span class="p">:</span> <span class="k">this</span><span class="p">(</span><span class="n">music</span><span class="p">.</span><span class="n">Id</span><span class="p">,</span> <span class="n">music</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">music</span><span class="p">.</span><span class="n">ChannelId</span><span class="p">,</span> <span class="n">bufferSize</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+
+<span class="k">public</span> <span class="nf">MusicStreamProvider</span><span class="p">(</span><span class="kt">int</span> <span class="n">musicId</span><span class="p">,</span> <span class="kt">string</span> <span class="n">musicName</span><span class="p">,</span> <span class="kt">int</span> <span class="n">channelId</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bufferSize</span> <span class="p">=</span> <span class="n">DEFAULT_BUFFER_SIZE</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">LocalFileName</span> <span class="p">=</span> <span class="nf">ContextualizedPath</span><span class="p">(</span>
+        <span class="n">DEFAULT_DIRECTORY</span><span class="p">,</span>
+        <span class="n">channelId</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span>
+        <span class="n">Path</span><span class="p">.</span><span class="nf">ChangeExtension</span><span class="p">(</span>
+            <span class="n">musicId</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span>
+            <span class="n">Path</span><span class="p">.</span><span class="nf">GetExtension</span><span class="p">(</span><span class="n">musicName</span><span class="p">)));</span>
+    <span class="n">BufferSize</span> <span class="p">=</span> <span class="n">bufferSize</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>If two methods don’t have a similar behavior, they most likely shouldn’t have similar names:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Wrong!
+</span><span class="k">def</span> <span class="nf">read_music</span><span class="p">(</span><span class="n">music</span><span class="p">,</span> <span class="nb">file</span><span class="p">):</span>
+<span class="p">...</span>
+
+<span class="k">def</span> <span class="nf">read_music_s</span><span class="p">(</span><span class="n">music</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
+<span class="p">...</span>
+
+<span class="c1">#Right.
+</span><span class="k">def</span> <span class="nf">read_music_from_file</span><span class="p">(</span><span class="n">music</span><span class="p">):</span>
+<span class="p">...</span>
+<span class="k">def</span> <span class="nf">read_music_from_string</span><span class="p">(</span><span class="n">music</span><span class="p">):</span>
+<span class="p">...</span>
+</code></pre></div></div>
+
+<h3 id="optimize-comments">Optimize comments</h3>
+<p>Don’t comment code that could be self explanatory:</p>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">#</span> <span class="n">Wrong</span><span class="p">!</span>
+<span class="kt">int</span> <span class="n">a</span> <span class="p">=</span> <span class="m">10</span><span class="p">;</span> <span class="err">#</span> <span class="n">skip</span> <span class="n">@a</span> <span class="n">books</span><span class="p">.</span>
+<span class="kt">int</span> <span class="n">b</span> <span class="p">=</span> <span class="m">50</span><span class="p">;</span> <span class="err">#</span> <span class="n">take</span> <span class="n">@a</span> <span class="n">books</span><span class="p">.</span>
+<span class="kt">var</span> <span class="n">page</span> <span class="p">=</span> <span class="n">books</span><span class="p">.</span><span class="nf">paginate</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+
+<span class="err">#</span> <span class="n">Right</span><span class="p">.</span>
+<span class="kt">int</span> <span class="n">skip</span> <span class="p">=</span> <span class="m">10</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">take</span> <span class="p">=</span> <span class="m">50</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">page</span> <span class="p">=</span> <span class="n">books</span><span class="p">.</span><span class="nf">paginate</span><span class="p">(</span><span class="n">skip</span><span class="p">,</span> <span class="n">take</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Be direct, making them as short as possible:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">not_found_in_cache</span><span class="p">:</span>
+<span class="c1"># What hasn't been found in cache must be queried from the database.
+</span><span class="n">results_from_database</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="n">objects</span><span class="p">(</span><span class="n">id__in</span><span class="o">=</span><span class="n">not_found_in_cache</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="consider-chaining-methods-instead-of-writing-multiple-statements">Consider chaining methods instead of writing multiple statements</h3>
+<p>As an example of method chaining, <a href="https://github.com/devraccoon/dojo/blob/master/2.WordsInABook/c%23/WordsInABook/Interpreter.cs#L24">WordsInABook</a>! I’m interested in find out which are the most frequent words in a book:</p>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">virtual</span> <span class="n">ICollection</span> <span class="nf">MostFrequentWords</span><span class="p">(</span><span class="kt">int</span> <span class="n">count</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">Book</span>
+        <span class="p">.</span><span class="nf">Split</span><span class="p">()</span>
+        <span class="p">.</span><span class="nf">GroupBy</span><span class="p">(</span><span class="n">word</span> <span class="p">=&gt;</span> <span class="n">word</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">OrderByDescending</span><span class="p">(</span><span class="k">group</span> <span class="p">=&gt;</span> <span class="k">group</span><span class="p">.</span><span class="nf">Count</span><span class="p">())</span>
+        <span class="p">.</span><span class="nf">Take</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="k">group</span> <span class="p">=&gt;</span> <span class="k">group</span><span class="p">.</span><span class="n">Key</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">ToList</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>Of course, this is not the most efficient way to deal with this problem, but in terms of simplicity, I’d say it’s good, right? The whole problem was solved in “one” line! In my opinion, <em>chaining</em> methods with simple and meaningful names produce a pleasant effect on reading.</p>
+
+<p><a href="https://github.com/devraccoon/dojo/blob/master/2.WordsInABook/ruby/interpreter.rb">Another solution</a>, by <a href="https://github.com/cenouro">@cenouro</a>:</p>
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">most_frequent_words</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">top_n</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">str</span><span class="p">.</span><span class="nf">split</span><span class="p">.</span><span class="nf">sort</span> <span class="p">{</span> <span class="o">|</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="o">|</span> <span class="n">str</span><span class="p">.</span><span class="nf">count</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">&lt;=&gt;</span> <span class="n">str</span><span class="p">.</span><span class="nf">count</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="p">}.</span><span class="nf">uniq</span><span class="p">.</span><span class="nf">take</span><span class="p">(</span><span class="n">top_n</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h3 id="dont-repeat-words">Don’t repeat words.</h3>
+<p>I really hate verbosity, so I want to take some time on this topic…</p>
+
+<p>Suppose that you’re reading a book. The authors can be extremely vague, producing really confusing material, or they could be awfully thoroughly, boring you to death. There is a tiny space between these two extremes that will create an enjoyable story.</p>
+
+<p>Code is writing. As the author, you must be able to get to that enjoyable region. Achieving that will make your code less stressful and more pleasant to read, hence increasing quality.</p>
+
+<p>We tend to repeat ourselves very often.</p>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">UsersRepository</span> <span class="n">usersRepository</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">UsersRepository</span><span class="p">(</span><span class="n">Context</span><span class="p">);</span>
+<span class="n">usersRepository</span><span class="p">.</span><span class="nf">AddUser</span><span class="p">(</span><span class="n">user</span><span class="p">);</span>
+</code></pre></div></div>
+<p>After four times, I THINK I GOT that this is a repository of users!</p>
+
+<ul>
+  <li>Why repeat the name so many times?</li>
+  <li>Why do we have to call it <code class="language-plaintext highlighter-rouge">usersRepository</code>? Doesn’t the plural form <code class="language-plaintext highlighter-rouge">users</code> already indicates a collection to us? Besides, we’ll have to write down a huge name every time.</li>
+  <li>Why is there a method called <code class="language-plaintext highlighter-rouge">.AddUser()</code>? This is a repository of users! The parameter of the method is <code class="language-plaintext highlighter-rouge">User user</code>! Did someone think we would implement the method <code class="language-plaintext highlighter-rouge">.AddHorse(Horse horse)</code> someday?</li>
+</ul>
+
+<p>What if it were like this:</p>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">users</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">UsersRepository</span><span class="p">(</span><span class="n">Context</span><span class="p">);</span>
+<span class="n">users</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">user</span><span class="p">);</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>#1</strong> Never go full retard and implement a method called <code class="language-plaintext highlighter-rouge">.AddHorse(Horse horse)</code> on a class named <code class="language-plaintext highlighter-rouge">UsersRepository</code>.</p>
+</blockquote>
+
+<p>Another example:</p>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">EnrollmentService</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">async</span> <span class="n">Task</span> <span class="nf">OfStudent</span><span class="p">(</span><span class="kt">string</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">Db</span><span class="p">.</span><span class="n">Enrollments</span>
+            <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">e</span> <span class="p">=&gt;</span> <span class="n">e</span><span class="p">.</span><span class="n">StudentId</span> <span class="p">==</span> <span class="n">id</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">ToListAsync</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Do you think <code class="language-plaintext highlighter-rouge">EnrollmentsService.OfStudent()</code> is a confusing name? Look at the <strong>signature</strong> of the method, not only the name. Clearly, it returns a collection of <code class="language-plaintext highlighter-rouge">Enrollments</code>. That can only mean that I’m returning a list of enrollments of a given student <code class="language-plaintext highlighter-rouge">id</code>.
+This is how I’d use it:</p>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">student</span> <span class="p">=</span> <span class="p">...</span>
+<span class="kt">var</span> <span class="n">enrollments</span> <span class="p">=</span> <span class="nf">EnrollmentService</span><span class="p">();</span>
+<span class="k">return</span> <span class="k">await</span> <span class="n">enrollments</span><span class="p">.</span><span class="nf">OfStudent</span><span class="p">(</span><span class="n">student</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span>
+</code></pre></div></div>
+<p>Look at the third line. That’s almost natural! Are we seriously still considering that <code class="language-plaintext highlighter-rouge">await enrollmentsRepository.GetEnrollmentsOfStudent(student.Id)</code> might be better?</p>
+
+<h2 id="switch-languages-often-until-you-find-one-that-you-like">Switch languages often, until you find one that you like.</h2>
+<h3 id="java">Java</h3>
+<p>Sometimes, your ideas don’t really match a programming language standards. Personally, I’m not a big fan of Java. Consider the example:</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Document</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Course</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">ObjectId</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Professor</span> <span class="n">professor</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">getId</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">id</span><span class="o">;</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="nf">setId</span><span class="o">(</span><span class="nc">ObjectId</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="o">;</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="o">;</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="nf">getProfessor</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">professor</span><span class="o">;</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="nf">setProfessor</span><span class="o">(</span><span class="nc">Professor</span> <span class="n">professor</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span> <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="nc">String</span> <span class="n">name</span> <span class="o">=</span> <span class="o">...</span>
+<span class="nc">Professor</span> <span class="n">professor</span> <span class="o">=</span> <span class="o">...</span>
+
+<span class="nc">Course</span> <span class="n">course</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Course</span><span class="o">();</span>
+<span class="n">course</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+<span class="n">course</span><span class="o">.</span><span class="na">setProfessor</span><span class="o">(</span><span class="n">professor</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>How many times did we repeat the word <code class="language-plaintext highlighter-rouge">course</code> on the initializing? And why do I have to say <code class="language-plaintext highlighter-rouge">.setProfessor</code>, given that the name of the parameter in the method’s signature is already <code class="language-plaintext highlighter-rouge">professor</code>? Isn’t obvious that I’m setting a <code class="language-plaintext highlighter-rouge">professor</code>?</p>
+
+<blockquote>
+  <p><strong>#2</strong> If Java were a sentence, it would be <em>“Buffalo buffalo Buffalo buffalo buffalo buffalo Buffalo buffalo”</em>. It’s grammatically correct, but it’s fucking dumb. It assumes that all programmers are retarded people that can’t read, and so it must repeat the same words over and over. This is called <a href="http://programmers.stackexchange.com/questions/141175/why-is-verbosity-bad-for-a-programming-language">verbosity</a>.</p>
+</blockquote>
+
+<h3 id="c-slightly-different-approach">C# slightly different approach</h3>
+<p>C# is similar to Java in many ways. Repetition is not one of them:</p>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Course</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="k">virtual</span> <span class="n">Professor</span> <span class="n">Professor</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">name</span> <span class="p">=</span> <span class="p">...</span>
+<span class="n">professor</span> <span class="p">=</span> <span class="p">...</span>
+
+<span class="kt">var</span> <span class="n">course</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Course</span>
+<span class="p">{</span>
+    <span class="n">Name</span> <span class="p">=</span> <span class="n">name</span><span class="p">,</span>
+    <span class="n">Professor</span> <span class="p">=</span> <span class="n">professor</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>Nice, right? We’ve eliminated one usage of the word course with <code class="language-plaintext highlighter-rouge">var</code> and the sequential calls for methods <code class="language-plaintext highlighter-rouge">set</code> because of the way C# allows us to instantiate classes.</p>
+
+<p>C# also allows us to substitute the <code class="language-plaintext highlighter-rouge">get</code> and <code class="language-plaintext highlighter-rouge">set</code> keywords by <code class="language-plaintext highlighter-rouge">{}</code> and write any pre-assingment validation that we might eventually need. In other words, they work as <a href="https://en.wikipedia.org/wiki/Mutator_method">mutator methods</a>.</p>
+
+<h3 id="the-pythonic-way">The Pythonic way.</h3>
+<p>In Python, nothing is private, only members declared with an underscore, which means “be careful, use it only if you deeply understands the class functioning”. It’s a little bit more rational, as it grants full modification freedom to future programmers, if they eventually come up with a better way to do things.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Course</span><span class="p">(</span><span class="n">mongoengine</span><span class="p">.</span><span class="n">Document</span><span class="p">):</span>
+<span class="n">name</span> <span class="o">=</span> <span class="n">mongoengine</span><span class="p">.</span><span class="n">StringField</span><span class="p">()</span>
+<span class="n">professor</span> <span class="o">=</span> <span class="n">mongoengine</span><span class="p">.</span><span class="n">EmbeddedDocument</span><span class="p">(</span><span class="n">Professor</span><span class="p">)</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="p">...</span>
+<span class="n">professor</span> <span class="o">=</span> <span class="p">...</span>
+
+<span class="n">course</span> <span class="o">=</span> <span class="n">Course</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">professor</span><span class="o">=</span><span class="n">professor</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>This post was very biased, I know. Let’s be honest, though: we all have our preferences when it comes to languages, styles, environments etc. I believe that programming freedom yields better results than restriction and “protection”, and that’s why Java isn’t the best language for me. In the other hand, I’m pretty positive there is a huge community that have very good reasons to like Java.</p>
+
+<p>We’re all different. “Our world isn’t perfect, and that’s what makes it so beautiful” - <a href="http://fma.wikia.com/wiki/Roy_Mustang">Mustang</a>.</p>
+
+<blockquote>
+  <p><strong>#3</strong> Finally, I’ll leave this reference: <a href="https://www.python.org/dev/peps/pep-0020/">PEP 20 – The Zen of Python</a>. You might find it very reasonable. :-)</p>
+</blockquote>
+
+        </div>
+      </article>
+
+      
+      <div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://lucasdavid-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      
+    </div>
+  </div>
+</div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+  integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"
+  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
+  integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '\\[', right: '\\]', display: true}, {left: '$', right: '$', display: false},{left: '\\(', right: '\\)', display: false}]});"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+<script>
+  anchors.options = { icon: '#' };
+  anchors.add();
+</script>
+
+
+  <!-- <svg id="visual" viewBox="0 0 1980 300"  class="curve-container__curve curve-three" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <path
+    d="M0 69L55 90.2C110 111.3 220 153.7 330 169.8C440 186 550 176 660 165.5C770 155 880 144 990 139.2C1100 134.3 1210 135.7 1320 137.7C1430 139.7 1540 142.3 1650 155.5C1760 168.7 1870 192.3 1925 204.2L1980 216L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#d3d3d3"></path>
+  <path
+    d="M0 89L55 107.8C110 126.7 220 164.3 330 191.3C440 218.3 550 234.7 660 243.8C770 253 880 255 990 252.3C1100 249.7 1210 242.3 1320 228.8C1430 215.3 1540 195.7 1650 174.5C1760 153.3 1870 130.7 1925 119.3L1980 108L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#6a6a6a"></path>
+  <path
+    d="M0 229L55 232.3C110 235.7 220 242.3 330 244.3C440 246.3 550 243.7 660 247.3C770 251 880 261 990 254.8C1100 248.7 1210 226.3 1320 223.5C1430 220.7 1540 237.3 1650 233.8C1760 230.3 1870 206.7 1925 194.8L1980 183L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#121212"></path>
+</svg> -->
+<footer class="page-footer text-bg-dark bg-black-subtle d-print-none">
+  <div class="container">
+    <div class="mt-4 mb-5">
+      
+        <div class="row g-1 mb-4">
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Keras Explainable</h6>
+                <p class="card-text text-light">
+                  Clean implementations for AI explaining methods in Keras.
+<a href="https://github.com/lucasdavid/keras-explainable" target="_new">Code</a> and
+<a href="https://lucasdavid.github.io/keras-explainable" target="_new">docs</a> are available.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Supporting Study Material</h6>
+                <p class="card-text text-light">
+                  If you are an undergrad student and are looking for additional study material,
+check out our collaborative project <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Algorithms in TensorFlow</h6>
+                <p class="card-text text-light">
+                  I'm implementing all algorithms I find interesting using TensorFlow.
+You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">github.com/lucasdavid/algorithms-in-tensorflow</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">TF-Experiment</h6>
+                <p class="card-text text-light">
+                  And environment to run Machine Learning experiments based on components and mixins. Available at <a href="https://github.com/lucasdavid/tf-experiment">github.com/lucasdavid/tf-experiment</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Mineração de Dados Complexos</h6>
+                <p class="card-text text-light">
+                  Information around the extension program "Mineração de Dados Complexos (in Portuguese)" is available at
+<a href="https://www.ic.unicamp.br/~mdc/" target="_blank">ic.unicamp.br/~mdc/</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+    </div>
+
+    <div class="text-end mt-4">
+      
+
+
+<div class="fs-2">
+  
+    <a href="https://github.com/lucasdavid"
+      target="_blank"
+      ><i
+      aria-label="GitHub"
+      class="bi bi-github link-light"></i></a>
+  
+  
+    <a href="https://www.linkedin.com/in/ld7"
+      target="_blank"
+      title="LinkedIn"><i class="bi bi-linkedin text-primary sr-none"></i></a>
+  
+  <span itemscope itemtype="https://schema.org/Person">
+    <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+       target="orcid.widget"
+       rel="me noopener noreferrer"
+       title="ORCID"
+      ><img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 7px; width: 32px;"></a>
+  </span>
+  
+  <a href="http://stackoverflow.com/users/2429640/lucasdavid"
+     target="_blank"
+     title="Stackoverflow"><i class="bi bi-code-slash link-light sr-none"></i></a>
+  
+    <a href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q"
+      target="_blank"
+      title="Youtube"><i class="bi bi-youtube text-danger sr-none"></i></a>
+  
+    <a href="mailto:mb37410l3@mozmail.com"
+      target="_blank"
+      title="Mail"><i class="bi bi-envelope-fill link-light sr-none"></i></a>
+  
+  <a href="assets/docs/lucas-david-resume.pdf"
+     target="_blank"
+     title="Resume"><i class="bi bi-person-lines-fill link-light sr-none"></i></a>
+</div>
+
+    </div>
+    <div class="text-end">
+      <p>
+        ® Lucas David. Todos os direitos reservados.
+      </p>
+    </div>
+</div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous" defer></script>
+
+</body>
+</html>

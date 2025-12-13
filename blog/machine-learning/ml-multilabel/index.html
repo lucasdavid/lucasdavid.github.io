@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Multilabel Learning Problems – Lucas David</title>
+  <meta charset="utf-8" />
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="image_src" type="image/png" href="img_path" />
+
+
+<meta name="description" content="Dealing with ML classification problems that deal where samples aren't mutually disjointed." />
+<meta property="og:description" content="Dealing with ML classification problems that deal where samples aren't mutually disjointed." />
+<meta property="og:image" content="" />
+
+<meta name="author" content="Lucas David" />
+
+
+<meta property="og:title" content="Multilabel Learning Problems" />
+<meta property="twitter:title" content="Multilabel Learning Problems" />
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<link rel="alternate" type="application/rss+xml" title="Lucas David - my personal website/blog"
+      href="/feed.xml" />
+
+  
+  
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LG7FZ8VCHM"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-LG7FZ8VCHM');
+	</script>
+
+
+  
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+  <nav id="mainNav" class="navbar navbar-light bg-white navbar-expand-lg d-print-none border-bottom border-light ">
+  <div class="container-xl">
+    <button class="navbar-toggler rounded-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand fw-bold text-decoration-none p-1" href="/">Lucas David</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <span class="navbar-text navbar-excerpt">
+        Multilabel Learning Problems
+      </span>
+      <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+      <ul class="navbar-nav mb-2 mb-lg-0 font-small">
+        <li class="nav-item"><a href="/" class="nav-link fw-bold link-dark fs-6">Home</a></li>
+        <li class="nav-item"><a href="/blog" class="nav-link fw-bold link-dark fs-6">Blog</a></li>
+        <li class="nav-item"><a href="/publications" class="nav-link fw-bold link-dark fs-6">Publications</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold link-dark fs-6" href="#" id="nbd-links-social" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Social
+          </a>
+          <ul class="dropdown-menu font-small dropdown-menu-end" aria-labelledby="nbd-links-social">
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://github.com/lucasdavid">
+                <i aria-label="GitHub" class="bi bi-github link-dark sr-none"></i>
+                Github</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://www.linkedin.com/in/ld7">
+                <i class="bi bi-linkedin text-primary sr-none"></i>
+                Linkedin</a></li>
+
+            <li itemscope itemtype="https://schema.org/Person">
+              <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+                  target="orcid.widget"
+                  rel="me noopener noreferrer"
+                  class="dropdown-item text-decoration-none"
+                >
+                <img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 5px; width: 16px;">
+                ORCID</a>
+            </li>
+
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="http://stackoverflow.com/users/2429640/lucasdavid">
+                <i class="bi bi-code-slash link-dark sr-none"></i>
+                Stackoverflow</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q">
+                <i class="bi bi-youtube text-danger sr-none"></i>
+                Youtube</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+</div>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12 col-xl-3 col-xxl-2 offset-xxl-1">
+      <div id="sidebar" class="">
+  <div class="text-center">
+    <a href="/" title="Home">
+      <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
+        class="img-fluid rounded-circle" style="width:100px" />
+    </a>
+    <p class="pt-2 font-small">
+      
+        <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
+      
+    </p>
+  </div>
+
+  
+</div>
+
+    </div>
+    <div id="table-of-contents-container-r" class="col-12 col-xl-3 col-xxl-2 order-xl-2">
+      
+      <div style="z-index: 0; font-size:0.8rem;">
+        <div id="table-of-contents" class="font-small">
+  <p class="border-bottom"><strong>Summary</strong></p>
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#multi-label-using-tensorflow">Multi-label using TensorFlow</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#testing-the-model-trained">Testing The Model Trained</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#final-considerations">Final Considerations</a></li>
+</ul>
+</div>
+
+      </div>
+      
+    </div>
+    <div class="col-12 col-xl-6">
+      <article class="post mb-4">
+        <header class="">
+          <h1 id="postTitle" class="fw-bold">Multilabel Learning Problems</h1>
+          <p class="right-align mb-2 text-muted fs-5">
+            Dealing with ML classification problems that deal where samples aren't mutually disjointed. <em>— October 26, 2017</em>
+          </p>
+          <div class="mb-4">
+            <span class="badges-container">
+  
+    <a href="/blog/tag/ml"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >ML</a>
+  
+    <a href="/blog/tag/classification"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Classification</a>
+  
+    <a href="/blog/tag/multi-label"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Multi-label</a>
+  
+</span>
+
+          </div>
+        </header>
+        <div class="article-content" style="margin-top: 4rem;">
+          <p><span class="fs-1" style="line-height:0">I</span>n
+classic classification with networks, samples belong to a single class. We usually code this relationship using
+one-hot encoding: a label $i$ is transformed into a vector $[0, 0, … 1, …, 0, 0]$, where the number $1$ is
+located at the i-th position in the target vector.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">from</span> <span class="nn">keras.utils</span> <span class="kn">import</span> <span class="n">to_categorical</span>
+
+<span class="n">samples</span> <span class="o">=</span> <span class="mi">8096</span>
+<span class="n">features</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">classes</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">rand</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">features</span><span class="p">),</span>
+                <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randint</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+<span class="n">target_c</span> <span class="o">=</span> <span class="n">to_categorical</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>We also define the networks to end with a <code class="language-plaintext highlighter-rouge">softmax</code> layer with the same number
+of units as classes, where the activations are translated intro probabilities:</p>
+
+\[y(x)_i = \frac{e^x_i}{\sum_k e^x_k}\]
+
+<p>Which, in code, stays like this:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">Input</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">299</span><span class="p">,</span> <span class="mi">299</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'softmax'</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s">'adam'</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s">'categorical_crossentropy'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Because of the normalization factor, the probabilities will always sum to
+$1.0$. That’s ideal when dealing with mutually disjointed classes, but what
+about when that’s not the case?</p>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/multilabel/dataset.webp" alt="Samples from the multi-label dataset 'Image Data for Multi-Instance Multi-Label Learning'." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Samples from the multi-label dataset 'Image Data for Multi-Instance Multi-Label Learning'. Note that some instances are associated with more than one label (mountains and sea or sea and sunset). Available at: <a href="https://www.lamda.nju.edu.cn/data_MIMLimage.ashx">lamda.nju.edu.cn</a>
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>First, we must convert <code class="language-plaintext highlighter-rouge">target</code> to a binary encoding:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">classes</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">classses</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+  <span class="n">encoded</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">classes</span><span class="p">)</span>
+  <span class="n">encoded</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+  <span class="k">return</span> <span class="n">encoded</span>
+
+<span class="n">yc</span> <span class="o">=</span> <span class="n">encode</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="n">classes</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This creates a map very much like the one-hot.
+For example, let’s say there’s 5 possible classes:
+dog, mammal, primate, feral and domestic.</p>
+
+<ul>
+  <li>the labels <code class="language-plaintext highlighter-rouge">dog</code>, <code class="language-plaintext highlighter-rouge">mammal</code> and <code class="language-plaintext highlighter-rouge">domestic</code>, associated with sample <code class="language-plaintext highlighter-rouge">x0</code>, would be
+encoded as <code class="language-plaintext highlighter-rouge">(1., 1., 0., 0., 1.)</code></li>
+  <li>the labels <code class="language-plaintext highlighter-rouge">primate</code> and <code class="language-plaintext highlighter-rouge">feral</code>, associated with sample <code class="language-plaintext highlighter-rouge">x1</code>, would be encoded
+as <code class="language-plaintext highlighter-rouge">(0., 0., 1., 1., 0.)</code></li>
+</ul>
+
+<p>Softmax also needs to go. Textbook ML says we can use <code class="language-plaintext highlighter-rouge">sigmoid</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'sigmoid'</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s">'adam'</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s">'binary_crossentropy'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Because <code class="language-plaintext highlighter-rouge">sigmoid</code>’s shape, probabilities are no longer normalized between
+the different activation units. This means that <code class="language-plaintext highlighter-rouge">model</code> might output an
+entire vector of ones <code class="language-plaintext highlighter-rouge">(1., 1., ..., 1.)</code> or zeros <code class="language-plaintext highlighter-rouge">(0., 0., ..., 0.)</code> – even
+though such situations are unlikely to happen.</p>
+
+<p>Finally, we must replace our <code class="language-plaintext highlighter-rouge">categorical_crossentropy</code> loss function by the
+<code class="language-plaintext highlighter-rouge">binary_crossentropy</code>. To ensure we are up with the base concepts, this is the
+categorical cross-entropy function definition once again:</p>
+
+\[E(y, p) = -\frac{1}{N} y \cdot \log p = -\frac{1}{N} \sum_i y_i \log p_i\]
+
+<p>So let <em>x</em> be any given sample from the dataset, associated with the class of index <em>k</em>.
+From the equation above, we know all <em>yi</em> are 0, with exception of <em>yk</em>. Hence all terms <em>i != k</em>
+of the sum will be equal to <em>0</em> and will not directly affect the value of the loss function
+(the adjacent activation units <em>yi</em> s.t. <em>y != k</em> are still indirectly related through the softmax function).</p>
+
+<p>We use here a new loss function, that accounts for the independency of each activation unit
+of the networks’s last layer:</p>
+
+\[\begin{eqnarray}
+E(y, p) &amp;=&amp; -\frac{1}{N} [y \cdot \log p + (1-y)\log(1-p)] \\
+  &amp;=&amp; -\frac{1}{N} \sum_i y_i \log p_i + (1-y_i)\log(1-p_i)
+\end{eqnarray}\]
+
+<p>From the figure above, we can see this <em>loss function</em> contains two terms.
+Differently from the categorical cross-entropy, all units directly contribute to the summation through
+one of the terms.</p>
+
+<h2 id="multi-label-using-tensorflow">Multi-label using TensorFlow</h2>
+
+<p>It’s not commont for recent TensorFlow implementations to add the final layer (either softmax or sigmoid),
+as it increases numeric instability when computing gradients. So you should declare the network as:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">299</span><span class="p">,</span> <span class="mi">299</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">'inputs'</span><span class="p">)</span>
+
+<span class="c1"># using pretrained weights
+</span><span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">applications</span><span class="p">.</span><span class="n">Xception</span><span class="p">(</span><span class="n">include_top</span><span class="o">=</span><span class="bp">False</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'predictions'</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'multilabel_disc'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The metrics need to be tweaked a bit as well, as they are expecting the output to be contained in the $[0, 1]$
+interval. We re-declare them to either apply the sigmoid function within them or to expect the decision threshold
+to be on top of the point $0$ (where the sigmoid outputs 50%):</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">tensorflow.python.keras.metrics</span> <span class="kn">import</span> <span class="n">MeanMetricWrapper</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras</span> <span class="kn">import</span> <span class="n">losses</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">optimizers</span>
+
+<span class="k">def</span> <span class="nf">cosine_similarity_from_logits</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">losses</span><span class="p">.</span><span class="n">cosine_similarity</span><span class="p">(</span>
+        <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">),</span>
+        <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">y_pred</span><span class="p">),</span>
+        <span class="n">axis</span><span class="p">)</span>
+
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizers</span><span class="p">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="n">Config</span><span class="p">.</span><span class="n">training</span><span class="p">.</span><span class="n">learning_rate</span><span class="p">),</span>
+    <span class="n">loss</span><span class="o">=</span><span class="n">losses</span><span class="p">.</span><span class="n">BinaryCrossentropy</span><span class="p">(</span><span class="n">from_logits</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">metrics</span><span class="p">.</span><span class="n">BinaryAccuracy</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.</span><span class="p">),</span>
+        <span class="n">cosine_similarity_from_logits</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Training happens exactly like we have previously seen:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">tensorflow.keras</span> <span class="kn">import</span> <span class="n">callbacks</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span>
+        <span class="n">train_ds</span><span class="p">,</span>
+        <span class="n">validation_data</span><span class="o">=</span><span class="n">val_ds</span><span class="p">,</span>
+        <span class="n">epochs</span><span class="o">=</span><span class="n">Config</span><span class="p">.</span><span class="n">training</span><span class="p">.</span><span class="n">epochs</span><span class="p">,</span>
+        <span class="n">initial_epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">callbacks</span><span class="p">.</span><span class="n">TerminateOnNaN</span><span class="p">(),</span>
+            <span class="n">callbacks</span><span class="p">.</span><span class="n">ModelCheckpoint</span><span class="p">(</span><span class="n">Config</span><span class="p">.</span><span class="n">log</span><span class="p">.</span><span class="n">tensorboard</span> <span class="o">+</span> <span class="s">'/weights.h5'</span><span class="p">,</span>
+                                      <span class="n">save_best_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                      <span class="n">save_weights_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                      <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">callbacks</span><span class="p">.</span><span class="n">ReduceLROnPlateau</span><span class="p">(</span><span class="n">patience</span><span class="o">=</span><span class="n">Config</span><span class="p">.</span><span class="n">training</span><span class="p">.</span><span class="n">reduce_lr_on_plateau_pacience</span><span class="p">,</span>
+                                        <span class="n">factor</span><span class="o">=</span><span class="n">Config</span><span class="p">.</span><span class="n">training</span><span class="p">.</span><span class="n">reduce_lr_on_plateau_factor</span><span class="p">,</span>
+                                        <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">callbacks</span><span class="p">.</span><span class="n">EarlyStopping</span><span class="p">(</span><span class="n">patience</span><span class="o">=</span><span class="n">Config</span><span class="p">.</span><span class="n">training</span><span class="p">.</span><span class="n">early_stopping_patience</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">callbacks</span><span class="p">.</span><span class="n">TensorBoard</span><span class="p">(</span><span class="n">Config</span><span class="p">.</span><span class="n">log</span><span class="p">.</span><span class="n">tensorboard</span><span class="p">,</span> <span class="n">histogram_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">],</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span>
+<span class="k">except</span> <span class="nb">KeyboardInterrupt</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s">'interrupted'</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s">'done'</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Epoch 1/200
+25/25 - 28s - loss: 0.4791 - binary_accuracy: 0.7712 - cosine_similarity: <span class="nt">-6</span>.3827e-01 - val_loss: 0.3492 - val_binary_accuracy: 0.8850 - val_cosine_similarity: <span class="nt">-7</span>.7264e-01
+
+Epoch 00001: val_loss improved from inf to 0.34916, saving model to /tf/logs/d:miml e:200 fte:0 b:32 v:0.3 m:inceptionv3 aug:False/weights.h5
+...
+Epoch 00123: val_loss did not improve from 0.12995
+Epoch 124/200
+25/25 - 13s - loss: 0.0369 - binary_accuracy: 0.9912 - cosine_similarity: <span class="nt">-9</span>.8772e-01 - val_loss: 0.1314 - val_binary_accuracy: 0.9583 - val_cosine_similarity: <span class="nt">-9</span>.3486e-01
+
+Epoch 00124: val_loss did not improve from 0.12995
+Epoch 00124: early stopping
+<span class="k">done</span>
+</code></pre></div></div>
+
+<h3 id="testing-the-model-trained">Testing The Model Trained</h3>
+<p>First, re-load the best weights found during the training procedure:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">disc</span><span class="p">.</span><span class="n">load_weights</span><span class="p">(</span><span class="n">Config</span><span class="p">.</span><span class="n">log</span><span class="p">.</span><span class="n">tensorboard</span> <span class="o">+</span> <span class="s">'/weights.h5'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Evaluation is pretty straight forward with the keras API:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">report</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">([</span>
+    <span class="n">disc</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+    <span class="n">disc</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">val_ds</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+    <span class="n">disc</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_ds</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+<span class="p">],</span>
+<span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s">'train'</span><span class="p">,</span> <span class="s">'test'</span><span class="p">,</span> <span class="s">'val'</span><span class="p">],</span>
+<span class="n">columns</span><span class="o">=</span><span class="n">disc</span><span class="p">.</span><span class="n">metrics_names</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 	loss 	binary_accuracy 	cosine_similarity
+train 	0.049423 	0.986750 	<span class="nt">-0</span>.981672
+<span class="nb">test 	</span>0.129952 	0.956000 	<span class="nt">-0</span>.932243
+val 	0.131192 	0.958333 	<span class="nt">-0</span>.937034
+</code></pre></div></div>
+
+<p>It’s always a good idea to see a few samples from the validation/test set,
+in order to check for obvious inconsistencies:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">plot_predictions</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">take</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">figs</span><span class="p">,</span> <span class="n">titles</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="n">ls</span> <span class="o">=</span> <span class="n">Data</span><span class="p">.</span><span class="n">class_names</span>
+
+    <span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ds</span><span class="p">.</span><span class="n">take</span><span class="p">(</span><span class="n">take</span><span class="p">)):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">pl</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">p</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">figs</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">numpy</span><span class="p">().</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+
+        <span class="n">titles</span><span class="p">.</span><span class="n">append</span><span class="p">([(</span><span class="sa">f</span><span class="s">'y: </span><span class="si">{</span><span class="s">", "</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">Data</span><span class="p">.</span><span class="n">class_names</span><span class="p">[</span><span class="n">_y</span><span class="p">])</span><span class="si">}</span><span class="se">\n</span><span class="s">'</span>
+                        <span class="sa">f</span><span class="s">'p: </span><span class="si">{</span><span class="s">", "</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">Data</span><span class="p">.</span><span class="n">class_names</span><span class="p">[</span><span class="n">_p</span><span class="p">])</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+                       <span class="k">for</span> <span class="n">_y</span><span class="p">,</span> <span class="n">_p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">y</span><span class="p">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">pl</span><span class="p">.</span><span class="n">numpy</span><span class="p">())])</span>
+    <span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">figs</span><span class="p">),</span> <span class="n">titles</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">titles</span><span class="p">,</span> <span class="p">[]),</span> <span class="n">rows</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+<span class="n">plot_predictions</span><span class="p">(</span><span class="n">disc</span><span class="p">,</span> <span class="n">test_ds</span><span class="p">)</span>
+</code></pre></div></div>
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/multilabel/preds.webp" alt="Samples from the dataset's test split and its predictions." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title"></strong>
+
+    Samples from the dataset's test split and its predictions.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>Finally, it might be interesting to verify for the individual results for each label:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">binary_accuracy_per_label</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="n">threshold</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">threshold</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">y_true</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">y_pred</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">.</span><span class="n">dtype</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">equal</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">),</span> <span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">calc_acc_per_label</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ds</span><span class="p">):</span>
+    <span class="n">batches</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ds</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+        <span class="n">batches</span> <span class="o">+=</span> <span class="p">[</span><span class="n">binary_accuracy_per_label</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">)]</span>
+
+    <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">stack</span><span class="p">(</span><span class="n">batches</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">).</span><span class="n">numpy</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="n">batches</span><span class="p">)</span>
+
+<span class="n">score_per_label</span><span class="p">,</span> <span class="n">batches</span> <span class="o">=</span> <span class="n">calc_acc_per_label</span><span class="p">(</span><span class="n">disc</span><span class="p">,</span> <span class="n">test_ds</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'Batches evaluated:'</span><span class="p">,</span> <span class="n">batches</span><span class="p">)</span>
+<span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">Data</span><span class="p">.</span><span class="n">class_names</span><span class="p">,</span> <span class="n">score_per_label</span><span class="p">)),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">'label'</span><span class="p">,</span> <span class="s">'binary_accuracy'</span><span class="p">])</span>
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Batches evaluated: 19
+
+label 	 binary_accuracy
+desert  	0.968750
+mountains 	0.958333
+sea 	 	0.935307
+sunset  	0.973684
+trees 	 	0.956689
+</code></pre></div></div>
+
+<h2 id="final-considerations">Final Considerations</h2>
+<p>In this post, I casually presented the formulation for multi-label classification problems and a way to solve them using networks. Except from the categorical cross-entropy loss function and metrics — which model mutually disjointed problems, where the classification output is expected to sum to $1$ —, much of the code that we have learned so far can be reused here. In any case, just a few tweaks can be made in order to bring it home.</p>
+
+<p>Finally, I leave you with following questions as food for thought: if two classes (sea and sunset, for example) always appear together in all of the images, is it possible to achieve 100% test accuracy for both classes without actually
+learning how to differentiate them?
+If yes, then is there a maximum amount of correlation between two classes such that violating this threshold would create a confusion in the model?</p>
+
+        </div>
+      </article>
+
+      
+      <div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://lucasdavid-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      
+    </div>
+  </div>
+</div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+  integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"
+  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
+  integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '\\[', right: '\\]', display: true}, {left: '$', right: '$', display: false},{left: '\\(', right: '\\)', display: false}]});"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+<script>
+  anchors.options = { icon: '#' };
+  anchors.add();
+</script>
+
+
+  <!-- <svg id="visual" viewBox="0 0 1980 300"  class="curve-container__curve curve-three" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <path
+    d="M0 69L55 90.2C110 111.3 220 153.7 330 169.8C440 186 550 176 660 165.5C770 155 880 144 990 139.2C1100 134.3 1210 135.7 1320 137.7C1430 139.7 1540 142.3 1650 155.5C1760 168.7 1870 192.3 1925 204.2L1980 216L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#d3d3d3"></path>
+  <path
+    d="M0 89L55 107.8C110 126.7 220 164.3 330 191.3C440 218.3 550 234.7 660 243.8C770 253 880 255 990 252.3C1100 249.7 1210 242.3 1320 228.8C1430 215.3 1540 195.7 1650 174.5C1760 153.3 1870 130.7 1925 119.3L1980 108L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#6a6a6a"></path>
+  <path
+    d="M0 229L55 232.3C110 235.7 220 242.3 330 244.3C440 246.3 550 243.7 660 247.3C770 251 880 261 990 254.8C1100 248.7 1210 226.3 1320 223.5C1430 220.7 1540 237.3 1650 233.8C1760 230.3 1870 206.7 1925 194.8L1980 183L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#121212"></path>
+</svg> -->
+<footer class="page-footer text-bg-dark bg-black-subtle d-print-none">
+  <div class="container">
+    <div class="mt-4 mb-5">
+      
+        <div class="row g-1 mb-4">
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Keras Explainable</h6>
+                <p class="card-text text-light">
+                  Clean implementations for AI explaining methods in Keras.
+<a href="https://github.com/lucasdavid/keras-explainable" target="_new">Code</a> and
+<a href="https://lucasdavid.github.io/keras-explainable" target="_new">docs</a> are available.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Supporting Study Material</h6>
+                <p class="card-text text-light">
+                  If you are an undergrad student and are looking for additional study material,
+check out our collaborative project <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Algorithms in TensorFlow</h6>
+                <p class="card-text text-light">
+                  I'm implementing all algorithms I find interesting using TensorFlow.
+You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">github.com/lucasdavid/algorithms-in-tensorflow</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">TF-Experiment</h6>
+                <p class="card-text text-light">
+                  And environment to run Machine Learning experiments based on components and mixins. Available at <a href="https://github.com/lucasdavid/tf-experiment">github.com/lucasdavid/tf-experiment</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Mineração de Dados Complexos</h6>
+                <p class="card-text text-light">
+                  Information around the extension program "Mineração de Dados Complexos (in Portuguese)" is available at
+<a href="https://www.ic.unicamp.br/~mdc/" target="_blank">ic.unicamp.br/~mdc/</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+    </div>
+
+    <div class="text-end mt-4">
+      
+
+
+<div class="fs-2">
+  
+    <a href="https://github.com/lucasdavid"
+      target="_blank"
+      ><i
+      aria-label="GitHub"
+      class="bi bi-github link-light"></i></a>
+  
+  
+    <a href="https://www.linkedin.com/in/ld7"
+      target="_blank"
+      title="LinkedIn"><i class="bi bi-linkedin text-primary sr-none"></i></a>
+  
+  <span itemscope itemtype="https://schema.org/Person">
+    <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+       target="orcid.widget"
+       rel="me noopener noreferrer"
+       title="ORCID"
+      ><img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 7px; width: 32px;"></a>
+  </span>
+  
+  <a href="http://stackoverflow.com/users/2429640/lucasdavid"
+     target="_blank"
+     title="Stackoverflow"><i class="bi bi-code-slash link-light sr-none"></i></a>
+  
+    <a href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q"
+      target="_blank"
+      title="Youtube"><i class="bi bi-youtube text-danger sr-none"></i></a>
+  
+    <a href="mailto:mb37410l3@mozmail.com"
+      target="_blank"
+      title="Mail"><i class="bi bi-envelope-fill link-light sr-none"></i></a>
+  
+  <a href="assets/docs/lucas-david-resume.pdf"
+     target="_blank"
+     title="Resume"><i class="bi bi-person-lines-fill link-light sr-none"></i></a>
+</div>
+
+    </div>
+    <div class="text-end">
+      <p>
+        ® Lucas David. Todos os direitos reservados.
+      </p>
+    </div>
+</div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous" defer></script>
+
+</body>
+</html>

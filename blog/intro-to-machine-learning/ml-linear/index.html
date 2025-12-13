@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Introdução ao aprendizado de máquina, pt. 2 – Lucas David</title>
+  <meta charset="utf-8" />
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="image_src" type="image/png" href="img_path" />
+
+
+<meta name="description" content="Modelos lineares e otimização numérica." />
+<meta property="og:description" content="Modelos lineares e otimização numérica." />
+<meta property="og:image" content="" />
+
+<meta name="author" content="Lucas David" />
+
+
+<meta property="og:title" content="Introdução ao aprendizado de máquina, pt. 2" />
+<meta property="twitter:title" content="Introdução ao aprendizado de máquina, pt. 2" />
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<link rel="alternate" type="application/rss+xml" title="Lucas David - my personal website/blog"
+      href="/feed.xml" />
+
+  
+  
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LG7FZ8VCHM"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-LG7FZ8VCHM');
+	</script>
+
+
+  
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+  <nav id="mainNav" class="navbar navbar-light bg-white navbar-expand-lg d-print-none border-bottom border-light ">
+  <div class="container-xl">
+    <button class="navbar-toggler rounded-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand fw-bold text-decoration-none p-1" href="/">Lucas David</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <span class="navbar-text navbar-excerpt">
+        Introdução ao aprendizado de máquina, pt. 2
+      </span>
+      <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+      <ul class="navbar-nav mb-2 mb-lg-0 font-small">
+        <li class="nav-item"><a href="/" class="nav-link fw-bold link-dark fs-6">Home</a></li>
+        <li class="nav-item"><a href="/blog" class="nav-link fw-bold link-dark fs-6">Blog</a></li>
+        <li class="nav-item"><a href="/publications" class="nav-link fw-bold link-dark fs-6">Publications</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold link-dark fs-6" href="#" id="nbd-links-social" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Social
+          </a>
+          <ul class="dropdown-menu font-small dropdown-menu-end" aria-labelledby="nbd-links-social">
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://github.com/lucasdavid">
+                <i aria-label="GitHub" class="bi bi-github link-dark sr-none"></i>
+                Github</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://www.linkedin.com/in/ld7">
+                <i class="bi bi-linkedin text-primary sr-none"></i>
+                Linkedin</a></li>
+
+            <li itemscope itemtype="https://schema.org/Person">
+              <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+                  target="orcid.widget"
+                  rel="me noopener noreferrer"
+                  class="dropdown-item text-decoration-none"
+                >
+                <img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 5px; width: 16px;">
+                ORCID</a>
+            </li>
+
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="http://stackoverflow.com/users/2429640/lucasdavid">
+                <i class="bi bi-code-slash link-dark sr-none"></i>
+                Stackoverflow</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q">
+                <i class="bi bi-youtube text-danger sr-none"></i>
+                Youtube</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+</div>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12 col-xl-3 col-xxl-2 offset-xxl-1">
+      <div id="sidebar" class="">
+  <div class="text-center">
+    <a href="/" title="Home">
+      <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
+        class="img-fluid rounded-circle" style="width:100px" />
+    </a>
+    <p class="pt-2 font-small">
+      
+        <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
+      
+    </p>
+  </div>
+
+  
+</div>
+
+    </div>
+    <div id="table-of-contents-container-r" class="col-12 col-xl-3 col-xxl-2 order-xl-2">
+      
+      <div style="z-index: 0; font-size:0.8rem;">
+        <div id="table-of-contents" class="font-small">
+  <p class="border-bottom"><strong>Summary</strong></p>
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#modelos-lineares">Modelos lineares</a></li>
+<li class="toc-entry toc-h2"><a href="#treinamento">Treinamento</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#solução-ótima">Solução ótima</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#soluções-iterativas">Soluções iterativas</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#online-stochastic-gradient-descent">Online Stochastic Gradient Descent</a></li>
+<li class="toc-entry toc-h3"><a href="#mini-batch-gradient-descent">Mini-batch Gradient Descent</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#teste">Teste</a></li>
+<li class="toc-entry toc-h2"><a href="#múltiplas-características">Múltiplas características</a></li>
+<li class="toc-entry toc-h2"><a href="#um-exemplo-prático-de-regressão-boston">Um exemplo prático de regressão: Boston</a></li>
+<li class="toc-entry toc-h2"><a href="#próximo-post-não-linearidade">Próximo post: não linearidade</a></li>
+</ul>
+</div>
+
+      </div>
+      
+    </div>
+    <div class="col-12 col-xl-6">
+      <article class="post mb-4">
+        <header class="">
+          <h1 id="postTitle" class="fw-bold">Introdução ao aprendizado de máquina, pt. 2</h1>
+          <p class="right-align mb-2 text-muted fs-5">
+            Modelos lineares e otimização numérica. <em>— October 26, 2017</em>
+          </p>
+          <div class="mb-4">
+            <span class="badges-container">
+  
+    <a href="/blog/tag/ml"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >ML</a>
+  
+    <a href="/blog/tag/regression"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Regression</a>
+  
+    <a href="/blog/tag/scikit-learn"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Scikit-Learn</a>
+  
+    <a href="/blog/tag/portuguese"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Portuguese</a>
+  
+</span>
+
+          </div>
+        </header>
+        <div class="article-content" style="margin-top: 4rem;">
+          <p><span>Um</span>
+guia introdutório em Português e Python.
+Aqui, vamos falar um pouco sobre modelos lineares e seus funcionamentos básicos.
+Exemplos são dados por trechos de código na linguagem <code class="language-plaintext highlighter-rouge">python</code>.</p>
+
+<h2 id="modelos-lineares">Modelos lineares</h2>
+
+<p>Vamos começar pequeno, com uma única dimensão: suponha que você queira
+estimar números $y := (y_0, y_1, …, y_n)$ (e.g. uma pontuação, um erro,
+uma quantidade) a partir de outros $x := (x_0, x_1, …, x_n)$, mas não
+sabe exatamente como essas duas medidas se relacionam.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+
+<span class="n">samples</span><span class="p">,</span> <span class="n">features</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="c1"># build a dataset with 1000 pairs (x', y') of numbers, with a little noise
+</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">datasets</span><span class="p">.</span><span class="n">make_regression</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="n">samples</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span>
+                                <span class="n">n_informative</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>O mais simples dos jeitos é um modelo linear. Ou seja, estimá-lo usando uma reta:</p>
+
+\[p = w\cdot x + b\]
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="c1"># start with random parameters (e.g.: w0 = .024; b = -0.2445)
+</span><span class="n">w0</span><span class="p">,</span> <span class="n">b0</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">features</span><span class="p">),</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">x</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="n">p0</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w0</span><span class="p">,</span> <span class="n">b0</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'correct values:'</span><span class="p">,</span> <span class="n">y</span><span class="p">[:</span><span class="mi">3</span><span class="p">].</span><span class="n">flatten</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'random estimations:'</span><span class="p">,</span> <span class="n">p0</span><span class="p">[:</span><span class="mi">3</span><span class="p">].</span><span class="n">flatten</span><span class="p">())</span>
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>correct values: <span class="o">[</span><span class="nt">-29</span>.78727937  15.90389802  <span class="nt">-9</span>.14293022]
+random estimations: <span class="o">[</span> 1.18352758  0.76425245  0.99254442]
+</code></pre></div></div>
+
+<p>$w$ e $b$ são parâmetros, variáveis que afetam o comportamento de $p$.
+Ao alterarmos $w$ e $b$, podemos fazer com que $p$ se torne mais próximo ou
+mais distante da variável $y$. Pra isso, precisamos primeiro definir uma medida
+– comumente denominada <em>loss</em> –
+que indique o quão distante um modelo $p$ está da observação impírica $y$.
+Uma <em>loss</em> comum é o <em>mean squared error</em> ou MSE:</p>
+
+\[E(y, p) = \frac{1}{2N} (p - y)^2 = \frac{1}{2N} \sum_i (p_i - y_i)^2\]
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mse</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+  <span class="k">return</span> <span class="p">((</span><span class="n">p</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="n">loss</span> <span class="o">=</span> <span class="n">mse</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'initial loss:'</span><span class="p">,</span> <span class="n">loss</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">p0</span><span class="p">))</span>
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>initial loss: 274.493855595
+</code></pre></div></div>
+
+<h2 id="treinamento">Treinamento</h2>
+
+<h3 id="solução-ótima">Solução ótima</h3>
+
+<p>Minimizar $E(y, p)$ significa aproximar os valores que saem do nosso
+modelo linear ao valor real, mas como fazer isso? $p$ é linear. Logo, $E$ é uma
+função quadrática positiva. O que significa que ela tem essa cara,
+para qualquer um dos parâmetros envolvidos:</p>
+
+<center>
+  <figure class="equation">
+    <img src="/assets/images/posts/ml/linear/squared-f.webp" alt="Gráfico de uma função quadrática." style="width:100%; max-width:500px" />
+  </figure>
+</center>
+
+<p>Como podemos observar no gráfico acima, existe um único ponto crítico de
+mínimo. Usando cálculo I, podemos calcular $w$ e $b$ que levam ao erro mínimo:</p>
+
+<center>
+  <figure class="equation">
+    <img src="/assets/images/posts/ml/linear/optimal-weights.webp" alt="Parâmetros ótimos" style="width:100%; max-width:800px" />
+  </figure>
+</center>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">compute_optimal</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+  <span class="n">w_star</span> <span class="o">=</span> <span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">/</span> <span class="n">x</span><span class="p">).</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+  <span class="n">b_star</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">w</span> <span class="o">*</span> <span class="n">x</span><span class="p">).</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">w_star</span><span class="p">,</span> <span class="n">b_star</span>
+
+<span class="n">w_star</span><span class="p">,</span> <span class="n">b_star</span> <span class="o">=</span> <span class="n">compute_optimal</span><span class="p">(</span><span class="n">w0</span><span class="p">,</span> <span class="n">b0</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">p_star</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w_star</span><span class="p">,</span> <span class="n">b_star</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'best loss:'</span><span class="p">,</span> <span class="n">loss</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">p_star</span><span class="p">))</span>
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>best loss: 1.10390441361
+</code></pre></div></div>
+
+<h2 id="soluções-iterativas">Soluções iterativas</h2>
+
+<p>Muitas vezes, computar a solução ótima é impossível ou computacionalmente
+infactível:</p>
+
+<ul>
+  <li>x possui elementos próximos ao zero</li>
+  <li>o conjunto de dados é muito grande para caber na memória</li>
+  <li>a operação $w\cdot x + b$ é muito demorada devido à grandeza das variáveis</li>
+  <li>a função de erro possui mais de um mínimo (veremos este caso quando
+passarmos sobre modelos não-lineares)</li>
+</ul>
+
+<p>Uma solução possível é executar o treinamento de forma iterativa, utilizando
+o método chamado <strong>Gradient Descent</strong>. O gradiente de uma função <em>f</em> é o vetor
+contendo todas as diferenciais de <em>f</em> e, por definição, aponta na direção de
+maior aumento da função. Na imagem abaixo, por exemplo: por ser uma reta e por
+sua inclinação, podemos inferir que o gradiente é um vetor composto por um
+único elemento e esse é estritamente positivo. Em outras palavras, ele aponta
+para a direita (o lado positivo do gráfico).</p>
+
+<center>
+  <figure class="equation">
+    <img src="/assets/images/posts/ml/linear/gradient.webp" alt="Gradiente de uma função linear." style="width:100%; max-width:500px" />
+  </figure>
+</center>
+
+<h3 id="online-stochastic-gradient-descent">Online Stochastic Gradient Descent</h3>
+
+<p>Aqui, apresentamos cada amostra ao modelo e, logo em seguida, computamos
+o gradiente.<br />
+Já que o gradiente aponta para a direção de <strong>maior aumento</strong> da função $E$,
+podemos reduzí-la ao somar $w$ e $b$ ao negativo de seus gradientes $-dw$ e
+$-db$. Desta forma, “caminhamos” para a região de <strong>maior decremento</strong> da funço
+$E$. Isto é, a região de menor erro:</p>
+
+<center>
+  <figure class="equation">
+    <img src="/assets/images/posts/ml/linear/iterative-loss-improvement.webp" alt="Melhoramento iterativo de erro pelo método 'Gradient Descent'." style="width:100%; max-width:500px" />
+  </figure>
+</center>
+
+<p>Usualmente, escalamos a atualização por um fator <code class="language-plaintext highlighter-rouge">lr</code> – o <em>learning
+rate</em> – contido no intervalo $(0, 1]$ a fim de suavizar a modificação
+aplicada. Isto é importante visto que:</p>
+
+<ul>
+  <li>somar gradientes de primeira ordem é fundalmentalmente um deslocamento
+em linha reta em uma função que é uma curva, representando simplesmente
+uma estimativa</li>
+  <li>o gradiente leva em consideração uma única amostra e não o conjunto como
+um todo, sendo suscetível a <em>outliers</em></li>
+</ul>
+
+<p>O processo é repetido por diversas épocas, idealmente até a convergência.
+Isto é, a estagnação do plano de decisão.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">lr</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">epochs</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">w0</span><span class="p">,</span> <span class="n">b0</span>
+
+<span class="k">def</span> <span class="nf">compute_gradients</span><span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">,</span> <span class="n">_w</span><span class="p">,</span> <span class="n">_b</span><span class="p">):</span>
+  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_x</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="c1"># transform a single sample into a list of samples containing a single
+</span>    <span class="c1"># sample, singularly. A unique sample batch. Just one sample. Simple odd 1.
+</span>    <span class="n">_x</span><span class="p">,</span> <span class="n">_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">))</span>
+  <span class="n">_p</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_w</span><span class="p">,</span> <span class="n">_b</span><span class="p">)</span>
+  <span class="n">de</span> <span class="o">=</span> <span class="p">(</span><span class="n">_p</span> <span class="o">-</span> <span class="n">_y</span><span class="p">)</span>
+  <span class="n">dw</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">de</span><span class="p">.</span><span class="n">T</span><span class="p">,</span> <span class="n">_x</span><span class="p">)</span>
+  <span class="n">db</span> <span class="o">=</span> <span class="n">de</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">dw</span><span class="p">,</span> <span class="n">db</span>
+
+<span class="k">def</span> <span class="nf">update_gradients</span><span class="p">(</span><span class="n">lr</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">dw</span><span class="p">,</span> <span class="n">db</span><span class="p">):</span>
+  <span class="n">w_updated</span> <span class="o">=</span> <span class="n">w</span> <span class="o">-</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">dw</span>
+  <span class="n">b_updated</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">db</span>
+  <span class="k">return</span> <span class="n">w_updated</span><span class="p">,</span> <span class="n">b_updated</span>
+
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+  <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)):</span>
+    <span class="n">dw</span><span class="p">,</span> <span class="n">db</span> <span class="o">=</span> <span class="n">compute_gradients</span><span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">update_gradients</span><span class="p">(</span><span class="n">lr</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">dw</span><span class="p">,</span> <span class="n">db</span><span class="p">)</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'final loss:'</span><span class="p">,</span> <span class="n">loss</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">))</span>
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>final loss: 1.44465388371
+</code></pre></div></div>
+
+<p>Uma característica importante do treinamento online é que ele rapidamente
+reduz o MSE, já que computar $\text _x$ é muito mais rápido do que $x$. Outra
+é que ele frequentemente se materializa como um processo divergente,
+já que o processo de atualização do modelo só enxerga uma única instância e
+ignora as demais.</p>
+
+<p>Podemos melhorar essa situação com um “meio termo”. A estratégia de
+<strong>batches</strong>.</p>
+
+<h3 id="mini-batch-gradient-descent">Mini-batch Gradient Descent</h3>
+
+<p>No treinamento por batches, um subconjunto de amostras <strong>pequeno</strong>, porém
+<strong>significativo</strong> (que corretamente representa a distribuição dos dados de
+  treinamento) é selecionado. O gradiente é então computado sobre o batch:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">ceil</span>
+
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">batches</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="n">samples</span> <span class="o">/</span> <span class="n">batch_size</span><span class="p">)</span>
+<span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">w0</span><span class="p">,</span> <span class="n">b0</span>
+
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+  <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batches</span><span class="p">):</span>
+    <span class="n">_x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">batch</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">:(</span><span class="n">batch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">]</span>
+    <span class="n">_y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">batch</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">:(</span><span class="n">batch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">]</span>
+
+    <span class="n">dw</span><span class="p">,</span> <span class="n">db</span> <span class="o">=</span> <span class="n">compute_gradients</span><span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">update_gradients</span><span class="p">(</span><span class="n">lr</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">dw</span><span class="p">,</span> <span class="n">db</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>A mais simples forma de induzir estabilidade na distribuição do batch é
+através do que chamamos de <strong>stochastic mini-batch gradient descent</strong>,
+onde as amostras são aleatóriamente selecionadas:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">shuffle_samples</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+  <span class="c1"># shuffle dataset while maintaining original pairs together
+</span>  <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+  <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="n">p</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+  <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">shuffle_samples</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+  <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batches</span><span class="p">):</span>
+    <span class="n">_x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">batch</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">:(</span><span class="n">batch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">]</span>
+    <span class="n">_y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">batch</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">:(</span><span class="n">batch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">]</span>
+
+    <span class="n">dw</span><span class="p">,</span> <span class="n">db</span> <span class="o">=</span> <span class="n">compute_gradients</span><span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">update_gradients</span><span class="p">(</span><span class="n">lr</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">dw</span><span class="p">,</span> <span class="n">db</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Este (ou variações deste) é um dos método mais utilizados no treinamento
+de redes neurais, atualmente.</p>
+
+<h2 id="teste">Teste</h2>
+
+<p>Os passos acima buscam o erro seja mínimo para as amostras de <strong>treinamento</strong>.
+Entretanto, nosso objetivo não é criarmos um IF/ELSE gigante, que acerta todas
+as amostras de treino mas erra terrívelmente para quaisquer amostras futuras.</p>
+
+<p>Queremos que ele seja genérico o suficiente para ser reaplicado em situações
+futuras, em amostras de <strong>teste</strong>. Portanto, usualmente subdividimos o conjunto
+de dados em:</p>
+<ul>
+  <li><strong>treino</strong>: conjunto de amostras utilizadas para se atualizar os parâmetros do
+            modelo.</li>
+  <li><strong>teste</strong>: conjunto de dados onde o modelo é aplicado e a <em>loss</em> registrada.
+           Como o modelo não viu nenhuma destas amostras durante o treino,
+           podemos supor que é assim que ele se comportará em amostras
+           futuras.</li>
+</ul>
+
+<p>Se existem hiper-parâmetros (<code class="language-plaintext highlighter-rouge">lr</code>, <code class="language-plaintext highlighter-rouge">batch_size</code>) ou se o treinamento é
+iterativo, o conjunto de treino é normalmente separado em <strong>treino</strong> e
+<strong>validação</strong>. Assim, modificamos os parâmetros com base nos gradientes
+computado sobre as amostras de treino, mas mantemos o registro dos parâmetros
+que resultarem menor erro nas amostras valiação. Isto é, estamos salvando os
+parâmetros que <strong>melhor generalizam</strong> o problema.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">test_size</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span>
+<span class="n">valid_size</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">4</span>
+<span class="n">best_valid_error</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">inf</span>
+<span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">w0</span><span class="p">,</span> <span class="n">b0</span>
+
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">test_size</span><span class="p">)</span>
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_valid</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">valid_size</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+  <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">shuffle_samples</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+  <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batches</span><span class="p">):</span>
+    <span class="n">_x</span> <span class="o">=</span> <span class="n">x_train</span><span class="p">[</span><span class="n">batch</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">:(</span><span class="n">batch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">]</span>
+    <span class="n">_y</span> <span class="o">=</span> <span class="n">y_train</span><span class="p">[</span><span class="n">batch</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">:(</span><span class="n">batch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">]</span>
+    <span class="n">dw</span><span class="p">,</span> <span class="n">db</span> <span class="o">=</span> <span class="n">compute_gradients</span><span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">update_gradients</span><span class="p">(</span><span class="n">lr</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">dw</span><span class="p">,</span> <span class="n">db</span><span class="p">)</span>
+
+  <span class="n">p_valid</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x_valid</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">loss</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">p_valid</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">best_valid_error</span><span class="p">:</span>
+    <span class="n">best_valid_error</span> <span class="o">=</span> <span class="n">loss</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">p_valid</span><span class="p">)</span>
+    <span class="n">w_star</span><span class="p">,</span> <span class="n">b_star</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+<span class="n">p_test</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">w_star</span><span class="p">,</span> <span class="n">b_star</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'test mse:'</span><span class="p">,</span> <span class="n">loss</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">p_test</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h2 id="múltiplas-características">Múltiplas características</h2>
+
+<p>Como funcionaria se um valor $y$ estivesse sendo regredido de uma amostra
+$x$ composta por mais de uma característica? Nenhum segredo aqui. Na verdade,
+todas as seções acima (com exceção de <a href="#solução-ótima">solução ótima</a>)
+já lidam perfeitamente com esse caso.</p>
+
+<p>Com múltiplas características, uma amostra se torna um vetor de números e o
+conjunto $x$ uma matriz. A fim de garantir liberdade ao modelo, definimos $w$
+também como um vetor, onde cada elemento é um coeficiente que multiplica um
+atributo diferente:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">dummy_dataset</span><span class="p">(</span><span class="n">samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+
+<span class="n">w</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">)),</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">p</span><span class="p">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">y</span><span class="p">.</span><span class="n">shape</span>
+</code></pre></div></div>
+
+<p>Resumindo:</p>
+
+<ul>
+  <li>Se $x$ e $w$ são números, há uma única característica e <code class="language-plaintext highlighter-rouge">dot</code> é a
+múltiplicação convencional nos Reais, resultando em um número
+que pode ser somado à $b$.</li>
+  <li>Se $x$ e $w$ são vetores, <code class="language-plaintext highlighter-rouge">dot</code> é o produto interno, resultando em um número
+que também pode ser somado à $b$.</li>
+</ul>
+
+<p>O gradiente continua funcionando do mesmo jeito, já que <code class="language-plaintext highlighter-rouge">mean(axis=0)</code> garante
+que somente a primeira dimensão (contendo a diferença entre amostras)
+seja reduzida, preservando a diferença entre os diferentes parâmetros em
+$w$ (contidos na segunda dimensão).</p>
+
+<p>Nota I: se você está se perguntando “por quê $b$ não virou um vetor (digamos, $c$) também?”,
+a reposta é simples: ele virou sim, mas se supormos $b = w\cdot c$, então $w\cdot (x+c) = w\cdot x+b$.
+Com isso, podemos dar um “jeito brasileiro” e simplesmente guardar um número em vez do
+vetor inteiro. :-)</p>
+
+<p>Nota II: o método apresentado em <a href="#solução-ótima">solução ótima</a> exige dividir a equação
+por $x_i$. No caso de múltiplas características, isso equivale a inverter a matrix $x$, o
+que nem sempre possível. :-(</p>
+
+<h2 id="um-exemplo-prático-de-regressão-boston">Um exemplo prático de regressão: Boston</h2>
+
+<p>Este conjunto de dados contém informações sobre casas na região metropolitana
+de boston, relacionando atributos gerais ao custo de mercado efetivo destas.
+Não sabemos exatamente como cada um desses atributos afetam o custo, mas podemos
+usar um modelo linear para descobrir isso:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sacred</span> <span class="kn">import</span> <span class="n">Experiment</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_boston</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span> <span class="k">as</span> <span class="n">mse</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">ex</span> <span class="o">=</span> <span class="n">Experiment</span><span class="p">(</span><span class="s">'training-linear-regressor'</span><span class="p">)</span>
+
+
+<span class="o">@</span><span class="n">ex</span><span class="p">.</span><span class="n">config</span>
+<span class="k">def</span> <span class="nf">my_config</span><span class="p">():</span>
+  <span class="n">workers</span> <span class="o">=</span> <span class="mi">1</span>
+  <span class="n">test_size</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span>
+  <span class="n">split_random_state</span> <span class="o">=</span> <span class="mi">42</span>
+
+
+<span class="o">@</span><span class="n">ex</span><span class="p">.</span><span class="n">automain</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">test_size</span><span class="p">,</span> <span class="n">workers</span><span class="p">,</span> <span class="n">split_random_state</span><span class="p">):</span>
+  <span class="n">dataset</span> <span class="o">=</span> <span class="n">load_boston</span><span class="p">()</span>
+  <span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+      <span class="n">dataset</span><span class="p">.</span><span class="n">data</span><span class="p">,</span> <span class="n">dataset</span><span class="p">.</span><span class="n">target</span><span class="p">,</span>
+      <span class="n">test_size</span><span class="o">=</span><span class="n">test_size</span><span class="p">,</span>
+      <span class="n">random_state</span><span class="o">=</span><span class="n">split_random_state</span><span class="p">)</span>
+
+  <span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">workers</span><span class="p">)</span>
+  <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+  <span class="k">print</span><span class="p">(</span><span class="s">'train mse:'</span><span class="p">,</span> <span class="n">mse</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_train</span><span class="p">)))</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">'test mse:'</span><span class="p">,</span> <span class="n">mse</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)))</span>
+
+  <span class="k">print</span><span class="p">(</span><span class="s">'y:'</span><span class="p">,</span> <span class="n">y_test</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">'p:'</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)[:</span><span class="mi">5</span><span class="p">])</span>
+
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python training_linear_regressor.py with <span class="nv">seed</span><span class="o">=</span>42
+train mse: 23.0559695699
+<span class="nb">test </span>mse: 20.6179622853
+y: <span class="o">[</span> 23.60  32.40  13.60  22.80  16.10 ...]
+p: <span class="o">[</span> 28.55  36.61  15.68  25.51  18.76 ...]
+</code></pre></div></div>
+
+<p>MSE em teste está em 20.6k, o que significa que o modelo aproxima o preço
+verdadeiro $p$ por uma margem de $(p - 4.54k, p + 4.54k)$.
+Parece bom o suficiente pra mim. Por enquanto.</p>
+
+<p>Lembre-se que eu os resultados dependem das condições iniciais, que são
+aleatórias. Precisamos então pensar um pouco em reproducibilidade. O jeito
+mais fácil, na minha opinião, é usando o módulo sacred, que – entre várias coisas – ajusta
+automaticamente a semente do gerador pseudo-aleatório para <code class="language-plaintext highlighter-rouge">42</code> quando
+executamos o script com os argumentos <code class="language-plaintext highlighter-rouge">with seed=42</code>. Dê uma olhada no
+<a href="/blog/machine-learning/sacred/" target="_blank">meu mini post</a> sobre o
+sacred e na <a href="http://sacred.readthedocs.io" target="_blank">documentação</a>
+para entender melhor como ele funciona.</p>
+
+<h2 id="próximo-post-não-linearidade">Próximo post: não linearidade</h2>
+
+<center>
+  <figure class="equation">
+    <img src="/assets/images/posts/ml/linear/nonlinear-f.webp" alt="Gráfico de uma função não linear, de ordem superior à quadrática." style="width:100%; max-width:500px" />
+  </figure>
+</center>
+
+<p>Infelizmente, as coisas nem sempre serão resolvidas com retas e linearidade.
+Resolver esses problemas exigem a utilização de
+<a href="/blog/intro-to-machine-learning/ml-nonlinear/">modelos não-lineares</a>,
+o que envolve várias outras peculiaridades. Só para instigar, pense: o que aconteceria
+com o erro se nosso modelo de decisão não fosse uma reta? O que acontece com
+o espaço de otimização se existem multiplas características?</p>
+
+        </div>
+      </article>
+
+      
+      <div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://lucasdavid-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      
+    </div>
+  </div>
+</div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+  integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"
+  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
+  integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '\\[', right: '\\]', display: true}, {left: '$', right: '$', display: false},{left: '\\(', right: '\\)', display: false}]});"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+<script>
+  anchors.options = { icon: '#' };
+  anchors.add();
+</script>
+
+
+  <!-- <svg id="visual" viewBox="0 0 1980 300"  class="curve-container__curve curve-three" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <path
+    d="M0 69L55 90.2C110 111.3 220 153.7 330 169.8C440 186 550 176 660 165.5C770 155 880 144 990 139.2C1100 134.3 1210 135.7 1320 137.7C1430 139.7 1540 142.3 1650 155.5C1760 168.7 1870 192.3 1925 204.2L1980 216L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#d3d3d3"></path>
+  <path
+    d="M0 89L55 107.8C110 126.7 220 164.3 330 191.3C440 218.3 550 234.7 660 243.8C770 253 880 255 990 252.3C1100 249.7 1210 242.3 1320 228.8C1430 215.3 1540 195.7 1650 174.5C1760 153.3 1870 130.7 1925 119.3L1980 108L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#6a6a6a"></path>
+  <path
+    d="M0 229L55 232.3C110 235.7 220 242.3 330 244.3C440 246.3 550 243.7 660 247.3C770 251 880 261 990 254.8C1100 248.7 1210 226.3 1320 223.5C1430 220.7 1540 237.3 1650 233.8C1760 230.3 1870 206.7 1925 194.8L1980 183L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#121212"></path>
+</svg> -->
+<footer class="page-footer text-bg-dark bg-black-subtle d-print-none">
+  <div class="container">
+    <div class="mt-4 mb-5">
+      
+        <div class="row g-1 mb-4">
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Keras Explainable</h6>
+                <p class="card-text text-light">
+                  Clean implementations for AI explaining methods in Keras.
+<a href="https://github.com/lucasdavid/keras-explainable" target="_new">Code</a> and
+<a href="https://lucasdavid.github.io/keras-explainable" target="_new">docs</a> are available.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Supporting Study Material</h6>
+                <p class="card-text text-light">
+                  If you are an undergrad student and are looking for additional study material,
+check out our collaborative project <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Algorithms in TensorFlow</h6>
+                <p class="card-text text-light">
+                  I'm implementing all algorithms I find interesting using TensorFlow.
+You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">github.com/lucasdavid/algorithms-in-tensorflow</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">TF-Experiment</h6>
+                <p class="card-text text-light">
+                  And environment to run Machine Learning experiments based on components and mixins. Available at <a href="https://github.com/lucasdavid/tf-experiment">github.com/lucasdavid/tf-experiment</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Mineração de Dados Complexos</h6>
+                <p class="card-text text-light">
+                  Information around the extension program "Mineração de Dados Complexos (in Portuguese)" is available at
+<a href="https://www.ic.unicamp.br/~mdc/" target="_blank">ic.unicamp.br/~mdc/</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+    </div>
+
+    <div class="text-end mt-4">
+      
+
+
+<div class="fs-2">
+  
+    <a href="https://github.com/lucasdavid"
+      target="_blank"
+      ><i
+      aria-label="GitHub"
+      class="bi bi-github link-light"></i></a>
+  
+  
+    <a href="https://www.linkedin.com/in/ld7"
+      target="_blank"
+      title="LinkedIn"><i class="bi bi-linkedin text-primary sr-none"></i></a>
+  
+  <span itemscope itemtype="https://schema.org/Person">
+    <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+       target="orcid.widget"
+       rel="me noopener noreferrer"
+       title="ORCID"
+      ><img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 7px; width: 32px;"></a>
+  </span>
+  
+  <a href="http://stackoverflow.com/users/2429640/lucasdavid"
+     target="_blank"
+     title="Stackoverflow"><i class="bi bi-code-slash link-light sr-none"></i></a>
+  
+    <a href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q"
+      target="_blank"
+      title="Youtube"><i class="bi bi-youtube text-danger sr-none"></i></a>
+  
+    <a href="mailto:mb37410l3@mozmail.com"
+      target="_blank"
+      title="Mail"><i class="bi bi-envelope-fill link-light sr-none"></i></a>
+  
+  <a href="assets/docs/lucas-david-resume.pdf"
+     target="_blank"
+     title="Resume"><i class="bi bi-person-lines-fill link-light sr-none"></i></a>
+</div>
+
+    </div>
+    <div class="text-end">
+      <p>
+        ® Lucas David. Todos os direitos reservados.
+      </p>
+    </div>
+</div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous" defer></script>
+
+</body>
+</html>

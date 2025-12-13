@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Activation, Cross-Entropy and Logits – Lucas David</title>
+  <meta charset="utf-8" />
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="image_src" type="image/png" href="img_path" />
+
+
+<meta name="description" content="Discussion around the activation loss functions commonly used in Machine Learning problems." />
+<meta property="og:description" content="Discussion around the activation loss functions commonly used in Machine Learning problems." />
+<meta property="og:image" content="" />
+
+<meta name="author" content="Lucas David" />
+
+
+<meta property="og:title" content="Activation, Cross-Entropy and Logits" />
+<meta property="twitter:title" content="Activation, Cross-Entropy and Logits" />
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<link rel="alternate" type="application/rss+xml" title="Lucas David - my personal website/blog"
+      href="/feed.xml" />
+
+  
+  
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LG7FZ8VCHM"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-LG7FZ8VCHM');
+	</script>
+
+
+  
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/style.css" />
+
+</head>
+<body>
+  <nav id="mainNav" class="navbar navbar-light bg-white navbar-expand-lg d-print-none border-bottom border-light ">
+  <div class="container-xl">
+    <button class="navbar-toggler rounded-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand fw-bold text-decoration-none p-1" href="/">Lucas David</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <span class="navbar-text navbar-excerpt">
+        Activation, Cross-Entropy and Logits
+      </span>
+      <span class="navbar-text font-small ms-2 me-2 sr-none" aria-hidden="true">•</span>
+      <ul class="navbar-nav mb-2 mb-lg-0 font-small">
+        <li class="nav-item"><a href="/" class="nav-link fw-bold link-dark fs-6">Home</a></li>
+        <li class="nav-item"><a href="/blog" class="nav-link fw-bold link-dark fs-6">Blog</a></li>
+        <li class="nav-item"><a href="/publications" class="nav-link fw-bold link-dark fs-6">Publications</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold link-dark fs-6" href="#" id="nbd-links-social" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Social
+          </a>
+          <ul class="dropdown-menu font-small dropdown-menu-end" aria-labelledby="nbd-links-social">
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://github.com/lucasdavid">
+                <i aria-label="GitHub" class="bi bi-github link-dark sr-none"></i>
+                Github</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://www.linkedin.com/in/ld7">
+                <i class="bi bi-linkedin text-primary sr-none"></i>
+                Linkedin</a></li>
+
+            <li itemscope itemtype="https://schema.org/Person">
+              <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+                  target="orcid.widget"
+                  rel="me noopener noreferrer"
+                  class="dropdown-item text-decoration-none"
+                >
+                <img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 5px; width: 16px;">
+                ORCID</a>
+            </li>
+
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="http://stackoverflow.com/users/2429640/lucasdavid">
+                <i class="bi bi-code-slash link-dark sr-none"></i>
+                Stackoverflow</a></li>
+            <li><a class="dropdown-item text-decoration-none" target="_blank"
+                href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q">
+                <i class="bi bi-youtube text-danger sr-none"></i>
+                Youtube</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <div class="empty-v-space d-none d-xl-block" style="margin-bottom: 5vh"></div>
+</div>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12 col-xl-3 col-xxl-2 offset-xxl-1">
+      <div id="sidebar" class="">
+  <div class="text-center">
+    <a href="/" title="Home">
+      <img src="/assets/images/infra/aloy-100.png" alt="Aloy, a character from Horizon Zero Dawn."
+        class="img-fluid rounded-circle" style="width:100px" />
+    </a>
+    <p class="pt-2 font-small">
+      
+        <a href="mailto:mb37410l3@mozmail.com" class="text-decoration-none fw-bold">mb37410l3@mozmail.com</a>
+      
+    </p>
+  </div>
+
+  
+</div>
+
+    </div>
+    <div id="table-of-contents-container-r" class="col-12 col-xl-3 col-xxl-2 order-xl-2">
+      
+      <div style="z-index: 0; font-size:0.8rem;">
+        <div id="table-of-contents" class="font-small">
+  <p class="border-bottom"><strong>Summary</strong></p>
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#activation-functions">Activation Functions</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#sigmoid">Sigmoid</a></li>
+<li class="toc-entry toc-h3"><a href="#softmax">Softmax</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#losses">Losses</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#categorical-cross-entropy">Categorical Cross-Entropy</a></li>
+<li class="toc-entry toc-h3"><a href="#binary-cross-entropy">Binary Cross-Entropy</a></li>
+<li class="toc-entry toc-h3"><a href="#focal-loss">Focal Loss</a></li>
+<li class="toc-entry toc-h3"><a href="#hinge-loss">Hinge Loss</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#final-considerations">Final Considerations</a></li>
+<li class="toc-entry toc-h2"><a href="#references">References</a></li>
+</ul>
+</div>
+
+      </div>
+      
+    </div>
+    <div class="col-12 col-xl-6">
+      <article class="post mb-4">
+        <header class="">
+          <h1 id="postTitle" class="fw-bold">Activation, Cross-Entropy and Logits</h1>
+          <p class="right-align mb-2 text-muted fs-5">
+            Discussion around the activation loss functions commonly used in Machine Learning problems. <em>— August 30, 2021</em>
+          </p>
+          <div class="mb-4">
+            <span class="badges-container">
+  
+    <a href="/blog/tag/ml"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >ML</a>
+  
+    <a href="/blog/tag/classification"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Classification</a>
+  
+    <a href="/blog/tag/multi-label"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Multi-label</a>
+  
+    <a href="/blog/tag/linear-optimization"
+       class="btn badge rounded-pill btn-dark text-bg-dark text-decoration-none"
+       style="font-size: 0.8em;"
+       type="button"
+       role="button"
+       >Linear Optimization</a>
+  
+</span>
+
+          </div>
+        </header>
+        <div class="article-content" style="margin-top: 4rem;">
+          <p><span class="fs-1" style="line-height:0">A</span>ctivation
+and loss functions are paramount components employed in the training of Machine Learning networks.
+In the vein of classification problems, studies have focused on developing and analyzing
+functions capable of estimating posterior probability variables (class and label probabilities)
+with some degree of numerical stability.
+In this post, we present the intuition behind these functions, as well as their interesting
+properties and limitations. Finally, we also describe efficient implementations using popular
+numerical libraries such as TensorFlow.</p>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#collapseSetup" aria-controls="collapseSetup" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show setup code</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="collapseSetup"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
+
+<span class="n">sns</span><span class="p">.</span><span class="nb">set</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s">'whitegrid'</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+  <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">256</span>
+  <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="activation-functions">Activation Functions</h2>
+
+<p>Classification networks will often times employ the <em>softmax</em> or <em>sigmoid</em> activation functions
+in their last layer:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">tensorflow.keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span>
+
+<span class="n">features</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">(</span>
+  <span class="p">[[</span><span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span> <span class="mf">5.1</span><span class="p">,</span> <span class="p">...],</span>
+   <span class="p">[</span><span class="mf">2.6</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="p">...],</span>
+   <span class="p">...])</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s">'label_01'</span><span class="p">,</span> <span class="s">'label_02'</span><span class="p">,</span> <span class="s">'label_03'</span><span class="p">,</span> <span class="p">...]</span>
+
+<span class="n">nn</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">Sequential</span><span class="p">([</span>
+  <span class="n">Dense</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'swish'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'fc1'</span><span class="p">),</span>
+  <span class="n">Dense</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'swish'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'fc2'</span><span class="p">),</span>
+  <span class="n">Dense</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">)),</span> <span class="n">activation</span><span class="o">=</span><span class="s">'softmax'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'predictions'</span><span class="p">),</span>
+<span class="p">])</span>
+</code></pre></div></div>
+
+<p>These functions are useful to limit the output of the model to conform with
+the expected predicted variable, which likely model a posterior probability distribution or
+a multi-variate probability distribution signal.</p>
+
+<h3 id="sigmoid">Sigmoid</h3>
+<p>The <em>sigmoid</em> function has a historical importance to Machine Learning, being commonly employed
+in the classic connectionist approach of Artificial Intelligence (Multi-layer Perceptron Networks)
+for its interesting properties <a class="citation" href="#han1995influence">[1]</a>.
+Firstly, it is bounded to the real interval $[0, 1]$, and differentiable on each and every point
+of its domain. It is monotonically increasing, which means it does not affect the rank between the
+input logits ($\arg\max_i S(x) = \arg\max_i x$) <a class="citation" href="#han1995influence">[1]</a>. It’s derivative is a bell
+function, with the highest value in 0. It is convex in $[-\infty, 0]$ and concave $[0, \infty]$ <a class="citation" href="#han1995influence">[1]</a>,
+so it saturates when outputting close to its extremities.</p>
+
+<p>Let $l = x\cdot w + b$ be the result of the last dense layer in the network (the inner
+product between an input feature vector and the weights vector of the layer, added to
+the bias factor), commonly referred to as the <strong>logit vector</strong> in the Machine Learning literature.
+The <em>sigmoid</em> function is defined as:</p>
+
+\[S(l) = \frac{1}{1+e^{-l}}\]
+
+<p>And it looks like this:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="p">.</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#csigmoid" aria-controls="csigmoid" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-py collapse highlighter-rouge" id="csigmoid"><div class="highlight"><pre class="highlight"><code><span class="n">sns</span><span class="p">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">.</span><span class="n">numpy</span><span class="p">().</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">.</span><span class="n">numpy</span><span class="p">().</span><span class="n">ravel</span><span class="p">())</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/deducing-ce-wl/sigmoid.jpg" alt="The &lt;i&gt;Sigmoid&lt;/i&gt; activation function." class="figure-img img-fluid rounded mx-auto d-block w-100 w-md-50" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title">The <i>Sigmoid</i> activation function.</strong>
+
+    This function is monotonically increasing and has a single inflection point at $x = 0$.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>In Mathematics, the <em>logit</em> (logistic unit) function is the inverse of the sigmoid function <a class="citation" href="#cramer2003logit">[2]</a>:</p>
+
+\[\text{logit}(p) = \log\Big(\frac{p}{1-p}\Big)\]
+
+<h4 id="jacobian">Jacobian</h4>
+
+<p>The <em>sigmoid</em> function does not associate different input numbers, so it does not have
+cross-derivatives with respect to the inputs, and thus, $\text{diag}(\nabla S) = \mathbf{J} S$.</p>
+
+\[\nabla S = \Bigg[\frac{\partial S}{\partial x_0}, \frac{\partial S}{\partial x_1}, \ldots, \frac{\partial S}{\partial x_n} \Bigg]\]
+
+<p>And,</p>
+
+\[\begin{align}\begin{split}
+\frac{\partial S}{\partial x_i} &amp;= \frac{\partial}{\partial x_i} \frac{1}{1+e^{-x}}
+= -(1+e^{-x})^{-2} \frac{\partial}{\partial x_i} (1+e^{-x}) \\
+&amp;= -\frac{-e^{-x}}{(1+e^{-x})^2} = \frac{e^{-x}}{(1+e^{-x})(1+e^{-x})} \\
+&amp;= S \frac{e^{-x} + 1 - 1}{1+e^{-x}} = S \Bigg[\frac{e^{-x} + 1}{1+e^{-x}} - \frac{1}{1+e^{-x}}\Bigg] \\
+&amp;= S (1 - S)
+\end{split}\end{align}\]
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/deducing-ce-wl/sigmoid-derivative.jpg" alt="The derivative of the Sigmoid activation function." class="figure-img img-fluid rounded mx-auto d-block w-100 w-md-50" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title">The derivative <i>Sigmoid</i> activation function.</strong>
+
+    This function is symmetric and centered on the point 0.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h3 id="softmax">Softmax</h3>
+<p>The <em>softmax</em> function is defined as <a class="citation" href="#gao2017properties">[3]</a>:</p>
+
+\[\text{softmax}(l)_i = \frac{e^{l_i}}{\sum_j e^{l_j}}\]
+
+<p>This function has some interesting properties as well.
+Firstly, it is monotonically increasing. Hence, $\arg \max_i \text{softmax}(x) = \arg \max_i x$.
+Secondly, it’s strictly positive, and it will always output a vector that adds up to 100%, regardless of the values in $l$.
+Lastly, it is quickly saturated, so small changes in the input distribution (e.g. weights) cause a large shift in the output distribution (predictions). In other words, it can be quickly trained.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">z</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">stack</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#csoftmax" aria-controls="csoftmax" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-py collapse highlighter-rouge" id="csoftmax"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show_sm_surface</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sm</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+  <span class="n">ax</span><span class="p">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">y</span><span class="p">[...,</span> <span class="n">sm</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="p">.</span><span class="n">cm</span><span class="p">.</span><span class="n">viridis</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+  <span class="n">ax</span><span class="p">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span>
+
+  <span class="n">ax</span><span class="p">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">"Logit 1"</span><span class="p">)</span>
+  <span class="n">ax</span><span class="p">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">"Logit 2"</span><span class="p">)</span>
+  <span class="n">ax</span><span class="p">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="sa">f</span><span class="s">"Soft </span><span class="si">{</span><span class="n">sm</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+  <span class="n">ax</span><span class="p">.</span><span class="n">xaxis</span><span class="p">.</span><span class="n">pane</span><span class="p">.</span><span class="n">fill</span> <span class="o">=</span> <span class="bp">False</span>
+  <span class="n">ax</span><span class="p">.</span><span class="n">yaxis</span><span class="p">.</span><span class="n">pane</span><span class="p">.</span><span class="n">fill</span> <span class="o">=</span> <span class="bp">False</span>
+  <span class="n">ax</span><span class="p">.</span><span class="n">zaxis</span><span class="p">.</span><span class="n">pane</span><span class="p">.</span><span class="n">fill</span> <span class="o">=</span> <span class="bp">False</span>
+
+  <span class="k">if</span> <span class="n">title</span><span class="p">:</span> <span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.05</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">show_sm_surface</span><span class="p">(</span><span class="n">fig</span><span class="p">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">projection</span> <span class="o">=</span> <span class="s">'3d'</span><span class="p">),</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sm</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">'(a)'</span><span class="p">)</span>
+<span class="n">show_sm_surface</span><span class="p">(</span><span class="n">fig</span><span class="p">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span> <span class="o">=</span> <span class="s">'3d'</span><span class="p">),</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sm</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">'(b)'</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/deducing-ce-wl/softmax.jpg" alt="The &lt;i&gt;Softmax&lt;/i&gt; activation function." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title">The <i>Softmax</i> activation function.</strong>
+
+    (a) The activation intensity of softmax function for the first component (class). (b) The activation intensity of the softmax function for the second component (class).
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h4 id="jacobian-1">Jacobian</h4>
+<p>While the <em>softmax</em> function preserves the shape of the input vector, each output element
+is formed by the combination of all input elements. This clearly hints that the Jacobian of
+the <em>softmax</em> function is a full matrix.</p>
+
+<p>The the Jacobian of the softmax function $\mathbf{J} \text{softmax}$ can be computed in two steps.
+Firstly, for the elements in the main diagonal:</p>
+
+\[\frac{\partial}{\partial x_i} \text{softmax}_i(x) = \frac{\partial}{\partial x_i} \frac{e^{x_i}}{\sum_j e^{x_j}}\]
+
+<p>Using the quotient rule:</p>
+
+\[\begin{align}
+\begin{split}
+\frac{\partial}{\partial x_i} \text{softmax}_i(x)
+&amp;= \frac{\Big (\frac{\partial}{\partial x_i} e^{x_i} \Big) \sum_j e^{x_j} - e^{x_i} \frac{\partial}{\partial x_i} \sum_j e^{x_j}}{(\sum_j e^{x_j})^2} \\
+&amp;= \frac{e^{x_i}\sum_j e^{x_j} - e^{x_i}e^{x_i}}{(\sum_j e^{x_j})^2} \\
+&amp;= \frac{e^{x_i}}{\sum_j e^{x_j}}\frac{(\sum_j e^{x_j} - e^{x_i})}{\sum_j e^{x_j}} \\
+&amp;= \text{softmax}_i(x) (1 - \text{softmax}_i(x))
+\end{split}\end{align}\]
+
+<p>For the elements outside of the main diagonal:</p>
+
+\[\begin{align}
+\begin{split}\frac{\partial}{\partial x_l} \text{softmax}_i(x)
+&amp;= \frac{\Big(\frac{\partial}{\partial x_l} e^{x_i}\Big) \sum_j e^{x_j} - e^{x_i} \frac{\partial}{\partial x_l} \sum_j e^j}{(\sum_j e^{x_j})^2} \\
+&amp;= \frac{0 - e^{x_i}e^{x_l}}{(\sum_j e^{x_j})^2} \\
+&amp;= -\text{softmax}_i(x) \text{softmax}_l(x)
+\end{split}\end{align}\]
+
+<p>Then,</p>
+
+\[\begin{align}
+\begin{split}
+\mathbf{J} \text{softmax} &amp;=
+  \begin{bmatrix}
+    \text{sm}_0(1-\text{sm}_0) &amp;    -\text{sm}_0\text{sm}_1 &amp; \ldots &amp; -\text{sm}_0\text{sm}_n \\
+    -\text{sm}_1\text{sm}_0    &amp; \text{sm}_1(1-\text{sm}_1) &amp; \ldots &amp; -\text{sm}_1\text{sm}_n \\
+    \vdots                     &amp;                     \vdots &amp; \ddots &amp; \vdots \\
+    -\text{sm}_n\text{sm}_0 &amp; -\text{sm}_n\text{sm}_1 &amp; \ldots &amp; \text{sm}_n(1-\text{sm}_n)
+  \end{bmatrix} \\
+  &amp;= \text{sm}_i (I - \text{sm}_j)
+\end{split}\end{align}\]
+
+<p>Where $\text{sm}_i = \text{softmax}_i(x)$.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">z</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">stack</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[...,</span> <span class="n">tf</span><span class="p">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+<span class="n">y_grad</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">y</span><span class="p">)</span>
+<span class="n">y_grad</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">y_grad</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#csm_grad" aria-controls="csm_grad" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-py collapse highlighter-rouge" id="csm_grad"><div class="highlight"><pre class="highlight"><code><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">show_sm_surface</span><span class="p">(</span><span class="n">fig</span><span class="p">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">projection</span> <span class="o">=</span> <span class="s">'3d'</span><span class="p">),</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">y_grad</span><span class="p">,</span> <span class="n">sm</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">'(a)'</span><span class="p">)</span>
+<span class="n">show_sm_surface</span><span class="p">(</span><span class="n">fig</span><span class="p">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span> <span class="o">=</span> <span class="s">'3d'</span><span class="p">),</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">y_grad</span><span class="p">,</span> <span class="n">sm</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">'(b)'</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/deducing-ce-wl/softmax-derivative.jpg" alt="The derivative of the &lt;i&gt;Softmax&lt;/i&gt; activation function." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title">The derivative of the <i>Softmax</i> activation function.</strong>
+
+    The components of the Jacobian are added to account for all partial contributions of each logit. A more detailed representation can be view by plotting each partial derivative in the Jacobian separatelly (producing four charts).
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h4 id="comparison-with-normalized-logits">Comparison with Normalized Logits</h4>
+<p>In a first thought, a simple normalization could also be used as activation function in classification models,
+while holding the first two properties described above:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">normalized_logits</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+  <span class="n">x</span> <span class="o">-=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_min</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1e-7</span>
+  <span class="n">x</span> <span class="o">/=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-7</span>
+
+  <span class="k">return</span> <span class="n">x</span>
+</code></pre></div></div>
+
+<p>It wouldn’t be as fast to train or as stable as <em>softmax</em>, though:</p>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#c1" aria-controls="c1" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="c1"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+  <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">256</span>
+  <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># Dataset
+</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span> <span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">datasets</span><span class="p">.</span><span class="n">cifar10</span><span class="p">.</span><span class="n">load_data</span><span class="p">()</span>
+
+<span class="c1"># Model
+</span><span class="n">preprocessing</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">Sequential</span><span class="p">([</span>
+  <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">RandomFlip</span><span class="p">(</span><span class="s">"horizontal"</span><span class="p">),</span>
+  <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">RandomRotation</span><span class="p">(</span><span class="mf">0.1</span><span class="p">),</span>
+  <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">experimental</span><span class="p">.</span><span class="n">preprocessing</span><span class="p">.</span><span class="n">Rescaling</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="mf">127.5</span><span class="p">,</span> <span class="n">offset</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span>
+<span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">make_model</span><span class="p">(</span>
+    <span class="n">input_shape</span><span class="p">,</span>
+    <span class="n">num_classes</span><span class="p">,</span>
+    <span class="n">top_activation</span><span class="o">=</span><span class="s">'softmax'</span>
+<span class="p">):</span>
+  <span class="s">"""Build a convolutional neural network using skip-connections and Separable Conv2D Layers.
+
+  Ref: https://keras.io/examples/vision/image_classification_from_scratch/
+
+  """</span>
+  <span class="n">inputs</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">input_shape</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+
+  <span class="c1"># Entry block
+</span>  <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">strides</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Activation</span><span class="p">(</span><span class="s">"relu"</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+
+  <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Activation</span><span class="p">(</span><span class="s">"relu"</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+
+  <span class="n">previous_block_activation</span> <span class="o">=</span> <span class="n">x</span>  <span class="c1"># Set aside residual
+</span>
+  <span class="k">for</span> <span class="n">size</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">]:</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Activation</span><span class="p">(</span><span class="s">"relu"</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">SeparableConv2D</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Activation</span><span class="p">(</span><span class="s">"relu"</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">SeparableConv2D</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">MaxPooling2D</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">strides</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="c1"># Project residual
+</span>    <span class="n">residual</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">strides</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span>
+        <span class="n">previous_block_activation</span>
+    <span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">add</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">residual</span><span class="p">])</span>  <span class="c1"># Add back residual
+</span>    <span class="n">previous_block_activation</span> <span class="o">=</span> <span class="n">x</span>  <span class="c1"># Set aside next residual
+</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">SeparableConv2D</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Activation</span><span class="p">(</span><span class="s">"relu"</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+
+  <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">GlobalAveragePooling2D</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">'avg_pool'</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'head/drop'</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">outputs</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">top_activation</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'head/predictions'</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">train</span><span class="p">(</span>
+  <span class="n">top_activation</span><span class="p">,</span>
+  <span class="n">optimizer</span><span class="p">,</span>
+  <span class="n">loss</span><span class="p">,</span>
+  <span class="n">epochs</span> <span class="o">=</span> <span class="mi">18</span><span class="p">,</span>
+<span class="p">):</span>
+  <span class="n">model</span> <span class="o">=</span> <span class="n">make_model</span><span class="p">(</span><span class="n">input_shape</span><span class="o">=</span><span class="n">Config</span><span class="p">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_train</span><span class="p">)),</span> <span class="n">top_activation</span><span class="o">=</span><span class="n">top_activation</span><span class="p">)</span>
+  <span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">"accuracy"</span><span class="p">,</span> <span class="s">'sparse_top_k_categorical_accuracy'</span><span class="p">])</span>
+  <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span>
+    <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="n">epochs</span><span class="p">,</span>
+    <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+  <span class="p">);</span>
+
+  <span class="k">return</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">history_softmax</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span>
+  <span class="n">top_activation</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">softmax</span><span class="p">,</span>
+  <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">optimizers</span><span class="p">.</span><span class="n">SGD</span><span class="p">(),</span>
+  <span class="n">loss</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">losses</span><span class="p">.</span><span class="n">SparseCategoricalCrossentropy</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">history_normalized_logits</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span>
+  <span class="n">top_activation</span><span class="o">=</span><span class="n">normalized_logits</span><span class="p">,</span>
+  <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">optimizers</span><span class="p">.</span><span class="n">SGD</span><span class="p">(),</span>
+  <span class="n">loss</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">losses</span><span class="p">.</span><span class="n">SparseCategoricalCrossentropy</span><span class="p">()</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#c2" aria-controls="c2" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-python collapse highlighter-rouge" id="c2"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
+
+<span class="n">sns</span><span class="p">.</span><span class="nb">set</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">plot_accuracy_lines</span><span class="p">(</span><span class="o">*</span><span class="n">histories</span><span class="p">):</span>
+
+  <span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+
+  <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">histories</span><span class="p">):</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">histories</span><span class="p">),</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">sns</span><span class="p">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">h</span><span class="p">.</span><span class="n">reset_index</span><span class="p">().</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s">'index'</span><span class="p">:</span> <span class="s">'epoch'</span><span class="p">,</span>
+                        <span class="s">'accuracy'</span><span class="p">:</span> <span class="s">'top 1 score training'</span><span class="p">,</span>
+                        <span class="s">'sparse_categorical_accuracy'</span><span class="p">:</span> <span class="s">'top 1 score training'</span><span class="p">,</span>
+                        <span class="s">'val_accuracy'</span><span class="p">:</span> <span class="s">'top 1 score validation'</span><span class="p">,</span>
+                        <span class="s">'val_sparse_categorical_accuracy'</span><span class="p">:</span> <span class="s">'top 1 score validation'</span><span class="p">,</span>
+                        <span class="s">'sparse_top_k_categorical_accuracy'</span><span class="p">:</span> <span class="s">'top 5 score training'</span><span class="p">,</span>
+                        <span class="s">'val_sparse_top_k_categorical_accuracy'</span><span class="p">:</span> <span class="s">'top 5 score validation'</span><span class="p">,</span>
+                      <span class="p">}).</span><span class="n">melt</span><span class="p">(</span>
+                        <span class="p">[</span><span class="s">'epoch'</span><span class="p">],</span>
+                        <span class="p">[</span><span class="s">'top 1 score training'</span><span class="p">,</span> <span class="s">'top 1 score validation'</span><span class="p">,</span> <span class="s">'top 5 score training'</span><span class="p">,</span> <span class="s">'top 5 score validation'</span><span class="p">],</span>
+                        <span class="s">'metric'</span><span class="p">),</span>
+      <span class="n">x</span><span class="o">=</span><span class="s">'epoch'</span><span class="p">,</span>
+      <span class="n">y</span><span class="o">=</span><span class="s">'value'</span><span class="p">,</span>
+      <span class="n">hue</span><span class="o">=</span><span class="s">'metric'</span>
+    <span class="p">);</span>
+
+<span class="n">plot_accuracy_lines</span><span class="p">(</span>
+  <span class="p">(</span><span class="n">history_softmax</span><span class="p">,</span> <span class="s">'Softmax'</span><span class="p">),</span>
+  <span class="p">(</span><span class="n">history_normalized_logits</span><span class="p">,</span> <span class="s">'Normalized Logits'</span><span class="p">),</span>
+<span class="p">)</span>
+</code></pre></div></div>
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/deducing-ce-wl/softmax_and_logit_normalization_benchmark_5_0.webp" alt="Comparison between training a CNN using softmax predictions and simple logits normalization over the CIFAR10 dataset." class="figure-img img-fluid rounded mx-auto d-block w-100" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title">Comparison between training a CNN using softmax predictions and simple logits normalization over the CIFAR10 dataset.</strong>
+
+    We observe a stable increase in the score metrics when training with the softmax function. On the other hand, normalized logits will briefly produce an increase in the metrics, followed by a diverging progression of the aformentioned metrics.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<p>The <em>log</em> function inside the <em>Cross-entropy</em> function counteracts the exponential inside the <em>softmax</em>
+function (see the Categorical Cross-entropy with Logits Section below), implying that the gradient of the
+loss function with respect to the logits are somewhat linear in $l_i$ <a class="citation" href="#softmax2017normalization">[4]</a>,
+allowing for the model to update its weights at a reasonable pace.
+By replacing the activation function by a linear normalization (while using Categorical Cross-entropy),
+the weights are now being updated at a logarithmic rate.
+Finally, changing the loss function to something else (like <em>Mean Squared Error</em>) fixes the aforementioned issue,
+but creates many other problems, such as: (a) the error function is no longer bonded; (b) it is slower to train, as small changes in weights no longer produce large changes in the output; and (c) saturation no longer occurs after a considerate amount of epochs, introducing instability to the training procedure.</p>
+
+<h4 id="stability-tricks">Stability Tricks</h4>
+
+<p>It’s worth remarking that the $e^x$ function can result in numerical under/overflow, if its inputs
+are very large numbers <a class="citation" href="#softmax2018kmario23">[5]</a>.
+However, this can be easily remedied by remembering that this function is invariant to translations in its domain.</p>
+
+<p>Let $C\in\mathbb{R}$ be a constant factor, then</p>
+
+\[\text{softmax}(l - C)_i = \frac{e^{l_i - C}}{\sum_j e^{l_j - C}} = \frac{e^l_i/e^C}{\sum_j e^l_j/e^C}
+                        = \frac{e^l_i/e^C}{\frac{\sum_j e^l_j}{e^C}} = \text{softmax}(l)_i\]
+
+<p>So it’s quite common for computing tools to define the softmax function as $\text{softmax}(l - \max_i l)_i$,
+implying $l - \max(l) \le 0 \implies e^l_i \le 1$:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">softmax</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+  <span class="n">x</span> <span class="o">-=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_max</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">keep_dims</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">math</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">math</span><span class="p">.</span><span class="n">divide_no_nan</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">,</span>
+    <span class="n">tf</span><span class="p">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">keep_dims</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+  <span class="p">)</span>
+
+<span class="c1"># Or tf.nn.softmax
+</span></code></pre></div></div>
+
+<p>Underflow might still happen after shifting the input, if the logits greatly differ.
+This is highly unlikely, though, as all of the parameters are randomly drawn from the same random distribution
+and small changes are expected during training.</p>
+
+<h2 id="losses">Losses</h2>
+
+<p>In this section, I list two very popular forms of the cross-entropy (CE) function, commonly employed
+in the optimization (or training) of Network Classifiers.</p>
+
+<h3 id="categorical-cross-entropy">Categorical Cross-Entropy</h3>
+
+<p>The Categorical CE loss function is a famous loss function when optimizing
+estimators for multi-class classification problems <a class="citation" href="#zhang2018generalized">[6]</a>.
+It is defined as:</p>
+
+\[E(y, p) = -y \cdot \log p = -\sum_i y_i \log p_i\]
+
+<p>This function is also called negative log likelihood, and it is heavily based on the eq. of Information Entropy proposed by Shannon <a class="citation" href="#shannon1948mathematical">[7]</a>.</p>
+
+<p>In TensorFlow’s notation <a class="citation" href="#tensorflow2015-whitepaper">[8]</a>, we can write it as:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">categorical_crossentropy</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+  <span class="k">return</span> <span class="o">-</span><span class="n">tf</span><span class="p">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Or simply tf.losses.categorical_crossentropy
+</span></code></pre></div></div>
+
+<p>Quite simple. Notice this might not return a single real number, as the operation <code class="language-plaintext highlighter-rouge">mean</code>
+is applied over a single dimension (the last one). In fact, for the common case of a
+Multilayer Perceptron Network, <code class="language-plaintext highlighter-rouge">y</code> and <code class="language-plaintext highlighter-rouge">p</code> are matrices of shapes <code class="language-plaintext highlighter-rouge">[batch, labels]</code>
+and mean-reducing their pairwise multiplication will result in a vector of shape <code class="language-plaintext highlighter-rouge">[batch]</code>.
+However, when calling for the <a href="https://www.tensorflow.org/api_docs/python/tf/GradientTape#gradient">GradientTape#gradient</a>
+with anything but a number, TensorFlow will internally summarize this
+same tensor into a single number by add-reducing all of its elements.
+Conversely, the gradient of each element in a tensor with respect to the inputs can be obtained
+from the methods <a href="https://www.tensorflow.org/api_docs/python/tf/GradientTape#jacobian">GradientTape#jacobian</a> and <a href="https://www.tensorflow.org/api_docs/python/tf/GradientTape#batch_jacobian">GradientTape#batch_jacobian</a>.</p>
+
+<p>The gradients of the trainable weights can be retrieved using a <code class="language-plaintext highlighter-rouge">GradientTape</code>.
+Parameters can then be updated using an <code class="language-plaintext highlighter-rouge">Optimizer</code>:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">train_step</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+  <span class="k">with</span> <span class="n">tf</span><span class="p">.</span><span class="n">GradientTape</span><span class="p">()</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">network</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">categorical_crossentropy</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+
+  <span class="n">trainable_variables</span> <span class="o">=</span> <span class="n">network</span><span class="p">.</span><span class="n">trainable_variables</span>
+  <span class="n">gradients</span> <span class="o">=</span> <span class="n">tape</span><span class="p">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">trainable_variables</span><span class="p">)</span>
+
+  <span class="n">optimizer</span><span class="p">.</span><span class="n">apply_gradients</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">gradients</span><span class="p">,</span> <span class="n">trainable_variables</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>While some shenanigans occur inside the optimizer (like keeping track of moving averages,
+normalizing vectors by dividing them by their $l^2$-norm), the optimizer will ultimately minimize
+the loss function by subtracting the gradients to the parameters themselves
+(<a href="https://www.tensorflow.org/api_docs/python/tf/keras/optimizers/Optimizer">docs on Optimizer</a>),
+walking the in the direction of steepest descent of the optimization manifold.</p>
+
+<h4 id="intuition">Intuition</h4>
+<p>Categorical CE can be interpreted as a sum of the log probabilities conditioned to
+the association of the sample to the respective class being predicted.
+If $y_i = 0$ (i.e., the sample does not belong to the class $i$), then the output $p_i$ is ignored
+in the optimization process. Conversely, if the association exists, then $y_i = 1$, hence:</p>
+
+\[E(y,p) = -[\log(p_k) + \log(p_l) + \ldots +\log(p_m)] \mid y_k = y_l = \ldots = y_m = 1\]
+
+<p>It’s important to keep in mind that this isn’t the same as saying that the logit $l_i$ will be ignored,
+as it also appears in the denominator of the softmax function in the terms $p_j \mid j \ne i$.</p>
+
+<p>Without loss of generality, the log of a ratio is always negative:</p>
+
+\[p_i \in (0, 1] \implies \log p_i \in (-\infty, 0] \implies -\log p_i \in [0, \infty)\]
+
+<p>Categorical CE is minimum when the probability factor $p_i = 1, \forall i \mid y_i = 1$,
+and grows as the classification probability decreases. Therefore, the <code class="language-plaintext highlighter-rouge">Optimizer</code> instance
+minimizes the <code class="language-plaintext highlighter-rouge">loss</code> function by increasing the classification probability $p_i$ of a sample
+associated with the class $y_i$.</p>
+
+<h4 id="sparse-categorical-ce">Sparse Categorical CE</h4>
+
+<p>In the simplest case, a multi-class and single-label problem, $y$ is a one-hot encoded vector
+(in which all elements but one are zero), and thus can be more efficiently represented as
+a single positive integer, representing the associated class index.
+I.e., we assume <code class="language-plaintext highlighter-rouge">y</code> to be a vector of shape <code class="language-plaintext highlighter-rouge">[batch]</code> and <code class="language-plaintext highlighter-rouge">p</code> the common <code class="language-plaintext highlighter-rouge">[batch, classes]</code>.
+Therefore:</p>
+
+\[\exists! k \mid y_k = 1 \implies E(y, p) = -\log(p_k)\]
+
+<p>This form, commonly known as <em>Sparse CE</em>, can be written in the following way in TensorFlow:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sparse_categorical_crossentropy</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+  <span class="n">p</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">gather</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">batch_dims</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+  <span class="n">p</span> <span class="o">=</span> <span class="o">-</span><span class="n">tf</span><span class="p">.</span><span class="n">math</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">p</span>
+
+<span class="c1"># Or simply tf.losses.sparse_categorical_crossentropy
+</span></code></pre></div></div>
+
+<p>Notice we no longer add all of the elements of the probability vector $p$ (as all of them are
+multiplied by 0 and would not change the loss value). This is not only more efficient, but also
+induces more numerical stability by generating a smaller computation graph.</p>
+
+<h4 id="categorical-ce-from-logits">Categorical CE from Logits</h4>
+<p>Finally, I think we are ready to go over this! It’s quite simple, actually. We need only
+to expand the Categorical CE and softmax equations above.</p>
+
+<p>Let $x\in X$ be a feature vector representing sample in the set $X$,
+$l$ be the logits vector and $p = \text{softmax}(l)$.
+Furthermore, let $y$ be the ground-truth class vector associated with $x$.
+Then,</p>
+
+\[E(y, l) = -\sum_i y_i \log p_i = -\sum_i y_i \log \frac{e^{l_i}}{\sum_j e^{l_j}}\]
+
+<p>Applying $\log (q/t) = \log q - \log t$,</p>
+
+\[\begin{align}
+E(y, l) &amp;= -\sum_i y_i [\log e^{l_i} + \log(\sum_j e^{l_j})] \\
+        &amp;= -\sum_i y_i [l_i + \log(\sum_j e^{l_j})]
+\end{align}\]
+
+<p>Hence, we can merge the <em>softmax</em> and Categorical CE functions into a single optimization equation:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">softmax_cross_entropy_with_logits</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+  <span class="k">return</span> <span class="o">-</span><span class="n">tf</span><span class="p">.</span><span class="n">reduce_sum</span><span class="p">(</span>
+    <span class="n">y</span> <span class="o">*</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">tf</span><span class="p">.</span><span class="n">math</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">math</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="n">l</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">keep_dims</span><span class="o">=</span><span class="bp">True</span><span class="p">))),</span>
+    <span class="n">axis</span><span class="o">=</span><span class="n">axis</span>
+  <span class="p">)</span>
+
+<span class="c1"># Or tf.nn.softmax_cross_entropy_with_logits
+</span></code></pre></div></div>
+
+<p>The equation above is not only more efficient, but also more stable: no division operations
+occur, and we can see at least one path (<code class="language-plaintext highlighter-rouge">y*l</code>) in which the gradients can linearly propagate to the rest
+of the network.</p>
+
+<p>This can be simplified even further if samples are associated with a single class at a time:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sparse_softmax_cross_entropy_with_logits</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="n">tf</span><span class="p">.</span><span class="n">math</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">math</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="n">l</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">keep_dims</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+    <span class="o">-</span><span class="n">tf</span><span class="p">.</span><span class="n">gather</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">batch_dims</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+  <span class="p">)</span>
+
+<span class="c1"># Or tf.nn.sparse_softmax_cross_entropy_with_logits
+</span></code></pre></div></div>
+
+<h3 id="binary-cross-entropy">Binary Cross-Entropy</h3>
+<p>The Binary CE is a special case of the Categorical CE <a class="citation" href="#sycorax2017260537">[9]</a>,
+when the estimated variable belongs to a Bernoulli distribution:</p>
+
+\[\begin{align}\begin{split}
+E(y, p) &amp;= -\sum_i y_i \log p_i \\
+        &amp;= - \big[y_0 \log p_0 + (1-y_0) \log (1-p_0)\big]
+\end{split}\end{align}\]
+
+<p>In this case, only two classes are available (a Bernoulli variable $i\in \{0, 1\}$), such
+that $p_0 = 1-p_1$. Hence, this problem is represented with a single probability number
+(a single predicted target number).</p>
+
+<h4 id="intuition-1">Intuition</h4>
+<p>Just like Categorical CE, we can draw a parallel between the Binary CE and the likelihood function:</p>
+
+\[\begin{align}\begin{split}
+E(y, p) &amp;= - \big[y_0 \log p_0 + (1-y_0) \log (1-p_0)\big] \\
+        &amp;= - \big[\log p_0^{y_0} + \log (1-p_0)^{1-y_0}\big] \\
+        &amp;= - \log \big[p_0^{y_0} (1-p_0)^{1-y_0}\big] \\
+        &amp;= - \log \big[p_0^{y_0} p_1^{y_1}\big] \\
+        &amp;= - \log \Big[ \prod_i p_i^{yi} \Big]
+\end{split}\end{align}\]
+
+<h4 id="binary-ce-from-logits">Binary CE from Logits</h4>
+
+<p>Binary CE has a derivation with logits, similar to its <em>categorical</em> counterpart:</p>
+
+\[\begin{align}\begin{split}
+E(y, l) &amp;= - [y\log\text{sigmoid}(l) + (1-y)\log(1-\text{sigmoid}(l))] \\
+        &amp;= - \Big[y\log\Big(\frac{1}{1 + e^{-l}}\Big) + (1-y)\log\Big(1-\frac{1}{1+e^{-l}}\Big)\Big] \\
+        &amp;= - \Big[y(\log 1 -\log(1 + e^{-l})) + (1-y)(\log(1+e^{-l} -1) -\log(1+e^{-l}))\Big] \\
+        &amp;= - \Big[-y\log(1 + e^{-l}) + (1-y)(-l -\log(1+e^{-l}))\Big] \\
+        &amp;= - \Big[-y\log(1 + e^{-l}) + (y-1)(l +\log(1+e^{-l}))\Big] \\
+        &amp;= - \Big[-y\log(1 + e^{-l}) + yl + y\log(1+e^{-l}) -l -\log(1+e^{-l})\Big] \\
+        &amp;= l - yl +\log(1+e^{-l}) \\
+        &amp;= l(1 - y) -\log((1+e^{-l})^{-1}) \\
+        &amp;= l(1 - y) -\log(\text{sigmoid}(l))
+\end{split}\end{align}\]
+
+<h4 id="stability-tricks-1">Stability Tricks</h4>
+<p>Binary CE becomes quite unstable for $l \ll 0$, as $\text{sigmoid}(l)\to 0$ and $-\log(\text{sigmoid}(l))\to \infty$ quickly.
+To circumvent this issue, the equation above is reformulated for negative logits to:</p>
+
+\[\begin{align}\begin{split}
+E(y, l) &amp;= l - yl +\log(1+e^{-l}) \\
+        &amp;= \log(e^l) - yl +\log(1 + e^{-l}) \\
+        &amp;= -yl +\log(e^l(1+e^{-l})) \\
+        &amp;= -yl +\log(e^l + 1)
+\end{split}\end{align}\]
+
+<p>And finally, both forms are combined conditioned to the numerical sign of the logit:</p>
+
+\[\begin{align}\begin{split}
+E(y, l) &amp;= \begin{cases}
+  l &amp;-yl +\log(e^{-l} + 1) &amp; \text{if $l&gt;0$} \\
+    &amp;-yl +\log(e^l + 1) &amp; \text{otherwise}
+  \end{cases} \\
+  &amp;= \max(l, 0) -yl +\log(e^{-|l|} + 1)
+\end{split}\end{align}\]
+
+<p>TensorFlow true implementation is available at <a href="https://github.com/tensorflow/tensorflow/blob/919f693420e35d00c8d0a42100837ae3718f7927/tensorflow/python/ops/nn_impl.py#L115">tensorflow/ops/ops/nn_impl.py#L115</a>.</p>
+
+<h3 id="focal-loss">Focal Loss</h3>
+
+<p>Another example of optimizing objective is the Focal Cross-Entropy loss function <a class="citation" href="#lin2017focal">[10]</a>,
+which was proposed in the context of object detection to address the massive imbalance problem
+between the labels representing objects of interest and the background label.
+Since then, it has been leveraged in multi-class classification problems
+as a regularization strategy <a class="citation" href="#mukhoti2020calibrating">[11]</a>.</p>
+
+<p>Binary Focal CE is defined as:</p>
+
+\[L_\text{focal}(y, p) = - \big[α (1-p)^γ y \log p + (1-α) p^γ (1-y) \log (1-p)\big]\]
+
+<p>Where $α=0.25$ and $γ=2$, commonly.</p>
+
+<h4 id="intuition-2">Intuition</h4>
+
+<p>The intuition behind Focal CE loss is to focus on labels that the classifier is uncertain about,
+while gradually erasing the importance of labels that are predicted with a high certainty rate
+(usually the ones that dominate the optimization process, such as frequent contextual objects or
+background classes).</p>
+
+<p>Let $x$ be a sample of the set, associated with labels $y$ s.t. $y_l = 1$. Furthermore,
+let $p$ be the association probability value, estimated by a given classifier. If this
+same classifier is certain about its prediction, then</p>
+
+\[p_l \to 1 \implies (1 - p_l)^γ \to 0 \implies L_\text{focal}(y, p)_l \to 0\]
+
+<p>Conversely, for a $k$ s.t. $y_k=0$, if the classifier is certain about its prediction, then</p>
+
+\[p_k \to 0 \implies p_k^γ \to 0 \implies L_\text{focal}(y, p)_k \to 0\]
+
+<h4 id="implementation">Implementation</h4>
+
+<p>Binary Focal CE loss can be translated to Python code as <a class="citation" href="#keras2020retinanet">[12]</a>:</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">focal_loss_with_logits</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+  <span class="n">ce</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">sigmoid_cross_entropy_with_logits</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
+
+  <span class="n">p</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+  <span class="n">a</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">where</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">equal</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mf">1.</span><span class="p">),</span> <span class="n">a</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">-</span><span class="n">a</span><span class="p">)</span>
+  <span class="n">p</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">where</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">equal</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mf">1.</span><span class="p">),</span> <span class="mf">1.</span> <span class="o">-</span><span class="n">p</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_sum</span><span class="p">(</span>
+    <span class="n">a</span> <span class="o">*</span> <span class="n">p</span><span class="o">**</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">ce</span><span class="p">,</span>
+    <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="hinge-loss">Hinge Loss</h3>
+<p>Hinge can be used to create “quasi-SVM” networks, in which the search for a solution that
+maximizes the separation margin between two class groups is performed. It is defined as
+<a class="citation" href="#rosasco2004loss">[13]</a>:</p>
+
+\[L_\text{hinge}(y, p) = \max(1 - yp, 0)\]
+
+<p>Where $y,p\in\{-1, 1\}$.</p>
+
+<h4 id="intuition-3">Intuition</h4>
+
+<p>This function measures if — and by how much — the proposed margin is being violated by samples
+that belong to the opposite class. As samples of class -1 and 1 are incorrectly estimated to be
+of class 1 and -1, respectively, $-yp \gg 0 \implies L_\text{hinge} \gg 0$.
+The function will also penalize any samples that are correctly classified, but fall under the margin.
+For example, let $y = -1$ and $p=-0.8$, then</p>
+
+\[L_\text{hinge}(y, p) = \max(1- (-1)(-0.8), 0) = \max(1-0.8, 0) = 0.2\]
+
+<p>Finally, for any other sample correctly classified with $|p| \ge 1, L_\text{hinge}(y,p) = 0$,
+and no further gradient updates are performed.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="p">.</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">losses</span><span class="p">.</span><span class="n">hinge</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">ones</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">x</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="text-center mb-1" style="height:1.25rem">
+  <hr class="thin mb-0 border-1 sr-none " />
+  <button data-bs-target="#c_hinge" aria-controls="c_hinge" class="btn rounded-5 btn-light" style="position: relative; margin-top: -2rem;" type="button" data-bs-toggle="collapse" aria-expanded="false">show collapsed</button>
+</div>
+
+<div class="language-py collapse highlighter-rouge" id="c_hinge"><div class="highlight"><pre class="highlight"><code><span class="n">sns</span><span class="p">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">.</span><span class="n">numpy</span><span class="p">().</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">.</span><span class="n">numpy</span><span class="p">().</span><span class="n">ravel</span><span class="p">())</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">axvline</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s">':'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">text</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="s">"Decision Boundary"</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">'right'</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s">'semibold'</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div style="" class="text-center">
+  <figure class="figure ">
+    <img src="/assets/images/posts/ml/deducing-ce-wl/hinge.jpg" alt="The Hinge Loss Function." class="figure-img img-fluid rounded mx-auto d-block w-100 w-md-50" />
+
+    
+  <figcaption class="figure-caption text-start">
+    <strong class="title">The Hinge Loss Function.</strong>
+
+    Incorrectly estimated samples are penalized with a large hinge loss value, as well as correctly classified samples that fall in the confidence margin. Conversely, correctly classified samples are ignored with a null loss value. Available at <a href="https://math.stackexchange.com/q/2899178">stackexchange/q/2899178</a>.
+  </figcaption>
+
+
+  </figure>
+</div>
+
+<h4 id="implementation-1">Implementation</h4>
+
+<p>Hinge loss’ implementation is quite simple, and can be found at <a href="https://github.com/keras-team/keras/blob/3a33d53ea4aca312c5ad650b4883d9bac608a32e/keras/losses.py#L1481">keras/losses.py#L1481</a>:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">hinge</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_all</span><span class="p">((</span><span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)):</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># convert to (-1, 1)
+</span>
+  <span class="k">return</span> <span class="n">tf</span><span class="p">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">maximum</span><span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">y</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="final-considerations">Final Considerations</h2>
+<p>Classification problems are very particular, in the sense that the predicted variable
+belongs to a very specific, restricted distribution. To this end, we leverage loss functions
+based on Information Theory principles to train ML models more efficiently and stably.</p>
+
+<p>Notwithstanding, multiple stability and speedup tricks are already implemented in TensorFlow,
+and can be employed when certain criteria are met. For instance,
+one can simplify the final activation and loss functions by combining them into a more efficient
+equation; or select the maximizing outputs of the network instead of multiplying terms that ultimately
+reduce to zero.</p>
+
+<p>Hopefully, you are now able to better understanding the differences between
+these functions when training your ML models and transparently select between them.</p>
+
+<h2 id="references">References</h2>
+
+<ol class="bibliography"><li><span id="han1995influence">J. Han and C. Moraga, “The influence of the sigmoid function parameters on the speed of backpropagation learning,” in <i>International workshop on artificial neural networks</i>, 1995, pp. 195–201.</span></li>
+<li><span id="cramer2003logit">J. Cramer, “The Origins and Development of the Logit Model,” Aug. 2003, doi: 10.1017/CBO9780511615412.010.</span></li>
+<li><span id="gao2017properties">B. Gao and L. Pavel, “On the properties of the softmax function with application in game theory and reinforcement learning,” <i>arXiv preprint arXiv:1704.00805</i>, 2017.</span></li>
+<li><span id="softmax2017normalization">K. Batzner, “Why use softmax as opposed to standard normalization?” Stackoverflow.Available at: https://stackoverflow.com/a/47763299/2429640</span></li>
+<li><span id="softmax2018kmario23">kmario23, “Numercially stable softmax.” Stackoverflow.Available at: https://stackoverflow.com/a/49212689/2429640</span></li>
+<li><span id="zhang2018generalized">Z. Zhang and M. R. Sabuncu, “Generalized cross entropy loss for training deep neural networks with noisy labels,” 2018.</span></li>
+<li><span id="shannon1948mathematical">C. E. Shannon, “A mathematical theory of communication,” <i>The Bell system technical journal</i>, vol. 27, no. 3, pp. 379–423, 1948.</span></li>
+<li><span id="tensorflow2015-whitepaper">Martı́n Abadi <i>et al.</i>, “ TensorFlow: Large-Scale Machine Learning on Heterogeneous Systems.” TensorFlow, 2015.Available at: https://www.tensorflow.org/</span></li>
+<li><span id="sycorax2017260537">S. (https://stats.stackexchange.com/users/22311/sycorax), “Should I use a categorical cross-entropy or binary cross-entropy loss for binary predictions?” Cross Validated, 2017.Available at: https://stats.stackexchange.com/q/260537</span></li>
+<li><span id="lin2017focal">T.-Y. Lin, P. Goyal, R. Girshick, K. He, and P. Dollár, “Focal loss for dense object detection,” in <i>Proceedings of the IEEE international conference on computer vision</i>, 2017, pp. 2980–2988.</span></li>
+<li><span id="mukhoti2020calibrating">J. Mukhoti, V. Kulharia, A. Sanyal, S. Golodetz, P. H. S. Torr, and P. K. Dokania, “Calibrating deep neural networks using focal loss,” <i>arXiv preprint arXiv:2002.09437</i>, 2020.</span></li>
+<li><span id="keras2020retinanet">S. Humbarwadi, “Object Detection with RetinaNet.” Keras, 2020.Available at: https://keras.io/examples/vision/retinanet/</span></li>
+<li><span id="rosasco2004loss">L. Rosasco, E. De Vito, A. Caponnetto, M. Piana, and A. Verri, “Are Loss Functions All the Same?,” <i>Neural computation</i>, vol. 16, pp. 1063–76, Jun. 2004, doi: 10.1162/089976604773135104.</span></li></ol>
+
+        </div>
+      </article>
+
+      
+      <div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://lucasdavid-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      
+    </div>
+  </div>
+</div>
+<div class="empty-v-space d-none d-xl-block" style="margin-bottom: 10vh"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+  integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"
+  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
+  integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '\\[', right: '\\]', display: true}, {left: '$', right: '$', display: false},{left: '\\(', right: '\\)', display: false}]});"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+<script>
+  anchors.options = { icon: '#' };
+  anchors.add();
+</script>
+
+
+  <!-- <svg id="visual" viewBox="0 0 1980 300"  class="curve-container__curve curve-three" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <path
+    d="M0 69L55 90.2C110 111.3 220 153.7 330 169.8C440 186 550 176 660 165.5C770 155 880 144 990 139.2C1100 134.3 1210 135.7 1320 137.7C1430 139.7 1540 142.3 1650 155.5C1760 168.7 1870 192.3 1925 204.2L1980 216L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#d3d3d3"></path>
+  <path
+    d="M0 89L55 107.8C110 126.7 220 164.3 330 191.3C440 218.3 550 234.7 660 243.8C770 253 880 255 990 252.3C1100 249.7 1210 242.3 1320 228.8C1430 215.3 1540 195.7 1650 174.5C1760 153.3 1870 130.7 1925 119.3L1980 108L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#6a6a6a"></path>
+  <path
+    d="M0 229L55 232.3C110 235.7 220 242.3 330 244.3C440 246.3 550 243.7 660 247.3C770 251 880 261 990 254.8C1100 248.7 1210 226.3 1320 223.5C1430 220.7 1540 237.3 1650 233.8C1760 230.3 1870 206.7 1925 194.8L1980 183L1980 301L1925 301C1870 301 1760 301 1650 301C1540 301 1430 301 1320 301C1210 301 1100 301 990 301C880 301 770 301 660 301C550 301 440 301 330 301C220 301 110 301 55 301L0 301Z"
+    fill="#121212"></path>
+</svg> -->
+<footer class="page-footer text-bg-dark bg-black-subtle d-print-none">
+  <div class="container">
+    <div class="mt-4 mb-5">
+      
+        <div class="row g-1 mb-4">
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Keras Explainable</h6>
+                <p class="card-text text-light">
+                  Clean implementations for AI explaining methods in Keras.
+<a href="https://github.com/lucasdavid/keras-explainable" target="_new">Code</a> and
+<a href="https://lucasdavid.github.io/keras-explainable" target="_new">docs</a> are available.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Supporting Study Material</h6>
+                <p class="card-text text-light">
+                  If you are an undergrad student and are looking for additional study material,
+check out our collaborative project <a href="http://comp-ufscar.github.io/">comp-ufscar.github.io</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Algorithms in TensorFlow</h6>
+                <p class="card-text text-light">
+                  I'm implementing all algorithms I find interesting using TensorFlow.
+You can check it out at <a href="https://github.com/lucasdavid/algorithms-in-tensorflow/">github.com/lucasdavid/algorithms-in-tensorflow</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">TF-Experiment</h6>
+                <p class="card-text text-light">
+                  And environment to run Machine Learning experiments based on components and mixins. Available at <a href="https://github.com/lucasdavid/tf-experiment">github.com/lucasdavid/tf-experiment</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col">
+            <div class="card bg-black-subtle border-0 border-start border-dark rounded-0">
+              <div class="card-body font-small pt-0 pb-0">
+                <h6 class="card-title fw-bold text-light">Mineração de Dados Complexos</h6>
+                <p class="card-text text-light">
+                  Information around the extension program "Mineração de Dados Complexos (in Portuguese)" is available at
+<a href="https://www.ic.unicamp.br/~mdc/" target="_blank">ic.unicamp.br/~mdc/</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+    </div>
+
+    <div class="text-end mt-4">
+      
+
+
+<div class="fs-2">
+  
+    <a href="https://github.com/lucasdavid"
+      target="_blank"
+      ><i
+      aria-label="GitHub"
+      class="bi bi-github link-light"></i></a>
+  
+  
+    <a href="https://www.linkedin.com/in/ld7"
+      target="_blank"
+      title="LinkedIn"><i class="bi bi-linkedin text-primary sr-none"></i></a>
+  
+  <span itemscope itemtype="https://schema.org/Person">
+    <a itemprop="sameAs" content="https://orcid.org/0000-0002-8793-7300" href="https://orcid.org/0000-0002-8793-7300"
+       target="orcid.widget"
+       rel="me noopener noreferrer"
+       title="ORCID"
+      ><img src="/assets/images/infra/32px-ORCID_iD.webp" alt="ORCID logo" class="sr-none" style="margin-bottom: 7px; width: 32px;"></a>
+  </span>
+  
+  <a href="http://stackoverflow.com/users/2429640/lucasdavid"
+     target="_blank"
+     title="Stackoverflow"><i class="bi bi-code-slash link-light sr-none"></i></a>
+  
+    <a href="https://youtube.com/channel/UC7IWeKUy4OSlC5ripcQGD6Q"
+      target="_blank"
+      title="Youtube"><i class="bi bi-youtube text-danger sr-none"></i></a>
+  
+    <a href="mailto:mb37410l3@mozmail.com"
+      target="_blank"
+      title="Mail"><i class="bi bi-envelope-fill link-light sr-none"></i></a>
+  
+  <a href="assets/docs/lucas-david-resume.pdf"
+     target="_blank"
+     title="Resume"><i class="bi bi-person-lines-fill link-light sr-none"></i></a>
+</div>
+
+    </div>
+    <div class="text-end">
+      <p>
+        ® Lucas David. Todos os direitos reservados.
+      </p>
+    </div>
+</div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous" defer></script>
+
+</body>
+</html>
